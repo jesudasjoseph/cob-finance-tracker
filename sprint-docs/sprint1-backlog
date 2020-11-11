@@ -8,19 +8,18 @@ Product log:
 	- Student UI Design (PC/Mobile)
 	- Front-end prototype
 	- Database Design
-	- Demo Database setup
-	- Query server setup
 	- Find and setup a test server environment
 
 Member task:
 	Jesudas Joseph:
 		Student UI Design (PC/Mobile),
+		Database Design
 
 	Jackson Miller:
 		Instructor UI Design (PC/Mobile),
 
 	Ghaith Shan:
-
+		Front-end prototype
 
 Scrum record:
 	First Thursday: //Replace with data
@@ -28,5 +27,3 @@ Scrum record:
 
 	Second Thursday: //Replace with date
 		Jackson started the instructor UI prototype for PC, Jesudas fixed a few student UI things and started the Mobile side of things.
-
-	
