@@ -1,5 +1,7 @@
 Scrum master: Jesudas Joseph
 
+Deadline: Nov 20th, 2020
+
 Sprint goal:
 	Design a UI prototype for both instructor/student websites and build a base database, query server and a simple front-end website to demonstrate our query setup.
 
@@ -27,3 +29,9 @@ Scrum record:
 
 	Second Thursday: //Replace with date
 		Jackson started the instructor UI prototype for PC, Jesudas fixed a few student UI things and started the Mobile side of things.
+
+	Friday Nov 13, 2020
+		TODO:
+			Ghaith - Cleaning up front-end and throwing it in the repo.
+			Jesudas - Setting up server space for development tests & UI improvements
+			Jackson - Instructor UI improvements and documentation.
