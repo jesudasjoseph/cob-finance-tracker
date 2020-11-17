@@ -31,7 +31,20 @@ Scrum record:
 		Jackson started the instructor UI prototype for PC, Jesudas fixed a few student UI things and started the Mobile side of things.
 
 	Friday Nov 13, 2020
+
 		TODO:
 			Ghaith - Cleaning up front-end and throwing it in the repo.
-			Jesudas - Setting up server space for development tests & UI improvements
+			Jesudas - Setting up server space for development tests, UI improvements
 			Jackson - Instructor UI improvements and documentation.
+
+	Monday Nov 16, 2020
+
+		Progress:
+			Ghaith - Fixing up template before pushing react website to main branch.
+			Jesudas - Setup server space with a development html server. Setup mongodb in the server space. Learned a little about how mongodb works. Made a few Student mobile UI prototype adjustments
+			Jackson - UNKNOWN
+
+		TODO:
+			Ghaith - Continue setting up react frontend base, look into query server stuff
+			Jesudas - Setup test database entries for basic query tests. cleanup student UI.
+			Jackson - Fine-tune instructor UI prototype.
