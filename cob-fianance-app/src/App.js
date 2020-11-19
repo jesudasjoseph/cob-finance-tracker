@@ -56,6 +56,7 @@ class App extends Component{
           delTodo={this.delTodo} />
         </React.Fragment>
       )} />
+      <Route path="/home" component={Login} />
       <Route path="/transactions" component={Transactions} />
       <Route path="/expenses" component={Expenses} />
       <Route path="/profile" component={Login} />
