@@ -5,7 +5,10 @@ function Header() {
     return (
         <header style={headerStyle}>
             <h1>College Of Buisness App</h1>
-            <Link style={linkStyle} to="/">Home</Link> | <Link style={linkStyle} to="/about">About</Link>
+            <Link style={linkStyle} to="/">Dashboard</Link> | 
+            <Link style={linkStyle} to="/transactions"> Transactions </Link> | 
+            <Link style={linkStyle} to="/Expenses"> Expenses </Link> | 
+            <Link style={linkStyle} to="/profile"> Profile </Link>
         </header>
     )
 }
