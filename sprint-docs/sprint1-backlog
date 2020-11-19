@@ -48,3 +48,15 @@ Scrum record:
 			Ghaith - Continue setting up react frontend base, look into query server stuff
 			Jesudas - Setup test database entries for basic query tests. cleanup student UI.
 			Jackson - Fine-tune instructor UI prototype.
+
+	Wednesday Nov 18, 2020
+
+		Progress:
+			Ghaith - Got some of the front end done, still setting up a basic structure
+			Jesudas - Got mongoDB running
+			Jackson - UNKNOWN
+
+		TODO:
+			Ghaith - Commit and push frontend code
+			Jesudas - Get one frontend-server-database query working.
+			Jackson - UNKNOWN
