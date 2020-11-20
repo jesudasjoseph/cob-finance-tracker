@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 export class ExpensesTables extends Component {
     render() {
         return (
-            <Table responsive="sm" style={{padding: '10px'}} striped bordered hover variant="dark">
+            <Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
                 <thead>
                     <tr>
                         <th>Date:</th>
@@ -52,6 +52,95 @@ export class ExpensesTables extends Component {
                                 <td>$15</td>
                                 <td>$45</td>
                                 </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                <tr>
+                                <td>10/29/2020</td>
+                                <td>Ghaith</td>
+                                <td>Online Vendor 2</td>
+                                <td>Online</td>
+                                <td>Square</td>
+                                <td>Pumpkin</td>
+                                <td>3</td>
+                                <td>$15</td>
+                                <td>$45</td>
+                                </tr>
+                                
                                     </tbody>
                                     </Table>
         )
