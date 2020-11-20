@@ -19,7 +19,7 @@ export class ProfitProgress extends Component {
             }
         if(now>=100){
             return (
-            <ProgressBar now={now} variant="success" label={`${now}%`} />
+            <ProgressBar now={now} variant="success" label={`GOAL REACHED: ${now}%`} />
             )
         }
 

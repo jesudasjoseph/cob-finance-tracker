@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 export class ExpensesTables extends Component {
     render() {
         return (
-            <Table style={{padding: '10px'}} striped bordered hover variant="dark">
+            <Table responsive="sm" style={{padding: '10px'}} striped bordered hover variant="dark">
                 <thead>
                     <tr>
                         <th>Date:</th>
