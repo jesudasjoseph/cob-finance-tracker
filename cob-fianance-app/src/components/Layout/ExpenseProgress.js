@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export class ExpenseProgress extends Component {
     render() {
-        return (
-            <div>
-                
-            </div>
+        return(
+        <div>
+            <ProgressBar variant="danger" now={40} label={'Expenses'} />
+            <ProgressBar variant="success" now={20} label={'Revenue'}/>
+        </div>
         )
     }
 }
