@@ -19,7 +19,6 @@ class MyNavbar extends Component {
     <Nav>
       <NavDropdown title="User Profile" id="collasible-nav-dropdown">
         <NavDropdown.Item href="#action/3.1">My Profile</NavDropdown.Item>
-
         <NavDropdown.Item href="#action/3.3">Settings</NavDropdown.Item>
         <NavDropdown.Divider />
         <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>

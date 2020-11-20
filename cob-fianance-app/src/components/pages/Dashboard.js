@@ -4,7 +4,8 @@ export default function Dashboard() {
     return (
         <React.Fragment>
             <h1>Dashboard</h1>
-            <p>This is the COB finance app Dashboard page</p>
+            <p>Profit Goals</p>
+            
         </React.Fragment>
     )
 }
