@@ -1,10 +1,17 @@
 import React from 'react'
+import Buttons from '../Layout/ExpensesButtons';
+import Table from '../Layout/ExpensesTable';
 
 export default function Expenses() {
     return (
         <React.Fragment>
             <h1>Expenses</h1>
-            <p>This is the COB finance app Expenses page</p>
+            <React.Fragment>
+            <div style={{textAlign: 'right'}}>
+                <Buttons />
+            </div>
+            <Table style = {{paddingTop: '10px 20px'}}></Table>
+        </React.Fragment>
         </React.Fragment>
     )
 }

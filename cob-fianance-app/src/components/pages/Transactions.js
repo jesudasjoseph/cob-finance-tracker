@@ -1,7 +1,7 @@
 
 import React from 'react'
-import Buttons from '../Layout/Buttons';
-import Table from '../Layout/Table';
+import Buttons from '../Layout/TransactionsButtons';
+import Table from '../Layout/TransactionsTable';
 
 export default function Transactions() {
     return (
