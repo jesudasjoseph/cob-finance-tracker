@@ -10,7 +10,7 @@ export default function Expenses() {
             <div style={{textAlign: 'right'}}>
                 <Buttons />
             </div>
-            <Table style = {{paddingTop: '10px 20px'}}></Table>
+            <Table style = {{paddingTop: '10px 20px' }}></Table>
         </React.Fragment>
         </React.Fragment>
     )

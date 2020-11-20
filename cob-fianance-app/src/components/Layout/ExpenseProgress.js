@@ -5,8 +5,8 @@ export class ExpenseProgress extends Component {
     render() {
         return(
         <div>
-            <ProgressBar variant="danger" now={40} label={'Expenses'} />
-            <ProgressBar variant="success" now={20} label={'Revenue'}/>
+            <ProgressBar  style= {{height:'50px'}} variant="danger" now={40} label={'Expenses'} />
+            <ProgressBar style= {{height:'50px'}} variant="success" now={20} label={'Revenue'}/>
         </div>
         )
     }
