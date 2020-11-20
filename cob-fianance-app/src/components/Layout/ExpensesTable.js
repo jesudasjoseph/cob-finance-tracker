@@ -55,7 +55,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 3</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>
@@ -66,7 +66,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 4</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>
@@ -77,7 +77,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 5</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>
@@ -88,7 +88,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 6</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>
@@ -99,7 +99,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 7</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>
@@ -110,7 +110,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 8</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>
@@ -121,7 +121,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 9</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>
@@ -132,7 +132,7 @@ export class ExpensesTables extends Component {
                                 <tr>
                                 <td>10/29/2020</td>
                                 <td>Ghaith</td>
-                                <td>Online Vendor 2</td>
+                                <td>Online Vendor 10</td>
                                 <td>Online</td>
                                 <td>Square</td>
                                 <td>Pumpkin</td>

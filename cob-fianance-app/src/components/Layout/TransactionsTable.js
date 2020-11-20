@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 export class Tables extends Component {
     render() {
         return (
-            <Table responsive="sm" style={{padding: '10px'}} striped bordered hover variant="dark">
+            <Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
                 <thead>
                     <tr>
                         <th>Date:</th>
