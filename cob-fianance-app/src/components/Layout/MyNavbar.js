@@ -12,7 +12,7 @@ class MyNavbar extends Component {
   <Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="mr-auto">
-      <Nav.Link href="features">Dashboard</Nav.Link>
+      <Nav.Link href="dashboard">Dashboard</Nav.Link>
       <Nav.Link href="transactions">Transactions</Nav.Link>
       <Nav.Link href="expenses">Expenses</Nav.Link>
     </Nav>
