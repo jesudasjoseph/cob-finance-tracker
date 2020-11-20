@@ -5,7 +5,7 @@ import Table from '../Layout/ExpensesTable';
 export default function Expenses() {
     return (
         <React.Fragment>
-            <h1>Expenses</h1>
+            <h1 style={{textAlign:'center'}}>Expenses</h1>
             <React.Fragment>
             <div style={{textAlign: 'right'}}>
                 <Buttons />

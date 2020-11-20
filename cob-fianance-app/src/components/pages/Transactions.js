@@ -6,7 +6,7 @@ import Table from '../Layout/TransactionsTable';
 export default function Transactions() {
     return (
         <React.Fragment>
-            <h1>Transactions</h1>
+            <h1 style={{textAlign:'center'}}>Transactions</h1>
             <div style={{textAlign: 'right'}}>
                 <Buttons />
             </div>
