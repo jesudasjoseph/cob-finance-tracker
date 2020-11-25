@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import Navbar from 'react-bootstrap/NavBar';
+import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Container from 'react-bootstrap/Container';
 
-class MyNavbar extends Component { 
+class MyNavbar extends Component {
   render(){
   return(
 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -24,7 +24,7 @@ class MyNavbar extends Component {
         <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>
       </NavDropdown>
       <Nav.Link eventKey={2} href="profile">
-        
+
       </Nav.Link>
     </Nav>
   </Navbar.Collapse>
