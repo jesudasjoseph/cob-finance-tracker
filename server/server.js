@@ -1,5 +1,6 @@
 const fs = require('fs');
 const http = require('http');
+const url = require('url');
 
 let configs = {
 	//default configs
@@ -19,7 +20,6 @@ try {
 }
 
 const server = http.createServer((request, response) => {
-	const { headers, method, url } = request;
 
 	//On error
 	request.on('error', (err) => {
@@ -27,33 +27,23 @@ const server = http.createServer((request, response) => {
   		console.error(err.stack);
 	});
 
-	response.statusCode = 200;
-	response.setHeader('Content-Type', 'application/json');
-    response.setHeader('Access-Control-Allow-Origin', '*');
+	let requestJSON = url.parse(request.url, true).query;
+	if (request.url.startsWith("/q?")) {
 
-	let body = [];
-	request.on('data', (chunk) => {
-		body.push(chunk);
-	}).on('end', () => {
+		response.statusCode = 200;
+		response.setHeader('Content-Type', 'application/json');
+		response.setHeader('Access-Control-Allow-Origin', '*');
 
-		//Get request body
-		body = Buffer.concat(body).toString();
-		console.log(body + "lol");
-
-		//Parse body into JSON
-		let requestJSON = JSON.parse(body);
-
-		switch (requestJSON.requestType) {
+		switch (requestJSON.q) {
 			case "login":
-				response.end(accountRegister(requestJSON));
+				response.write(accountRegister(requestJSON));
+				response.end();
 				break;
 			default:
 				console.log("failed!");
 		}
 
-
-
-	});
+	}
 }).listen(configs.port);
 
 
@@ -61,7 +51,8 @@ function accountRegister(input) {
     //Would verify and query here
 	if (input.username == "username" && input.password == "password"){
 		userTokens.push(12345);
-		console.log("MAde it here!");
+		console.log("sending.. stuff");
+		console.log(JSON.stringify({status: "0", token: 12345}));
 		return JSON.stringify({status: "0", token: 12345});
 	}
 	else {
