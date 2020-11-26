@@ -2,7 +2,7 @@ import React from 'react'
 import ProfitProgress from '../Layout/ProfitProgress';
 import ExpenseProgress from '../Layout/ExpenseProgress';
 import BankProgress from '../Layout/BankProgress';
-
+//let fetch = require("fetch");
 
 export default function Dashboard() {
     return (
@@ -14,7 +14,6 @@ export default function Dashboard() {
             <ExpenseProgress />
             <h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
             <BankProgress/>
-
         </React.Fragment>
     )
 }
