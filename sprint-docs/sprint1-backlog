@@ -60,3 +60,12 @@ Scrum record:
 			Ghaith - Commit and push frontend code
 			Jesudas - Get one frontend-server-database query working.
 			Jackson - UNKNOWN
+
+	Wednesday Nov 25, 2020
+
+		Progress:
+			Ghaith - Added a whole lot to frontend code (dashboard, transaction, expenses, login)
+			Jesudas - Got a basic fetch() working half way. Fixed JS dependencies.
+			Jackson - UNKNOWN
+
+	
