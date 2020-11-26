@@ -36,8 +36,12 @@ const server = http.createServer((request, response) => {
 
 		switch (requestJSON.q) {
 			case "login":
-				response.write(accountRegister(requestJSON));
+				response.write(accountRegister(requestJSON, request.headers.origin));
 				response.end();
+				console.log("User Tokens:");
+				for (let i = 0; i < userTokens.length; i++){
+					console.log(userTokens[i]);
+				}
 				break;
 			default:
 				response.write("Query not recognized!\n");
@@ -49,10 +53,10 @@ const server = http.createServer((request, response) => {
 }).listen(configs.port);
 
 
-function accountRegister(input) {
+function accountRegister(input, host) {
     //Would verify and query here
 	if (input.username == "username" && input.password == "password"){
-		userTokens.push(12345);
+		userTokens.push({id:12345, ip:host});
 		console.log("sending.. stuff");
 		console.log(JSON.stringify({status: "0", token: 12345}));
 		return JSON.stringify({status: "0", token: 12345});
