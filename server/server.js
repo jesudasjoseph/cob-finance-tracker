@@ -40,7 +40,9 @@ const server = http.createServer((request, response) => {
 				response.end();
 				break;
 			default:
-				console.log("failed!");
+				response.write("Query not recognized!\n");
+				response.end();
+				console.log("q not recognized! - q = " + requestJSON.q);
 		}
 
 	}
