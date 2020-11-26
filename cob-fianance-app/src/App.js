@@ -13,6 +13,9 @@ import './App.css';
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const hostname = "http://localhost";
+const port = "2700";
+
 class App extends Component{
   state = {
     todos: []
