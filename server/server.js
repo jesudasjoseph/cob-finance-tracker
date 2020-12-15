@@ -1,6 +1,13 @@
 const fs = require('fs');
-const http = require('http');
-const url = require('url');
+const express = require('express');
+
+let auth = require('./authenticator');
+
+const app = express();
+
+let authRouter = require('./routes/auth');
+
+app.use('/auth', authRouter);
 
 let configs = {
 	//default configs
@@ -19,6 +26,11 @@ try {
 	process.exit(1);
 }
 
+app.listen(configs.port, () => {
+	console.log(`Listening at http://localhost:${configs.port}`);
+})
+
+/*
 const server = http.createServer((request, response) => {
 
 	//On error
@@ -65,3 +77,6 @@ function accountRegister(input, host) {
 		return JSON.stringify({status: "1", token: 0});
 	}
 }
+*/
+
+module.exports = app;
