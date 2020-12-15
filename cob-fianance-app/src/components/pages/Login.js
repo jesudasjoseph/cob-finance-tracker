@@ -30,8 +30,10 @@ export default function Login() {
  	// 	  });
 	//	  console.log("here!");
 
-	fetch('http://localhost:2700/q?' + "q=login&username=username&password=password", {
+	fetch('http://localhost:2700/auth', {
 		mode: 'cors',
+		method: 'GET',
+		credentials: 'same-origin',
 	})
 	.then(response => {
 		console.log(response);
