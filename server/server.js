@@ -1,6 +1,26 @@
 const fs = require('fs');
-const http = require('http');
-const url = require('url');
+const express = require('express');
+
+let auth = require('./authenticator');
+
+const app = express();
+
+
+//Request Routing
+
+let authRouter = require('./routes/auth');
+let userRouter = require('./routes/user');
+let transactionRouter = require('./routes/transaction');
+let expenseRouter = require('./routes/expense');
+let depositRouter = require('./routes/deposit');
+
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
+app.use('/transaction', transactionRouter);
+app.use('/expense', expenseRouter);
+app.use('/deposit', depositRouter);
+
+
 
 let configs = {
 	//default configs
@@ -19,6 +39,11 @@ try {
 	process.exit(1);
 }
 
+app.listen(configs.port, () => {
+	console.log(`Listening at http://localhost:${configs.port}`);
+})
+
+/*
 const server = http.createServer((request, response) => {
 
 	//On error
@@ -65,3 +90,6 @@ function accountRegister(input, host) {
 		return JSON.stringify({status: "1", token: 0});
 	}
 }
+*/
+
+module.exports = app;

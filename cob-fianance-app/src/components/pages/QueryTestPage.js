@@ -30,10 +30,8 @@ export default function Login() {
  	// 	  });
 	//	  console.log("here!");
 
-	fetch('http://localhost:2700/auth', {
+	fetch('http://localhost:2700/q?' + "q=login&username=username&password=password", {
 		mode: 'cors',
-		method: 'GET',
-		credentials: 'same-origin',
 	})
 	.then(response => {
 		console.log(response);
@@ -49,17 +47,12 @@ export default function Login() {
 
     return (
         <React.Fragment >
-            <h2 style={{paddingTop:'25px' , textAlign:'center'}} >Sign in with your ONID credentials</h2>
-            <div style={{flex: '1', paddingTop:'100px', paddingBottom:'50px' , textAlign: 'center' }}>
-            <>
-            <Button onClick={postDataTest} style={{flex: '1' , textAlign: 'center', width:'700px',   display: 'inline-block', height: '100px' }} as="input" type="button" value="Login as Student" />{' '}
-            </>
+            <div style={{flex: '1', paddingTop:'5px', paddingBottom:'5px' , textAlign: 'center' }}><>
+            <Button onClick={postDataTest} style={{flex: '1' , textAlign: 'center', width:'700px',   display: 'inline-block', height: '100px' }} as="input" type="button" value="Get Token" />{' '}</>
             </div>
-            <div style={{ flex: '1', padding: '50px 100px' , textAlign: 'center'}}>
-             <>
-             <Button style={{flex: '1' , textAlign: 'center', width:'700px',   display: 'inline-block', height: '100px' }} as="input" type="button" value="Login as Instructor" />{' '}
-             </>
-             </div>
+            <div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
+            <Button style={{flex: '1' , textAlign: 'center', width:'700px',   display: 'inline-block', height: '100px' }} as="input" type="button" value="Get User Transactions" />{' '}</>
+            </div>
 
         </React.Fragment>
     )
