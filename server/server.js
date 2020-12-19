@@ -5,9 +5,22 @@ let auth = require('./authenticator');
 
 const app = express();
 
+
+//Request Routing
+
 let authRouter = require('./routes/auth');
+let userRouter = require('./routes/user');
+let transactionRouter = require('./routes/transaction');
+let expenseRouter = require('./routes/expense');
+let depositRouter = require('./routes/deposit');
 
 app.use('/auth', authRouter);
+app.use('/user', userRouter);
+app.use('/transaction', transactionRouter);
+app.use('/expense', expenseRouter);
+app.use('/deposit', depositRouter);
+
+
 
 let configs = {
 	//default configs

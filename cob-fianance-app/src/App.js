@@ -9,7 +9,7 @@ import Navibar from './components/Layout/MyNavbar';
 import Buttons from './components/Layout/TransactionsButtons';
 import Transactions from './components/pages/Transactions';
 import Login from './components/pages/Login';
-import QueryTestPage from './components/pages/QueryTestPage'
+import QueryTestPage from './components/pages/QueryTestPage';
 import './App.css';
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css';
