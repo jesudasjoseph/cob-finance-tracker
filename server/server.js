@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require('express');
+const helmet = require('helmet');
 
 let auth = require('./authenticator');
 
@@ -14,6 +15,7 @@ let transactionRouter = require('./routes/transaction');
 let expenseRouter = require('./routes/expense');
 let depositRouter = require('./routes/deposit');
 
+app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/transaction', transactionRouter);
