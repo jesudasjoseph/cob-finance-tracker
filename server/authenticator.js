@@ -1,13 +1,21 @@
-//Not sure if this is depricated
-const crypto = require('crypto');
 let current_users = [];
-let next_token = 1111111111111111;
-let last_token;
 
+//Insecure! Replace with a proper crypto safe random key generator or a hash function that takes username+ip+salt
 function generateToken(username, ip){
-	return crypto.webcrypto.generateKey({name:"AES-CBC", length:256}, false, ["verify"], (err, key) => {
-		if (err) throw err;
-	});
+	let token;
+	while(1){
+		token =  Math.floor(Math.random() * (1000000000000 - 100000000) + 100000000) + username + ip;
+		let checks = 0;
+		for (i = 0; i<current_users.length; i++){
+			if (token == current_users[i].token){
+				break;
+			}
+			checks++;
+		}
+		if (checks == current_users.length){
+			return token;
+		}
+	}
 }
 
 function getToken(username, password, ip){
@@ -35,4 +43,3 @@ function getCurrentUsers(){
 }
 
 exports.authenticate = authenticate;
-exports.getCurrentUsers = getCurrentUsers;
