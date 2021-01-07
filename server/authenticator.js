@@ -38,12 +38,20 @@ function authenticate(user, ip){
 	return token;
 }
 
+//returns 1 on success
+//returns -1 on auth_obj parsing error
+//returns -2 on non authenticated token
 function validate_token(auth_obj){
-	console.log("here:" + auth_obj + auth_obj.username);
-	console.log(current_users[0]);
+	try {
+		auth_obj = JSON.parse(auth_obj);
+	}
+	catch(e) {
+		console.log(e);
+		throw "Failed to Authorize: Invalid Auth Token Format!";
+	}
 	for (i = 0; i<current_users.length; i++){
 		console.log("Token: " + current_users[i].token);
-		console.log("Client Token: " + auth_obj.token);
+		console.log("Client Token: " + auth_obj.token + ", typeof auth_obj:" + typeof auth_obj);
 		if (auth_obj.token == current_users[i].token){
 			console.log("Found a Token Match:" + auth_obj.token + ", username:" + current_users[i].username);
 			if (auth_obj.username == current_users[i].username){
@@ -51,7 +59,7 @@ function validate_token(auth_obj){
 			}
 		}
 	}
-	return 0;
+	throw "Failed to Authorize: Invalid Auth Token!";
 }
 
 function getCurrentUsers(){
