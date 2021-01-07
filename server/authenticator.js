@@ -33,9 +33,25 @@ function getToken(username, password, ip){
 
 function authenticate(user, ip){
 	const token = getToken("jess", "password", ip);
-	current_users.push({"user":user, "ip":ip, "token":token});
+	current_users.push({"username":user, "ip":ip, "token":token});
 	console.log(current_users);
 	return token;
+}
+
+function validate_token(auth_obj){
+	console.log("here:" + auth_obj + auth_obj.username);
+	console.log(current_users[0]);
+	for (i = 0; i<current_users.length; i++){
+		console.log("Token: " + current_users[i].token);
+		console.log("Client Token: " + auth_obj.token);
+		if (auth_obj.token == current_users[i].token){
+			console.log("Found a Token Match:" + auth_obj.token + ", username:" + current_users[i].username);
+			if (auth_obj.username == current_users[i].username){
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 
 function getCurrentUsers(){
@@ -43,3 +59,4 @@ function getCurrentUsers(){
 }
 
 exports.authenticate = authenticate;
+exports.validate_token = validate_token;
