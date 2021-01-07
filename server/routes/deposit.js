@@ -7,11 +7,14 @@ router.get('/', function(req, res, next) {
 
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'text/html');
-	if (authenticator.validate_token(req.get('Authorization'))){
+	try{
+		authenticator.validate_token(req.get('Authorization'));
+		authenticator.validate_user_priv();
 		res.send("This Token is Authorized!");
 	}
-	else
-		res.send("Failed to Authenticate!");
+	catch(e){
+		res.send(e);
+	}
 });
 
 module.exports = router;
