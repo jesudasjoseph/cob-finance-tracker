@@ -2,6 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const bodyparser = require('body-parser');
 
 let auth = require('./authenticator');
 
@@ -18,6 +19,7 @@ let depositRouter = require('./routes/deposit');
 
 app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use(cors()); //Use cors middleware
+app.use(express.json()); //Parse body
 //Router for Authentication requests
 app.use('/auth', authRouter);
 //Router for User data requests
