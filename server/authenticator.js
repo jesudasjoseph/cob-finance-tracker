@@ -1,4 +1,5 @@
 const SESSION_TIMEOUT = 5000; //seconds
+const MAX_SESSIONS = 100;
 
 function session(user, ip, token) {
 	this.user = user;
@@ -12,54 +13,71 @@ let sessionList = [];
 
 //Insecure! Replace with a proper crypto safe random key generator or a hash function that takes username+ip+salt
 function generateToken(username, ip){
-	let token;
-	while(1){
-		token =  Math.floor(Math.random() * (1000000000000 - 100000000) + 100000000) + username + ip;
-		let checks = 0;
-		for (i = 0; i<sessionList.length; i++){
-			if (username == sessionList[i].user){
-				throw "User already signed in!";
-			}
-			if (token == sessionList[i].token){
-				break;
-			}
-			checks++;
-		}
-		if (checks == sessionList.length){
-			return token;
-		}
-	}
+
 }
 
 function getToken(username, password, ip){
 	//Add password encryption
 	//Checks username and password match
-	if (username == "jess" && password == "password"){
-		try{
-			return generateToken(username, ip);
-		}catch(error){
-			console.log(error);
-			throw error;
-		}
+	let token = 0;
 
+	if (username == "jess" && password == "password"){
+		while(1){
+			token =  Math.floor(Math.random() * (1000000000000 - 100000000) + 100000000) + username + ip;
+			let checks = 0;
+			for (i = 0; i<sessionList.length; i++){
+				if (username == sessionList[i].user){
+					return -1;
+				}
+				if (token == sessionList[i].token){
+					break;
+				}
+				checks++;
+			}
+			if (checks == sessionList.length){
+				return token;
+			}
+		}
 	}
 	else{
 		//Failed to getToken
 		//Password and Username do not match
-		throw "Failed to get token: User/Password mismatch";
+		return -2;
 	}
 }
 
-function authenticate(user, password, ip){
-	try{
-		const token = getToken(user, password, ip);
-		sessionList.push(new session(user, ip, token));
-		console.log(sessionList);
-		return token;
-	}catch (error){
-		throw error
-	}
+function createSession(user, ip, token){
+	sessionList.push(new session(user, ip, token));
+	console.log(sessionList);
+}
 
+//SUCCESS: returns valid token
+//FAIL: returns error codes: -1, -2
+function getToken(user, password, ip){
+	let token = 0;
+	if (user == "jess" && password == "password"){
+		while(1){
+			token =  Math.floor(Math.random() * (1000000000000 - 100000000) + 100000000) + user + ip;
+			let checks = 0;
+			for (i = 0; i<sessionList.length; i++){
+				if (user == sessionList[i].user){
+					//user already has a token
+					return -1;
+				}
+				if (token == sessionList[i].token){
+					break;
+				}
+				checks++;
+			}
+			if (checks == sessionList.length){
+				return token;
+			}
+		}
+	}
+	else{
+		//Password and Username do not match
+		return -2;
+	}
 }
 
 //Check the value of a token object against current session tokens
@@ -89,5 +107,6 @@ function getCurrentUsers(){
 	return sessionList;
 }
 
-exports.authenticate = authenticate;
+exports.getToken = getToken;
+exports.createSession = createSession;
 exports.validate_token = validate_token;
