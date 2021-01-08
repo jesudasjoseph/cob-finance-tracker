@@ -16,36 +16,6 @@ function generateToken(username, ip){
 
 }
 
-function getToken(username, password, ip){
-	//Add password encryption
-	//Checks username and password match
-	let token = 0;
-
-	if (username == "jess" && password == "password"){
-		while(1){
-			token =  Math.floor(Math.random() * (1000000000000 - 100000000) + 100000000) + username + ip;
-			let checks = 0;
-			for (i = 0; i<sessionList.length; i++){
-				if (username == sessionList[i].user){
-					return -1;
-				}
-				if (token == sessionList[i].token){
-					break;
-				}
-				checks++;
-			}
-			if (checks == sessionList.length){
-				return token;
-			}
-		}
-	}
-	else{
-		//Failed to getToken
-		//Password and Username do not match
-		return -2;
-	}
-}
-
 function createSession(user, ip, token){
 	sessionList.push(new session(user, ip, token));
 	console.log(sessionList);
