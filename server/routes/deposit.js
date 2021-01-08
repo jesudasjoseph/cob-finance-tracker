@@ -9,7 +9,6 @@ router.get('/', function(req, res, next) {
 	res.setHeader('Content-Type', 'text/html');
 	try{
 		authenticator.validate_token(req.get('Authorization'));
-		console.log(sessionList[0]);
 		res.send("This Token is Authorized!");
 	}
 	catch(e){
