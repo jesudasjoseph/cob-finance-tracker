@@ -14,7 +14,6 @@ router.get('/', function(req, res, next) {
 
 	//get authorization token
 	token = authorizor.getToken("jess", req.ip);
-	console.log(token);
 	res.send(JSON.stringify({"token":token}));
 
 });
@@ -24,7 +23,6 @@ router.post('/', function(req, res, next) {
 	let token;
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'application/json');
-	console.log(req.body);
 	token = authorizor.getToken(req.body.user, req.ip);
 	res.send(JSON.stringify({"token":token}));
 
