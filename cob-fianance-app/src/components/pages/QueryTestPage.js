@@ -29,7 +29,7 @@ export default class QueryTestPage extends React.Component {
 
 	getToken() {
 
-		fetch('http://localhost:2700/auth', {
+		fetch('http://localhost:2021/auth', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -50,12 +50,12 @@ export default class QueryTestPage extends React.Component {
 	}
 
 	checkToken() {
-		fetch('http://localhost:2700/deposit', {
+		fetch('http://localhost:2021/deposit', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
 			headers: {
-				'Authorization': `{"token":"${token}", "user":"jess"}`
+				'Authorization': `Bearer ${token}`
 			},
 		})
 		.then(response => {
@@ -71,7 +71,6 @@ export default class QueryTestPage extends React.Component {
 		});
 	}
 
-
 	handleUserChange(e){
 		this.setState({user: e.target.value});
 	}
@@ -81,7 +80,7 @@ export default class QueryTestPage extends React.Component {
 	handleSubmitClick(e){
 		let bod = {user:this.state.user, password:this.state.password};
 
-		fetch('http://localhost:2700/auth', {
+		fetch('http://localhost:2021/auth', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

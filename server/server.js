@@ -5,8 +5,6 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 const config = require('./config');
 
-let auth = require('./authenticator');
-
 const app = express();
 
 
