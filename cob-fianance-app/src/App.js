@@ -4,6 +4,8 @@ import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
 import Header from './components/Layout/Header';
 import Dashboard from './components/pages/Dashboard';
+import DashboardI from './components/pages/DashboardI';
+import UserManagement from './components/pages/UserManagement';
 import Expenses from './components/pages/Expenses';
 import Navibar from './components/Layout/MyNavbar';
 import Buttons from './components/Layout/TransactionsButtons';
@@ -25,10 +27,11 @@ class App extends Component{
   return (
     <Router>
     <div className="App" style={{background: '#d3d3d3', backgroundSize: 'cover',   width: '100%' , height: '100vh' , minHeight: '100%' }}>
-      <Navibar />
       <div className="container">
       <Route exact path="/" component={Login} />
       <Route path="/home" component={Login} />
+      <Route exact path="/DashboardI" component={DashboardI} />
+      <Route exact path="/UserManagement" component={UserManagement} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/transactions" component={Transactions} />
       <Route path="/expenses" component={Expenses} />
