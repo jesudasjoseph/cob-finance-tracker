@@ -55,7 +55,7 @@ export default class QueryTestPage extends React.Component {
 			method: 'GET',
 			credentials: 'same-origin',
 			headers: {
-				'Authorization': `{"token":"${token}", "user":"jess"}`
+				'Authorization': `Bearer ${token}`
 			},
 		})
 		.then(response => {
@@ -70,7 +70,6 @@ export default class QueryTestPage extends React.Component {
 			console.error('Error:', error);
 		});
 	}
-
 
 	handleUserChange(e){
 		this.setState({user: e.target.value});
