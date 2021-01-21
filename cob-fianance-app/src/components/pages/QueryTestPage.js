@@ -29,7 +29,7 @@ export default class QueryTestPage extends React.Component {
 
 	getToken() {
 
-		fetch('http://localhost:2700/auth', {
+		fetch('http://71.193.191.23:2021/auth', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -50,7 +50,7 @@ export default class QueryTestPage extends React.Component {
 	}
 
 	checkToken() {
-		fetch('http://localhost:2700/deposit', {
+		fetch('http://71.193.191.23:2021/deposit', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -81,7 +81,7 @@ export default class QueryTestPage extends React.Component {
 	handleSubmitClick(e){
 		let bod = {user:this.state.user, password:this.state.password};
 
-		fetch('http://localhost:2700/auth', {
+		fetch('http://71.193.191.23:2021/auth', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
