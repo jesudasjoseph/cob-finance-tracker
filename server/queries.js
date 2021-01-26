@@ -25,7 +25,7 @@ function getBid(uid){
 }
 
 function getExpense(uid){
-	return selectQuery('SELECT bid FROM student WHERE uid = $1', [uid]);
+	return selectQuery('SELECT * FROM expense WHERE bid = (SELECT bid FROM student WHERE uid = $1)', [uid]);
 }
 
 function selectQuery(statement, values){
