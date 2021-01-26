@@ -49,8 +49,17 @@ function generateToken(payload){
 function getToken(user, ip){
 	let ses = new session(user, ip)
 	let token = generateToken(ses);
+	let role;
+	if (user === "instructor"){
+		role = "instructor";
+	}
+	else {
+		role = "student";
+	}
+
 	addSession(ses);
-	return token;
+	return {token: token,
+			role: role};
 }
 
 //Express middleware

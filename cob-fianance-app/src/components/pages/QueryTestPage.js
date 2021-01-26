@@ -10,8 +10,8 @@ let token = 0;
 export default class QueryTestPage extends React.Component {
 
 	constructor(props) {
-	    super(props);
-	    this.state = {
+		super(props);
+		this.state = {
 			button0Text: "Get Token!",
 			button1Text: "Validate Token!",
 			button2Text: "Text",
@@ -106,45 +106,45 @@ export default class QueryTestPage extends React.Component {
 	}
 
 	render () {
-	    return (
-	        <React.Fragment >
+		return (
+			<React.Fragment >
 			<div style={{display: 'flex', flexDirection: 'row'}}>
 			<div style={{display: 'flex', flex: '1', paddingTop: '10px'}}>
 			<Form style={{flex: '1'}}>
 			  <Form.Group controlId="formBasicEmail">
-			    <Form.Control placeholder="Enter User" onChange={this.handleUserChange} />
+				<Form.Control placeholder="Enter User" onChange={this.handleUserChange} />
 			  </Form.Group>
 
-			  <Form.Group controlId="formBasicPassword">
-			    <Form.Control type="password" placeholder="Password" onChange={this.handlePasswordChange} />
-			  </Form.Group>
-			  <Button onClick={this.handleSubmitClick}>
-			    Submit
+			<Form.Group controlId="formBasicPassword">
+				<Form.Control type="password" placeholder="Password" onChange={this.handlePasswordChange} />
+				</Form.Group>
+				<Button onClick={this.handleSubmitClick}>
+				Submit
 			  </Button>
 			</Form>
 			</div>
 			<div style={{display: 'flex', flexDirection: 'column', flex: '1'}}>
-	            <div style={{flex: '1', paddingTop:'5px', paddingBottom:'5px' , textAlign: 'center' }}><>
-	            <Button onClick={this.getToken} style={{width: '300px',flex: '1' , textAlign: 'center',   display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button0Text} />{' '}</>
-	            </div>
-	            <div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-	            <Button onClick={this.checkToken} style={{ width: '300px', flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button1Text} />{' '}</>
-	            </div>
+				<div style={{flex: '1', paddingTop:'5px', paddingBottom:'5px' , textAlign: 'center' }}><>
+				<Button onClick={this.getToken} style={{width: '300px',flex: '1' , textAlign: 'center',   display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button0Text} />{' '}</>
+				</div>
 				<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-	            <Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button2Text} />{' '}</>
-	            </div>
+				<Button onClick={this.checkToken} style={{ width: '300px', flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button1Text} />{' '}</>
+				</div>
 				<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-	            <Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button3Text} />{' '}</>
-	            </div>
+				<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button2Text} />{' '}</>
+				</div>
 				<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-	            <Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button4Text} />{' '}</>
-	            </div>
+				<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button3Text} />{' '}</>
+				</div>
 				<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-	            <Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button5Text} />{' '}</>
-	            </div>
+				<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button4Text} />{' '}</>
+				</div>
+				<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
+				<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button5Text} />{' '}</>
+				</div>
 			</div>
 			</div>
-	        </React.Fragment>
-	    );
+			</React.Fragment>
+		);
 	}
 }
