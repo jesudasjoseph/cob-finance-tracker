@@ -13,7 +13,7 @@ function getBid(uid){
 	// callback - checkout a client
 	pool.connect((err, client, done) => {
 		if (err) throw err
-		client.query(`SELECT bid FROM student WHERE uid = $1`, [uid], (err, res) => {
+		client.query('SELECT bid FROM student WHERE uid = $1', [uid], (err, res) => {
 			done()
 			if (err) {
 				console.log(err.stack)
@@ -24,5 +24,24 @@ function getBid(uid){
 	})
 }
 
+function getExpense(uid){
+	return selectQuery('SELECT bid FROM student WHERE uid = $1', [uid]);
+}
+
+function selectQuery(statement, values){
+	pool.connect((err, client, done) => {
+		if (err) throw err
+		client.query(statement, values, (err, res) => {
+			done()
+			if (err) {
+				console.log(err.stack)
+			} else {
+				return res;
+			}
+		})
+	})
+}
+
 exports.init = init;
 exports.getBid = getBid;
+exports.getExpense = getExpense;

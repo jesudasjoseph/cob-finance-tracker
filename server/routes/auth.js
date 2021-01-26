@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-let authorizor = require('../authorizor');
+const authorizor = require('../authorizor');
 
 /*GET request for /auth (returns token)*/
 /*
