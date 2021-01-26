@@ -11,7 +11,7 @@ const app = express();
 
 //Init database connection
 q.init();
-q.getBid();
+q.getBid(0);
 
 //Request Routing
 let authRouter = require('./routes/auth');
