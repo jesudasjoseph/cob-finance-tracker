@@ -22,11 +22,11 @@ router.get('/', function(req, res, next) {
 
 //Get Credentials and Authenticate! (user = jess and password = password as default)
 router.post('/', function(req, res, next) {
-	let token;
+	let tokenRoleObj;
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'application/json');
-	token = authorizor.getToken(req.body.uid, req.ip);
-	res.send(JSON.stringify({"token":token}));
+	tokenRoleObj = authorizor.getToken(req.body.uid, req.ip);
+	res.send(JSON.stringify(tokenRoleObj));
 
 });
 

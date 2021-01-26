@@ -20,29 +20,35 @@ export default class Login extends React.Component {
     }
 
     getUserToken() {
-        let body = {uid:this.state.uid};
+        if (this.state.token != null){
+            let body = {uid:this.state.uid};
 
-		fetch('http://71.193.191.23:2021/auth', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json'
-			},
-			body: JSON.stringify(body)
-        }).then(response => {
-			return response.json();
-		}).then(data => {
-			if (data.token){
-				this.setState({token: data.token});
-			} else {
-				this.setState({token: 0});
-			}
-			console.log('Success:', data);
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
+    		fetch('http://71.193.191.23:2021/auth', {
+    			mode: 'cors',
+    			method: 'POST',
+    			credentials: 'same-origin',
+    			headers: {
+    				'Accept': 'application/json',
+    				'Content-type': 'application/json'
+    			},
+    			body: JSON.stringify(body)
+            }).then(response => {
+    			return response.json();
+    		}).then(data => {
+    			if (data.token){
+    				this.setState({token: data.token});
+    			} else {
+    				this.setState({token: 0});
+    			}
+    			console.log('Success:', data);
+    		}).catch((error) => {
+    			console.error('Error:', error);
+    		});
+        }
+        else {
+            alert("User already has a Token!");
+        }
+
     }
 
     render () {
