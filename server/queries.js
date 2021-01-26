@@ -13,7 +13,7 @@ function getBid(uid){
 	// callback - checkout a client
 	pool.connect((err, client, done) => {
 		if (err) throw err
-		client.query(`SELECT bid FROM user WHERE uid = ` + uid, [1], (err, res) => {
+		client.query(`SELECT bid FROM student WHERE uid = ` + uid, [1], (err, res) => {
 			done()
 			if (err) {
 				console.log(err.stack)
