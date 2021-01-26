@@ -27,6 +27,7 @@ class App extends Component{
   return (
     <Router>
     <div className="App" style={{background: '#d3d3d3', backgroundSize: 'cover',   width: '100%' , height: '100vh' , minHeight: '100%' }}>
+      <Navibar />
       <div className="container">
       <Route exact path="/" component={Login} />
       <Route path="/home" component={Login} />
@@ -35,8 +36,8 @@ class App extends Component{
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/transactions" component={Transactions} />
       <Route path="/expenses" component={Expenses} />
-	  <Route path="/profile" component={Login} />
-	  <Route path="/querytestpage" component={QueryTestPage} />
+      <Route path="/profile" component={Login} />
+      <Route path="/querytestpage" component={QueryTestPage} />
       </div>
       </div>
       </Router>
