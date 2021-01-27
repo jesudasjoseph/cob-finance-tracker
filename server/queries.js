@@ -65,6 +65,7 @@ function getUser(asker, uid) {
 
 function getRole(asker){
 	console.log("here!");
+	console.log(asker.uid);
 	let item = query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]);
 	console.log(item);
 	return query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]);
@@ -74,7 +75,7 @@ function query(statement, values){
 	pool.connect((err, client, done) => {
 		if (err) throw err
 		client.query(statement, values, (err, res) => {
-			done()
+			done();
 			if (err) {
 				console.log(err.stack)
 				return new data('Failed to Query Database!', '');

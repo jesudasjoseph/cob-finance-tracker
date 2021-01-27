@@ -26,7 +26,6 @@ router.post('/', function(req, res, next) {
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'application/json');
 	tokenRoleObj = authorizor.getToken(req.body.uid, req.ip);
-	console.log(req.body.uid);
 	res.send(JSON.stringify(tokenRoleObj));
 
 });

@@ -49,12 +49,10 @@ function generateToken(payload){
 //Adds user to sessionList
 function getToken(uid, ip){
 	let role = q.getRole(new q.asker(uid, null));
-	console.log(role);
 	let ses = new session(uid, role, ip)
 	let token = generateToken(ses);
 
 	addSession(ses);
-	console.log('added session!');
 	return {token: token,
 			role: role};
 }
