@@ -28,20 +28,42 @@ export default class QueryTestPage extends React.Component {
 	}
 
 	getToken() {
-
+		let myStorage = window.localStorage;
+		let body = {uid:'josejesu'};
 		fetch('http://71.193.191.23:2021/auth', {
 			mode: 'cors',
-			method: 'GET',
+			method: 'POST',
 			credentials: 'same-origin',
-		}).then(response => {
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json'
+			},
+			body: JSON.stringify(body)
+				}).then(response => {
 			return response.json();
 		}).then(data => {
 			if (data.token){
-				token = data.token;
-				this.setState({button0Text: token});
+				this.setState({token: data.token});
+					if (data.role === "instructor"){
+						this.setState({role: data.role});
+						myStorage.setItem('jwt',"Bearer " + this.state.token);
+						myStorage.setItem('role', data.role);
+						this.props.history.push('/DashboardI');
+					}
+					else if (data.role === "student"){
+						this.setState({role: data.role});
+						myStorage.setItem('jwt',"Bearer " + this.state.token);
+						myStorage.setItem('role', data.role);
+						this.props.history.push('/dashboard');
+					}
+					else {
+						alert("No role specified!");
+						this.setState({token: 0});
+					}
+			//redirect to instructor or student account
 			} else {
-				this.setState({button0Text: "Failed to get Token!"});
-				token = 0;
+				this.setState({token: 0});
+								alert("Failed to get Token!");
 			}
 			console.log('Success:', data);
 		}).catch((error) => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authorizor = require('../authorizor');
-const q = require('../qheries');
+const q = require('../queries');
 
 /*GET request for /user (returns token)*/
 router.get('/', authorizor.authToken, function(req, res, next) {

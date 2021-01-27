@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 
 const pool = new Pool();
 
-const roleType {
+const roleType = {
 	'admin':2,
 	'instructor':1,
 	'student':0

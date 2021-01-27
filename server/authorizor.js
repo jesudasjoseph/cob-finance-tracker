@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const config = require('./config');
-const q = require('../queries');
+const q = require('./queries');
 
 const SESSION_TIMEOUT = 50; //seconds
 const MAX_SESSIONS = 100;

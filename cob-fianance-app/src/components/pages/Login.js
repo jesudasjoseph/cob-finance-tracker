@@ -4,18 +4,18 @@ import Form from 'react-bootstrap/Form';
 
 export default class Login extends React.Component {
 
-    constructor(props) {
-        let myStorage = window.localStorage;
-        super(props);
-        this.state = {
-            uid: "",
-            token: null
-        };
+	constructor(props) {
+		let myStorage = window.localStorage;
+		super(props);
+		this.state = {
+			uid: "",
+			token: null
+		};
 
-        this.getUserToken = this.getUserToken.bind(this);
-        this.handleUidChange = this.handleUidChange.bind(this);
+		this.getUserToken = this.getUserToken.bind(this);
+		this.handleUidChange = this.handleUidChange.bind(this);
 
-        if (myStorage.getItem('token') != undefined ) {
+		if (myStorage.getItem('token') != undefined ) {
             if (myStorage.getItem('role') === 'student' ) {
                 props.history.push('/dashboard');
             }
