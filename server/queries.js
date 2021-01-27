@@ -9,26 +9,15 @@ function init(){
 	})
 }
 
-function getBid(uid){
-	// callback - checkout a client
-	pool.connect((err, client, done) => {
-		if (err) throw err
-		client.query('SELECT bid FROM student WHERE uid = $1', [uid], (err, res) => {
-			done()
-			if (err) {
-				console.log(err.stack)
-			} else {
-				console.log(res.rows[0])
-			}
-		})
-	})
+function getExpense(uid) {
+	return query('SELECT * FROM expense WHERE bid = (SELECT bid FROM student WHERE uid = $1)', [uid]);
 }
 
-function getExpense(uid){
-	return selectQuery('SELECT * FROM expense WHERE bid = (SELECT bid FROM student WHERE uid = $1)', [uid]);
+function getUser(uid) {
+	return query('SELECT * FROM user', [uid]);
 }
 
-function selectQuery(statement, values){
+function query(statement, values){
 	pool.connect((err, client, done) => {
 		if (err) throw err
 		client.query(statement, values, (err, res) => {
@@ -43,5 +32,4 @@ function selectQuery(statement, values){
 }
 
 exports.init = init;
-exports.getBid = getBid;
 exports.getExpense = getExpense;
