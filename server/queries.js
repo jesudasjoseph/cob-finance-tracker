@@ -82,11 +82,12 @@ function query(statement, values){
 	pool
 		.connect()
 		.then(client => {
-			.query(curQuery)
-			.then(res => {
-				client.release();
-				return new data(null, res[0]);
-			})
+			return client
+				.query(curQuery)
+				.then(res => {
+					client.release();
+					return new data(null, res[0]);
+				})
 			.catch(err => {
 				console.log(err.stack)
 				return new data('Failed to Query Database!', '');
