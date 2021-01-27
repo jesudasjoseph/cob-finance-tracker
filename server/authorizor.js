@@ -1,17 +1,18 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const config = require('./config');
+const q = require('../queries');
 
 const SESSION_TIMEOUT = 50; //seconds
 const MAX_SESSIONS = 100;
 
 let sessionList = [];
 
-function session(user, ip){
+function session(uid, role, ip){
 	this.sub = generateSID();
 	this.sid = this.sub;
-	this.user = user;
-	this.role = "admin" //Replace with database call
+	this.uid = uid;
+	this.role = role;
 	this.ip = ip;
 	this.exp = Math.floor(Date.now() / 1000) + SESSION_TIMEOUT;
 }
@@ -46,16 +47,10 @@ function generateToken(payload){
 
 //Returns a token for the specified 'user', 'ip' combo.
 //Adds user to sessionList
-function getToken(user, ip){
-	let ses = new session(user, ip)
+function getToken(uid, ip){
+	let role = getRole(new q.asker(uid, null), uid);
+	let ses = new session(uid, role, ip)
 	let token = generateToken(ses);
-	let role;
-	if (user === "instructor"){
-		role = "instructor";
-	}
-	else {
-		role = "student";
-	}
 
 	addSession(ses);
 	return {token: token,
@@ -75,6 +70,9 @@ function authToken(req, res, next){
 		if (error){
 			console.log(error);
 			return res.sendStatus(403);
+		}
+		else{
+			req.body.asker = new q.asker(decoded.uid, decoded.role);
 		}
 	});
 	next();
