@@ -66,8 +66,7 @@ function getUser(asker, uid) {
 }
 
 function getRole(asker){
-	let res = await query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]);
-	return res;
+	return query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]);
 }
 
 async function query(statement, values){
