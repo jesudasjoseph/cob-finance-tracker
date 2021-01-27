@@ -74,19 +74,24 @@ function getRole(asker){
 }
 
 function query(statement, values){
-	pool.connect((err, client, done) => {
-		if (err) throw err
-		client.query(statement, values, (err, res) => {
-			done();
-			if (err) {
+	const curQuery = {
+		text: statement,
+		values: values
+	};
+
+	pool
+		.connect()
+		.then(client => {
+			.query(curQuery)
+			.then(res => {
+				client.release();
+				return new data(null, res[0]);
+			})
+			.catch(err => {
 				console.log(err.stack)
 				return new data('Failed to Query Database!', '');
-			} else {
-				console.log(res[0]);
-				return new data(null, res[0]);
-			}
+			})
 		})
-	})
 }
 
 exports.init = init;
