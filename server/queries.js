@@ -30,6 +30,8 @@ function init(){
 		console.error('Unexpected error on idle client', err)
 		process.exit(-1)
 	})
+
+	console.log(query('SELECT role FROM "user" WHERE uid = $1', ['jsoejesu'']));
 }
 
 function getExpense(uid) {
