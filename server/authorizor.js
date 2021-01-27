@@ -53,6 +53,7 @@ function getToken(uid, ip){
 	let token = generateToken(ses);
 
 	addSession(ses);
+	console.log('added session!');
 	return {token: token,
 			role: role};
 }
