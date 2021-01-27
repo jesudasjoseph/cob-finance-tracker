@@ -75,7 +75,7 @@ function query(statement, values){
 		values: values
 	};
 
-	pool
+	return pool
 		.connect()
 		.then(client => {
 			return client
