@@ -80,6 +80,7 @@ function query(statement, values){
 				console.log(err.stack)
 				return new data('Failed to Query Database!', '');
 			} else {
+				console.log(res[0]);
 				return new data(null, res[0]);
 			}
 		})
