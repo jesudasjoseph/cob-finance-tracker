@@ -66,7 +66,7 @@ function getUser(asker, uid) {
 }
 
 function getRole(asker){
-	return query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]);
+	return query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]).then();
 }
 
 function query(statement, values){
