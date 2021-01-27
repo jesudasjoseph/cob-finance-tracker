@@ -73,7 +73,7 @@ async function query(statement, values){
 	const client = await pool.connect();
 	try{
 		const res = await client.query(statement, values);
-		console.log("res: " + res);
+		console.log("res: " + res[0]);
 		return new data(null, res.rows[0]);
 	}
 	finally {
