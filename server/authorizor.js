@@ -48,7 +48,7 @@ function generateToken(payload){
 //Returns a token for the specified 'user', 'ip' combo.
 //Adds user to sessionList
 function getToken(uid, ip){
-	let role = getRole(new q.asker(uid, null), uid);
+	let role = q.getRole(new q.asker(uid, null), uid);
 	let ses = new session(uid, role, ip)
 	let token = generateToken(ses);
 
