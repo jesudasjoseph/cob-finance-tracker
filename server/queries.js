@@ -69,26 +69,15 @@ function getRole(asker){
 	return query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]).then();
 }
 
-function query(statement, values){
-	const curQuery = {
-		text: statement,
-		values: values
-	};
-
-	return pool
-		.connect()
-		.then(client => {
-			return client
-				.query(curQuery)
-				.then(res => {
-					client.release();
-					return new data(null, res[0]);
-				})
-			.catch(err => {
-				console.log(err.stack)
-				return new data('Failed to Query Database!', '');
-			})
-		})
+async function query(statement, values){
+	const client = await pool.connect();
+	try{
+		const res = await client.query(statement, values);
+		return new data(null, res.rows[0]);
+	}
+	finally {
+		client.release();
+	}
 }
 
 exports.init = init;
