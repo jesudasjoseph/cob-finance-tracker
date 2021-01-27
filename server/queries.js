@@ -31,7 +31,7 @@ function init(){
 		process.exit(-1)
 	})
 
-	console.log(query('SELECT role FROM "user" WHERE uid = $1', ['jsoejesu'']));
+	console.log(query('SELECT role FROM "user" WHERE uid = $1', ['josejesu']));
 }
 
 function getExpense(uid) {
