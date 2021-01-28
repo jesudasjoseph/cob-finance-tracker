@@ -47,14 +47,15 @@ function generateToken(payload){
 
 //Returns a token for the specified 'user', 'ip' combo.
 //Adds user to sessionList
-function getToken(uid, ip){
+function getToken(req, res, next){
 	let role = q.getRole(new q.asker(uid, null));
 	let ses = new session(uid, role, ip)
 	let token = generateToken(ses);
 
 	addSession(ses);
-	return {token: token,
-			role: role};
+	res.locals.token = token;
+	res.locals.role = role;
+	next();
 }
 
 //Express middleware
