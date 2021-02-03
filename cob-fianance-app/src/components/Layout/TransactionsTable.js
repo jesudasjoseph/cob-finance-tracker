@@ -1,9 +1,36 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 
+
+function createData(date, name, Customer, Location, Paymethod, product , quan , price, total) {
+    return { date, name, Customer, Location, Paymethod, product , quan , price, total};
+  }
+  const rows =[
+    createData('1', '01', 'me', 'customer1', 'location1', 'Paymethod1','goods1', 54,100 , 12341234),
+    createData('2','02', 'me2', 'customer2', 'location2', 'Paymethod2', 'goods2' , 59,100 , 543543)
+  ]
+  function addTransaction(rows){
+    rows.push(createData('3', '01', 'me', 'customer1', 'location1', 'Paymethod1','goods3', 54,100 , 12341234))
+  }
+
 export class Tables extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
     render() {
         return (
+          <div>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Name:
+              <input type="text" name="name" />
+              </label>
+              <input type="submit" value="Submit" />
+              </form>
             <Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
                 <thead>
                     <tr>
@@ -19,42 +46,23 @@ export class Tables extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>10/29/2020</td>
-                                <td>Jackson</td>
-                                <td>Jimmy</td>
-                                <td>In-Person</td>
-                                <td>Square</td>
-                                <td>Candles</td>
-                                <td>2000</td>
-                                <td>$4</td>
-                                <td>$8000</td>
-                                </tr>
-                                <tr>
-                                <td>10/24/2020</td>
-                                <td>Jess</td>
-                                <td>Bob</td>
-                                <td>Online</td>
-                                <td>Square</td>
-                                <td>Matches</td>
-                                <td>1</td>
-                                <td>$10</td>
-                                <td>$10</td>
-                                </tr>
-                                <tr>
-                                <td>10/29/2020</td>
-                                <td>Ghaith</td>
-                                <td>Bill</td>
-                                <td>Online</td>
-                                <td>Square</td>
-                                <td>Pumpkin</td>
-                                <td>3</td>
-                                <td>$15</td>
-                                <td>$45</td>
-                                </tr>
-                                    </tbody>
-                                    </Table>
-        )
+                        {rows.map((row) => (
+                             <tr key={row.id}>
+                                 <td >{row.date} </td>
+                                     <td>{row.name}</td>
+                                     <td >{row.Customer}</td>
+                                     <td >{row.Location}</td>
+                                     <td >{row.Paymethod}</td>
+                                     <td >{row.product}</td>
+                                     <td >{row.quan}</td>
+                                     <td >{row.price}</td>
+                                     <td>{row.total}</td>
+                                     </tr>
+          ))}
+        </tbody>
+      </Table>
+      </div>
+  );
     }
 }
 
