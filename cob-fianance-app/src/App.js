@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router , Route} from 'react-router-dom'
-import Todos from './components/Todos';
-import AddTodo from './components/AddTodo';
-import Header from './components/Layout/Header';
 import Dashboard from './components/pages/Dashboard';
 import Expenses from './components/pages/Expenses';
 import Navibar from './components/Layout/MyNavbar';
-import Buttons from './components/Layout/TransactionsButtons';
 import Transactions from './components/pages/Transactions';
 import Login from './components/pages/Login';
 import './App.css';
-import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const hostname = "http://localhost";
