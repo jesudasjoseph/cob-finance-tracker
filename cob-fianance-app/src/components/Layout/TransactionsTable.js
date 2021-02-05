@@ -6,12 +6,9 @@ function createData(date, name, Customer, Location, Paymethod, product , quan , 
     return { date, name, Customer, Location, Paymethod, product , quan , price, total};
   }
   const rows =[
-    createData('1', '01', 'me', 'customer1', 'location1', 'Paymethod1','goods1', 54,100 , 12341234),
-    createData('2','02', 'me2', 'customer2', 'location2', 'Paymethod2', 'goods2' , 59,100 , 543543)
+    createData('1', 'me1','customer1', 'location1', 'Paymethod1','goods1', 54,100 , 12341234),
+    createData('2','me2 ','customer2', 'location2', 'Paymethod2', 'goods2' , 59,100 , 543543)
   ]
-  function addTransaction(rows){
-    rows.push(createData('3', '01', 'me', 'customer1', 'location1', 'Paymethod1','goods3', 54,100 , 12341234))
-  }
 
 export class Tables extends Component {
   constructor(props){
@@ -93,7 +90,7 @@ export class Tables extends Component {
                         
                     </label>
                     <label> 
-                        Quanitiy:
+                        Quantity:
                         <input type="text" value={this.state.quan} onChange={(e) => this.setState({quan: e.target.value})} />
                         
                     </label>
