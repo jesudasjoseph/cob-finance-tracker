@@ -5,8 +5,6 @@ export class Buttons extends Component {
         return (
         <>
         <Button type="submit">Add Transaction</Button>{' '}
-        <Button as="input" type="button" value="Sync Square Transactions" />{' '}
-        <Button as="input" type="reset" value="Reset" />
         </>
 
         )
