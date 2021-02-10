@@ -31,7 +31,7 @@ function init(){
 		process.exit(-1)
 	})
 
-	console.log(query('SELECT role FROM "user" WHERE uid = $1', ['josejesu']));
+	console.log(query('SELECT role FROM "users" WHERE uid = $1', ['josejesu']));
 }
 
 function getExpense(uid) {
@@ -73,8 +73,11 @@ async function query(statement, values){
 	const client = await pool.connect();
 	try{
 		const res = await client.query(statement, values);
-		console.log("res: " + res);
+		console.log("res: " + res.rows);
 		return new data(null, res.rows[0]);
+	}
+	catch (e){
+		console.log("pg" + e);
 	}
 	finally {
 		client.release();
