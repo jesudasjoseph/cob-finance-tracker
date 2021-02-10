@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const now = 100;
+const now = 23;
 
 const progressInstance = <ProgressBar now={now} label={`${now}%`} />;
 
