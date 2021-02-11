@@ -25,69 +25,181 @@ function user(uid, role, first, last){
 	this.last = last;
 }
 
-function init(){
+async function init(){
 	pool.on('error', (err, client) => {
 		console.error('Unexpected error on idle client', err)
 		process.exit(-1)
 	})
-
-	console.log(query('SELECT role FROM "users" WHERE uid = $1', ['josejesu']));
-}
-
-function getExpense(uid) {
-	return query('SELECT * FROM expense WHERE bid = (SELECT bid FROM student WHERE uid = $1)', [uid]);
 }
 
 //This is a model function
-function createUser(asker, user) {
-	switch(asker.role){
-		case roleType.admin:
-			return query('INSERT INTO "user" (uid, role, first, last) VALUES ($1, $2, $3, $4)', [user.uid, user.role, user.first, user.last]);
-			break;
-		case roleType.instructor:
-			if (user.role != roleType.admin){
-				return query('INSERT INTO "user" (uid, role, first, last) VALUES ($1, $2, $3, $4)', [user.uid, user.role, user.first, user.last]);
-			}
-			break;
-		case roleType.student:
-			return new data('Students cannot create accounts!', '');
-			break;
+async function createUser(asker, user) {
+	const createUserQuery = {
+		text: 'INSERT INTO users (uid, role, first, last) VALUES ($1, $2, $3, $4)',
+		values: [user.uid, user.role, user.first, user.last]
 	}
+	const client = await pool.connect();
+
+	console.log(asker.role);
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(createUserQuery);
+				return new data(undefined, 'Successfully Added User!');
+				break;
+			case roleType.instructor:
+				if (user.role != roleType.admin){
+					await client.query(createUserQuery);
+					return new data(undefined, 'Successfully Added User!');
+				}
+				else {
+					return new data('Instructors cannot create admin accounts!', undefined);
+				}
+				break;
+			case roleType.student:
+				return new data('Students cannot create accounts!', undefined);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+
 	return new data('Failed to add user!', '');
 }
 
-function getUser(asker, uid) {
-	if (asker.uid === uid || asker.role >= 1){
-			return query('SELECT * FROM "user" WHERE uid == $1', [uid]);
+async function getUserByUid(asker, uid) {
+	const query = {
+		text: 'SELECT * FROM "users" WHERE uid = $1',
+		values: [uid]
 	}
-	else {
-		return new data('Permission Denied', '');
-	}
-}
-
-function getRole(asker){
-	return query('SELECT role FROM "user" WHERE uid = $1', [asker.uid]);
-}
-
-async function query(statement, values){
 	const client = await pool.connect();
-	try{
-		const res = await client.query(statement, values);
-		console.log("res: " + res.rows);
-		return new data(null, res.rows[0]);
+	let res;
+
+	try {
+		if (asker.uid === uid || asker.role >= 1){
+			res = await client.query(query);
+			if (!res.rows.length) {
+				return new data("Error! User is undefined!", undefined);
+			}
+			else {
+				return new data(undefined, res.rows[0]);
+			}
+		}
+		else {
+			return new data('Permission Denied', undefined);
+		}
 	}
-	catch (e){
+	catch (e) {
 		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
 	}
 	finally {
 		client.release();
 	}
 }
 
+async function modifyUser(asker, user) {
+	const query = {
+		text: 'UPDATE users SET first = $1, last = $2 WHERE uid=$3',
+		values: [user.first, user.last, user.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		if (asker.uid === user.uid || asker.role >= 1){
+			res = await client.query(query);
+			if (!res.rows.length) {
+				return new data("Error! User is undefined!", undefined);
+			}
+			else {
+				return new data(undefined, 200);
+			}
+		}
+		else {
+			return new data('Permission Denied', undefined);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+}
+
+async function deleteUserByUid(asker, uid) {
+	const query = {
+		text: 'DELETE FROM users WHERE uid = $1',
+		values: [uid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(undefined, 200);
+				break;
+			case roleType.instructor:
+				if (user.role != roleType.admin){
+					await client.query(query);
+					return new data(undefined, 200);
+				}
+				else {
+					return new data('Instructors cannot delete admin accounts!', undefined);
+				}
+				break;
+			case roleType.student:
+				return new data('Students cannot delete accounts!', undefined);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data('Failed to delete user!', '');
+}
+
+async function getRole(asker){
+	const client = await pool.connect();
+	let res;
+	try {
+		res = await client.query('SELECT role FROM "users" WHERE uid = $1', [asker.uid]);
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+
+	if (!res.rows.length) {
+		return new data("Error! User is undefined!", undefined);
+	}
+	else {
+		return new data(undefined, res.rows[0].role);
+	}
+}
+
 exports.init = init;
-exports.getExpense = getExpense;
 exports.getRole = getRole;
 exports.createUser = createUser;
+exports.getUserByUid = getUserByUid;
+exports.modifyUser = modifyUser;
+exports.deleteUserByUid = deleteUserByUid;
 exports.data = data;
 exports.asker = asker;
 exports.user = user;

@@ -47,15 +47,29 @@ function generateToken(payload){
 
 //Returns a token for the specified 'user', 'ip' combo.
 //Adds user to sessionList
-function getToken(req, res, next){
-	let role = q.getRole(new q.asker(uid, null));
-	let ses = new session(uid, role, ip)
-	let token = generateToken(ses);
+//
+//returns
+//on success - {token:user_token, role:user_role}
+//on fail - {token:0, role:0, error:error_message}
+async function getToken(uid, ip){
+	let query;
+	try {
+		query = await q.getRole(new q.asker(uid, undefined));
+	}
+	catch (e) {
+		console.log(e);
+	}
+	let tokenRole;
+	if (query.data != undefined) {
+		let ses = new session(uid, query.data, ip)
+		tokenRole = {token:generateToken(ses), role:query.data};
+		addSession(ses);
+	}
+	else {
+		tokenRole = {token:0, role:0, error:`Could not get Token for "${uid}"`};
+	}
 
-	addSession(ses);
-	res.locals.token = token;
-	res.locals.role = role;
-	next();
+	return tokenRole;
 }
 
 //Express middleware
@@ -69,14 +83,14 @@ function authToken(req, res, next){
 
 	jwt.verify(token, config.secret, function (error, decoded) {
 		if (error){
-			console.log(error);
+			console.log("jwt-err: " + error);
 			return res.sendStatus(403);
 		}
 		else{
-			req.body.asker = new q.asker(decoded.uid, decoded.role);
+			req.body.asker = new q.asker(decoded.payload.uid, decoded.payload.role);
+			next();
 		}
 	});
-	next();
 }
 
 //add session to sessionList
