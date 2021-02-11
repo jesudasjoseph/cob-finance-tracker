@@ -15,7 +15,7 @@ export default class Login extends React.Component {
 		this.getUserToken = this.getUserToken.bind(this);
 		this.handleUidChange = this.handleUidChange.bind(this);
 
-		if (myStorage.getItem('token') != undefined ) {
+		if (myStorage.getItem('token') !== undefined ) {
             if (myStorage.getItem('role') === 'student' ) {
                 props.history.push('/dashboard');
             }
@@ -35,7 +35,7 @@ export default class Login extends React.Component {
 
     getUserToken() {
         let myStorage = window.localStorage;
-        if (this.state.token != null){
+        if (this.state.token !== 0 && this.state.token !== null){
             alert("User already has a Token!");
         }
         else {
@@ -55,13 +55,13 @@ export default class Login extends React.Component {
     		}).then(data => {
     			if (data.token){
     				this.setState({token: data.token});
-                    if (data.role === "instructor"){
+                    if (data.role >= 1){
                         this.setState({role: data.role});
                         myStorage.setItem('jwt',"Bearer " + this.state.token);
                         myStorage.setItem('role', data.role);
                         this.props.history.push('/DashboardI');
                     }
-                    else if (data.role === "student"){
+                    else if (data.role === 0){
                         this.setState({role: data.role});
                         myStorage.setItem('jwt',"Bearer " + this.state.token);
                         myStorage.setItem('role', data.role);
@@ -74,7 +74,7 @@ export default class Login extends React.Component {
                     //redirect to instructor or student account
     			} else {
     				this.setState({token: 0});
-                    alert("Failed to get Token!");
+							alert(data.error);
     			}
     			console.log('Success:', data);
     		}).catch((error) => {

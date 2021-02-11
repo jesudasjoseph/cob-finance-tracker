@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 let token = 0;
+let ip = '71.193.191.23';
 
 export default class QueryTestPage extends React.Component {
 
@@ -44,7 +45,7 @@ export default class QueryTestPage extends React.Component {
 		else {
 				let body = {uid:'student'};
 
-		fetch('http://localhost:2021/auth', {
+		fetch('http://' + ip + ':2021/auth', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -91,7 +92,7 @@ export default class QueryTestPage extends React.Component {
 		else {
 				let body = {uid:'instructor'};
 
-		fetch('http://localhost:2021/auth', {
+		fetch('http://' + ip + ':2021/auth', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -138,7 +139,7 @@ export default class QueryTestPage extends React.Component {
 		else {
 				let body = {uid:'admin'};
 
-		fetch('http://localhost:2021/auth', {
+		fetch('http://' + ip + ':2021/auth', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -179,7 +180,7 @@ export default class QueryTestPage extends React.Component {
 	}
 
 	checkToken() {
-		fetch('http://71.193.191.23:2021/deposit', {
+		fetch('http://' + ip + ':2021/deposit', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -215,7 +216,7 @@ export default class QueryTestPage extends React.Component {
 	handleAddUserClick(e){
 		let bod = {user:{uid:this.state.temp_uid, first:this.state.first, last:this.state.last, role:this.state.role}};
 
-		fetch('http://localhost:2021/user', {
+		fetch('http://' + ip + ':2021/user', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -235,7 +236,7 @@ export default class QueryTestPage extends React.Component {
 		});
 	}
 	handleGetUserClick(e){
-		fetch('http://localhost:2021/user/byuid?uid=' + this.state.temp_uid, {
+		fetch('http://' + ip + ':2021/user/byuid?uid=' + this.state.temp_uid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -257,7 +258,7 @@ export default class QueryTestPage extends React.Component {
 	handleModifyUserClick(e){
 		let bod = {user:{uid:this.state.temp_uid, first:this.state.first, last:this.state.last, role:this.state.role}};
 
-		fetch('http://localhost:2021/user/', {
+		fetch('http://' + ip + ':2021/user/', {
 			mode: 'cors',
 			method: 'PUT',
 			credentials: 'same-origin',
@@ -276,7 +277,7 @@ export default class QueryTestPage extends React.Component {
 		});
 	}
 	handleDeleteUserClick(e){
-		fetch('http://localhost:2021/user/byuid?uid=' + this.state.temp_uid, {
+		fetch('http://' + ip + ':2021/user/byuid?uid=' + this.state.temp_uid, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
