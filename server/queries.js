@@ -103,6 +103,38 @@ async function getUserByUid(asker, uid) {
 	}
 }
 
+async function getMultipleUsers(asker, start, end) {
+	const query = {
+		text: 'SELECT * FROM "users" OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		if (asker.role >= 1){
+			res = await client.query(query);
+			if (!res.rows.length) {
+				return new data("Can't Find any users!", undefined);
+			}
+			else {
+				return new data(undefined, res.rows);
+			}
+		}
+		else {
+			return new data('Permission Denied', undefined);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+		console.log
+	}
+}
+
 async function modifyUser(asker, user) {
 	const query = {
 		text: 'UPDATE users SET first = $1, last = $2 WHERE uid=$3',
@@ -198,6 +230,7 @@ exports.init = init;
 exports.getRole = getRole;
 exports.createUser = createUser;
 exports.getUserByUid = getUserByUid;
+exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
 exports.data = data;

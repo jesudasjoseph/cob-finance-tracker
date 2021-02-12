@@ -6,7 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 let token = 0;
-let ip = '71.193.191.23';
+//let ip = '71.193.191.23';
+let ip = 'localhost';
 
 export default class QueryTestPage extends React.Component {
 
@@ -33,6 +34,7 @@ export default class QueryTestPage extends React.Component {
 		this.handleUidChange = this.handleUidChange.bind(this);
 		this.handleAddUserClick = this.handleAddUserClick.bind(this);
 		this.handleGetUserClick = this.handleGetUserClick.bind(this);
+		this.handleGetMultipleUsersClick = this.handleGetMultipleUsersClick.bind(this);
 		this.handleModifyUserClick = this.handleModifyUserClick.bind(this);
 		this.handleDeleteUserClick = this.handleDeleteUserClick.bind(this);
 	}
@@ -294,6 +296,25 @@ export default class QueryTestPage extends React.Component {
 			console.error('Error:', error);
 		});
 	}
+	handleGetMultipleUsersClick(e){
+		fetch('http://' + ip + ':2021/user?start=' + 0 + '&end=' + 50, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': `bearer ${this.state.token}`
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
 
 	render () {
 		return (
@@ -310,7 +331,7 @@ export default class QueryTestPage extends React.Component {
 					<Button onClick={this.getTokenAdmin} style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button2Text} />{' '}</>
 					</div>
 					<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-					<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button3Text} />{' '}</>
+					<Button onClick={this.handleGetMultipleUsersClick} style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value="Get 0-50 users!" />{' '}</>
 					</div>
 					<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
 					<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button4Text} />{' '}</>
