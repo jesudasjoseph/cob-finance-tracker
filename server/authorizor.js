@@ -1,17 +1,18 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const config = require('./config');
+const q = require('./queries');
 
 const SESSION_TIMEOUT = 50; //seconds
 const MAX_SESSIONS = 100;
 
 let sessionList = [];
 
-function session(user, ip){
+function session(uid, role, ip){
 	this.sub = generateSID();
 	this.sid = this.sub;
-	this.user = user;
-	this.role = "admin" //Replace with database call
+	this.uid = uid;
+	this.role = role;
 	this.ip = ip;
 	this.exp = Math.floor(Date.now() / 1000) + SESSION_TIMEOUT;
 }
@@ -46,20 +47,29 @@ function generateToken(payload){
 
 //Returns a token for the specified 'user', 'ip' combo.
 //Adds user to sessionList
-function getToken(user, ip){
-	let ses = new session(user, ip)
-	let token = generateToken(ses);
-	let role;
-	if (user === "instructor"){
-		role = "instructor";
+//
+//returns
+//on success - {token:user_token, role:user_role}
+//on fail - {token:0, role:0, error:error_message}
+async function getToken(uid, ip){
+	let query;
+	try {
+		query = await q.getRole(new q.asker(uid, undefined));
+	}
+	catch (e) {
+		console.log(e);
+	}
+	let tokenRole;
+	if (query.data != undefined) {
+		let ses = new session(uid, query.data, ip)
+		tokenRole = {token:generateToken(ses), role:query.data};
+		addSession(ses);
 	}
 	else {
-		role = "student";
+		tokenRole = {token:0, role:0, error:`Could not get Token for "${uid}"`};
 	}
 
-	addSession(ses);
-	return {token: token,
-			role: role};
+	return tokenRole;
 }
 
 //Express middleware
@@ -73,11 +83,14 @@ function authToken(req, res, next){
 
 	jwt.verify(token, config.secret, function (error, decoded) {
 		if (error){
-			console.log(error);
+			console.log("jwt-err: " + error);
 			return res.sendStatus(403);
 		}
+		else{
+			req.body.asker = new q.asker(decoded.payload.uid, decoded.payload.role);
+			next();
+		}
 	});
-	next();
 }
 
 //add session to sessionList

@@ -4,12 +4,15 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const config = require('./config');
+const q = require('./queries');
 
 const app = express();
 
 
-//Request Routing
+//Init database connection
+q.init();
 
+//Request Routing
 let authRouter = require('./routes/auth');
 let userRouter = require('./routes/user');
 let transactionRouter = require('./routes/transaction');
