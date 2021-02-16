@@ -2,9 +2,12 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router , Route} from 'react-router-dom'
 import Dashboard from './components/pages/Dashboard';
 import DashboardI from './components/pages/DashboardI';
+import UserInstructor from './components/pages/UserInstructor';
+import SettingsInstructor from './components/pages/SettingsInstuctor';
 import UserManagement from './components/pages/UserManagement';
 import Expenses from './components/pages/Expenses';
 import Navibar from './components/Layout/MyNavbar';
+import NavibarI from './components/Layout/MyNavBarI';
 import Transactions from './components/pages/Transactions';
 import Login from './components/pages/Login';
 import QueryTestPage from './components/pages/QueryTestPage';
@@ -19,16 +22,17 @@ class App extends Component{
 		return (
 			<Router>
 				<div className="App" style={{background: '#d3d3d3', backgroundSize: 'cover',   width: '100%' , height: '100vh' , minHeight: '100%' }}>
-					<Navibar />
 					<div className="container">
 						<Route exact path="/" component={Login} />
 						<Route path="/home" component={Login} />
-						<Route exact path="/DashboardI" component={DashboardI} />
-						<Route exact path="/UserManagement" component={UserManagement} />
+						<Route path="/DashboardI" component={DashboardI} />
+						<Route path= "/Profile" component={UserInstructor} />
+						<Route path= "/GroupFinancials" component={Dashboard} />
+						<Route path= "/SettingsInstuctor" component={SettingsInstructor} />
+						<Route path="/UserManagement" component={UserManagement} />
 						<Route path="/dashboard" component={Dashboard} />
 						<Route path="/transactions" component={Transactions} />
 						<Route path="/expenses" component={Expenses} />
-						<Route path="/profile" component={Login} />
 						<Route path="/querytestpage" component={QueryTestPage} />
 					</div>
 				</div>

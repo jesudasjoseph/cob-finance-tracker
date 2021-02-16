@@ -3,7 +3,12 @@ import Button from 'react-bootstrap/Button';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
 
-export class Buttons extends Component {
+export class UserMButtons extends Component {
+  handleclick(event){
+    alert('You clicked Instructor ');
+    event.preventDefault();
+  }
+
     render() {
         return (
           <>
@@ -11,9 +16,9 @@ export class Buttons extends Component {
         <Button as="input" type="button" value="Import Students" />{' '}
         <Nav>
         <NavDropdown title="Filter By" id="collasible-nav-dropdown">
-          <NavDropdown.Item href="#action/3.1">Instructor</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.3">Class</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.4">Other</NavDropdown.Item>
+          <NavDropdown.Item href="#filterI" OnClick = {this.handleclick} >Instructor</NavDropdown.Item>
+          <NavDropdown.Item href="#filterC">Class</NavDropdown.Item>
+          <NavDropdown.Item href="#filterS">Section</NavDropdown.Item>
         </NavDropdown>
         </Nav>
         </>
@@ -21,4 +26,4 @@ export class Buttons extends Component {
     }
 }
 
-export default Buttons
+export default UserMButtons
