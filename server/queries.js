@@ -227,32 +227,28 @@ async function getRole(asker){
 }
 
 //Business Queries
-async function getBusinessOverviewByBid(asker, bid) {
+//name, instructor, section, revenue, bank, square, expenses, profit
+async function getBusinessOverview(asker, start, end) {
 	const query = {
-		text: 'SELECT * FROM business WHERE bid=$1',
-		values: [bid]
+		text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) WHERE users.role >= 1 OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY;',
+		values: [start, end]
 	}
 	const client = await pool.connect();
+	let res;
 
-	console.log(asker.role);
 	try {
 		switch(asker.role){
-			case roleType.admin:
-				await client.query(createUserQuery);
-				return new data(undefined, 'Successfully Added User!');
+			case roleType.student:
+				return new data('Unauthorized!', undefined);
 				break;
-			case roleType.instructor:
-				if (user.role != roleType.admin){
-					await client.query(createUserQuery);
-					return new data(undefined, 'Successfully Added User!');
+			default:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data("Can't Find any Businesses!", undefined);
 				}
 				else {
-					return new data('Instructors cannot create admin accounts!', undefined);
+					return new data(undefined, res.rows);
 				}
-				break;
-			case roleType.student:
-				return new data('Students cannot create accounts!', undefined);
-				break;
 		}
 	}
 	catch (e) {
@@ -263,7 +259,7 @@ async function getBusinessOverviewByBid(asker, bid) {
 		client.release();
 	}
 
-	return new data('Failed to add user!', '');
+	return new data('Failed to get Businesses!', '');
 }
 
 
@@ -275,6 +271,9 @@ exports.getUserByUid = getUserByUid;
 exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
+
+exports.getBusinessOverview = getBusinessOverview;
+
 exports.data = data;
 exports.asker = asker;
 exports.user = user;

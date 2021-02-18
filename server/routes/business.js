@@ -3,12 +3,11 @@ const router = express.Router();
 const authorizor = require('../authorizor');
 const q = require('../queries');
 
-router.get('/', authorizor.authToken, async (req, res) => {
-	
+router.get('/overview', authorizor.authToken, async (req, res) => {
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'application/json');
-	res.send({'message': 'message'});
-
+	let result = await q.getBusinessOverview(req.body.asker, req.query.start, req.query.end);
+	res.send(JSON.stringify(result));
 });
 
 module.exports = router;
