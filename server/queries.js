@@ -226,6 +226,48 @@ async function getRole(asker){
 	}
 }
 
+//Business Queries
+async function getBusinessOverviewByBid(asker, bid) {
+	const query = {
+		text: 'SELECT * FROM business WHERE bid=$1',
+		values: [bid]
+	}
+	const client = await pool.connect();
+
+	console.log(asker.role);
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(createUserQuery);
+				return new data(undefined, 'Successfully Added User!');
+				break;
+			case roleType.instructor:
+				if (user.role != roleType.admin){
+					await client.query(createUserQuery);
+					return new data(undefined, 'Successfully Added User!');
+				}
+				else {
+					return new data('Instructors cannot create admin accounts!', undefined);
+				}
+				break;
+			case roleType.student:
+				return new data('Students cannot create accounts!', undefined);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data('Failed to add user!', '');
+}
+
+
+
 exports.init = init;
 exports.getRole = getRole;
 exports.createUser = createUser;

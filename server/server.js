@@ -14,6 +14,7 @@ q.init();
 
 //Request Routing
 let authRouter = require('./routes/auth');
+let businessRouter = require('./routes/business');
 let userRouter = require('./routes/user');
 let transactionRouter = require('./routes/transaction');
 let expenseRouter = require('./routes/expense');
@@ -24,6 +25,8 @@ app.use(cors()); //Use cors middleware
 app.use(express.json()); //Parse body
 //Router for Authentication requests
 app.use('/auth', authRouter);
+//Router for Business data requests
+app.use('/business', businessRouter);
 //Router for User data requests
 app.use('/user', userRouter);
 //Router for Transaction data requests
