@@ -231,7 +231,7 @@ async function getRole(asker){
 async function getMultipleBusiness(asker, start, end) {
 	const query = {
 		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		text: 'SELECT name, section, bank_total, expense_total, transaction_total, transaction_count, expense_count, bank_count, product_count, profit FROM business OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM business OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
 	const client = await pool.connect();
