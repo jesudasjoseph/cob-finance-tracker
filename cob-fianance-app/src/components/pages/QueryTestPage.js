@@ -6,8 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 let token = 0;
-let ip = '71.193.191.23';
-//let ip = 'localhost';
+//let ip = '71.193.191.23';
+let ip = 'localhost';
 
 export default class QueryTestPage extends React.Component {
 
@@ -17,7 +17,7 @@ export default class QueryTestPage extends React.Component {
 			button0Text: "Get Token for 'student'",
 			button1Text: "Get Token for 'instructor'",
 			button2Text: "Get Token for 'admin'",
-			button3Text: "Text",
+			button3Text: "Get Business data 0-50",
 			button4Text: "Text",
 			button5Text: "Text",
 			uid: "",
@@ -28,6 +28,10 @@ export default class QueryTestPage extends React.Component {
 		this.getTokenInstructor = this.getTokenInstructor.bind(this);
 		this.getTokenAdmin = this.getTokenAdmin.bind(this);
 		this.checkToken = this.checkToken.bind(this);
+
+		this.handleIndexChange = this.handleIndexChange.bind(this);
+		this.handleRowsChange = this.handleRowsChange.bind(this);
+
 		this.handleFirstChange = this.handleFirstChange.bind(this);
 		this.handleLastChange = this.handleLastChange.bind(this);
 		this.handleRoleChange = this.handleRoleChange.bind(this);
@@ -37,6 +41,11 @@ export default class QueryTestPage extends React.Component {
 		this.handleGetMultipleUsersClick = this.handleGetMultipleUsersClick.bind(this);
 		this.handleModifyUserClick = this.handleModifyUserClick.bind(this);
 		this.handleDeleteUserClick = this.handleDeleteUserClick.bind(this);
+
+		this.handleGetMultipleBusinessClick = this.handleGetMultipleBusinessClick.bind(this);
+		this.handleAddBusinessClick = this.handleAddBusinessClick.bind(this);
+		this.handleBusinessSecChange = this.handleBusinessSecChange.bind(this);
+		this.handleBusinessNameChange = this.handleBusinessNameChange.bind(this);
 	}
 
 	getTokenStudent() {
@@ -203,6 +212,51 @@ export default class QueryTestPage extends React.Component {
 		});
 	}
 
+	handleIndexChange(e){
+		this.setState({ind: e.target.value});
+	}
+	handleRowsChange(e){
+		this.setState({rows: e.target.value});
+	}
+	handleGetMultipleBusinessClick(){
+		fetch('http://' + ip + ':2021/business?start=' + this.state.ind + '&end=' + this.state.rows, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': `bearer ${this.state.token}`
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+	handleGetMultipleUsersClick(){
+		fetch('http://' + ip + ':2021/user?start=' + this.state.ind + '&end=' + this.state.rows, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': `bearer ${this.state.token}`
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+
 	handleFirstChange(e){
 		this.setState({first: e.target.value});
 	}
@@ -215,7 +269,8 @@ export default class QueryTestPage extends React.Component {
 	handleRoleChange(e){
 		this.setState({role: e.target.value});
 	}
-	handleAddUserClick(e){
+
+	handleAddUserClick(){
 		let bod = {user:{uid:this.state.temp_uid, first:this.state.first, last:this.state.last, role:this.state.role}};
 
 		fetch('http://' + ip + ':2021/user', {
@@ -237,7 +292,7 @@ export default class QueryTestPage extends React.Component {
 			console.error('Error:', error);
 		});
 	}
-	handleGetUserClick(e){
+	handleGetUserClick(){
 		fetch('http://' + ip + ':2021/user/byuid?uid=' + this.state.temp_uid, {
 			mode: 'cors',
 			method: 'GET',
@@ -257,7 +312,7 @@ export default class QueryTestPage extends React.Component {
 			console.error('Error:', error);
 		});
 	}
-	handleModifyUserClick(e){
+	handleModifyUserClick(){
 		let bod = {user:{uid:this.state.temp_uid, first:this.state.first, last:this.state.last, role:this.state.role}};
 
 		fetch('http://' + ip + ':2021/user/', {
@@ -278,7 +333,7 @@ export default class QueryTestPage extends React.Component {
 			console.error('Error:', error);
 		});
 	}
-	handleDeleteUserClick(e){
+	handleDeleteUserClick(){
 		fetch('http://' + ip + ':2021/user/byuid?uid=' + this.state.temp_uid, {
 			mode: 'cors',
 			method: 'DELETE',
@@ -296,21 +351,33 @@ export default class QueryTestPage extends React.Component {
 			console.error('Error:', error);
 		});
 	}
-	handleGetMultipleUsersClick(e){
-		fetch('http://' + ip + ':2021/user?start=' + 0 + '&end=' + 50, {
+
+	handleBusinessNameChange(e){
+		this.setState({businessName: e.target.value});
+	}
+	handleBusinessSecChange(e){
+		this.setState({businessSection: e.target.value});
+	}
+
+	handleAddBusinessClick(){
+		let body = {business:{name:this.state.businessName, section:this.state.businessSection}};
+
+		fetch('http://' + ip + ':2021/business', {
 			mode: 'cors',
-			method: 'GET',
+			method: 'POST',
 			credentials: 'same-origin',
 			headers: {
 				'Accept': 'application/json',
 				'Content-type': 'application/json',
 				'Authorization': `bearer ${this.state.token}`
-			}
+			},
+			body: JSON.stringify(body)
 		}).then(response => {
 			console.log(response);
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
+			alert(data.data);
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -330,18 +397,23 @@ export default class QueryTestPage extends React.Component {
 					<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
 					<Button onClick={this.getTokenAdmin} style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button2Text} />{' '}</>
 					</div>
-					<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-					<Button onClick={this.handleGetMultipleUsersClick} style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value="Get 0-50 users!" />{' '}</>
-					</div>
-					<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-					<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button4Text} />{' '}</>
-					</div>
-					<div style={{ flex: '1', padding: '5px 5px' , textAlign: 'center'}}><>
-					<Button style={{width: '300px',flex: '1' , textAlign: 'center', display: 'inline-block', height: '50px' }} as="input" type="button" value={this.state.button5Text} />{' '}</>
-					</div>
 				</div>
 				<div style={{display: 'flex', flex: '1', paddingTop: '10px'}}>
 					<Form style={{flex: '1'}}>
+						<Form.Label>Get Multiple</Form.Label>
+						<Form.Control placeholder="index (i)" onChange={this.handleIndexChange} />
+						<Form.Control placeholder="rows (r)" onChange={this.handleRowsChange} />
+						<Button onClick={this.handleGetMultipleUsersClick}>
+						Get Users from (i to i+r)
+						</Button>
+						<Button onClick={this.handleGetMultipleBusinessClick}>
+						Get Business from (i to i+r)
+						</Button>
+					</Form>
+				</div>
+				<div style={{display: 'flex', flex: '1', paddingTop: '10px'}}>
+					<Form style={{flex: '1'}}>
+						<Form.Label>User Management</Form.Label>
 						<Form.Control placeholder="first" onChange={this.handleFirstChange} />
 						<Form.Control placeholder="last" onChange={this.handleLastChange} />
 						<Form.Control placeholder="uid" onChange={this.handleUidChange} />
@@ -357,6 +429,16 @@ export default class QueryTestPage extends React.Component {
 						</Button>
 						<Button onClick={this.handleDeleteUserClick}>
 						Delete User by UID
+						</Button>
+					</Form>
+				</div>
+				<div style={{display: 'flex', flex: '1', paddingTop: '10px'}}>
+					<Form style={{flex: '1'}}>
+						<Form.Label>Business Management</Form.Label>
+						<Form.Control placeholder="name" onChange={this.handleBusinessNameChange} />
+						<Form.Control placeholder="section" onChange={this.handleBusinessSecChange} />
+						<Button onClick={this.handleAddBusinessClick}>
+						Add Business
 						</Button>
 					</Form>
 				</div>
