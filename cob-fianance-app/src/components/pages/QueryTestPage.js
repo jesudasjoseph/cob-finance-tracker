@@ -4,10 +4,11 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 
 let token = 0;
-//let ip = '71.193.191.23';
-let ip = 'localhost';
+let ip = '71.193.191.23';
+//let ip = 'localhost';
 
 export default class QueryTestPage extends React.Component {
 
@@ -21,7 +22,9 @@ export default class QueryTestPage extends React.Component {
 			button4Text: "Text",
 			button5Text: "Text",
 			uid: "",
-			token: null
+			token: null,
+			userTable: [],
+			businessTable: []
 		};
 
 		this.getTokenStudent = this.getTokenStudent.bind(this);
@@ -46,6 +49,9 @@ export default class QueryTestPage extends React.Component {
 		this.handleAddBusinessClick = this.handleAddBusinessClick.bind(this);
 		this.handleBusinessSecChange = this.handleBusinessSecChange.bind(this);
 		this.handleBusinessNameChange = this.handleBusinessNameChange.bind(this);
+
+		this.renderUserTable = this.renderUserTable.bind(this);
+		this.renderBusinessTable = this.renderBusinessTable.bind(this);
 	}
 
 	getTokenStudent() {
@@ -233,6 +239,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
+			this.setState({businessTable:data.data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -252,6 +259,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
+			this.setState({userTable:data.data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -383,6 +391,33 @@ export default class QueryTestPage extends React.Component {
 		});
 	}
 
+	renderUserTable(){
+		return this.state.userTable.map((student, index) => {
+			const {first, last, uid, role} = student;
+			return (
+				<tr key={uid}>
+					<td>{index+1}</td>
+					<td>{first}</td>
+					<td>{last}</td>
+					<td>{role}</td>
+					<td>{uid}</td>
+				</tr>
+			)});
+	}
+
+	renderBusinessTable(){
+		return this.state.businessTable.map((business, index) => {
+			const {name, bid, profit} = business;
+			return (
+				<tr key={bid}>
+					<td>{index+1}</td>
+					<td>{bid}</td>
+					<td>{name}</td>
+					<td>{profit}</td>
+				</tr>
+			)});
+	}
+
 	render () {
 		return (
 			<React.Fragment >
@@ -443,6 +478,35 @@ export default class QueryTestPage extends React.Component {
 					</Form>
 				</div>
 			</div>
+			user table
+			<Table responsive>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>First</th>
+						<th>Last</th>
+						<th>Role</th>
+						<th>UID</th>
+					</tr>
+				</thead>
+				<tbody>
+					{this.renderUserTable()}
+				</tbody>
+			</Table>
+			business table
+			<Table responsive>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>BID</th>
+						<th>Name</th>
+						<th>Profit</th>
+					</tr>
+				</thead>
+				<tbody>
+					{this.renderBusinessTable()}
+				</tbody>
+			</Table>
 			</React.Fragment>
 		);
 	}
