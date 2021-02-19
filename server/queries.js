@@ -228,9 +228,10 @@ async function getRole(asker){
 
 //Business Queries
 //name, instructor, section, revenue, bank, square, expenses, profit
-async function getBusinessOverview(asker, start, end) {
+async function getMultipleBusiness(asker, start, end) {
 	const query = {
-		text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) WHERE users.role >= 1 OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY;',
+		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT name, section, bank_total, expense_total, transaction_total, transaction_count, expense_count, bank_count, product_count, profit FROM business OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
 	const client = await pool.connect();
@@ -262,6 +263,39 @@ async function getBusinessOverview(asker, start, end) {
 	return new data('Failed to get Businesses!', '');
 }
 
+async function createBusiness(asker, business) {
+	const query = {
+		text: 'INSERT INTO business (name, section) VALUES ($1, $2)',
+		values: [business.name, business.section]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data('Students cannot create businesses!', undefined);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(undefined, 'Successfully Added Business!');
+				break;
+			case roleType.admin:
+				await client.query(query);
+				return new data(undefined, 'Successfully Added Business!');
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data('Failed to add business!', undefined);
+}
+
 
 
 exports.init = init;
@@ -272,7 +306,8 @@ exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
 
-exports.getBusinessOverview = getBusinessOverview;
+exports.getMultipleBusiness = getMultipleBusiness;
+exports.createBusiness = createBusiness;
 
 exports.data = data;
 exports.asker = asker;
