@@ -24,7 +24,8 @@ export default class QueryTestPage extends React.Component {
 			uid: "",
 			token: null,
 			userTable: [],
-			businessTable: []
+			businessTable: [],
+			transactionTable: []
 		};
 
 		this.getTokenStudent = this.getTokenStudent.bind(this);
@@ -34,6 +35,7 @@ export default class QueryTestPage extends React.Component {
 
 		this.handleIndexChange = this.handleIndexChange.bind(this);
 		this.handleRowsChange = this.handleRowsChange.bind(this);
+		this.handleBidChange = this.handleBidChange.bind(this);
 
 		this.handleFirstChange = this.handleFirstChange.bind(this);
 		this.handleLastChange = this.handleLastChange.bind(this);
@@ -50,8 +52,22 @@ export default class QueryTestPage extends React.Component {
 		this.handleBusinessSecChange = this.handleBusinessSecChange.bind(this);
 		this.handleBusinessNameChange = this.handleBusinessNameChange.bind(this);
 
+		this.handleGetMultipleTransactionsClick = this.handleGetMultipleTransactionsClick.bind(this);
+
+		this.handleTransactionUid = this.handleTransactionUid.bind(this);
+		this.handleTransactionBid = this.handleTransactionBid.bind(this);
+		this.handleTransactionCustomer = this.handleTransactionCustomer.bind(this);
+		this.handleTransactionDate = this.handleTransactionDate.bind(this);
+		this.handleTransactionProduct = this.handleTransactionProduct.bind(this);
+		this.handleTransactionPayment = this.handleTransactionPayment.bind(this);
+		this.handleTransactionQuantity = this.handleTransactionQuantity.bind(this);
+		this.handleTransactionPrice = this.handleTransactionPrice.bind(this);
+
+		this.handleAddTransactionClick = this.handleAddTransactionClick.bind(this);
+
 		this.renderUserTable = this.renderUserTable.bind(this);
 		this.renderBusinessTable = this.renderBusinessTable.bind(this);
+		this.renderTransactionTable = this.renderTransactionTable.bind(this);
 	}
 
 	getTokenStudent() {
@@ -264,6 +280,29 @@ export default class QueryTestPage extends React.Component {
 			console.error('Error:', error);
 		});
 	}
+	handleBidChange(e){
+		this.setState({bid: e.target.value});
+	}
+	handleGetMultipleTransactionsClick(){
+		fetch('http://' + ip + ':2021/transaction?start=' + this.state.ind + '&end=' + this.state.rows + '&bid=' + this.state.bid, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': `bearer ${this.state.token}`
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+			this.setState({transactionTable:data.data});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
 
 	handleFirstChange(e){
 		this.setState({first: e.target.value});
@@ -391,6 +430,55 @@ export default class QueryTestPage extends React.Component {
 		});
 	}
 
+	handleTransactionUid(e){
+		this.setState({tUid: e.target.value});
+	}
+	handleTransactionBid(e){
+		this.setState({tBid: e.target.value});
+	}
+	handleTransactionCustomer(e){
+		this.setState({customer: e.target.value});
+	}
+	handleTransactionDate(e){
+		this.setState({date: e.target.value});
+	}
+	handleTransactionProduct(e){
+		this.setState({product: e.target.value});
+	}
+	handleTransactionPayment(e){
+		this.setState({payment: e.target.value});
+	}
+	handleTransactionQuantity(e){
+		this.setState({tQuantity: e.target.value});
+	}
+	handleTransactionPrice(e){
+		this.setState({tPrice: e.target.value});
+	}
+
+	handleAddTransactionClick(){
+		let body = {transaction:{uid:this.state.tUid, bid:this.state.tBid, customer:this.state.customer, date:this.state.date, product:this.state.product, payment:this.state.payment, quantity:this.state.tQuantity, price:this.state.tPrice}};
+
+		fetch('http://' + ip + ':2021/transaction', {
+			mode: 'cors',
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': `bearer ${this.state.token}`
+			},
+			body: JSON.stringify(body)
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+			alert(data.data);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+
 	renderUserTable(){
 		return this.state.userTable.map((student, index) => {
 			const {first, last, uid, role} = student;
@@ -404,7 +492,6 @@ export default class QueryTestPage extends React.Component {
 				</tr>
 			)});
 	}
-
 	renderBusinessTable(){
 		return this.state.businessTable.map((business, index) => {
 			const {name, bid, profit} = business;
@@ -414,6 +501,19 @@ export default class QueryTestPage extends React.Component {
 					<td>{bid}</td>
 					<td>{name}</td>
 					<td>{profit}</td>
+				</tr>
+			)});
+	}
+	renderTransactionTable(){
+		return this.state.transactionTable.map((transaction, index) => {
+			const {uid, bid, tid, total} = transaction;
+			return (
+				<tr key={tid}>
+					<td>{index+1}</td>
+					<td>{uid}</td>
+					<td>{bid}</td>
+					<td>{tid}</td>
+					<td>{total}</td>
 				</tr>
 			)});
 	}
@@ -443,6 +543,10 @@ export default class QueryTestPage extends React.Component {
 						</Button>
 						<Button onClick={this.handleGetMultipleBusinessClick}>
 						Get Business from (i to i+r)
+						</Button>
+						<Form.Control placeholder="bid" onChange={this.handleBidChange} />
+						<Button onClick={this.handleGetMultipleTransactionsClick}>
+						Get Transactions from bid in range (i to i+r)
 						</Button>
 					</Form>
 				</div>
@@ -477,6 +581,22 @@ export default class QueryTestPage extends React.Component {
 						</Button>
 					</Form>
 				</div>
+				<div style={{display: 'flex', flex: '1', paddingTop: '10px'}}>
+					<Form style={{flex: '1'}}>
+						<Form.Label>Transactions</Form.Label>
+						<Form.Control placeholder="uid" onChange={this.handleTransactionUid} />
+						<Form.Control placeholder="bid" onChange={this.handleTransactionBid} />
+						<Form.Control placeholder="customer" onChange={this.handleTransactionCustomer} />
+						<Form.Control placeholder="date (yyyy-mm-dd)" onChange={this.handleTransactionDate} />
+						<Form.Control placeholder="product" onChange={this.handleTransactionProduct} />
+						<Form.Control placeholder="payment" onChange={this.handleTransactionPayment} />
+						<Form.Control placeholder="quantity" onChange={this.handleTransactionQuantity} />
+						<Form.Control placeholder="price" onChange={this.handleTransactionPrice} />
+						<Button onClick={this.handleAddTransactionClick}>
+						Add Transaction
+						</Button>
+					</Form>
+				</div>
 			</div>
 			user table
 			<Table responsive>
@@ -505,6 +625,21 @@ export default class QueryTestPage extends React.Component {
 				</thead>
 				<tbody>
 					{this.renderBusinessTable()}
+				</tbody>
+			</Table>
+			transaction table
+			<Table responsive>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>uid</th>
+						<th>bid</th>
+						<th>tid</th>
+						<th>total</th>
+					</tr>
+				</thead>
+				<tbody>
+					{this.renderTransactionTable()}
 				</tbody>
 			</Table>
 			</React.Fragment>
