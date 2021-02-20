@@ -262,7 +262,6 @@ async function getMultipleBusiness(asker, start, end) {
 
 	return new data('Failed to get Businesses!', '');
 }
-
 async function createBusiness(asker, business) {
 	const query = {
 		text: 'INSERT INTO business (name, section) VALUES ($1, $2)',
@@ -296,6 +295,75 @@ async function createBusiness(asker, business) {
 	return new data('Failed to add business!', undefined);
 }
 
+//Transaction Queries
+//Fix permissions
+async function getMultipleTransactions(asker, start, end, bid) {
+	const query = {
+		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM transactions WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data('Unauthorized!', undefined);
+				break;
+			default:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data("Can't Find any Transactions!", undefined);
+				}
+				else {
+					return new data(undefined, res.rows);
+				}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data('Failed to get Transactions!', '');
+}
+async function addTransaction(asker, transaction) {
+	const query = {
+		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
+		values: [transaction.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data('Students cannot add transactions!', undefined);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(undefined, 'Successfully Added Transaction!');
+				break;
+			case roleType.admin:
+				await client.query(query);
+				return new data(undefined, 'Successfully Added Transaction!');
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data("Error querying database!", undefined);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data('Failed to add Transaction!', undefined);
+}
+
 
 
 exports.init = init;
@@ -308,6 +376,9 @@ exports.deleteUserByUid = deleteUserByUid;
 
 exports.getMultipleBusiness = getMultipleBusiness;
 exports.createBusiness = createBusiness;
+
+exports.getMultipleTransactions = getMultipleTransactions;
+exports.addTransaction = addTransaction;
 
 exports.data = data;
 exports.asker = asker;
