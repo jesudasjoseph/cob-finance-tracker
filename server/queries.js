@@ -8,8 +8,8 @@ const roleType = {
 	'student':0
 };
 
-function data(error, data){
-	this.error = error;
+function data(code, data = null){
+	this.code = code;
 	this.data = data;
 }
 
@@ -45,31 +45,31 @@ async function createUser(asker, user) {
 		switch(asker.role){
 			case roleType.admin:
 				await client.query(createUserQuery);
-				return new data(undefined, 'Successfully Added User!');
+				return new data(201);
 				break;
 			case roleType.instructor:
 				if (user.role != roleType.admin){
 					await client.query(createUserQuery);
-					return new data(undefined, 'Successfully Added User!');
+					return new data(201);
 				}
 				else {
-					return new data('Instructors cannot create admin accounts!', undefined);
+					return new data(403);
 				}
 				break;
 			case roleType.student:
-				return new data('Students cannot create accounts!', undefined);
+				return new data(403);
 				break;
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
 	}
 
-	return new data('Failed to add user!', '');
+	return new data(500);
 }
 
 async function getUserByUid(asker, uid) {
@@ -84,19 +84,19 @@ async function getUserByUid(asker, uid) {
 		if (asker.uid === uid || asker.role >= 1){
 			res = await client.query(query);
 			if (!res.rows.length) {
-				return new data("Error! User is undefined!", undefined);
+				return new data(404);
 			}
 			else {
-				return new data(undefined, res.rows[0]);
+				return new data(200, res.rows[0]);
 			}
 		}
 		else {
-			return new data('Permission Denied', undefined);
+			return new data(403);
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
@@ -115,19 +115,19 @@ async function getMultipleUsers(asker, start, end) {
 		if (asker.role >= 1){
 			res = await client.query(query);
 			if (!res.rows.length) {
-				return new data("Can't Find any users!", undefined);
+				return new data(404);
 			}
 			else {
-				return new data(undefined, res.rows);
+				return new data(200, res.rows);
 			}
 		}
 		else {
-			return new data('Permission Denied', undefined);
+			return new data(403);
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
@@ -147,19 +147,19 @@ async function modifyUser(asker, user) {
 		if (asker.uid === user.uid || asker.role >= 1){
 			res = await client.query(query);
 			if (!res.rows.length) {
-				return new data("Error! User is undefined!", undefined);
+				return new data(404);
 			}
 			else {
-				return new data(undefined, 200);
+				return new data(200);
 			}
 		}
 		else {
-			return new data('Permission Denied', undefined);
+			return new data(403);
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
@@ -177,31 +177,31 @@ async function deleteUserByUid(asker, uid) {
 		switch(asker.role){
 			case roleType.admin:
 				await client.query(query);
-				return new data(undefined, 200);
+				return new data(200);
 				break;
 			case roleType.instructor:
 				if (user.role != roleType.admin){
 					await client.query(query);
-					return new data(undefined, 200);
+					return new data(200);
 				}
 				else {
-					return new data('Instructors cannot delete admin accounts!', undefined);
+					return new data(403);
 				}
 				break;
 			case roleType.student:
-				return new data('Students cannot delete accounts!', undefined);
+				return new data(403);
 				break;
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
 	}
 
-	return new data('Failed to delete user!', '');
+	return new data(500);
 }
 
 async function getRole(asker){
@@ -212,17 +212,17 @@ async function getRole(asker){
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
 	}
 
 	if (!res.rows.length) {
-		return new data("Error! User is undefined!", undefined);
+		return new data(404);
 	}
 	else {
-		return new data(undefined, res.rows[0].role);
+		return new data(200, res.rows[0].role);
 	}
 }
 
@@ -240,27 +240,27 @@ async function getMultipleBusiness(asker, start, end) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data('Unauthorized!', undefined);
+				return new data(403);
 				break;
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data("Can't Find any Businesses!", undefined);
+					return new data(404);
 				}
 				else {
-					return new data(undefined, res.rows);
+					return new data(200, res.rows);
 				}
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
 	}
 
-	return new data('Failed to get Businesses!', '');
+	return new data(500);
 }
 async function createBusiness(asker, business) {
 	const query = {
@@ -272,27 +272,27 @@ async function createBusiness(asker, business) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data('Students cannot create businesses!', undefined);
+				return new data(403);
 				break;
 			case roleType.instructor:
 				await client.query(query);
-				return new data(undefined, 'Successfully Added Business!');
+				return new data(201);
 				break;
 			case roleType.admin:
 				await client.query(query);
-				return new data(undefined, 'Successfully Added Business!');
+				return new data(201);
 				break;
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
 	}
 
-	return new data('Failed to add business!', undefined);
+	return new data(500);
 }
 
 //Transaction Queries
@@ -309,27 +309,27 @@ async function getMultipleTransactions(asker, start, end, bid) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data('Unauthorized!', undefined);
+				return new data(403);
 				break;
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data("Can't Find any Transactions!", undefined);
+					return new data(404);
 				}
 				else {
-					return new data(undefined, res.rows);
+					return new data(200, res.rows);
 				}
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
 	}
 
-	return new data('Failed to get Transactions!', '');
+	return new data(500);
 }
 async function addTransaction(asker, transaction) {
 	const query = {
@@ -341,27 +341,27 @@ async function addTransaction(asker, transaction) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data('Students cannot add transactions!', undefined);
+				return new data(403);//Students cant add transactions yet.. (need to change)
 				break;
 			case roleType.instructor:
 				await client.query(query);
-				return new data(undefined, 'Successfully Added Transaction!');
+				return new data(201);
 				break;
 			case roleType.admin:
 				await client.query(query);
-				return new data(undefined, 'Successfully Added Transaction!');
+				return new data(201);
 				break;
 		}
 	}
 	catch (e) {
 		console.log("pg" + e);
-		return new data("Error querying database!", undefined);
+		return new data(500);
 	}
 	finally {
 		client.release();
 	}
 
-	return new data('Failed to add Transaction!', undefined);
+	return new data(500);
 }
 
 
