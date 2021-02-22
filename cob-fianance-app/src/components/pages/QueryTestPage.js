@@ -7,8 +7,8 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 
 let token = 0;
-//let ip = '71.193.191.23';
-let ip = 'localhost';
+let ip = '71.193.191.23';
+//let ip = 'localhost';
 
 export default class QueryTestPage extends React.Component {
 
