@@ -17,6 +17,11 @@ function session(uid, role, ip){
 	this.exp = Math.floor(Date.now() / 1000) + SESSION_TIMEOUT;
 }
 
+function packet(code, data = null){
+	this.code = code;
+	this.data = data;
+}
+
 //Generate a unique SID
 //This function is recurssive
 function generateSID(){
@@ -49,27 +54,19 @@ function generateToken(payload){
 //Adds user to sessionList
 //
 //returns
-//on success - {token:user_token, role:user_role}
-//on fail - {token:0, role:0, error:error_message}
+//on success - {200, {token, role}}
+//on fail - {http_status}
 async function getToken(uid, ip){
-	let query;
-	try {
-		query = await q.getRole(new q.asker(uid, undefined));
-	}
-	catch (e) {
-		console.log(e);
-	}
-	let tokenRole;
-	if (query.data != undefined) {
-		let ses = new session(uid, query.data, ip)
-		tokenRole = {token:generateToken(ses), role:query.data};
+	let {code, data} = await q.getRole(new q.asker(uid, undefined));
+
+	if (code == 200) {
+		let ses = new session(uid, data, ip)
 		addSession(ses);
+		return new packet(code, {token:generateToken(ses), role:data});
 	}
 	else {
-		tokenRole = {token:0, role:0, error:`Could not get Token for "${uid}"`};
+		return new packet(code);
 	}
-
-	return tokenRole;
 }
 
 //Express middleware
@@ -84,9 +81,10 @@ function authToken(req, res, next){
 	jwt.verify(token, config.secret, function (error, decoded) {
 		if (error){
 			console.log("jwt-err: " + error);
-			return res.sendStatus(403);
+			return res.sendStatus(400);
 		}
 		else{
+			//Adds the deciphered requestor data to the request body.
 			req.body.asker = new q.asker(decoded.payload.uid, decoded.payload.role);
 			next();
 		}
