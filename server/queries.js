@@ -71,7 +71,6 @@ async function createUser(asker, user) {
 
 	return new data(500);
 }
-
 async function getUserByUid(asker, uid) {
 	const query = {
 		text: 'SELECT * FROM "users" WHERE uid = $1',
@@ -102,7 +101,6 @@ async function getUserByUid(asker, uid) {
 		client.release();
 	}
 }
-
 async function getMultipleUsers(asker, start, end) {
 	const query = {
 		text: 'SELECT * FROM "users" OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
@@ -134,7 +132,6 @@ async function getMultipleUsers(asker, start, end) {
 		console.log
 	}
 }
-
 async function modifyUser(asker, user) {
 	const query = {
 		text: 'UPDATE users SET first = $1, last = $2 WHERE uid=$3',
@@ -165,7 +162,6 @@ async function modifyUser(asker, user) {
 		client.release();
 	}
 }
-
 async function deleteUserByUid(asker, uid) {
 	const query = {
 		text: 'DELETE FROM users WHERE uid = $1',
@@ -203,7 +199,6 @@ async function deleteUserByUid(asker, uid) {
 
 	return new data(500);
 }
-
 async function getRole(asker){
 	const client = await pool.connect();
 	let res;
@@ -296,7 +291,7 @@ async function createBusiness(asker, business) {
 }
 
 //Transaction Queries
-//Fix permissions
+//Fix permissions for students
 async function getMultipleTransactions(asker, start, end, bid) {
 	const query = {
 		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
@@ -364,6 +359,74 @@ async function addTransaction(asker, transaction) {
 	return new data(500);
 }
 
+//Expense Queries
+//Fix Permissions for students
+async function getMultipleExpenses(asker, start, end, bid) {
+	const query = {
+		text: 'SELECT * FROM expenses WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			default:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function addExpense(asker, expense) {
+	const query = {
+		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+		values: [expense.uid, expense.bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment, expense.price, expense.justification]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);//Students cant add transactions yet.. (need to change)
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(201);
+				break;
+			case roleType.admin:
+				await client.query(query);
+				return new data(201);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+
 
 
 exports.init = init;
@@ -379,6 +442,9 @@ exports.createBusiness = createBusiness;
 
 exports.getMultipleTransactions = getMultipleTransactions;
 exports.addTransaction = addTransaction;
+
+exports.getMultipleTransactions = getMultipleExpenses;
+exports.addTransaction = addExpense;
 
 exports.data = data;
 exports.asker = asker;
