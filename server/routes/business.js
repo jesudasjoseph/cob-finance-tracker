@@ -5,16 +5,16 @@ const q = require('../queries');
 
 router.get('/', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	let {code, data} = await q.getMultipleTransactions(req.body.asker, req.query.start, req.query.end, req.query.bid);
+	let {code, data} = await q.getMultipleBusiness(req.body.asker, req.query.start, req.query.end);
 	res.statusCode = code;
 	res.send(JSON.stringify(data));
 });
 
 router.post('/', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	let {code} = await q.addTransaction(req.body.asker, req.body.transaction);
+	let {code, data} = await q.createBusiness(req.body.asker, req.body.business);
 	res.statusCode = code;
-	res.end();
+	res.send(JSON.stringify(data));
 });
 
 module.exports = router;

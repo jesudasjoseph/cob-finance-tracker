@@ -3,13 +3,18 @@ const router = express.Router();
 const authorizor = require('../authorizor');
 const q = require('../queries');
 
-/*GET request for /auth (returns token)*/
-router.get('/', function(req, res, next) {
-
-	res.statusCode = 200;
+router.get('/', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	res.send(q.getExpense(4));
+	let {code, data} = await q.getMultipleExpenses(req.body.asker, req.query.start, req.query.end, req.query.bid);
+	res.statusCode = code;
+	res.send(JSON.stringify(data));
+});
 
+router.post('/', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code} = await q.addExpense(req.body.asker, req.body.expense);
+	res.statusCode = code;
+	res.end();
 });
 
 module.exports = router;
