@@ -212,28 +212,6 @@ export default class QueryTestPage extends React.Component {
 		}
 	}
 
-	checkToken() {
-		fetch('http://' + ip + ':2021/deposit', {
-			mode: 'cors',
-			method: 'GET',
-			credentials: 'same-origin',
-			headers: {
-				'Authorization': `Bearer ${token}`
-			},
-		})
-		.then(response => {
-			console.log(response);
-			return response.text();
-		})
-		.then(data => {
-			this.setState({button1Text: data});
-			console.log('Success:', data);
-		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
-	}
-
 	handleIndexChange(e){
 		this.setState({ind: e.target.value});
 	}
