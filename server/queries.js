@@ -427,6 +427,73 @@ async function addExpense(asker, expense) {
 	return new data(500);
 }
 
+//Deposit Queries
+//Permitted - Admin, Instructor
+async function getMultipleDeposits(asker, start, end, bid) {
+	const query = {
+		text: 'SELECT * FROM deposits WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			default:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function addDeposit(asker, deposit) {
+	const query = {
+		text: 'CALL insert_deposit($1, $2, $3, $4)',
+		values: [deposit.uid, deposit.bid, deposit.product, deposit.company]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(201);
+				break;
+			case roleType.admin:
+				await client.query(query);
+				return new data(201);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 
 
 exports.init = init;
@@ -445,6 +512,9 @@ exports.addTransaction = addTransaction;
 
 exports.getMultipleTransactions = getMultipleExpenses;
 exports.addTransaction = addExpense;
+
+exports.getMultipleDeposits = getMultipleDeposits;
+exports.addDeposit = addDeposit;
 
 exports.data = data;
 exports.asker = asker;
