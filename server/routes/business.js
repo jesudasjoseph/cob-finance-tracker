@@ -12,9 +12,9 @@ router.get('/', authorizor.authToken, async (req, res) => {
 
 router.post('/', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	let {code, data} = await q.createBusiness(req.body.asker, req.body.business);
+	let {code} = await q.createBusiness(req.body.asker, req.body.business);
 	res.statusCode = code;
-	res.send(JSON.stringify(data));
+	res.end();
 });
 
 module.exports = router;
