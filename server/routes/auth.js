@@ -13,4 +13,19 @@ router.post('/', async (req, res) => {
 
 });
 
+router.get('/', async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	if (req.query.uid != undefined) {
+		let {code, data} = await authorizor.getToken(req.query.uid, req.ip);
+		console.log("Sending token to: '" + req.query.uid + "'");
+		res.send(JSON.stringify(data));
+	}
+	else {
+		res.statusCode = 400;
+		console.log("Bad auth request!");
+		res.send(JSON.stringify({error:"Requires uid param."}));
+	}
+
+});
+
 module.exports = router;
