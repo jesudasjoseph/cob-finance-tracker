@@ -389,7 +389,7 @@ async function addTransaction(asker, transaction) {
 }
 async function deleteTransactionByTid(asker, tid) {
 	const query = {
-		text: 'DELETE FROM transactions WHERE tid = $1',
+		text: 'CALL delete_transaction($1)',
 		values: [tid]
 	}
 	const client = await pool.connect();
@@ -486,7 +486,7 @@ async function addExpense(asker, expense) {
 }
 async function deleteExpenseByEid(asker, eid) {
 	const query = {
-		text: 'DELETE FROM expenses WHERE eid = $1',
+		text: 'CALL delete_expense($1)',
 		values: [eid]
 	}
 	const client = await pool.connect();
@@ -583,7 +583,7 @@ async function addDeposit(asker, deposit) {
 }
 async function deleteDepositByDid(asker, did) {
 	const query = {
-		text: 'DELETE FROM deposits WHERE did = $1',
+		text: 'CALL delete_deposit($1)',
 		values: [did]
 	}
 	const client = await pool.connect();
