@@ -30,8 +30,10 @@ Random Information:
 All queries below must have the headers:
 	'authorization' : 'bearer {jwt_token}'
 
+2. User (/user)
+	->GET
 
-2. Business (/business)
+3. Business (/business)
 
 	->GET /business?start={start_index}&end={end_index}
 			This will return an array of business objects of max length end_index-start_index.
@@ -68,12 +70,4 @@ All queries below must have the headers:
 		Returns
 		- Nothing
 
-How to Authenticate:
-get token:
-	GET SERVER_IP/auth
-
-	This returns a json in the format: {token:JWT_ACCESS_TOKEN}
-
-Authenticate with other requests:
-	GET SERVER_IP/resource
-	Authorization: Bearer JWT_ACCESS_TOKEN
+3.
