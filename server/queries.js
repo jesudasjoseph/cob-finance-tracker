@@ -289,6 +289,35 @@ async function createBusiness(asker, business) {
 
 	return new data(500);
 }
+async function deleteBusinessByBid(asker, bid) {
+	const query = {
+		text: 'DELETE FROM business WHERE bid = $1',
+		values: [bid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
 
 //Transaction Queries
 //Fix permissions for students
@@ -506,6 +535,7 @@ exports.deleteUserByUid = deleteUserByUid;
 
 exports.getMultipleBusiness = getMultipleBusiness;
 exports.createBusiness = createBusiness;
+exports.deleteBusinessByBid = deleteBusinessByBid;
 
 exports.getMultipleTransactions = getMultipleTransactions;
 exports.addTransaction = addTransaction;
