@@ -17,4 +17,10 @@ router.post('/', authorizor.authToken, async (req, res) => {
 	res.end();
 });
 
+router.delete('/bydid', authorizor.authToken, async (req, res) => {
+	let {code} = await q.deleteDepositByDid(req.body.asker, req.query.did);
+	res.statusCode = code;
+	res.end();
+});
+
 module.exports = router;
