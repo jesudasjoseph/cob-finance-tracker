@@ -387,6 +387,35 @@ async function addTransaction(asker, transaction) {
 
 	return new data(500);
 }
+async function deleteTransactionByTid(asker, tid) {
+	const query = {
+		text: 'DELETE FROM transactions WHERE tid = $1',
+		values: [tid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
 
 //Expense Queries
 //Fix Permissions for students
@@ -453,6 +482,35 @@ async function addExpense(asker, expense) {
 		client.release();
 	}
 
+	return new data(500);
+}
+async function deleteExpenseByEid(asker, eid) {
+	const query = {
+		text: 'DELETE FROM expenses WHERE eid = $1',
+		values: [eid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
 	return new data(500);
 }
 
@@ -523,7 +581,35 @@ async function addDeposit(asker, deposit) {
 
 	return new data(500);
 }
+async function deleteDepositByDid(asker, did) {
+	const query = {
+		text: 'DELETE FROM deposits WHERE did = $1',
+		values: [did]
+	}
+	const client = await pool.connect();
 
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
 
 exports.init = init;
 exports.getRole = getRole;
@@ -539,12 +625,15 @@ exports.deleteBusinessByBid = deleteBusinessByBid;
 
 exports.getMultipleTransactions = getMultipleTransactions;
 exports.addTransaction = addTransaction;
+exports.deleteTransactionByTid = deleteTransactionByTid;
 
 exports.getMultipleTransactions = getMultipleExpenses;
 exports.addTransaction = addExpense;
+exports.deleteExpenseByEid = deleteExpenseByEid;
 
 exports.getMultipleDeposits = getMultipleDeposits;
 exports.addDeposit = addDeposit;
+exports.deleteDepositByDid = deleteDepositByDid;
 
 exports.data = data;
 exports.asker = asker;
