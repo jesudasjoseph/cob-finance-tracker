@@ -6,8 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 
-let ip = '71.193.191.23';
-//let ip = 'localhost';
+//let ip = '71.193.191.23';
+let ip = 'localhost';
 
 export default class QueryTestPage extends React.Component {
 
@@ -225,7 +225,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({businessTable:data.data});
+			this.setState({businessTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -245,7 +245,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({userTable:data.data});
+			this.setState({userTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -268,7 +268,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({transactionTable:data.data});
+			this.setState({transactionTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
