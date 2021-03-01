@@ -129,7 +129,6 @@ async function getMultipleUsers(asker, start, end) {
 	}
 	finally {
 		client.release();
-		console.log
 	}
 }
 async function modifyUser(asker, user) {
@@ -221,11 +220,26 @@ async function getRole(asker){
 	}
 }
 
+//Helper
+async function is_user_in_business(uid, bid, client) {
+	const query = {
+		text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
+		values: [bid, uid]
+	};
+
+	let res = await client.query(query);
+	if (!res.rows.length) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 //Business Queries
 //name, instructor, section, revenue, bank, square, expenses, profit
 async function getMultipleBusiness(asker, start, end) {
 	const query = {
-		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		text: 'SELECT * FROM business OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
@@ -244,6 +258,39 @@ async function getMultipleBusiness(asker, start, end) {
 				}
 				else {
 					return new data(200, res.rows);
+				}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function getBusinessByUid(asker) {
+	const query = {
+		text: 'SELECT * FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) WHERE uid=$1;',
+		values: [asker.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			default:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows[0]);
 				}
 		}
 	}
@@ -333,7 +380,18 @@ async function getMultipleTransactions(asker, start, end, bid) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);
+				if (await is_user_in_business(asker.uid, bid, client)) {
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
+				}
+				else {
+					return new data(403);
+				}
 				break;
 			default:
 				res = await client.query(query);
@@ -356,33 +414,20 @@ async function getMultipleTransactions(asker, start, end, bid) {
 	return new data(500);
 }
 async function addTransaction(asker, transaction) {
-	console.log("What the fuck?!");
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
-		values: [transaction.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
-	}
-	const queryUids = {
-		text: 'SELECT uid FROM user_has_business WHERE bid = $1',
-		values: [transaction.bid]
-	}
+		values: [asker.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
+	};
 	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
 			case roleType.student:
-				let uidList = await client.query(queryUids);
-				if (!res.rows.length) {
-					console.log("Empty list of uids");
-					console.log(uidList);
-					return new data(403);
-				}
-				else if (res.rows.includes(asker.uid)){
+				if (await is_user_in_business(asker.uid, transaction.bid, client)) {
 					await client.query(query);
-					console.log("workd!");
 					return new data(201);
 				}
 				else {
-					console.log("HERE:" + uidList);
 					return new data(403);
 				}
 				break;
@@ -406,7 +451,7 @@ async function addTransaction(asker, transaction) {
 
 	return new data(500);
 }
-async function deleteTransactionByTid(asker, tid) {
+async function deleteTransactionByTid(asker, tid, bid) {
 	const query = {
 		text: 'CALL delete_transaction($1)',
 		values: [tid]
@@ -424,7 +469,13 @@ async function deleteTransactionByTid(asker, tid) {
 				return new data(200);
 				break;
 			case roleType.student:
-				return new data(403);
+				if (await is_user_in_business(asker.uid, bid, client)) {
+					await client.query(query);
+					return new data(200);
+				}
+				else {
+					return new data(403);
+				}
 				break;
 		}
 	} catch (e) {
@@ -449,7 +500,18 @@ async function getMultipleExpenses(asker, start, end, bid) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);
+				if (await is_user_in_business(asker.uid, bid, client)) {
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
+				}
+				else {
+					return new data(403);
+				}
 				break;
 			default:
 				res = await client.query(query);
@@ -474,14 +536,20 @@ async function getMultipleExpenses(asker, start, end, bid) {
 async function addExpense(asker, expense) {
 	const query = {
 		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-		values: [expense.uid, expense.bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment, expense.price, expense.justification]
+		values: [asker.uid, expense.bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment, expense.price, expense.justification]
 	}
 	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);//Students cant add transactions yet.. (need to change)
+				if (await is_user_in_business(asker.uid, expense.bid, client)) {
+					await client.query(query);
+					return new data(201);
+				}
+				else {
+					return new data(403);
+				}
 				break;
 			case roleType.instructor:
 				await client.query(query);
@@ -503,7 +571,7 @@ async function addExpense(asker, expense) {
 
 	return new data(500);
 }
-async function deleteExpenseByEid(asker, eid) {
+async function deleteExpenseByEid(asker, eid, bid) {
 	const query = {
 		text: 'CALL delete_expense($1)',
 		values: [eid]
@@ -521,7 +589,13 @@ async function deleteExpenseByEid(asker, eid) {
 				return new data(200);
 				break;
 			case roleType.student:
+			if (await is_user_in_business(asker.uid, bid, client)) {
+				await client.query(query);
+				return new data(200);
+			}
+			else {
 				return new data(403);
+			}
 				break;
 		}
 	} catch (e) {
@@ -639,6 +713,7 @@ exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
 
 exports.getMultipleBusiness = getMultipleBusiness;
+exports.getBusinessByUid = getBusinessByUid;
 exports.createBusiness = createBusiness;
 exports.deleteBusinessByBid = deleteBusinessByBid;
 
@@ -646,8 +721,8 @@ exports.getMultipleTransactions = getMultipleTransactions;
 exports.addTransaction = addTransaction;
 exports.deleteTransactionByTid = deleteTransactionByTid;
 
-exports.getMultipleTransactions = getMultipleExpenses;
-exports.addTransaction = addExpense;
+exports.getMultipleExpenses = getMultipleExpenses;
+exports.addExpense = addExpense;
 exports.deleteExpenseByEid = deleteExpenseByEid;
 
 exports.getMultipleDeposits = getMultipleDeposits;
