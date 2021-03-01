@@ -17,4 +17,10 @@ router.post('/', authorizor.authToken, async (req, res) => {
 	res.end();
 });
 
+router.delete('/byeid', authorizor.authToken, async (req, res) => {
+	let {code} = await q.deleteExpenseByEid(req.body.asker, req.query.eid);
+	res.statusCode = code;
+	res.end();
+});
+
 module.exports = router;

@@ -129,7 +129,6 @@ async function getMultipleUsers(asker, start, end) {
 	}
 	finally {
 		client.release();
-		console.log
 	}
 }
 async function modifyUser(asker, user) {
@@ -221,11 +220,45 @@ async function getRole(asker){
 	}
 }
 
+//Helper
+async function get_bid_from_uid(uid, client) {
+	const query = {
+		text: 'SELECT bid FROM user_has_business WHERE uid = $1',
+		values: [uid]
+	};
+
+	let res = await client.query(query);
+	if (!res.rows.length) {
+		return -1;
+	}
+	else {
+		return res.rows[0].bid;
+	}
+}
+async function is_user_in_business(uid, client) {
+	const bid = await get_bid_from_uid(uid, client);
+	if (bid < 0){
+		return false;
+	}
+
+	const query = {
+		text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
+		values: [bid, uid]
+	};
+
+	let res = await client.query(query);
+	if (!res.rows.length) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 //Business Queries
 //name, instructor, section, revenue, bank, square, expenses, profit
 async function getMultipleBusiness(asker, start, end) {
 	const query = {
-		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		text: 'SELECT * FROM business OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
@@ -245,6 +278,38 @@ async function getMultipleBusiness(asker, start, end) {
 				else {
 					return new data(200, res.rows);
 				}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function getBusinessByUid(asker) {
+	const query = {
+		text: 'SELECT * FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) WHERE uid=$1;',
+		values: [asker.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows[0]);
+				}
+			default:
+				return new data(403);
 		}
 	}
 	catch (e) {
@@ -289,6 +354,35 @@ async function createBusiness(asker, business) {
 
 	return new data(500);
 }
+async function deleteBusinessByBid(asker, bid) {
+	const query = {
+		text: 'DELETE FROM business WHERE bid = $1',
+		values: [bid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
 
 //Transaction Queries
 //Fix permissions for students
@@ -304,7 +398,18 @@ async function getMultipleTransactions(asker, start, end, bid) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);
+				if (await is_user_in_business(asker.uid, client)) {
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
+				}
+				else {
+					return new data(403);
+				}
 				break;
 			default:
 				res = await client.query(query);
@@ -329,14 +434,20 @@ async function getMultipleTransactions(asker, start, end, bid) {
 async function addTransaction(asker, transaction) {
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
-		values: [transaction.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
-	}
+		values: [asker.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
+	};
 	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);//Students cant add transactions yet.. (need to change)
+				if (await is_user_in_business(asker.uid, client)) {
+					await client.query(query);
+					return new data(201);
+				}
+				else {
+					return new data(403);
+				}
 				break;
 			case roleType.instructor:
 				await client.query(query);
@@ -358,12 +469,167 @@ async function addTransaction(asker, transaction) {
 
 	return new data(500);
 }
+async function deleteTransactionByTid(asker, tid, bid) {
+	const query = {
+		text: 'CALL delete_transaction($1)',
+		values: [tid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+				if (await is_user_in_business(asker.uid, client)) {
+					await client.query(query);
+					return new data(200);
+				}
+				else {
+					return new data(403);
+				}
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
 
 //Expense Queries
 //Fix Permissions for students
 async function getMultipleExpenses(asker, start, end, bid) {
 	const query = {
 		text: 'SELECT * FROM expenses WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				if (await is_user_in_business(asker.uid, client)) {
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
+				}
+				else {
+					return new data(403);
+				}
+				break;
+			default:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function addExpense(asker, expense) {
+	const query = {
+		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+		values: [asker.uid, expense.bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment, expense.price, expense.justification]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				if (await is_user_in_business(asker.uid, client)) {
+					await client.query(query);
+					return new data(201);
+				}
+				else {
+					return new data(403);
+				}
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(201);
+				break;
+			case roleType.admin:
+				await client.query(query);
+				return new data(201);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function deleteExpenseByEid(asker, eid, bid) {
+	const query = {
+		text: 'CALL delete_expense($1)',
+		values: [eid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+			if (await is_user_in_business(asker.uid, client)) {
+				await client.query(query);
+				return new data(200);
+			}
+			else {
+				return new data(403);
+			}
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
+
+//Deposit Queries
+//Permitted - Admin, Instructor
+async function getMultipleDeposits(asker, start, end, bid) {
+	const query = {
+		text: 'SELECT * FROM deposits WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [bid, start, end]
 	}
 	const client = await pool.connect();
@@ -394,17 +660,17 @@ async function getMultipleExpenses(asker, start, end, bid) {
 
 	return new data(500);
 }
-async function addExpense(asker, expense) {
+async function addDeposit(asker, deposit) {
 	const query = {
-		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-		values: [expense.uid, expense.bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment, expense.price, expense.justification]
+		text: 'CALL insert_deposit($1, $2, $3, $4)',
+		values: [deposit.uid, deposit.bid, deposit.product, deposit.company]
 	}
 	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);//Students cant add transactions yet.. (need to change)
+				return new data(403);
 				break;
 			case roleType.instructor:
 				await client.query(query);
@@ -426,8 +692,35 @@ async function addExpense(asker, expense) {
 
 	return new data(500);
 }
+async function deleteDepositByDid(asker, did) {
+	const query = {
+		text: 'CALL delete_deposit($1)',
+		values: [did]
+	}
+	const client = await pool.connect();
 
-
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.instructor:
+				await client.query(query);
+				return new data(200);
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
 
 exports.init = init;
 exports.getRole = getRole;
@@ -438,13 +731,21 @@ exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
 
 exports.getMultipleBusiness = getMultipleBusiness;
+exports.getBusinessByUid = getBusinessByUid;
 exports.createBusiness = createBusiness;
+exports.deleteBusinessByBid = deleteBusinessByBid;
 
 exports.getMultipleTransactions = getMultipleTransactions;
 exports.addTransaction = addTransaction;
+exports.deleteTransactionByTid = deleteTransactionByTid;
 
-exports.getMultipleTransactions = getMultipleExpenses;
-exports.addTransaction = addExpense;
+exports.getMultipleExpenses = getMultipleExpenses;
+exports.addExpense = addExpense;
+exports.deleteExpenseByEid = deleteExpenseByEid;
+
+exports.getMultipleDeposits = getMultipleDeposits;
+exports.addDeposit = addDeposit;
+exports.deleteDepositByDid = deleteDepositByDid;
 
 exports.data = data;
 exports.asker = asker;

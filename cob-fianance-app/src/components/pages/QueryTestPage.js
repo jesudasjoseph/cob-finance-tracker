@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 
-let token = 0;
 let ip = '71.193.191.23';
 //let ip = 'localhost';
 
@@ -31,7 +30,6 @@ export default class QueryTestPage extends React.Component {
 		this.getTokenStudent = this.getTokenStudent.bind(this);
 		this.getTokenInstructor = this.getTokenInstructor.bind(this);
 		this.getTokenAdmin = this.getTokenAdmin.bind(this);
-		this.checkToken = this.checkToken.bind(this);
 
 		this.handleIndexChange = this.handleIndexChange.bind(this);
 		this.handleRowsChange = this.handleRowsChange.bind(this);
@@ -76,46 +74,44 @@ export default class QueryTestPage extends React.Component {
 				alert("User already has a Token!");
 		}
 		else {
-				let body = {uid:'student'};
+			let uid = 'student';
 
-		fetch('http://' + ip + ':2021/auth', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json'
-			},
-			body: JSON.stringify(body)
-				}).then(response => {
-			return response.json();
-		}).then(data => {
-			if (data.token){
-				this.setState({token: data.token});
-				if (data.role >= 1){
-						this.setState({role: data.role});
-						myStorage.setItem('jwt',"Bearer " + this.state.token);
-						myStorage.setItem('role', data.role);
-				}
-				else if (data.role === 0){
-						this.setState({role: data.role});
-						myStorage.setItem('jwt',"Bearer " + this.state.token);
-						myStorage.setItem('role', data.role);
-				}
-				else {
-						alert("No role specified!");
+			fetch('http://' + ip + ':2021/auth?uid=' + uid, {
+				mode: 'cors',
+				method: 'GET',
+				credentials: 'same-origin',
+				headers: {
+					'Accept': 'application/json',
+					'Content-type': 'application/json'
+				}}).then(response => {
+					return response.json();
+				}).then(data => {
+					if (data.token){
+						this.setState({token: data.token});
+						if (data.role >= 1){
+								this.setState({role: data.role});
+								myStorage.setItem('jwt',"Bearer " + this.state.token);
+								myStorage.setItem('role', data.role);
+						}
+						else if (data.role === 0){
+								this.setState({role: data.role});
+								myStorage.setItem('jwt',"Bearer " + this.state.token);
+								myStorage.setItem('role', data.role);
+						}
+						else {
+								alert("No role specified!");
+								this.setState({token: 0});
+						}
+						//redirect to instructor or student account
+					} else {
 						this.setState({token: 0});
-				}
-				//redirect to instructor or student account
-			} else {
-				this.setState({token: 0});
-					alert(data.error);
+							alert(data.error);
+					}
+					console.log('Success:', data);
+				}).catch((error) => {
+					console.error('Error:', error);
+				});
 			}
-			console.log('Success:', data);
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-		}
 	}
 	getTokenInstructor() {
 		let myStorage = window.localStorage;
@@ -123,46 +119,44 @@ export default class QueryTestPage extends React.Component {
 				alert("User already has a Token!");
 		}
 		else {
-				let body = {uid:'instructor'};
+			let uid = 'instructor';
 
-		fetch('http://' + ip + ':2021/auth', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json'
-			},
-			body: JSON.stringify(body)
-				}).then(response => {
-			return response.json();
-		}).then(data => {
-			if (data.token){
-				this.setState({token: data.token});
-				if (data.role >= 1){
-						this.setState({role: data.role});
-						myStorage.setItem('jwt',"Bearer " + this.state.token);
-						myStorage.setItem('role', data.role);
-				}
-				else if (data.role === 0){
-						this.setState({role: data.role});
-						myStorage.setItem('jwt',"Bearer " + this.state.token);
-						myStorage.setItem('role', data.role);
-				}
-				else {
-						alert("No role specified!");
+			fetch('http://' + ip + ':2021/auth?uid=' + uid, {
+				mode: 'cors',
+				method: 'GET',
+				credentials: 'same-origin',
+				headers: {
+					'Accept': 'application/json',
+					'Content-type': 'application/json'
+				}}).then(response => {
+					return response.json();
+				}).then(data => {
+					if (data.token){
+						this.setState({token: data.token});
+						if (data.role >= 1){
+								this.setState({role: data.role});
+								myStorage.setItem('jwt',"Bearer " + this.state.token);
+								myStorage.setItem('role', data.role);
+						}
+						else if (data.role === 0){
+								this.setState({role: data.role});
+								myStorage.setItem('jwt',"Bearer " + this.state.token);
+								myStorage.setItem('role', data.role);
+						}
+						else {
+								alert("No role specified!");
+								this.setState({token: 0});
+						}
+						//redirect to instructor or student account
+					} else {
 						this.setState({token: 0});
-				}
-				//redirect to instructor or student account
-			} else {
-				this.setState({token: 0});
-					alert(data.error);
+							alert(data.error);
+					}
+					console.log('Success:', data);
+				}).catch((error) => {
+					console.error('Error:', error);
+				});
 			}
-			console.log('Success:', data);
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-		}
 	}
 	getTokenAdmin() {
 		let myStorage = window.localStorage;
@@ -170,68 +164,44 @@ export default class QueryTestPage extends React.Component {
 				alert("User already has a Token!");
 		}
 		else {
-				let body = {uid:'admin'};
+			let uid = 'admin';
 
-		fetch('http://' + ip + ':2021/auth', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json'
-			},
-			body: JSON.stringify(body)
-				}).then(response => {
-			return response.json();
-		}).then(data => {
-			if (data.token){
-				this.setState({token: data.token});
-				if (data.role >= 1){
-						this.setState({role: data.role});
-						myStorage.setItem('jwt',"Bearer " + this.state.token);
-						myStorage.setItem('role', data.role);
-				}
-				else if (data.role === 0){
-						this.setState({role: data.role});
-						myStorage.setItem('jwt',"Bearer " + this.state.token);
-						myStorage.setItem('role', data.role);
-				}
-				else {
-						alert("No role specified!");
+			fetch('http://' + ip + ':2021/auth?uid=' + uid, {
+				mode: 'cors',
+				method: 'GET',
+				credentials: 'same-origin',
+				headers: {
+					'Accept': 'application/json',
+					'Content-type': 'application/json'
+				}}).then(response => {
+					return response.json();
+				}).then(data => {
+					if (data.token){
+						this.setState({token: data.token});
+						if (data.role >= 1){
+								this.setState({role: data.role});
+								myStorage.setItem('jwt',"Bearer " + this.state.token);
+								myStorage.setItem('role', data.role);
+						}
+						else if (data.role === 0){
+								this.setState({role: data.role});
+								myStorage.setItem('jwt',"Bearer " + this.state.token);
+								myStorage.setItem('role', data.role);
+						}
+						else {
+								alert("No role specified!");
+								this.setState({token: 0});
+						}
+						//redirect to instructor or student account
+					} else {
 						this.setState({token: 0});
-				}
-				//redirect to instructor or student account
-			} else {
-				this.setState({token: 0});
-					alert(data.error);
-			}
-			console.log('Success:', data);
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
+							alert(data.error);
+					}
+					console.log('Success:', data);
+				}).catch((error) => {
+					console.error('Error:', error);
+				});
 		}
-	}
-
-	checkToken() {
-		fetch('http://' + ip + ':2021/deposit', {
-			mode: 'cors',
-			method: 'GET',
-			credentials: 'same-origin',
-			headers: {
-				'Authorization': `Bearer ${token}`
-			},
-		})
-		.then(response => {
-			console.log(response);
-			return response.text();
-		})
-		.then(data => {
-			this.setState({button1Text: data});
-			console.log('Success:', data);
-		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
 	}
 
 	handleIndexChange(e){
@@ -255,7 +225,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({businessTable:data.data});
+			this.setState({businessTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -275,7 +245,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({userTable:data.data});
+			this.setState({userTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -298,7 +268,7 @@ export default class QueryTestPage extends React.Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({transactionTable:data.data});
+			this.setState({transactionTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});

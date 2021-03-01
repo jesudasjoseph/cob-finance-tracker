@@ -10,11 +10,24 @@ router.get('/', authorizor.authToken, async (req, res) => {
 	res.send(JSON.stringify(data));
 });
 
-router.post('/', authorizor.authToken, async (req, res) => {
+router.get('/byuid', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	let {code, data} = await q.createBusiness(req.body.asker, req.body.business);
+	let {code, data} = await q.getBusinessByUid(req.body.asker);
 	res.statusCode = code;
 	res.send(JSON.stringify(data));
+});
+
+router.post('/', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code} = await q.createBusiness(req.body.asker, req.body.business);
+	res.statusCode = code;
+	res.end();
+});
+
+router.delete('/bybid', authorizor.authToken, async (req, res) => {
+	let {code} = await q.deleteBusinessByBid(req.body.asker, req.query.bid);
+	res.statusCode = code;
+	res.end();
 });
 
 module.exports = router;
