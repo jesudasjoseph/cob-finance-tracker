@@ -356,16 +356,35 @@ async function getMultipleTransactions(asker, start, end, bid) {
 	return new data(500);
 }
 async function addTransaction(asker, transaction) {
+	console.log("What the fuck?!");
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
 		values: [transaction.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
+	}
+	const queryUids = {
+		text: 'SELECT uid FROM user_has_business WHERE bid = $1',
+		values: [transaction.bid]
 	}
 	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);//Students cant add transactions yet.. (need to change)
+				let uidList = await client.query(queryUids);
+				if (!res.rows.length) {
+					console.log("Empty list of uids");
+					console.log(uidList);
+					return new data(403);
+				}
+				else if (res.rows.includes(asker.uid)){
+					await client.query(query);
+					console.log("workd!");
+					return new data(201);
+				}
+				else {
+					console.log("HERE:" + uidList);
+					return new data(403);
+				}
 				break;
 			case roleType.instructor:
 				await client.query(query);
