@@ -221,7 +221,26 @@ async function getRole(asker){
 }
 
 //Helper
-async function is_user_in_business(uid, bid, client) {
+async function get_bid_from_uid(uid, client) {
+	const query = {
+		text: 'SELECT bid FROM user_has_business WHERE uid = $1',
+		values: [uid]
+	};
+
+	let res = await client.query(query);
+	if (!res.rows.length) {
+		return -1;
+	}
+	else {
+		return res.rows[0].bid;
+	}
+}
+async function is_user_in_business(uid, client) {
+	const bid = await get_bid_from_uid(uid, client);
+	if (bid < 0){
+		return false;
+	}
+
 	const query = {
 		text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
 		values: [bid, uid]
@@ -282,9 +301,6 @@ async function getBusinessByUid(asker) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				return new data(403);
-				break;
-			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
 					return new data(404);
@@ -292,6 +308,8 @@ async function getBusinessByUid(asker) {
 				else {
 					return new data(200, res.rows[0]);
 				}
+			default:
+				return new data(403);
 		}
 	}
 	catch (e) {
@@ -380,7 +398,7 @@ async function getMultipleTransactions(asker, start, end, bid) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, bid, client)) {
+				if (await is_user_in_business(asker.uid, client)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
 						return new data(404);
@@ -423,7 +441,7 @@ async function addTransaction(asker, transaction) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, transaction.bid, client)) {
+				if (await is_user_in_business(asker.uid, client)) {
 					await client.query(query);
 					return new data(201);
 				}
@@ -469,7 +487,7 @@ async function deleteTransactionByTid(asker, tid, bid) {
 				return new data(200);
 				break;
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, bid, client)) {
+				if (await is_user_in_business(asker.uid, client)) {
 					await client.query(query);
 					return new data(200);
 				}
@@ -500,7 +518,7 @@ async function getMultipleExpenses(asker, start, end, bid) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, bid, client)) {
+				if (await is_user_in_business(asker.uid, client)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
 						return new data(404);
@@ -543,7 +561,7 @@ async function addExpense(asker, expense) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, expense.bid, client)) {
+				if (await is_user_in_business(asker.uid, client)) {
 					await client.query(query);
 					return new data(201);
 				}
@@ -589,7 +607,7 @@ async function deleteExpenseByEid(asker, eid, bid) {
 				return new data(200);
 				break;
 			case roleType.student:
-			if (await is_user_in_business(asker.uid, bid, client)) {
+			if (await is_user_in_business(asker.uid, client)) {
 				await client.query(query);
 				return new data(200);
 			}
