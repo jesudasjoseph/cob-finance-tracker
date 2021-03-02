@@ -39,18 +39,15 @@ export default class Login extends React.Component {
             alert("User already has a Token!");
         }
         else {
-            let body = {uid:this.state.uid};
-
-    		fetch('http://71.193.191.23:2021/auth', {
+    		fetch('http://71.193.191.23:2021/auth?uid=' + this.state.uid, {
     			mode: 'cors',
-    			method: 'POST',
+    			method: 'GET',
     			credentials: 'same-origin',
     			headers: {
     				'Accept': 'application/json',
     				'Content-type': 'application/json'
-    			},
-    			body: JSON.stringify(body)
-            }).then(response => {
+    			}
+				}).then(response => {
     			return response.json();
     		}).then(data => {
     			if (data.token){
