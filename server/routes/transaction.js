@@ -17,4 +17,10 @@ router.post('/', authorizor.authToken, async (req, res) => {
 	res.end();
 });
 
+router.delete('/bytid', authorizor.authToken, async (req, res) => {
+	let {code} = await q.deleteTransactionByTid(req.body.asker, req.query.tid);
+	res.statusCode = code;
+	res.end();
+});
+
 module.exports = router;
