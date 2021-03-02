@@ -2,14 +2,6 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 import ProfitProgress from '../Layout/ProfitProgress';
 
-function createData(gname, Instructor, Revenue, Bank, Square, Expenses , Profits) {
-    return { gname, Instructor, Revenue, Bank, Square, Expenses , Profits};
-  }
-  const rows =[
-    createData('Bennys Beavers', 'Omar',700, 300, 400, 250, 450),
-    createData('Jeffersons Jelly', 'Peach',700, 300, 400, 250, 450)
-  ]
-
 
 export class Tables extends Component {
   constructor(props){
@@ -18,37 +10,36 @@ export class Tables extends Component {
         gname: '',
         Instructor:'',
         Revenue: '',
-        Bank: ''}
-        this.addTransaction = this.addTransaction.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        Bank: '',
+        businessTable: []}
+        this.get_businesses = this.get_businesses.bind(this);
+        this.get_businesses();
           }
 
-          handleChange(event) {
-            this.setState({date: event.target.gname});
-            this.setState({name: event.target.Instructor})
-            this.setState({Customer: event.target.Revenue})
-            this.setState({Location: event.target.Bank})
-            this.setState({Paymethod: event.target.Square})
-            this.setState({product: event.target.Expenses})
-            this.setState({quan: event.target.Profits})
 
+          get_businesses(){
+            fetch('http://' + '71.193.191.23' + ':2021/business?start=' + '0' + '&end=' + '50', {
+              mode: 'cors',
+              method: 'GET',
+              credentials: 'same-origin',
+              headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'Authorization': window.localStorage.getItem('jwt')
+              }
+            }).then(response => {
+              console.log(response);
+              return response.json();
+            }).then(data => {
+              console.log('Success:', data);
+              this.setState({businessTable:data});
+            }).catch((error) => {
+              console.error('Error:', error);
+            });
           }
 
-          handleSubmit(event) {
-            event.preventDefault();
-            this.addTransaction(event)
-          }
-          addTransaction(event , date, name){
-            rows.push(createData(
-                this.state.gname ,
-                this.state.Instructor,
-                this.state.Revenue,
-                this.state.Bank,
-                this.state.Square,
-                this.state.Expenses,
-                this.state.Profits))
-          }
+
+
     render() {
       return (
          <div>
@@ -60,26 +51,31 @@ export class Tables extends Component {
                        <th>Revenue</th>
                        <th>Bank</th>
                        <th>Square</th>
+                       <th> Quantity Sold </th>
                        <th>Expenses</th>
                        <th>Profits</th>
                        <th>Sales Goals</th>
                        </tr>
                        </thead>
                        <tbody>
-                       {rows.map((row) => (
-                            <tr key={row.id}>
-                                <td> <a href="/GroupFinancials"> {row.gname} </a> </td>
-                                    <td>{row.Instructor}</td>
-                                    <td >{row.Revenue}</td>
-                                    <td >{row.Bank}</td>
-                                    <td >{row.Square}</td>
-                                    <td >{row.Expenses}</td>
-                                    <td >{row.Profits}</td>
-                                    <td><ProfitProgress /></td>
-                                    </tr>
-         ))}
-       </tbody>
-     </Table>
+                       {this.state.businessTable.map((business, index) => {
+                          const {name,deposit_total,product_count,expense_total, bid, profit} = business;
+                          return (
+                            <tr key={bid}>
+                                <td> <a href="/GroupFinancials"> {name} </a> </td>
+                                <td> Instructor </td>
+                                <td> {deposit_total} </td>
+                                <td> Bank Money </td>
+                                <td> Square Money </td>
+                                <td> {product_count} </td>
+                                <td> {expense_total} </td>
+                                <td> {profit} </td>
+                                <td><ProfitProgress /></td>
+                            </tr>
+                          )
+                          })}
+                      </tbody>
+            </Table>
      </div>
  );
    }
