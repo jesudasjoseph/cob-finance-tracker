@@ -5,6 +5,7 @@ import DashboardI from './components/pages/DashboardI';
 import UserInstructor from './components/pages/UserInstructor';
 import SettingsInstructor from './components/pages/SettingsInstuctor';
 import UserManagement from './components/pages/UserManagement';
+import SnapshotGroup from './components/pages/SnapshotGroup.js';
 import Expenses from './components/pages/Expenses';
 import Navibar from './components/Layout/MyNavbar';
 import NavibarI from './components/Layout/MyNavBarI';
@@ -27,7 +28,7 @@ class App extends Component{
 						<Route path="/home" component={Login} />
 						<Route path="/DashboardI" component={DashboardI} />
 						<Route path= "/Profile" component={UserInstructor} />
-						<Route path= "/GroupFinancials" component={Dashboard} />
+						<Route path= "/GroupFinancials" component={SnapshotGroup} />
 						<Route path= "/SettingsInstuctor" component={SettingsInstructor} />
 						<Route path="/UserManagement" component={UserManagement} />
 						<Route path="/dashboard" component={Dashboard} />

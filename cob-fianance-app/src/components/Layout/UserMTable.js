@@ -1,16 +1,6 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 
-
-function createData(gname, sname, sid, Instructor, Section) {
-    return {gname, sname, sid, Instructor, Section};
-  }
-  const rows =[
-    createData('Bennys Beavers', 'Jack Miller',933272728, 'Omar', 4),
-    createData('Jeffersons Jelly', 'Ghaith Shan',933172823, 'Omar', 5)
-  ]
-
-
 export class Tables extends Component {
   constructor(props){
     super(props);
@@ -19,33 +9,33 @@ export class Tables extends Component {
         sname:'',
         sid: '',
         Instructor: '',
-        Section: ''}
-        this.addTransaction = this.addTransaction.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        userTable: []}
+        this.get_allusers = this.get_allusers.bind(this);
+        this.get_allusers();
           }
 
-          handleChange(event) {
-            this.setState({date: event.target.gname});
-            this.setState({name: event.target.sname})
-            this.setState({Customer: event.target.sid})
-            this.setState({Location: event.target.Instructor})
-            this.setState({Paymethod: event.target.Section})
 
+        get_allusers(){
+            fetch('http://' + '71.193.191.23' + ':2021/user?start=' + '0' + '&end=' + '50', {
+              mode: 'cors',
+              method: 'GET',
+              credentials: 'same-origin',
+              headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'Authorization': window.localStorage.getItem('jwt')
+              }
+            }).then(response => {
+              console.log(response);
+              return response.json();
+            }).then(data => {
+              console.log('Success:', data);
+              this.setState({userTable:data});
+            }).catch((error) => {
+              console.error('Error:', error);
+            });
           }
 
-          handleSubmit(event) {
-            event.preventDefault();
-            this.addTransaction(event)
-          }
-          addTransaction(event , date, name){
-            rows.push(createData(
-                this.state.gname ,
-                this.state.sname,
-                this.state.sid,
-                this.state.Instructor,
-                this.state.Section))
-          }
     render() {
       return (
          <div>
@@ -53,24 +43,29 @@ export class Tables extends Component {
                <thead>
                    <tr>
                        <th>Group Name</th>
-                       <th>Student Name </th>
+                       <th>Student First Name </th>
+                       <th> Student Last Name </th>
                        <th>Student ID</th>
                        <th>Instructor</th>
                        <th>Section</th>
                        </tr>
                        </thead>
                        <tbody>
-                       {rows.map((row) => (
-                            <tr key={row.id}>
-                                <td >{row.gname} </td>
-                                    <td>{row.sname}</td>
-                                    <td >{row.sid}</td>
-                                    <td >{row.Instructor}</td>
-                                    <td >{row.Section}</td>
-                                    </tr>
-         ))}
-       </tbody>
-     </Table>
+                       {this.state.userTable.map((student, index) => {
+                          const {uid,first, last} = student;
+                          return (
+                            <tr key={uid}>
+                                <td> Group Name </td>
+                                <td> {first} </td>
+                                <td> {last} </td>
+                                <td> ID </td>
+                                <td> Instructor </td>
+                                <td> Section </td>
+                            </tr>
+                          )
+                          })}
+                      </tbody>
+            </Table>
      </div>
  );
    }

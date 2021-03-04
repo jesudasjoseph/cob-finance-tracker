@@ -20,15 +20,11 @@ export default function DashboardI() {
           <Nav>
             <NavDropdown title="Filter By" id="collasible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Instructor</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Class</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.4">Section</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link eventKey={2} href="profile">
             </Nav.Link>
           </Nav>
-          <div style={{textAlign: 'right'}}>
-            <Searchbar />
-         </div>
           <Table style = {{paddingTop: '10px 20px'}}></Table>
       </React.Fragment>
   )
