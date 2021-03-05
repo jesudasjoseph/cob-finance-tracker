@@ -306,7 +306,23 @@ async function getBusinessByUid(asker) {
 					return new data(404);
 				}
 				else {
-					return new data(200, res.rows[0]);
+					return new data(200, res.rows);
+				}
+			case roleType.instructor:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+			case roleType.admin:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows);
 				}
 			default:
 				return new data(403);
