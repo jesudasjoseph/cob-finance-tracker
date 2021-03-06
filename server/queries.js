@@ -369,7 +369,6 @@ async function getBusinessByBid(asker, bid) {
 		switch(asker.role){
 			case roleType.student:
 				const studentIsInBusiness = await is_user_in_business(asker.uid, client, bid);
-				console.log(studentIsInBusiness);
 				if (studentIsInBusiness){
 					res = await client.query(query);
 					if (!res.rows.length) {
@@ -378,6 +377,9 @@ async function getBusinessByBid(asker, bid) {
 					else {
 						return new data(200, res.rows);
 					}
+				}
+				else{
+					return new data(403);
 				}
 			case roleType.instructor:
 				res = await client.query(query);
