@@ -522,7 +522,7 @@ async function getMultipleTransactions(asker, start, end, bid) {
 }
 async function getMultipleTransactionsByUid(asker, start, end) {
 	const client = await pool.connect();
-	const bid await get_bid_from_uid(asker.uid, client);
+	const bid = await get_bid_from_uid(asker.uid, client);
 	if (bid == -1){
 		return new data(403);
 	}
