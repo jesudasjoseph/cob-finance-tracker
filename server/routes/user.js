@@ -18,7 +18,7 @@ router.get('/', authorizor.authToken, async (req, res) => {
 	res.send(JSON.stringify(data));;
 });
 
-router.put('/', authorizor.authToken, async (req, res) => {
+router.post('/', authorizor.authToken, async (req, res) => {
 	let {code} = await q.modifyUser(req.body.asker, req.body.user);
 	res.statusCode = code;
 	res.end();
