@@ -520,6 +520,48 @@ async function getMultipleTransactions(asker, start, end, bid) {
 
 	return new data(500);
 }
+async function getMultipleTransactionsByUid(asker, start, end) {
+	const client = await pool.connect();
+	const bid await get_bid_from_uid(asker.uid, client);
+	if (bid == -1){
+		return new data(403);
+	}
+	const query = {
+		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM transactions WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end]
+	}
+	let res;
+	try {
+		switch(asker.role){
+			case roleType.student:
+				if (await is_user_in_business(asker.uid, client)) {
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
+				}
+				else {
+					return new data(403);
+				}
+				break;
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function addTransaction(asker, transaction) {
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
@@ -826,6 +868,7 @@ exports.createBusiness = createBusiness;
 exports.deleteBusinessByBid = deleteBusinessByBid;
 
 exports.getMultipleTransactions = getMultipleTransactions;
+exports.getMultipleTransactionsByUid = getMultipleTransactionsByUid;
 exports.addTransaction = addTransaction;
 exports.deleteTransactionByTid = deleteTransactionByTid;
 
