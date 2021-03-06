@@ -563,11 +563,15 @@ async function getMultipleTransactionsByUid(asker, start, end) {
 	return new data(500);
 }
 async function addTransaction(asker, transaction) {
+	const client = await pool.connect();
+	const bid = await get_bid_from_uid(asker.uid, client);
+	if (bid == -1){
+		return new data(403);
+	}
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
-		values: [asker.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
+		values: [asker.uid, bid, transaction.customer, transaction.date, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
 	};
-	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
@@ -581,12 +585,10 @@ async function addTransaction(asker, transaction) {
 				}
 				break;
 			case roleType.instructor:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 			case roleType.admin:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 		}
 	}
