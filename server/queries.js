@@ -684,12 +684,57 @@ async function getMultipleExpenses(asker, start, end, bid) {
 
 	return new data(500);
 }
+async function getMultipleExpensesByUid(asker, start, end) {
+	const client = await pool.connect();
+	const bid = await get_bid_from_uid(asker.uid, client);
+	if (bid == -1){
+		return new data(403);
+	}
+	const query = {
+		text: 'SELECT * FROM expenses WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end]
+	}
+	let res;
+	try {
+		switch(asker.role){
+			case roleType.student:
+				if (await is_user_in_business(asker.uid, client)) {
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
+				}
+				else {
+					return new data(403);
+				}
+				break;
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function addExpense(asker, expense) {
+	const client = await pool.connect();
+	const bid = await get_bid_from_uid(asker.uid, client);
+	if (bid == -1){
+		return new data(403);
+	}
 	const query = {
 		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-		values: [asker.uid, expense.bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment, expense.price, expense.justification]
+		values: [asker.uid, bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.justification]
 	}
-	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
@@ -703,12 +748,10 @@ async function addExpense(asker, expense) {
 				}
 				break;
 			case roleType.instructor:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 			case roleType.admin:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 		}
 	}
@@ -875,6 +918,7 @@ exports.addTransaction = addTransaction;
 exports.deleteTransactionByTid = deleteTransactionByTid;
 
 exports.getMultipleExpenses = getMultipleExpenses;
+exports.getMultipleExpensesByUid = getMultipleExpensesByUid;
 exports.addExpense = addExpense;
 exports.deleteExpenseByEid = deleteExpenseByEid;
 
