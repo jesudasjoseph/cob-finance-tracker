@@ -235,23 +235,42 @@ async function get_bid_from_uid(uid, client) {
 		return res.rows[0].bid;
 	}
 }
-async function is_user_in_business(uid, client) {
-	const bid = await get_bid_from_uid(uid, client);
-	if (bid < 0){
-		return false;
-	}
+async function is_user_in_business(uid, client, bid = null) {
+	if (bid == null){
+		bid = await get_bid_from_uid(uid, client);
+		if (bid < 0){
+			return false;
+		}
 
-	const query = {
-		text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
-		values: [bid, uid]
-	};
+		const query = {
+			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
+			values: [bid, uid]
+		};
 
-	let res = await client.query(query);
-	if (!res.rows.length) {
-		return false;
+		let res = await client.query(query);
+		if (!res.rows.length) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 	else {
-		return true;
+		if (bid < 0){
+			return false;
+		}
+		const query = {
+			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
+			values: [bid, uid]
+		};
+
+		let res = await client.query(query);
+		if (!res.rows.length) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 }
 
@@ -307,6 +326,56 @@ async function getBusinessByUid(asker) {
 				}
 				else {
 					return new data(200, res.rows);
+				}
+			case roleType.instructor:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+			case roleType.admin:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function getBusinessByBid(asker, bid) {
+	const query = {
+		text: 'SELECT * FROM business WHERE bid=$1;',
+		values: [asker.bid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				if (await is_user_in_business(asker.uid, client, bid)){
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
 				}
 			case roleType.instructor:
 				res = await client.query(query);
@@ -748,6 +817,7 @@ exports.deleteUserByUid = deleteUserByUid;
 
 exports.getMultipleBusiness = getMultipleBusiness;
 exports.getBusinessByUid = getBusinessByUid;
+exports.getBusinessByBid = getBusinessByBid;
 exports.createBusiness = createBusiness;
 exports.deleteBusinessByBid = deleteBusinessByBid;
 

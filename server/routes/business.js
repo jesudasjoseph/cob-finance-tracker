@@ -17,6 +17,13 @@ router.get('/byuid', authorizor.authToken, async (req, res) => {
 	res.send(JSON.stringify(data));
 });
 
+router.get('/bybid', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code, data} = await q.getBusinessByBid(req.body.asker, req.query.bid);
+	res.statusCode = code;
+	res.send(JSON.stringify(data));
+});
+
 router.post('/', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let {code} = await q.createBusiness(req.body.asker, req.body.business);
