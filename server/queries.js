@@ -360,7 +360,7 @@ async function getBusinessByUid(asker) {
 async function getBusinessByBid(asker, bid) {
 	const query = {
 		text: 'SELECT * FROM business WHERE bid=$1;',
-		values: [asker.bid]
+		values: [bid]
 	}
 	const client = await pool.connect();
 	let res;
