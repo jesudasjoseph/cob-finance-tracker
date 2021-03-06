@@ -219,6 +219,46 @@ async function getRole(asker){
 		return new data(200, res.rows[0].role);
 	}
 }
+async function addUserToBusiness(asker, uid, bid) {
+	const query = {
+		text: 'INSERT INTO user_has_business (uid, bid) VALUES ($1, $2)',
+		values: [uid, bid]
+	}
+	const client = await pool.connect();
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				if (await get_bid_from_uid(uid, client) == -1){
+					await client.query(query);
+					return new data(201);
+				} else {
+					return new data(409);
+				}
+
+				break;
+			case roleType.instructor:
+				if (await get_bid_from_uid(uid, client) == -1){
+					await client.query(query);
+					return new data(201);
+				} else {
+					return new data(409);
+				}
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 
 //Helper
 async function get_bid_from_uid(uid, client) {
@@ -905,6 +945,7 @@ exports.getUserByUid = getUserByUid;
 exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
+exports.addUserToBusiness = addUserToBusiness;
 
 exports.getMultipleBusiness = getMultipleBusiness;
 exports.getBusinessByUid = getBusinessByUid;
