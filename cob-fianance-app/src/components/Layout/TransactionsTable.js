@@ -9,130 +9,145 @@ function createData(date, name, Customer, Location, Paymethod, product , quan , 
     createData('1', 'me1','customer1', 'location1', 'Paymethod1','goods1', 54,100 , 12341234),
     createData('2','me2 ','customer2', 'location2', 'Paymethod2', 'goods2' , 59,100 , 543543)
   ]
-
+//transaction/byuid?start=0&end=50
 export class Tables extends Component {
   constructor(props){
     super(props);
     this.state = {
-        date: '',
-        name:'', 
-        Customer: '',
-        Location: ''}
-        this.addTransaction = this.addTransaction.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+      customer: '',
+      date:'', 
+      product: '',
+      payment_method: '',
+      quantity: '',
+      price_per_unit:'',
+      total:'',
+      transactionTable: []
+    }
+    
+        this.get_transactions = this.get_transactions.bind(this);
+        this.get_transactions();
+        this.add_transactions =this.add_transactions.bind(this);
+        this.add_transactions();
         this.handleSubmit = this.handleSubmit.bind(this);
           }
-        
-          handleChange(event) {
-            this.setState({date: event.target.date});
-            this.setState({name: event.target.name})
-            this.setState({Customer: event.target.Customer})
-            this.setState({Location: event.target.Location})
-            this.setState({Paymethod: event.target.Paymethod})
-            this.setState({product: event.target.product})
-            this.setState({quan: event.target.quan})
-            this.setState({price: event.target.price})
-            this.setState({total: event.target.total})
-
-          }
-        
           handleSubmit(event) {
             event.preventDefault();
-            this.addTransaction(event)
+            this.add_transactions(event)
+            this.get_transactions(event)
           }
-          addTransaction(event , date, name){
-            rows.push(createData(
-                this.state.date ,
-                this.state.name,
-                this.state.Customer,
-                this.state.Location,
-                this.state.Paymethod,
-                this.state.product,
-                this.state.quan,
-                this.state.price,
-                this.state.total))
+          get_transactions(){
+            fetch('http://' + '71.193.191.23' + ':2021/transaction/byuid?start=' + '0' + '&end=' + '50', {
+              mode: 'cors',
+              method: 'GET',
+              credentials: 'same-origin',
+              headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'Authorization': window.localStorage.getItem('jwt')
+              }
+            }).then(response => {
+              console.log(response);
+              return response.json();
+            }).then(data => {
+              console.log('Success:', data);
+              this.setState({transactionTable:data});
+            }).catch((error) => {
+              console.error('Error:', error);
+            });
+          }
+          add_transactions(){
+            let body ={transaction:{
+              customer: this.state.customer, 
+              date:this.state.date,
+              product: this.state.product ,
+              payment_method: this.state.payment_method,
+              quantity:this.state.quantity,
+              price_per_unit:this.state.price_per_unit
+              }
+            }
+            console.log(body)
+            fetch('http://' + '71.193.191.23' + ':2021/transaction', {
+              mode: 'cors',
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'Authorization': window.localStorage.getItem('jwt')
+              },
+              body: JSON.stringify(body)
+            }).then(response => {
+              console.log(response);
+              return response.json();
+            }).catch((error) => {
+              console.error('Error:', error);
+            });
           }
     render() {
         return (
           <div>
-          <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit}>
+                    <label>
+                        Customer:
+                        <input type="text" value={this.state.customer}  onChange={(e) => this.setState({customer: e.target.value})} />
+                    </label>
                     <label>
                         Date:
-                        <input type="text" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})} />
-                    </label>
-                    <label>
-                        Name:
-                        <input type="text" value={this.state.name} onChange={(e) => this.setState({name: e.target.value})} />
+                        <input type="text" value={this.state.date} onChange={(e) => this.setState({date: e.target.value})} />
                     </label>
                     <label> 
-                        Customer:
-                        <input type="text" value={this.state.Customer} onChange={(e) => this.setState({Customer: e.target.value})} />
-                        
-                    </label>
-                    <label> 
-                        Location:
-                        <input type="text" value={this.state.Location} onChange={(e) => this.setState({Location: e.target.value})} />
-                        
-                    </label>
-                    <label> 
-                        Pay Method:
-                        <input type="text" value={this.state.Paymethod} onChange={(e) => this.setState({Paymethod: e.target.value})} />
-                        
-                    </label>
-                    <label> 
-                        Product:
+                        product:
                         <input type="text" value={this.state.product} onChange={(e) => this.setState({product: e.target.value})} />
                         
                     </label>
                     <label> 
-                        Price:
-                        <input type="text" value={this.state.price} onChange={(e) => this.setState({price: e.target.value})} />
+                        Payment Method:
+                        <input type="text" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})} />
                         
                     </label>
                     <label> 
                         Quantity:
-                        <input type="text" value={this.state.quan} onChange={(e) => this.setState({quan: e.target.value})} />
+                        <input type="text" value={this.state.quantity} onChange={(e) => this.setState({quantity: e.target.value})} />
                         
                     </label>
                     <label> 
-                        Total:
-                        <input type="text" value={this.state.total} onChange={(e) => this.setState({total: e.target.value})} />
+                        Price per unit:
+                        <input type="text" value={this.state.price_per_unit} onChange={(e) => this.setState({price_per_unit: e.target.value})} />
                         
                     </label>
-                    
                         <input type="submit" value="Submit" />
                         </form>
-            <Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
-                <thead>
-                    <tr>
-                        <th>Date:</th>
-                        <th>Name</th>
-                        <th>Customer</th>
-                        <th>Location</th>
-                        <th>Payment Method</th>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Price(per unit)</th>
-                        <th>Total:</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {rows.map((row) => (
-                             <tr key={row.id}>
-                                 <td >{row.date} </td>
-                                     <td>{row.name}</td>
-                                     <td >{row.Customer}</td>
-                                     <td >{row.Location}</td>
-                                     <td >{row.Paymethod}</td>
-                                     <td >{row.product}</td>
-                                     <td >{row.quan}</td>
-                                     <td >{row.price}</td>
-                                     <td>{row.total}</td>
-                                     </tr>
-          ))}
-        </tbody>
-      </Table>
-      </div>
+                      
+          <Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
+              <thead>
+                  <tr>
+                      <th>customer</th>
+                      <th>date</th>
+                      <th>product</th>
+                      <th>Payment Method</th>
+                      <th>Quantity</th>
+                      <th>Price Per Unit</th>
+                      <th>Total</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {this.state.transactionTable.map((transaction, index) => {
+                         const {customer,date,product,payment_method, quantity, price_per_unit, tid, total} = transaction;
+                         return (
+                           <tr key={tid}>
+                               <td> {customer}</td>
+                               <td> {date} </td>
+                               <td>{product}</td>
+                               <td> {payment_method} </td>
+                               <td> {quantity} </td>
+                               <td> {price_per_unit} </td>
+                               <td> {total} </td>
+                           </tr>
+                         )
+                         })}
+                     </tbody>
+           </Table>
+    </div>
   );
     }
 }

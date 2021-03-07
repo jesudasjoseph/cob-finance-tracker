@@ -2,10 +2,12 @@
 import React from 'react'
 import Buttons from '../Layout/TransactionsButtons';
 import Table from '../Layout/TransactionsTable';
+import Navbar from '../Layout/MyNavbar';
 
 export default function Transactions() {
     return (
         <React.Fragment>
+            <Navbar></Navbar>
             <h1 style={{textAlign:'center'}}>Transactions</h1>
             <div style={{textAlign: 'right'}}>
                 <Buttons />
@@ -14,3 +16,5 @@ export default function Transactions() {
         </React.Fragment>
     )
 }
+
+
