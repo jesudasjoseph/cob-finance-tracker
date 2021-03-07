@@ -38,4 +38,11 @@ router.post('/', authorizor.authToken, async (req, res) => {
 	res.end();
 });
 
+router.post('/addtobusiness', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code} = await q.addUserToBusiness(req.body.asker, req.body.uid, req.body.bid);
+	res.statusCode = code;
+	res.end();
+});
+
 module.exports = router;

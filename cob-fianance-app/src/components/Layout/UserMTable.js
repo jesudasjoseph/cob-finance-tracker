@@ -45,22 +45,20 @@ export class Tables extends Component {
                        <th>Group Name</th>
                        <th>Student First Name </th>
                        <th> Student Last Name </th>
-                       <th>Student ID</th>
-                       <th>Instructor</th>
+                       <th> Onid ID </th>
                        <th>Section</th>
                        </tr>
                        </thead>
                        <tbody>
                        {this.state.userTable.map((student, index) => {
-                          const {uid,first, last} = student;
+                          const {bid,uid,first, last,section} = student;
                           return (
                             <tr key={uid}>
-                                <td> Group Name </td>
+                                <td> {bid} </td>
                                 <td> {first} </td>
                                 <td> {last} </td>
-                                <td> ID </td>
-                                <td> Instructor </td>
-                                <td> Section </td>
+                                <td> {uid} </td>
+                                <td> {section} </td>
                             </tr>
                           )
                           })}

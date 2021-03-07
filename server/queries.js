@@ -219,6 +219,46 @@ async function getRole(asker){
 		return new data(200, res.rows[0].role);
 	}
 }
+async function addUserToBusiness(asker, uid, bid) {
+	const query = {
+		text: 'INSERT INTO user_has_business (uid, bid) VALUES ($1, $2)',
+		values: [uid, bid]
+	}
+	const client = await pool.connect();
+	try {
+		switch(asker.role){
+			case roleType.admin:
+				if (await get_bid_from_uid(uid, client) == -1){
+					await client.query(query);
+					return new data(201);
+				} else {
+					return new data(409);
+				}
+
+				break;
+			case roleType.instructor:
+				if (await get_bid_from_uid(uid, client) == -1){
+					await client.query(query);
+					return new data(201);
+				} else {
+					return new data(409);
+				}
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 
 //Helper
 async function get_bid_from_uid(uid, client) {
@@ -563,11 +603,15 @@ async function getMultipleTransactionsByUid(asker, start, end) {
 	return new data(500);
 }
 async function addTransaction(asker, transaction) {
+	const client = await pool.connect();
+	const bid = await get_bid_from_uid(asker.uid, client);
+	if (bid == -1){
+		return new data(403);
+	}
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
-		values: [asker.uid, transaction.bid, transaction.customer, transaction.date, transaction.product, transaction.payment, transaction.quantity, transaction.price]
+		values: [asker.uid, bid, transaction.customer, transaction.date, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
 	};
-	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
@@ -581,12 +625,10 @@ async function addTransaction(asker, transaction) {
 				}
 				break;
 			case roleType.instructor:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 			case roleType.admin:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 		}
 	}
@@ -682,12 +724,57 @@ async function getMultipleExpenses(asker, start, end, bid) {
 
 	return new data(500);
 }
+async function getMultipleExpensesByUid(asker, start, end) {
+	const client = await pool.connect();
+	const bid = await get_bid_from_uid(asker.uid, client);
+	if (bid == -1){
+		return new data(403);
+	}
+	const query = {
+		text: 'SELECT * FROM expenses WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end]
+	}
+	let res;
+	try {
+		switch(asker.role){
+			case roleType.student:
+				if (await is_user_in_business(asker.uid, client)) {
+					res = await client.query(query);
+					if (!res.rows.length) {
+						return new data(404);
+					}
+					else {
+						return new data(200, res.rows);
+					}
+				}
+				else {
+					return new data(403);
+				}
+				break;
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function addExpense(asker, expense) {
+	const client = await pool.connect();
+	const bid = await get_bid_from_uid(asker.uid, client);
+	if (bid == -1){
+		return new data(403);
+	}
 	const query = {
 		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-		values: [asker.uid, expense.bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment, expense.price, expense.justification]
+		values: [asker.uid, bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.justification]
 	}
-	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
@@ -701,12 +788,10 @@ async function addExpense(asker, expense) {
 				}
 				break;
 			case roleType.instructor:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 			case roleType.admin:
-				await client.query(query);
-				return new data(201);
+				return new data(403);
 				break;
 		}
 	}
@@ -860,6 +945,7 @@ exports.getUserByUid = getUserByUid;
 exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
+exports.addUserToBusiness = addUserToBusiness;
 
 exports.getMultipleBusiness = getMultipleBusiness;
 exports.getBusinessByUid = getBusinessByUid;
@@ -873,6 +959,7 @@ exports.addTransaction = addTransaction;
 exports.deleteTransactionByTid = deleteTransactionByTid;
 
 exports.getMultipleExpenses = getMultipleExpenses;
+exports.getMultipleExpensesByUid = getMultipleExpensesByUid;
 exports.addExpense = addExpense;
 exports.deleteExpenseByEid = deleteExpenseByEid;
 

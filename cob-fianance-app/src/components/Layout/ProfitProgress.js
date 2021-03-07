@@ -68,7 +68,8 @@ export class ProfitProgress extends Component {
         a = parseFloat(resProfit[1]);
         b = parseFloat(resExpense[1]);
         console.log(a)
-        
+
+        if(now<25)
         return (
           <div>{expense_total}</div>
         )
@@ -88,10 +89,6 @@ export class ProfitProgress extends Component {
             <ProgressBar style= {{height:'50px'}} now={100*a/goal} variant="success" label={`GOAL REACHED: ${100*a/goal}%`} />
             )
         }
-        <div>
-            <ProgressBar  style= {{height:'50px'}} variant="danger" now={40} label={'Expenses'} />
-            <ProgressBar style= {{height:'50px'}} variant="success" now={20} label={'Revenue'}/>
-        </div>
     }
 }
 
