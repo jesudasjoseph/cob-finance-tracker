@@ -60,9 +60,10 @@ export class Tables extends Component {
                        <tbody>
                        {this.state.businessTable.map((business, index) => {
                           const {name,deposit_total,product_count,expense_total, bid, profit} = business;
+                          const route = name;
                           return (
                             <tr key={bid}>
-                                <td> <a href="/GroupFinancials"> {name} </a> </td>
+                                <td> <a href= {bid}> {name} </a> </td>
                                 <td> Instructor </td>
                                 <td> {deposit_total} </td>
                                 <td> Bank Money </td>

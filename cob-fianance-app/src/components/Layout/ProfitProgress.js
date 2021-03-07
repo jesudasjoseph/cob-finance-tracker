@@ -39,7 +39,6 @@ export class ProfitProgress extends Component {
 
 
     render() {
-       console.log("This is the shits:", this.state.betternow);
         if(now<25){
         return (
             <ProgressBar style= {{height:'50px'}} now={now} variant="danger" label={`${now}%`} />
