@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router , Route} from 'react-router-dom'
+import {BrowserRouter as Router ,Switch, Route} from 'react-router-dom'
 import Dashboard from './components/pages/Dashboard';
 import DashboardI from './components/pages/DashboardI';
 import UserInstructor from './components/pages/UserInstructor';
@@ -24,17 +24,19 @@ class App extends Component{
 			<Router>
 				<div className="App" style={{background: '#d3d3d3', backgroundSize: 'cover',   width: '100%' , height: '100vh' , minHeight: '100%' }}>
 					<div className="container">
+					<Switch>
 						<Route exact path="/" component={Login} />
 						<Route path="/home" component={Login} />
 						<Route path="/DashboardI" component={DashboardI} />
 						<Route path= "/Profile" component={UserInstructor} />
-						<Route path= "/GroupFinancials" component={SnapshotGroup} />
-						<Route path= "/SettingsInstuctor" component={SettingsInstructor} />
-						<Route path="/UserManagement" component={UserManagement} />
+						<Route exact path= "/SettingsInstuctor" component={SettingsInstructor} />
+						<Route exact path="/UserManagement" component={UserManagement} />
 						<Route path="/dashboard" component={Dashboard} />
 						<Route path="/transactions" component={Transactions} />
 						<Route path="/expenses" component={Expenses} />
 						<Route path="/querytestpage" component={QueryTestPage} />
+						<Route exact path= "/:int" component={SnapshotGroup} />
+						</Switch>
 					</div>
 				</div>
 			</Router>
