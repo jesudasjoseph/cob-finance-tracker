@@ -980,6 +980,47 @@ async function getExpenseDataCSV(asker, bid) {
 
 	return new data(500);
 }
+async function getTransactionDataCSV(asker, bid) {
+	const query = {
+		text: 'SELECT * FROM transactions WHERE bid=$1;',
+		values: [bid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			default:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404);
+				}
+				else {
+					const items = res.rows;
+					const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
+					const header = Object.keys(items[0]);
+					const csv = [
+					  header.join(','), // header row first
+					  ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+					].join('\r\n');
+					console.log(csv);
+					return new data(200, csv);
+				}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 
 exports.init = init;
 exports.getRole = getRole;
@@ -1011,6 +1052,7 @@ exports.addDeposit = addDeposit;
 exports.deleteDepositByDid = deleteDepositByDid;
 
 exports.getExpenseDataCSV = getExpenseDataCSV;
+exports.getTransactionDataCSV = getTransactionDataCSV;
 
 exports.data = data;
 exports.asker = asker;
