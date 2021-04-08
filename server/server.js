@@ -19,6 +19,7 @@ let userRouter = require('./routes/user');
 let transactionRouter = require('./routes/transaction');
 let expenseRouter = require('./routes/expense');
 let depositRouter = require('./routes/deposit');
+let exportRouter = require('./routes/export');
 
 app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use(cors()); //Use cors middleware
@@ -35,6 +36,8 @@ app.use('/transaction', transactionRouter);
 app.use('/expense', expenseRouter);
 //Router for Deposit data requests
 app.use('/deposit', depositRouter);
+//Router for Export data requests
+app.use('/export', exportRouter);
 
 app.listen(config.port, () => {
 	console.log(`Listening at http://localhost:${config.port}`);
