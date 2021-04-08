@@ -7,7 +7,6 @@ import NavibarI from '../Layout/MyNavBarI';
 import Searchbar from '../Layout/SearchBar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-//let fetch = require("fetch");
 
 export default function DashboardI() {
     return (

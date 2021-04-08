@@ -18,18 +18,18 @@ import Form from 'react-bootstrap/Form';
 
 
 export default class SnapshotGroup extends React.Component{
-    constructor(props){
+	constructor(props){
       super(props);
       this.state = {
           path: 0}
       this.get_path = this.get_path.bind(this);
       this.getbusiness = this.getbusiness.bind(this);
+			this.exportBusinessData = this.exportBusinessData.bind(this);
       this.get_path(this.state.path);
       this.getbusiness();
     }
 
-
-    getbusiness(){
+	getbusiness(){
       fetch('http://' + '71.193.191.23' + ':2021/business/bybid?bid=' + this.state.path, {
         mode: 'cors',
         method: 'GET',
@@ -50,36 +50,55 @@ export default class SnapshotGroup extends React.Component{
       });
     }
 
+	exportBusinessData(){
+		fetch('http://' + '71.193.191.23' + ':2021/export/expense?bid=' + this.state.path, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'text/csv',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response;
+		}).then(data => {
+			console.log('YUP:', data);
 
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
 
-      get_path(){
+	get_path(){
         var {pathname} = this.props.location;
         this.state.path = pathname.substring(1,pathname.length);
 
       }
 
+	render () {
+		const handleexpensetable = () => {
+			<React.Fragment>
+				<Expenses style = {{padding: '10px 20px'}}></Expenses>
+			</React.Fragment>
+		}
 
+		return (
+			<React.Fragment>
+					<NavibarI/>
+					<h1 style={{textAlign:'center'}}> Group Name </h1>
+					<div style={{textAlign: 'right'}}>
+						<Button onClick={this.exportBusinessData}>Download Business Data</Button>
+					</div>
+					<h2> Profit Goals</h2>
+					<ProfitProgress />
+					<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
+					<ExpenseProgress />
+					<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
+					<BankProgress/>
+					<Button onClick={() => handleexpensetable()}> Get Expense Table </Button>
+			</React.Fragment>
+		)
+	}
 
-      render () {
-        const handleexpensetable = () => {
-          <React.Fragment>
-          <Expenses style = {{padding: '10px 20px'}}></Expenses>
-          </React.Fragment>
-        }
-    return (
-      <React.Fragment>
-      <NavibarI/>
-          <h1 style={{textAlign:'center'}}> Group Name </h1>
-          <div style={{textAlign: 'right'}}>
-          </div>
-          <h2> Profit Goals</h2>
-          <ProfitProgress />
-          <h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
-          <ExpenseProgress />
-          <h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
-          <BankProgress/>
-          <Button onClick={() => handleexpensetable()}> Get Expense Table </Button>
-      </React.Fragment>
-  )
-  }
 }
