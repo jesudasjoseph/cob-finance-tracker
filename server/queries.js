@@ -1010,6 +1010,8 @@ exports.getMultipleDeposits = getMultipleDeposits;
 exports.addDeposit = addDeposit;
 exports.deleteDepositByDid = deleteDepositByDid;
 
+exports.getExpenseDataCSV = getExpenseDataCSV;
+
 exports.data = data;
 exports.asker = asker;
 exports.user = user;
