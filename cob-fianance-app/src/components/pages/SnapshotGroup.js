@@ -119,17 +119,17 @@ export default class SnapshotGroup extends React.Component{
 			<React.Fragment>
 					<NavibarI/>
 					<h1 style={{textAlign:'center'}}> Group Name </h1>
-					<div style={{textAlign: 'right'}}>
-						<Button onClick={this.exportExpenseData}>Download Expense Data</Button>
-						<Button onClick={this.exportTransactionData}>Download Transaction Data</Button>
-					</div>
 					<h2> Profit Goals</h2>
 					<ProfitProgress />
 					<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
 					<ExpenseProgress />
 					<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
 					<BankProgress/>
-					<Button onClick={() => handleexpensetable()}> Get Expense Table </Button>
+					<div style={{textAlign: 'left', margin: '20px 0px 5px 0px'}}>
+						<Button style={{margin: '0px 5px'}} onClick={this.exportExpenseData}>Download Expense Data</Button>
+						<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
+					</div>
+					<Button style={{margin: '0px 5px'}} onClick={() => handleexpensetable()}> Get Expense Table </Button>
 			</React.Fragment>
 		)
 	}
