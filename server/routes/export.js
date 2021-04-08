@@ -9,3 +9,5 @@ router.get('/expense', authorizor.authToken, async (req, res) => {
 	res.statusCode = code;
 	res.send(data);
 });
+
+module.exports = router;
