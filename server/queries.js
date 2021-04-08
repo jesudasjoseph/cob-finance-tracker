@@ -965,8 +965,8 @@ async function getExpenseDataCSV(asker, bid) {
 					  header.join('bid,company,date,eid,justification,payment_method,price_per_unit,product,quantity,total,uid'), // header row first
 					  ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
 					].join('\r\n');
-
-					return new data(200, res.rows);
+					console.log(csv);
+					return new data(200, csv);
 				}
 		}
 	}
