@@ -17,4 +17,11 @@ router.get('/transaction', authorizor.authToken, async (req, res) => {
 	res.send(data);
 });
 
+router.get('/deposit', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'text/csv');
+	let {code, data} = await q.getDepositDataCSV(req.body.asker, req.query.bid);
+	res.statusCode = code;
+	res.send(data);
+});
+
 module.exports = router;
