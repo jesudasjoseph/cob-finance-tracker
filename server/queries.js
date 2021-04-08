@@ -962,7 +962,7 @@ async function getExpenseDataCSV(asker, bid) {
 					const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
 					const header = Object.keys(items[0]);
 					const csv = [
-					  header.join('bid,company,date,eid,justification,payment_method,price_per_unit,product,quantity,total,uid'), // header row first
+					  header.join(','), // header row first
 					  ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
 					].join('\r\n');
 					console.log(csv);
