@@ -19,6 +19,7 @@ export default class SnapshotGroup extends React.Component{
       this.getbusiness = this.getbusiness.bind(this);
 			this.exportExpenseData = this.exportExpenseData.bind(this);
 			this.exportTransactionData = this.exportTransactionData.bind(this);
+			this.exportDepositData = this.exportDepositData.bind(this);
       this.get_path(this.state.path);
       this.getbusiness();
     }
@@ -102,6 +103,35 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 
+	exportDepositData(){
+		fetch('http://' + '71.193.191.23' + ':2021/export/deposit?bid=' + this.state.path, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'text/csv',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response.text();
+		}).then(data => {
+			//Create a CSV Download link
+			var downloadLink = document.createElement("a");
+			var blob = new Blob(["\ufeff", data]);
+			var url = URL.createObjectURL(blob);
+			downloadLink.href = url;
+			downloadLink.download = "Bid_" + this.state.path + "_depositData.csv";
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
+
+			console.log('YUP:', data);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+
 	get_path(){
         var {pathname} = this.props.location;
         this.state.path = pathname.substring(1,pathname.length);
@@ -128,6 +158,7 @@ export default class SnapshotGroup extends React.Component{
 					<div style={{textAlign: 'left', margin: '20px 0px 5px 0px'}}>
 						<Button style={{margin: '0px 5px'}} onClick={this.exportExpenseData}>Download Expense Data</Button>
 						<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
+						<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 					</div>
 					<Button style={{margin: '0px 5px'}} onClick={() => handleexpensetable()}> Get Expense Table </Button>
 			</React.Fragment>
