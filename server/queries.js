@@ -483,6 +483,68 @@ async function createBusiness(asker, business) {
 
 	return new data(500);
 }
+async function modifyProfitGoalByUid(asker, profit_goal) {
+	const query = {
+		text: 'UPDATE business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) SET profit_goal = $1 WHERE uid=$2;',
+		values: [profit_goal, asker.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				await client.query(query);
+				return new data(200);
+			case roleType.instructor:
+				return new data(403);
+			case roleType.admin:
+				return new data(403);
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function modifyStretchProfitGoalByUid(asker, stretch_profit_goal) {
+	const query = {
+		text: 'UPDATE business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) SET stretch_profit_goal = $1 WHERE uid=$2;',
+		values: [stretch_profit_goal, asker.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				await client.query(query);
+				return new data(200);
+			case roleType.instructor:
+				return new data(403);
+			case roleType.admin:
+				return new data(403);
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function deleteBusinessByBid(asker, bid) {
 	const query = {
 		text: 'DELETE FROM business WHERE bid = $1',
@@ -1076,6 +1138,8 @@ exports.getMultipleBusiness = getMultipleBusiness;
 exports.getBusinessByUid = getBusinessByUid;
 exports.getBusinessByBid = getBusinessByBid;
 exports.createBusiness = createBusiness;
+exports.modifyProfitGoalByUid = modifyProfitGoalByUid;
+exports.modifyStretchProfitGoalByUid = modifyStretchProfitGoalByUid;
 exports.deleteBusinessByBid = deleteBusinessByBid;
 
 exports.getMultipleTransactions = getMultipleTransactions;
