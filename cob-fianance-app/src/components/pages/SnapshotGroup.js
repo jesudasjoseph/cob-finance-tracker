@@ -10,12 +10,6 @@ import NavibarI from '../Layout/MyNavBarI';
 import Searchbar from '../Layout/SearchBar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-//let fetch = require("fetch");
-//
-//<React.Fragment>
-//  <Expenses style = {{padding: '10px 20px'}}></Expenses>
-//</React.Fragment>
-
 
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
@@ -24,7 +18,7 @@ export default class SnapshotGroup extends React.Component{
           path: 0}
       this.get_path = this.get_path.bind(this);
       this.getbusiness = this.getbusiness.bind(this);
-			this.exportBusinessData = this.exportBusinessData.bind(this);
+			this.exportExpenseData = this.exportExpenseData.bind(this);
       this.get_path(this.state.path);
       this.getbusiness();
     }
@@ -50,7 +44,7 @@ export default class SnapshotGroup extends React.Component{
       });
     }
 
-	exportBusinessData(){
+	exportExpenseData(){
 		fetch('http://' + '71.193.191.23' + ':2021/export/expense?bid=' + this.state.path, {
 			mode: 'cors',
 			method: 'GET',
@@ -61,10 +55,19 @@ export default class SnapshotGroup extends React.Component{
 			}
 		}).then(response => {
 			console.log(response);
-			return response;
+			return response.text();
 		}).then(data => {
-			console.log('YUP:', data);
+			//Create a CSV Download link
+			var downloadLink = document.createElement("a");
+			var blob = new Blob(["\ufeff", data]);
+			var url = URL.createObjectURL(blob);
+			downloadLink.href = url;
+			downloadLink.download = "Bid_" + this.state.path + "_expenseData.csv";
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
 
+			console.log('YUP:', data);
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -88,7 +91,7 @@ export default class SnapshotGroup extends React.Component{
 					<NavibarI/>
 					<h1 style={{textAlign:'center'}}> Group Name </h1>
 					<div style={{textAlign: 'right'}}>
-						<Button onClick={this.exportBusinessData}>Download Business Data</Button>
+						<Button onClick={this.exportExpenseData}>Download Expense Data</Button>
 					</div>
 					<h2> Profit Goals</h2>
 					<ProfitProgress />
