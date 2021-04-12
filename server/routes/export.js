@@ -10,4 +10,11 @@ router.get('/expense', authorizor.authToken, async (req, res) => {
 	res.send(data);
 });
 
+router.get('/transaction', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'text/csv');
+	let {code, data} = await q.getTransactionDataCSV(req.body.asker, req.query.bid);
+	res.statusCode = code;
+	res.send(data);
+});
+
 module.exports = router;
