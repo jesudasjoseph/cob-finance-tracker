@@ -6,32 +6,35 @@ const now = 30;
 var resProfit = ''
 var resExpense
 var a = 0
-var b = 0 
-var c = 0 
-var d =0 
+var b = 0
+var c = 0
+var d =0
 var goal = 100
 //const progressInstance = <ProgressBar now={now} label={`${now}%`} />;
 
 export class ProfitProgress extends Component {
-  constructor(props){
+	constructor(props){
     super(props);
     this.state = {
       name: '',
-      section:'', 
+      section:'',
       deposit_total: '',
       expense_total: '',
       transaction_total: '',
       transaction_count:'',
       expense_count:'',
+			profit_goal:'',
+			stretch_profit_goal:'',
       profit:'',
-        profitbar: '',
-        expensesbar: '',
-        businessTable: []
-      , expenses:[]}
-        this.get_business = this.get_business.bind(this);
-        this.get_business();
-        this.state.betternow = this.deposit_total;
-          }
+			profitbar: '',
+			expensesbar: '',
+			businessTable: [],
+			expenses:[]}
+
+		this.get_business = this.get_business.bind(this);
+		this.get_business();
+		this.state.betternow = this.deposit_total;
+	}
 
   get_business(){
     fetch('http://' + '71.193.191.23' + ':2021/business/byuid', {
@@ -56,7 +59,7 @@ export class ProfitProgress extends Component {
 
 
     render() {
-       //const {customer,date,product,payment_method, quantity, price_per_unit, tid, total} = business;
+       const {deposit_count,deposit_total,expense_count,expense_total, name, product_count, profit, profit_goal, stretch_profit_goal} = this.state.business;
        {this.state.expenses.map((expense, index) => {
         const {deposit_count,deposit_total,expense_count,expense_total, name, product_count, profit} = expense;
         this.state.profitbar = profit
