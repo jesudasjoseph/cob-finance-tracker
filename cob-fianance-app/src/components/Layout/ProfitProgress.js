@@ -1,6 +1,31 @@
 import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
+const containerStyle = {
+	display: 'flex'
+}
+const profitBarContainerStyle = {
+	flexGrow: 3
+}
+const profitBarStyle = {
+	height: '50px',
+	minWidth: 100
+}
+const profitBarPlusContainerStyle = {
+	flexGrow: 1
+}
+const profitBarPlusStyle = {
+	height: '50px',
+	minWidth: 100
+}
+const lossBarContainerStyle = {
+	flexGrow: 1
+}
+const lossBarStyle = {
+	height: '50px',
+	minWidth: 100
+}
+
 export class ProfitProgress extends Component {
 	constructor(props){
 		super(props);
@@ -47,42 +72,61 @@ export class ProfitProgress extends Component {
 		else {
 			let {deposit_count, deposit_total, expense_count, expense_total, name, product_count, profit, profit_goal, stretch_profit_goal} = this.state.business;
 
-			profit_goal = parseFloat(profit_goal.split("$")[1]);
-			stretch_profit_goal = parseFloat(stretch_profit_goal.split("$")[1]);
-
 			if (profit_goal === 0){
 				return (
 						<div>Profit goal not Set!</div>
 				)
 			}
 			else {
-				console.log(profit);
-				profit = profit.split("$")[1];
-				console.log(profit);
-				profit = parseFloat(profit);
-				console.log(profit);
-				expense_total = parseFloat(expense_total.split("$")[1]);
 				const percent_of_profit_goal = profit_goal/100;
 				const profit_percent = profit/percent_of_profit_goal;
 
 				console.log(profit);
 				if (profit < 0){
-					//Display Negative Profit Bar
-					console.log(profit);
+					return (
+						<div style={containerStyle}>
+							<div style={lossBarContainerStyle}>
+								<ProgressBar
+									style={lossBarStyle}
+									now={100}
+									variant="danger"
+									label={`$${profit} Loss`}/>
+							</div>
+							<div style={profitBarContainerStyle}>
+								<ProgressBar
+									style={profitBarStyle}
+									now={100}
+									variant="info"
+									label={`Profit Goal: $${profit_goal}`}/>
+							</div>
+						</div>
+					)
 				}
 				else if (profit_percent < 25){
 					return (
-						<ProgressBar style={{height:'50px', minWidth:100}} now={profit_percent} variant="danger" label={`$${profit}/$${profit_goal}, ${profit_percent}%`}/>
+						<ProgressBar
+							style={profitBarStyle}
+							now={profit_percent}
+							variant="danger"
+							label={`$${profit}/$${profit_goal}, ${profit_percent}%`}/>
 					)
 				}
 				else if (profit_percent < 75){
 					return (
-						<ProgressBar style={{height:'50px', minWidth:100}} now={profit_percent} variant="warning" label={`$${profit}/$${profit_goal}, ${profit_percent}%`}/>
+						<ProgressBar
+							style={profitBarStyle}
+							now={profit_percent}
+							variant="warning"
+							label={`$${profit}/$${profit_goal}, ${profit_percent}%`}/>
 					)
 				}
 				else{
 					return (
-						<ProgressBar style={{height:'50px', minWidth:100}} now={profit_percent} variant="success" label={`$${profit}/$${profit_goal}, ${profit_percent}%`}/>
+						<ProgressBar
+							style={profitBarStyle}
+							now={profit_percent}
+							variant="success"
+							label={`$${profit}/$${profit_goal}, ${profit_percent}%`}/>
 					)
 				}
 			}

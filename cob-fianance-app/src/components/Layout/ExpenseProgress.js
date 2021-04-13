@@ -4,23 +4,15 @@ const now = 30;
 var resProfit = ''
 var resExpense = ''
 var a = 0
-var b = 0 
-var c = 0 
-var d =0 
+var b = 0
+var c = 0
+var d =0
 var goal = 100
-var resRevenue='' 
+var resRevenue=''
 export class ExpenseProgress extends Component {
     constructor(props){
         super(props);
         this.state = {
-          name: '',
-          section:'', 
-          deposit_total: '',
-          expense_total: '',
-          transaction_total: '',
-          transaction_count:'',
-          expense_count:'',
-          profit:'',
             profitbar: '',
             expensesbar: '',
             revenuebar:'',
@@ -56,20 +48,15 @@ export class ExpenseProgress extends Component {
             this.state.profitbar = profit
             this.state.expensesbar = expense_total
             this.state.revenuebar = transaction_total
-            var str = this.state.revenuebar
-            var str2 = this.state.expensesbar
-            resExpense = str2.split("$");
-            resRevenue = str.split("$");
-            a = parseFloat(resRevenue[1]);
-            b = parseFloat(resExpense[1]);
-            console.log(a)
-            
+            a = this.state.revenuebar
+            b = this.state.expensesbar
+
             return (
               <div>{expense_total}</div>
             )
             })}
         return(
-        <div> 
+        <div>
             <ProgressBar  style= {{height:'50px'}} variant="danger" now={100*b/goal} label={`Expenses: $${b}`} />
             <ProgressBar style= {{height:'50px'}} variant="success" now={100*a/goal} label={`Revenue: $${a}`}/>
         </div>
