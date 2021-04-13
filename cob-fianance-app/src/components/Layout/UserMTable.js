@@ -16,7 +16,7 @@ export class Tables extends Component {
 
 
         get_allusers(){
-            fetch('http://' + '71.193.191.23' + ':2021/user?start=' + '0' + '&end=' + '50', {
+            fetch('http://71.193.191.23:2021/user?start=0&end=50', {
               mode: 'cors',
               method: 'GET',
               credentials: 'same-origin',
@@ -44,8 +44,8 @@ export class Tables extends Component {
                    <tr>
                        <th>Group Name</th>
                        <th>Student First Name </th>
-                       <th> Student Last Name </th>
-                       <th> Onid ID </th>
+                       <th>Student Last Name </th>
+                       <th>Onid ID </th>
                        <th>Section</th>
                        </tr>
                        </thead>
