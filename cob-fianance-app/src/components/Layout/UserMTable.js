@@ -47,11 +47,22 @@ export class Tables extends Component {
                        <th>Student Last Name </th>
                        <th>Onid ID </th>
                        <th>Section</th>
+											 <th>Role</th>
                        </tr>
                        </thead>
                        <tbody>
                        {this.state.userTable.map((student, index) => {
-                          const {bid,uid,first, last,section} = student;
+                          const {bid,uid,first,last,section,role} = student;
+													let roleType = '';
+													if (role === 0){
+														roleType = 'Student';
+													}
+													else if (role === 1){
+														roleType = 'Instructor';
+													}
+													else if (role === 2){
+														roleType = 'Admin';
+													}
                           return (
                             <tr key={uid}>
                                 <td> {bid} </td>
@@ -59,6 +70,7 @@ export class Tables extends Component {
                                 <td> {last} </td>
                                 <td> {uid} </td>
                                 <td> {section} </td>
+																<td> {roleType} </td>
                             </tr>
                           )
                           })}
