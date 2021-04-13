@@ -8,12 +8,12 @@ export class AddStudentDialogButton extends Component {
 		super(props);
 		this.state = {
 			modalShow: false,
-			customer: '',
-			date: '',
-			product: '',
-			payment_method: '',
-			quantity: '',
-			price_per_unit: ''
+			bid: '',
+			firstName: '',
+			lastName: '',
+			onidId: '',
+			section: '',
+			role: '0'
 		};
 
 		this.open_dialog = this.open_dialog.bind(this);
@@ -26,17 +26,54 @@ export class AddStudentDialogButton extends Component {
 	}
 	close_dialog() {
 		this.setState({
-			customer: '',
-			date: '',
-			product: '',
-			payment_method: '',
-			quantity: '',
-			price_per_unit: ''
+			bid: 0,
+			firstName: '',
+			lastName: '',
+			onidId: '',
+			section: '',
+			role: 0
 		});
 		this.setState({modalShow: false});
 	}
 	handle_submit(e) {
 		e.preventDefault();
+
+		const user_body = {user:{uid:this.state.onidId, first:this.state.firstName, last: this.state.lastName, role:this.state.role, section: this.state.section}}
+    fetch('http://71.193.191.23:2021/user', {
+      mode: 'cors',
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+        'Authorization': window.localStorage.getItem('jwt')
+      },
+      body: JSON.stringify(user_body)
+    }).then(response => {
+      console.log(response);
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
+
+    const b_body = {uid:this.state.onidId, bid:this.state.bid}
+    fetch('http://71.193.191.23:2021/user/addtobusiness', {
+      mode: 'cors',
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+        'Authorization': window.localStorage.getItem('jwt')
+      },
+      body: JSON.stringify(b_body)
+    }).then(response => {
+      console.log(response);
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
+
+		console.log(user_body);
+		console.log(b_body);
 
 		this.close_dialog();
 	}
@@ -61,23 +98,27 @@ export class AddStudentDialogButton extends Component {
 						<Modal.Body>
 							<Form onSubmit={this.handle_submit}>
 								<Form.Group>
-									<Form.Label>Customer:</Form.Label>
-									<Form.Control type="text" value={this.state.customer}  onChange={(e) => this.setState({customer: e.target.value})} />
+									<Form.Label>ONID:</Form.Label>
+									<Form.Control type="text" value={this.state.onidId}  onChange={(e) => this.setState({onidId: e.target.value})} />
 
-									<Form.Label>Date:</Form.Label>
-									<Form.Control type="text" value={this.state.date} onChange={(e) => this.setState({date: e.target.value})} />
+									<Form.Label>First name:</Form.Label>
+									<Form.Control type="text" value={this.state.firstName} onChange={(e) => this.setState({firstName: e.target.value})} />
 
-									<Form.Label>product:</Form.Label>
-									<Form.Control type="text" value={this.state.product} onChange={(e) => this.setState({product: e.target.value})} />
+									<Form.Label>Last name:</Form.Label>
+									<Form.Control type="text" value={this.state.lastName} onChange={(e) => this.setState({lastName: e.target.value})} />
 
-									<Form.Label>Payment Method:</Form.Label>
-									<Form.Control type="text" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})} />
+									<Form.Label>Section:</Form.Label>
+									<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
 
-									<Form.Label>Quantity:</Form.Label>
-									<Form.Control type="text" value={this.state.quantity} onChange={(e) => this.setState({quantity: e.target.value})} />
+									<Form.Label>Role:</Form.Label>
+									<Form.Control as="select" type="text" value={this.state.role} onChange={(e) => this.setState({role: e.target.value})}>
+										<option value="0">Student</option>
+										<option value="1">Instructor</option>
+										<option value="2">Admin</option>
+									</Form.Control>
 
-									<Form.Label>Price per unit:</Form.Label>
-									<Form.Control type="text" value={this.state.price_per_unit} onChange={(e) => this.setState({price_per_unit: e.target.value})} />
+									<Form.Label>Business ID:</Form.Label>
+									<Form.Control type="number" value={this.state.bid} onChange={(e) => this.setState({bid: e.target.value})} />
 								</Form.Group>
 
 								<Button variant="primary" type="submit">Add</Button>
