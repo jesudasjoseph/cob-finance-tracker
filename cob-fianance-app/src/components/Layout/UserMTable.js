@@ -5,10 +5,6 @@ export class Tables extends Component {
   constructor(props){
     super(props);
     this.state = {
-        gname: '',
-        sname:'',
-        sid: '',
-        Instructor: '',
         userTable: []}
         this.get_allusers = this.get_allusers.bind(this);
         this.get_allusers();
