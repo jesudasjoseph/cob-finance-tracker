@@ -318,7 +318,7 @@ async function is_user_in_business(uid, client, bid = null) {
 //name, instructor, section, revenue, bank, square, expenses, profit
 async function getMultipleBusiness(asker, start, end) {
 	const query = {
-		text: 'SELECT * FROM business OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM business_view OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
 	const client = await pool.connect();
@@ -351,7 +351,7 @@ async function getMultipleBusiness(asker, start, end) {
 }
 async function getBusinessByUid(asker) {
 	const query = {
-		text: 'SELECT * FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) WHERE uid=$1;',
+		text: 'SELECT * FROM business_view LEFT JOIN user_has_business ON (business_view.bid=user_has_business.bid) WHERE uid=$1;',
 		values: [asker.uid]
 	}
 	const client = await pool.connect();
@@ -399,7 +399,7 @@ async function getBusinessByUid(asker) {
 }
 async function getBusinessByBid(asker, bid) {
 	const query = {
-		text: 'SELECT * FROM business WHERE bid=$1;',
+		text: 'SELECT * FROM business_view WHERE bid=$1;',
 		values: [bid]
 	}
 	const client = await pool.connect();
