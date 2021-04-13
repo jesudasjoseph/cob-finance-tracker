@@ -39,41 +39,38 @@ export class AddStudentDialogButton extends Component {
 		e.preventDefault();
 
 		const user_body = {user:{uid:this.state.onidId, first:this.state.firstName, last: this.state.lastName, role:this.state.role, section: this.state.section}}
-    fetch('http://71.193.191.23:2021/user', {
-      mode: 'cors',
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-        'Authorization': window.localStorage.getItem('jwt')
-      },
-      body: JSON.stringify(user_body)
-    }).then(response => {
-      console.log(response);
-    }).catch((error) => {
-      console.error('Error:', error);
-    });
+		fetch('http://71.193.191.23:2021/user', {
+			mode: 'cors',
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			},
+			body: JSON.stringify(user_body)
+		}).then(response => {
+			console.log(response);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 
-    const b_body = {uid:this.state.onidId, bid:this.state.bid}
-    fetch('http://71.193.191.23:2021/user/addtobusiness', {
-      mode: 'cors',
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-        'Authorization': window.localStorage.getItem('jwt')
-      },
-      body: JSON.stringify(b_body)
-    }).then(response => {
-      console.log(response);
-    }).catch((error) => {
-      console.error('Error:', error);
-    });
-
-		console.log(user_body);
-		console.log(b_body);
+		const b_body = {uid:this.state.onidId, bid:this.state.bid}
+		fetch('http://71.193.191.23:2021/user/addtobusiness', {
+			mode: 'cors',
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			},
+			body: JSON.stringify(b_body)
+		}).then(response => {
+			console.log(response);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 
 		this.close_dialog();
 	}
