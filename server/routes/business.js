@@ -31,14 +31,14 @@ router.post('/', authorizor.authToken, async (req, res) => {
 	res.end();
 });
 
-router.put('/byuid/profit_goal' authorizor.authToken, async (req, res) => {
+router.put('/byuid/profit_goal', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let {code} = await q.modifyProfitGoalByUid(req.body.asker, req.body.profit_goal);
 	res.statusCode = code;
 	res.end();
 });
 
-router.put('/byuid/stretch_profit_goal' authorizor.authToken, async (req, res) => {
+router.put('/byuid/stretch_profit_goal', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let {code} = await q.modifyStretchProfitGoalByUid(req.body.asker, req.body.stretch_profit_goal);
 	res.statusCode = code;
