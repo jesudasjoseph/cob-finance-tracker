@@ -1,12 +1,6 @@
 import React from 'react'
-import Table from '../Layout/GroupTable';
-import ProfitProgress from '../Layout/ProfitProgress';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import GroupTable from '../Layout/GroupTable';
 import NavibarI from '../Layout/MyNavBarI';
-import Searchbar from '../Layout/SearchBar';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 
 export default function DashboardI() {
     return (
@@ -16,15 +10,7 @@ export default function DashboardI() {
           <div style={{textAlign: 'right'}}>
           </div>
           <h2 style={{textAlign:'left'}}> Welcome Instructor </h2>
-          <Nav>
-            <NavDropdown title="Filter By" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Instructor</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.4">Section</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link eventKey={2} href="profile">
-            </Nav.Link>
-          </Nav>
-          <Table style = {{paddingTop: '10px 20px'}}></Table>
+          <GroupTable style = {{paddingTop: '10px 20px'}}></GroupTable>
       </React.Fragment>
   )
 }

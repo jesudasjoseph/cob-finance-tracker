@@ -34,7 +34,10 @@ export class Tables extends Component {
 	render() {
 		return (
 			<div>
-				<Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
+				<Table responsive="sm"
+					size="xl"
+					style={{paddingBottom:'40px' , paddingTop: '10px'}}
+					striped bordered hover variant="dark">
 					<thead>
 						<tr>
 							<th>Group Name</th>
