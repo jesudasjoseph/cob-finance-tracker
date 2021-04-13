@@ -71,7 +71,7 @@ export class Tables extends Component {
                                 <td> {product_count} </td>
                                 <td> {expense_total} </td>
                                 <td> {profit} </td>
-                                <td><ProfitProgress /></td>
+                                <td><ProfitProgress dataFromParent = {bid} /></td>
                             </tr>
                           )
                           })}
