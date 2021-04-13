@@ -6,7 +6,7 @@ export class ExpensesTables extends Component {
         super(props);
         this.state = {
           quantity: '',
-          product:'', 
+          product:'',
           company: '',
           date: '',
           payment_method: '',
@@ -48,7 +48,7 @@ export class ExpensesTables extends Component {
               }
               add_expenses(){
                 let body ={expense:{
-                  quantity: this.state.quantity, 
+                  quantity: this.state.quantity,
                   product:this.state.product,
                   date:this.state.date,
                   company: this.state.company ,
@@ -87,30 +87,30 @@ export class ExpensesTables extends Component {
                         Product:
                         <input type="text" value={this.state.product} onChange={(e) => this.setState({product: e.target.value})} />
                     </label>
-                    <label> 
+                    <label>
                         Company:
                         <input type="text" value={this.state.company} onChange={(e) => this.setState({company: e.target.value})} />
-                        
+
                     </label>
-                    <label> 
+                    <label>
                         Date:
                         <input type="text" value={this.state.date} onChange={(e) => this.setState({date: e.target.value})} />
-                        
+
                     </label>
-                    <label> 
+                    <label>
                         Payment Method:
                         <input type="text" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})} />
-                        
+
                     </label>
-                    <label> 
+                    <label>
                         Price Per Unit:
                         <input type="text" value={this.state.price_per_unit} onChange={(e) => this.setState({price_per_unit: e.target.value})} />
-                        
+
                     </label>
-                    <label> 
+                    <label>
                         Justification:
                         <input type="text" value={this.justification} onChange={(e) => this.setState({justification: e.target.value})} />
-                        
+
                     </label>
                         <input type="submit" value="Submit" />
                         </form>
@@ -135,7 +135,7 @@ export class ExpensesTables extends Component {
                                <td> {quantity}</td>
                                <td> {product} </td>
                                <td>{company}</td>
-                               <td> {date} </td>
+                               <td> {date.split('T')[0]} </td>
                                <td> {payment_method} </td>
                                <td> {price_per_unit} </td>
                                <td> {justification} </td>
