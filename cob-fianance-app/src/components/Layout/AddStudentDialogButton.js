@@ -6,68 +6,82 @@ import Form from 'react-bootstrap/Form';
 export class AddStudentDialogButton extends Component {
 	constructor(props){
 		super(props);
-		this.state = {modalShow: false};
+		this.state = {
+			modalShow: false,
+			customer: '',
+			date: '',
+			product: '',
+			payment_method: '',
+			quantity: '',
+			price_per_unit: ''
+		};
 
 		this.open_dialog = this.open_dialog.bind(this);
 		this.close_dialog = this.close_dialog.bind(this);
+		this.handle_submit = this.handle_submit.bind(this);
 	}
 
 	open_dialog() {
 		this.setState({modalShow: true});
 	}
 	close_dialog() {
+		this.setState({
+			customer: '',
+			date: '',
+			product: '',
+			payment_method: '',
+			quantity: '',
+			price_per_unit: ''
+		});
 		this.setState({modalShow: false});
+	}
+	handle_submit(e) {
+		e.preventDefault();
+
+		this.close_dialog();
 	}
 
 	render() {
 		if (this.state.modalShow === false)
 			return (
 				<>
-					<Button as="input"  type="button" value="Add Student" onClick={this.open_dialog}/>
+					<Button variant="primary" onClick={this.open_dialog}>Add Student</Button>
 				</>
 			)
 		else {
 			return (
 				<>
-					<Button as="input"  type="button" value="Add Student" onClick={this.open_dialog}/>
+					<Button variant="primary" onClick={this.open_dialog}>Add Student</Button>
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
-							<Modal.Title id="example-custom-modal-styling-title">
-								Custom Modal Styling
+							<Modal.Title>
+								Add Student
 							</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
-							<form onSubmit={this.handleSubmit}>
-								<label>
-										Customer:
-										<input type="text" value={this.state.customer}  onChange={(e) => this.setState({customer: e.target.value})} />
-								</label>
-								<label>
-										Date:
-										<input type="text" value={this.state.date} onChange={(e) => this.setState({date: e.target.value})} />
-								</label>
-								<label>
-										product:
-										<input type="text" value={this.state.product} onChange={(e) => this.setState({product: e.target.value})} />
+							<Form onSubmit={this.handle_submit}>
+								<Form.Group>
+									<Form.Label>Customer:</Form.Label>
+									<Form.Control type="text" value={this.state.customer}  onChange={(e) => this.setState({customer: e.target.value})} />
 
-								</label>
-								<label>
-										Payment Method:
-										<input type="text" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})} />
+									<Form.Label>Date:</Form.Label>
+									<Form.Control type="text" value={this.state.date} onChange={(e) => this.setState({date: e.target.value})} />
 
-								</label>
-								<label>
-										Quantity:
-										<input type="text" value={this.state.quantity} onChange={(e) => this.setState({quantity: e.target.value})} />
+									<Form.Label>product:</Form.Label>
+									<Form.Control type="text" value={this.state.product} onChange={(e) => this.setState({product: e.target.value})} />
 
-								</label>
-								<label>
-										Price per unit:
-										<input type="text" value={this.state.price_per_unit} onChange={(e) => this.setState({price_per_unit: e.target.value})} />
+									<Form.Label>Payment Method:</Form.Label>
+									<Form.Control type="text" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})} />
 
-								</label>
-								<input type="primary" value="Submit" />
-							</form>
+									<Form.Label>Quantity:</Form.Label>
+									<Form.Control type="text" value={this.state.quantity} onChange={(e) => this.setState({quantity: e.target.value})} />
+
+									<Form.Label>Price per unit:</Form.Label>
+									<Form.Control type="text" value={this.state.price_per_unit} onChange={(e) => this.setState({price_per_unit: e.target.value})} />
+								</Form.Group>
+
+								<Button variant="primary" type="submit">Add</Button>
+							</Form>
 						</Modal.Body>
 					</Modal>
 				</>
