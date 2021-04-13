@@ -20,5 +20,4 @@ export class UserMButtons extends Component {
 		)
 	}
 }
-
 export default UserMButtons
