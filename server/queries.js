@@ -318,7 +318,7 @@ async function is_user_in_business(uid, client, bid = null) {
 //name, instructor, section, revenue, bank, square, expenses, profit
 async function getMultipleBusiness(asker, start, end) {
 	const query = {
-		text: 'SELECT * FROM business OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM business_view OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
 	const client = await pool.connect();
@@ -351,7 +351,7 @@ async function getMultipleBusiness(asker, start, end) {
 }
 async function getBusinessByUid(asker) {
 	const query = {
-		text: 'SELECT * FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) WHERE uid=$1;',
+		text: 'SELECT * FROM business_view LEFT JOIN user_has_business ON (business_view.bid=user_has_business.bid) WHERE uid=$1;',
 		values: [asker.uid]
 	}
 	const client = await pool.connect();
@@ -399,7 +399,7 @@ async function getBusinessByUid(asker) {
 }
 async function getBusinessByBid(asker, bid) {
 	const query = {
-		text: 'SELECT * FROM business WHERE bid=$1;',
+		text: 'SELECT * FROM business_view WHERE bid=$1;',
 		values: [bid]
 	}
 	const client = await pool.connect();
@@ -471,6 +471,68 @@ async function createBusiness(asker, business) {
 				await client.query(query);
 				return new data(201);
 				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function modifyProfitGoalByUid(asker, profit_goal) {
+	const query = {
+		text: 'UPDATE business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) SET profit_goal = $1 WHERE uid=$2;',
+		values: [profit_goal, asker.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				await client.query(query);
+				return new data(200);
+			case roleType.instructor:
+				return new data(403);
+			case roleType.admin:
+				return new data(403);
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function modifyStretchProfitGoalByUid(asker, stretch_profit_goal) {
+	const query = {
+		text: 'UPDATE business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) SET stretch_profit_goal = $1 WHERE uid=$2;',
+		values: [stretch_profit_goal, asker.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				await client.query(query);
+				return new data(200);
+			case roleType.instructor:
+				return new data(403);
+			case roleType.admin:
+				return new data(403);
+			default:
+				return new data(403);
 		}
 	}
 	catch (e) {
@@ -1076,6 +1138,8 @@ exports.getMultipleBusiness = getMultipleBusiness;
 exports.getBusinessByUid = getBusinessByUid;
 exports.getBusinessByBid = getBusinessByBid;
 exports.createBusiness = createBusiness;
+exports.modifyProfitGoalByUid = modifyProfitGoalByUid;
+exports.modifyStretchProfitGoalByUid = modifyStretchProfitGoalByUid;
 exports.deleteBusinessByBid = deleteBusinessByBid;
 
 exports.getMultipleTransactions = getMultipleTransactions;
