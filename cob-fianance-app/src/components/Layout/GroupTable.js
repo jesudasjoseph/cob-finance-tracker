@@ -51,11 +51,11 @@ export class Tables extends Component {
 	}
 
 	sortByInstructorClickHandler() {
-		get_businesses("instructor");
+		this.get_businesses("instructor");
 	}
 
 	sortBySectionClickHandler() {
-		get_businesses("section");
+		this.get_businesses("section");
 	}
 
 	render() {
