@@ -32,48 +32,48 @@ export class Tables extends Component {
 	}
 
 	render() {
-	return (
-		<div>
-			<Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
-				<thead>
-					<tr>
-						<th>Group Name</th>
-						<th>Onid</th>
-						<th>First Name </th>
-						<th>Last Name</th>
-						<th>Section</th>
-						<th>Role</th>
-					</tr>
-				</thead>
-				<tbody>
-					{this.state.userTable.map((student, index) => {
-						const {name,bid,uid,first,last,section,role} = student;
-						let roleType = '';
-						if (role === 0){
-							roleType = 'Student';
-						}
-						else if (role === 1){
-							roleType = 'Instructor';
-						}
-						else if (role === 2){
-							roleType = 'Admin';
-						}
+		return (
+			<div>
+				<Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
+					<thead>
+						<tr>
+							<th>Group Name</th>
+							<th>Onid</th>
+							<th>First Name </th>
+							<th>Last Name</th>
+							<th>Section</th>
+							<th>Role</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.state.userTable.map((student, index) => {
+							const {name,bid,uid,first,last,section,role} = student;
+							let roleType = '';
+							if (role === 0){
+								roleType = 'Student';
+							}
+							else if (role === 1){
+								roleType = 'Instructor';
+							}
+							else if (role === 2){
+								roleType = 'Admin';
+							}
 
-						return (
-							<tr key={uid}>
-								<td>({bid}) {name}</td>
-								<td>{uid}</td>
-								<td>{first}</td>
-								<td>{last}</td>
-								<td>{section}</td>
-								<td>{roleType}</td>
-							</tr>
-						)
-					})}
-				</tbody>
-			</Table>
-		</div>
-	);
-   }
+							return (
+								<tr key={uid}>
+									<td>({bid}) {name}</td>
+									<td>{uid}</td>
+									<td>{first}</td>
+									<td>{last}</td>
+									<td>{section}</td>
+									<td>{roleType}</td>
+								</tr>
+							)
+						})}
+					</tbody>
+				</Table>
+			</div>
+		);
+	}
 }
 export default Tables
