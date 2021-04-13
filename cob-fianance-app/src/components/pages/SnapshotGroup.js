@@ -150,7 +150,7 @@ export default class SnapshotGroup extends React.Component{
 					<NavibarI/>
 					<h1 style={{textAlign:'center'}}> Group Name </h1>
 					<h2> Profit Goals</h2>
-					<ProfitProgress />
+					<ProfitProgress dataFromParent = {this.state.path} />
 					<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
 					<ExpenseProgress />
 					<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
