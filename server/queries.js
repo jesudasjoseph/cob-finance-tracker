@@ -40,7 +40,6 @@ async function createUser(asker, user) {
 	}
 	const client = await pool.connect();
 
-	console.log(asker.role);
 	try {
 		switch(asker.role){
 			case roleType.admin:
