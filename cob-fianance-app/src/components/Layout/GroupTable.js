@@ -47,11 +47,10 @@ export class Tables extends Component {
                <thead>
                    <tr>
                        <th>Group Name</th>
-                       <th>Instructor</th>
                        <th>Revenue</th>
                        <th>Bank</th>
                        <th>Square</th>
-                       <th> Quantity Sold </th>
+                       <th>Quantity Sold</th>
                        <th>Expenses</th>
                        <th>Profits</th>
                        <th>Sales Goals</th>
@@ -62,15 +61,14 @@ export class Tables extends Component {
                           const {name,deposit_total,product_count,expense_total, bid, profit} = business;
                           const route = name;
                           return (
-                            <tr key={bid}>
-                                <td> <a href= {bid}> {name} </a> </td>
-                                <td> Instructor </td>
-                                <td> {deposit_total} </td>
-                                <td> Bank Money </td>
-                                <td> Square Money </td>
-                                <td> {product_count} </td>
-                                <td> {expense_total} </td>
-                                <td> {profit} </td>
+                            <tr key={bid} onClick={() => window.location=bid} style={{cursor: 'pointer'}}>
+                                <td>({bid}) {name}</td>
+                                <td>{deposit_total}</td>
+                                <td>Bank Money</td>
+                                <td>Square Money</td>
+                                <td>{product_count}</td>
+                                <td>{expense_total}</td>
+                                <td>{profit}</td>
                                 <td><ProfitProgress dataFromParent = {bid} /></td>
                             </tr>
                           )

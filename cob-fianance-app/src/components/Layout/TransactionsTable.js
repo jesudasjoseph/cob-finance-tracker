@@ -1,42 +1,32 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 
-
-function createData(date, name, Customer, Location, Paymethod, product , quan , price, total) {
-    return { date, name, Customer, Location, Paymethod, product , quan , price, total};
-  }
-  const rows =[
-    createData('1', 'me1','customer1', 'location1', 'Paymethod1','goods1', 54,100 , 12341234),
-    createData('2','me2 ','customer2', 'location2', 'Paymethod2', 'goods2' , 59,100 , 543543)
-  ]
-//transaction/byuid?start=0&end=50
 export class Tables extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      customer: '',
-      date:'',
-      product: '',
-      payment_method: '',
-      quantity: '',
-      price_per_unit:'',
-      total:'',
-      transactionTable: []
-    }
-
-        this.get_transactions = this.get_transactions.bind(this);
-        this.get_transactions();
-        this.add_transactions =this.add_transactions.bind(this);
-        this.add_transactions();
-        this.handleSubmit = this.handleSubmit.bind(this);
-          }
+	constructor(props){
+		super(props);
+		this.state = {
+			customer: '',
+			date:'',
+			product: '',
+			payment_method: '',
+			quantity: '',
+			price_per_unit:'',
+			total:'',
+			transactionTable: []
+		}
+		this.get_transactions = this.get_transactions.bind(this);
+		this.get_transactions();
+		this.add_transactions =this.add_transactions.bind(this);
+		this.add_transactions();
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
           handleSubmit(event) {
             event.preventDefault();
             this.add_transactions(event)
             this.get_transactions(event)
           }
           get_transactions(){
-            fetch('http://' + '71.193.191.23' + ':2021/transaction/byuid?start=' + '0' + '&end=' + '50', {
+            fetch('http://71.193.191.23:2021/transaction/byuid?start=0&end=50', {
               mode: 'cors',
               method: 'GET',
               credentials: 'same-origin',
@@ -66,7 +56,7 @@ export class Tables extends Component {
               }
             }
             console.log(body)
-            fetch('http://' + '71.193.191.23' + ':2021/transaction', {
+            fetch('http://71.193.191.23:2021/transaction', {
               mode: 'cors',
               method: 'POST',
               credentials: 'same-origin',
