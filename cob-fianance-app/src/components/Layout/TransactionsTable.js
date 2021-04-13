@@ -15,7 +15,7 @@ export class Tables extends Component {
     super(props);
     this.state = {
       customer: '',
-      date:'', 
+      date:'',
       product: '',
       payment_method: '',
       quantity: '',
@@ -23,7 +23,7 @@ export class Tables extends Component {
       total:'',
       transactionTable: []
     }
-    
+
         this.get_transactions = this.get_transactions.bind(this);
         this.get_transactions();
         this.add_transactions =this.add_transactions.bind(this);
@@ -57,7 +57,7 @@ export class Tables extends Component {
           }
           add_transactions(){
             let body ={transaction:{
-              customer: this.state.customer, 
+              customer: this.state.customer,
               date:this.state.date,
               product: this.state.product ,
               payment_method: this.state.payment_method,
@@ -95,29 +95,29 @@ export class Tables extends Component {
                         Date:
                         <input type="text" value={this.state.date} onChange={(e) => this.setState({date: e.target.value})} />
                     </label>
-                    <label> 
+                    <label>
                         product:
                         <input type="text" value={this.state.product} onChange={(e) => this.setState({product: e.target.value})} />
-                        
+
                     </label>
-                    <label> 
+                    <label>
                         Payment Method:
                         <input type="text" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})} />
-                        
+
                     </label>
-                    <label> 
+                    <label>
                         Quantity:
                         <input type="text" value={this.state.quantity} onChange={(e) => this.setState({quantity: e.target.value})} />
-                        
+
                     </label>
-                    <label> 
+                    <label>
                         Price per unit:
                         <input type="text" value={this.state.price_per_unit} onChange={(e) => this.setState({price_per_unit: e.target.value})} />
-                        
+
                     </label>
                         <input type="submit" value="Submit" />
                         </form>
-                      
+
           <Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
               <thead>
                   <tr>
@@ -136,7 +136,7 @@ export class Tables extends Component {
                          return (
                            <tr key={tid}>
                                <td> {customer}</td>
-                               <td> {date} </td>
+                               <td> {date.split('T')[0]} </td>
                                <td>{product}</td>
                                <td> {payment_method} </td>
                                <td> {quantity} </td>
