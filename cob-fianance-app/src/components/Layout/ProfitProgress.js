@@ -179,21 +179,6 @@ export class ProfitProgress extends Component {
 				}
 			}
 		}
-			//if(a<25){
-			//	return (
-			//		<ProgressBar style= {{height:'50px'}} now={100*a/goal} variant="danger" label={`${100*a/goal}%`} />
-			//	)
-			//}
-			//if(a>25 && a<100){
-			//	return (
-			//		<ProgressBar style= {{height:'50px'}} now={100*a/goal} variant="warning" label={`${a}%`} />
-			//	)
-			//}
-			//if(a>=100){
-			//	return (
-			//		<ProgressBar style= {{height:'50px'}} now={100*a/goal} variant="success" label={`GOAL REACHED: ${100*a/goal}%`} />
-			//	)
-			//}
 	}
 }
 
