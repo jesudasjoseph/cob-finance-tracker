@@ -24,7 +24,7 @@ let exportRouter = require('./routes/export');
 app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use(cors()); //Use cors middleware
 app.use(express.json()); //Parse body
-app.use(path.join(__dirname, 'build')); //Use Static Website Build Path
+app.use(express.static(path.join(__dirname, 'build'))); //Use Static Website Build Path
 
 app.get('/ping', (req, res) => {
   return res.send('pong')
