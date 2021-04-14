@@ -68,39 +68,39 @@ export class Tables extends Component {
 					</NavDropdown>
 				</Nav>
 				<Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
-               <thead>
-                   <tr>
-                       <th>Group Name</th>
-                       <th>Revenue</th>
-                       <th>Bank</th>
-                       <th>Square</th>
-                       <th>Quantity Sold</th>
-                       <th>Expenses</th>
-                       <th>Profits</th>
-                       <th>Sales Goals</th>
-                       </tr>
-                       </thead>
-                       <tbody>
-                       {this.state.businessTable.map((business, index) => {
-                          const {name,deposit_total,product_count,expense_total, bid, profit} = business;
-                          return (
-                            <tr key={bid} onClick={() => window.location=bid} style={{cursor: 'pointer'}}>
-                                <td>({bid}) {name}</td>
-                                <td>{deposit_total}</td>
-                                <td>Bank Money</td>
-                                <td>Square Money</td>
-                                <td>{product_count}</td>
-                                <td>{expense_total}</td>
-                                <td>{profit}</td>
-                                <td><ProfitProgress dataFromParent = {bid} /></td>
-                            </tr>
-                          )
-                          })}
-                      </tbody>
-            </Table>
-     </div>
- );
-}
+					<thead>
+ 						<tr>
+							<th>Group Name</th>
+							<th>Revenue</th>
+							<th>Bank</th>
+							<th>Square</th>
+							<th>Quantity Sold</th>
+							<th>Expenses</th>
+							<th>Profits</th>
+							<th>Sales Goals</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.state.businessTable.map((business, index) => {
+							const {name,deposit_total,product_count,expense_total, bid, profit} = business;
+							return (
+								<tr key={bid} onClick={() => window.location=bid} style={{cursor: 'pointer'}}>
+									<td>({bid}) {name}</td>
+									<td>{deposit_total}</td>
+									<td>Bank Money</td>
+									<td>Square Money</td>
+									<td>{product_count}</td>
+									<td>{expense_total}</td>
+									<td>{profit}</td>
+									<td><ProfitProgress dataFromParent = {bid} /></td>
+								</tr>
+							)
+						})}
+					</tbody>
+				</Table>
+			</div>
+		);
+	}
 }
 
 export default Tables
