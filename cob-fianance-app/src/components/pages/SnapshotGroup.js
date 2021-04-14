@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ExpenseProgress from '../Layout/ExpenseProgress';
 import TransactionsTable from '../Layout/TransactionsTable';
-import Expenses from '../Layout/ExpensesTable';
+import ExpenseTable from '../Layout/ExpenseTable';
 import BankProgress from '../Layout/BankProgress';
 import NavibarI from '../Layout/MyNavBarI';
 import Searchbar from '../Layout/SearchBar';
@@ -141,10 +141,12 @@ export default class SnapshotGroup extends React.Component{
 
 	render () {
 		const handleexpensetable = () => {
-			<React.Fragment>
-				<Expenses style = {{padding: '10px 20px'}}></Expenses>
-			</React.Fragment>
-		}
+			return(
+				<React.Fragment>
+					<ExpenseTable style = {{padding: '10px 20px'}}></ExpenseTable>
+				</React.Fragment>
+			);
+		};
 
 		return (
 			<React.Fragment>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../Layout/MyNavbar';
-import Table from '../Layout/ExpensesTable';
+import ExpenseTable from '../Layout/ExpenseTable';
 import AddExpenseDialogButton from '../Layout/AddExpenseDialogButton';
 
 export default function Expenses() {
@@ -11,7 +11,7 @@ export default function Expenses() {
 			<div style={{textAlign: 'right', margin: '5px'}}>
 				<AddExpenseDialogButton/>
 			</div>
-			<Table style = {{paddingTop: '10px 20px' }}></Table>
+			<ExpenseTable style = {{paddingTop: '10px 20px' }}></ExpenseTable>
 		</>
 	)
 }
