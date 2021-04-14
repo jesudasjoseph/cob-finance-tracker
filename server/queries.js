@@ -101,29 +101,7 @@ async function getUserByUid(asker, uid) {
 	}
 }
 async function getUserByAsker(asker) {
-	const query = {
-		text: 'SELECT * FROM "users" WHERE uid = $1',
-		values: [asker.uid]
-	}
-	const client = await pool.connect();
-	let res;
-
-	try {
-		res = await client.query(query);
-		if (!res.rows.length) {
-			return new data(404);
-		}
-		else {
-			return new data(200, res.rows[0]);
-		}
-	}
-	catch (e) {
-		console.log("pg" + e);
-		return new data(500);
-	}
-	finally {
-		client.release();
-	}
+	return new data(200, asker.uid);
 }
 async function getMultipleUsers(asker, start, end) {
 	const query = {
