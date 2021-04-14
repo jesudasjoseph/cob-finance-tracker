@@ -22,7 +22,7 @@ export class AddBusinessDialogButton extends Component {
 		this.setState({modalShow: true});
 		fetch('http://71.193.191.23:2021/user/asker', {
 			mode: 'cors',
-			method: 'POST',
+			method: 'GET',
 			credentials: 'same-origin',
 			headers: {
 				'Accept': 'application/json',
