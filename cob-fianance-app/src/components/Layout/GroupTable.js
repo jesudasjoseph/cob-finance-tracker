@@ -28,6 +28,8 @@ export class Tables extends Component {
 			case "section":
 				URL = URL + '&sort=section';
 				break;
+			default:
+				break;
 		}
 
 		fetch(URL, {
@@ -71,6 +73,8 @@ export class Tables extends Component {
 					<thead>
  						<tr>
 							<th>Group Name</th>
+							<th>Section</th>
+							<th>Instructor</th>
 							<th>Revenue</th>
 							<th>Bank</th>
 							<th>Square</th>
@@ -82,17 +86,19 @@ export class Tables extends Component {
 					</thead>
 					<tbody>
 						{this.state.businessTable.map((business, index) => {
-							const {name,deposit_total,product_count,expense_total, bid, profit} = business;
+							const {name,instructor,section,deposit_total,product_count,expense_total, bid, profit} = business;
 							return (
 								<tr key={bid} onClick={() => window.location=bid} style={{cursor: 'pointer'}}>
-									<td>({bid}) {name}</td>
+									<td style={{minWidth: '150px'}}>{name}</td>
+									<td>{section}</td>
+									<td>{instructor}</td>
 									<td>{deposit_total}</td>
 									<td>Bank Money</td>
 									<td>Square Money</td>
 									<td>{product_count}</td>
 									<td>{expense_total}</td>
 									<td>{profit}</td>
-									<td><ProfitProgress dataFromParent = {bid} /></td>
+									<td><ProfitProgress dataFromParent = {bid}/></td>
 								</tr>
 							)
 						})}
