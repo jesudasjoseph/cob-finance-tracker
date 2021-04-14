@@ -32,7 +32,7 @@ app.get('/ping', (req, res) => {
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
 
-app.get(['/app', '/app/*'], (req, res) => {
+app.get(['/', '/*'], (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
