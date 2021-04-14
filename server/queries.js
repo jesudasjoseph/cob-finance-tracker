@@ -100,6 +100,31 @@ async function getUserByUid(asker, uid) {
 		client.release();
 	}
 }
+async function getUserByAsker(asker) {
+	const query = {
+		text: 'SELECT * FROM "users" WHERE uid = $1',
+		values: [asker.uid]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		res = await client.query(query);
+		if (!res.rows.length) {
+			return new data(404);
+		}
+		else {
+			return new data(200, res.rows[0]);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+}
 async function getMultipleUsers(asker, start, end) {
 	const query = {
 		text: 'SELECT first, last, users.uid, role, business.bid, name, section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
@@ -1135,6 +1160,7 @@ exports.init = init;
 exports.getRole = getRole;
 exports.createUser = createUser;
 exports.getUserByUid = getUserByUid;
+exports.getUserByAsker = getUserByAsker;
 exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
