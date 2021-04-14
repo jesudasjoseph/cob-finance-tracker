@@ -315,10 +315,14 @@ async function is_user_in_business(uid, client, bid = null) {
 
 //Business Queries
 //name, instructor, section, revenue, bank, square, expenses, profit
-async function getMultipleBusiness(asker, start, end) {
+async function getMultipleBusiness(asker, start, end, sort) {
 	const query = {
 		text: 'SELECT * FROM business_view OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
+	}
+	const querySort = {
+		text: 'SELECT * FROM business_view ORDER BY $3 OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, sort]
 	}
 	const client = await pool.connect();
 	let res;
@@ -329,7 +333,10 @@ async function getMultipleBusiness(asker, start, end) {
 				return new data(403);
 				break;
 			default:
-				res = await client.query(query);
+				if (sort === undefined)
+					res = await client.query(query);
+				else
+					res = await client.query(querySort);
 				if (!res.rows.length) {
 					return new data(404);
 				}
