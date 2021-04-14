@@ -1,15 +1,10 @@
 import React from 'react'
 import ProfitProgress from '../Layout/ProfitProgress';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import ExpenseProgress from '../Layout/ExpenseProgress';
-import TransactionsTable from '../Layout/TransactionsTable';
 import ExpenseTable from '../Layout/ExpenseTable';
 import BankProgress from '../Layout/BankProgress';
 import NavibarI from '../Layout/MyNavBarI';
-import Searchbar from '../Layout/SearchBar';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { API_PATH } from '../Config';
 
 export default class SnapshotGroup extends React.Component{
@@ -19,33 +14,13 @@ export default class SnapshotGroup extends React.Component{
 			path: 0
 		};
 		this.get_path = this.get_path.bind(this);
-		this.getbusiness = this.getbusiness.bind(this);
 		this.exportExpenseData = this.exportExpenseData.bind(this);
 		this.exportTransactionData = this.exportTransactionData.bind(this);
 		this.exportDepositData = this.exportDepositData.bind(this);
-		this.get_path(this.state.path);
-		this.getbusiness();
 	}
 
-	getbusiness(){
-		fetch(API_PATH + '/business/bybid?bid=' + this.state.path, {
-			mode: 'cors',
-			method: 'GET',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			}
-		}).then(response => {
-			console.log(response);
-			return response.json();
-		}).then(data => {
-			console.log('YUP:', data);
-			this.setState({businessTable:data});
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
+	componentDidMount(){
+		this.get_path(this.state.path);
 	}
 
 	exportExpenseData(){
@@ -137,7 +112,7 @@ export default class SnapshotGroup extends React.Component{
 
 	get_path(){
 		let {pathname} = this.props.location;
-		this.state.path = pathname.substring(1,pathname.length);
+		this.setState({path: pathname.substring(1,pathname.length)});
 	}
 
 	render () {
@@ -151,20 +126,20 @@ export default class SnapshotGroup extends React.Component{
 
 		return (
 			<React.Fragment>
-					<NavibarI/>
-					<h1 style={{textAlign:'center'}}> Group Name </h1>
-					<h2> Profit Goals</h2>
-					<ProfitProgress dataFromParent = {this.state.path} />
-					<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
-					<ExpenseProgress />
-					<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
-					<BankProgress/>
-					<div style={{textAlign: 'left', margin: '20px 0px 5px 0px'}}>
-						<Button style={{margin: '0px 5px'}} onClick={this.exportExpenseData}>Download Expense Data</Button>
-						<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
-						<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
-					</div>
-					<Button style={{margin: '0px 5px'}} onClick={() => handleexpensetable()}> Get Expense Table </Button>
+				<NavibarI/>
+				<h1 style={{textAlign:'center'}}> Group Name </h1>
+				<h2> Profit Goals</h2>
+				<ProfitProgress dataFromParent = {this.state.path} />
+				<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
+				<ExpenseProgress />
+				<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
+				<BankProgress/>
+				<div style={{textAlign: 'left', margin: '20px 0px 5px 0px'}}>
+					<Button style={{margin: '0px 5px'}} onClick={this.exportExpenseData}>Download Expense Data</Button>
+					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
+					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
+				</div>
+				<Button style={{margin: '0px 5px'}} onClick={() => handleexpensetable()}> Get Expense Table </Button>
 			</React.Fragment>
 		)
 	}
