@@ -4,17 +4,18 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { API_PATH } from '../Config';
 
-export class AddTransactionDialogButton extends Component {
+export class AddExpenseDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			modalShow: false,
-			customer: '',
-			date:'',
 			product: '',
+			company:'',
+			date: '',
 			payment_method: '',
 			quantity: '',
-			price_per_unit:''
+			price_per_unit:'',
+			justification:''
 		};
 
 		this.open_dialog = this.open_dialog.bind(this);
@@ -41,18 +42,19 @@ export class AddTransactionDialogButton extends Component {
 	handle_submit(e) {
 		e.preventDefault();
 
-		const transaction_body = {
-			transaction:{
-				customer:this.state.customer,
+		const expense_body = {
+			expense:{
+				product:this.state.product,
+				company:this.state.company,
 				date:this.state.date,
-				product:this.state.product ,
 				payment_method:this.state.payment_method,
 				quantity:this.state.quantity,
-				price_per_unit:this.state.price_per_unit
+				price_per_unit:this.state.price_per_unit,
+				justification:this.state.justification
 				}
 			};
 
-		fetch(API_PATH + '/transaction', {
+		fetch(API_PATH + '/expense', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -61,7 +63,7 @@ export class AddTransactionDialogButton extends Component {
 				'Content-type': 'application/json',
 				'Authorization': window.localStorage.getItem('jwt')
 			},
-			body: JSON.stringify(transaction_body)
+			body: JSON.stringify(expense_body)
 		}).then(response => {
 			console.log(response);
 		}).catch((error) => {
@@ -74,13 +76,13 @@ export class AddTransactionDialogButton extends Component {
 		if (this.state.modalShow === false)
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Transaction</Button>
+					<Button variant="primary" onClick={this.open_dialog}>Add Expense</Button>
 				</>
 			)
 		else {
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Transaction</Button>
+					<Button variant="primary" onClick={this.open_dialog}>Add Expense</Button>
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
 							<Modal.Title>
@@ -90,18 +92,20 @@ export class AddTransactionDialogButton extends Component {
 						<Modal.Body>
 							<Form onSubmit={this.handle_submit}>
 								<Form.Group>
-									<Form.Label>Customer</Form.Label>
-									<Form.Control type="text" value={this.state.customer}  onChange={(e) => this.setState({customer: e.target.value})}/>
-									<Form.Label>Date</Form.Label>
-									<Form.Control type="text" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})}/>
 									<Form.Label>Product</Form.Label>
 									<Form.Control type="text" value={this.state.product}  onChange={(e) => this.setState({product: e.target.value})}/>
+									<Form.Label>Company</Form.Label>
+									<Form.Control type="text" value={this.state.company}  onChange={(e) => this.setState({company: e.target.value})}/>
+									<Form.Label>Date</Form.Label>
+									<Form.Control type="text" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})}/>
 									<Form.Label>Payment Method</Form.Label>
 									<Form.Control type="text" value={this.state.payment_method}  onChange={(e) => this.setState({payment_method: e.target.value})}/>
 									<Form.Label>Quantity</Form.Label>
 									<Form.Control type="text" value={this.state.quantity}  onChange={(e) => this.setState({quantity: e.target.value})}/>
 									<Form.Label>Price Per Unit</Form.Label>
 									<Form.Control type="text" value={this.state.price_per_unit}  onChange={(e) => this.setState({price_per_unit: e.target.value})}/>
+									<Form.Label>Justification</Form.Label>
+									<Form.Control type="text" value={this.state.justification}  onChange={(e) => this.setState({justification: e.target.value})}/>
 								</Form.Group>
 								<Button variant="primary" type="submit">Add</Button>
 							</Form>
@@ -112,4 +116,4 @@ export class AddTransactionDialogButton extends Component {
 		}
 	}
 }
-export default AddTransactionDialogButton
+export default AddExpenseDialogButton
