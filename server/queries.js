@@ -459,8 +459,8 @@ async function getBusinessByBid(asker, bid) {
 }
 async function createBusiness(asker, business) {
 	const query = {
-		text: 'INSERT INTO business (name, section) VALUES ($1, $2)',
-		values: [business.name, business.section]
+		text: 'INSERT INTO business (name, section, instructor) VALUES ($1, $2, $3)',
+		values: [business.name, business.section, business.instructor]
 	}
 	const client = await pool.connect();
 
