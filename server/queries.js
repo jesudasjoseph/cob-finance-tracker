@@ -35,12 +35,11 @@ async function init(){
 //This is a model function
 async function createUser(asker, user) {
 	const createUserQuery = {
-		text: 'INSERT INTO users (uid, role, first, last) VALUES ($1, $2, $3, $4)',
-		values: [user.uid, user.role, user.first, user.last]
+		text: 'INSERT INTO users (uid, role, first, last, section) VALUES ($1, $2, $3, $4, $5)',
+		values: [user.uid, user.role, user.first, user.last, user.section]
 	}
 	const client = await pool.connect();
 
-	console.log(asker.role);
 	try {
 		switch(asker.role){
 			case roleType.admin:

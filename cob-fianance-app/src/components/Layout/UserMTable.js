@@ -16,7 +16,7 @@ export class Tables extends Component {
 
 
         get_allusers(){
-            fetch('http://' + '71.193.191.23' + ':2021/user?start=' + '0' + '&end=' + '50', {
+            fetch('http://71.193.191.23:2021/user?start=0&end=50', {
               mode: 'cors',
               method: 'GET',
               credentials: 'same-origin',
@@ -44,14 +44,25 @@ export class Tables extends Component {
                    <tr>
                        <th>Group Name</th>
                        <th>Student First Name </th>
-                       <th> Student Last Name </th>
-                       <th> Onid ID </th>
+                       <th>Student Last Name </th>
+                       <th>Onid ID </th>
                        <th>Section</th>
+											 <th>Role</th>
                        </tr>
                        </thead>
                        <tbody>
                        {this.state.userTable.map((student, index) => {
-                          const {bid,uid,first, last,section} = student;
+                          const {bid,uid,first,last,section,role} = student;
+													let roleType = '';
+													if (role === 0){
+														roleType = 'Student';
+													}
+													else if (role === 1){
+														roleType = 'Instructor';
+													}
+													else if (role === 2){
+														roleType = 'Admin';
+													}
                           return (
                             <tr key={uid}>
                                 <td> {bid} </td>
@@ -59,6 +70,7 @@ export class Tables extends Component {
                                 <td> {last} </td>
                                 <td> {uid} </td>
                                 <td> {section} </td>
+																<td> {roleType} </td>
                             </tr>
                           )
                           })}
