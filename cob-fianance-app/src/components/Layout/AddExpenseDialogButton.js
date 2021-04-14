@@ -97,7 +97,7 @@ export class AddExpenseDialogButton extends Component {
 									<Form.Label>Company</Form.Label>
 									<Form.Control type="text" value={this.state.company}  onChange={(e) => this.setState({company: e.target.value})}/>
 									<Form.Label>Date</Form.Label>
-									<Form.Control type="text" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})}/>
+									<Form.Control type="date" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})}/>
 									<Form.Label>Payment Method</Form.Label>
 									<Form.Control type="text" value={this.state.payment_method}  onChange={(e) => this.setState({payment_method: e.target.value})}/>
 									<Form.Label>Quantity</Form.Label>

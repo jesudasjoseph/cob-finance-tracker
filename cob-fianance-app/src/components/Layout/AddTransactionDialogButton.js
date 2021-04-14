@@ -93,7 +93,7 @@ export class AddTransactionDialogButton extends Component {
 									<Form.Label>Customer</Form.Label>
 									<Form.Control type="text" value={this.state.customer}  onChange={(e) => this.setState({customer: e.target.value})}/>
 									<Form.Label>Date</Form.Label>
-									<Form.Control type="text" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})}/>
+									<Form.Control type="date" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})}/>
 									<Form.Label>Product</Form.Label>
 									<Form.Control type="text" value={this.state.product}  onChange={(e) => this.setState({product: e.target.value})}/>
 									<Form.Label>Payment Method</Form.Label>
