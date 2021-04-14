@@ -4,10 +4,10 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const config = require('./config');
+const path = require('path');
 const q = require('./queries');
 
 const app = express();
-
 
 //Init database connection
 q.init();
@@ -24,6 +24,16 @@ let exportRouter = require('./routes/export');
 app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use(cors()); //Use cors middleware
 app.use(express.json()); //Parse body
+app.use(path.join(__dirname, 'build')); //Use Static Website Build Path
+
+app.get('/ping', (req, res) => {
+  return res.send('pong')
+})
+
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 //Router for Authentication requests
 app.use('/auth', authRouter);
 //Router for Business data requests
@@ -41,6 +51,6 @@ app.use('/export', exportRouter);
 
 app.listen(config.port, () => {
 	console.log(`Listening at http://localhost:${config.port}`);
-})
+});
 
 module.exports = app;
