@@ -105,7 +105,7 @@ async function getUserByAsker(asker) {
 }
 async function getMultipleUsers(asker, start, end) {
 	const query = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end]
 	}
 	const client = await pool.connect();
