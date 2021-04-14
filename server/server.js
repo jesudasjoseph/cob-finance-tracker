@@ -24,17 +24,13 @@ let exportRouter = require('./routes/export');
 app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use(cors()); //Use cors middleware
 app.use(express.json()); //Parse body
-app.use('/site', express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
+app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
 
 app.get('/ping', (req, res) => {
   return res.send('pong')
 })
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
-
-app.get(['/', '/*'], (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
-});
 
 //Router for Authentication requests
 app.use('/auth', authRouter);
@@ -50,6 +46,10 @@ app.use('/expense', expenseRouter);
 app.use('/deposit', depositRouter);
 //Router for Export data requests
 app.use('/export', exportRouter);
+
+app.get(['/', '/*'], (req, res) => {
+	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+});
 
 app.listen(config.port, () => {
 	console.log(`Listening at http://localhost:${config.port}`);
