@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
+import { API_PATH } from '../Config'
 export default class Login extends React.Component {
 
 	constructor(props) {
@@ -39,7 +39,7 @@ export default class Login extends React.Component {
             alert("User already has a Token!");
         }
         else {
-    		fetch('http://71.193.191.23:2021/auth?uid=' + this.state.uid, {
+    		fetch(API_PATH + '/auth?uid=' + this.state.uid, {
     			mode: 'cors',
     			method: 'GET',
     			credentials: 'same-origin',
