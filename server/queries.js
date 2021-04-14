@@ -100,6 +100,9 @@ async function getUserByUid(asker, uid) {
 		client.release();
 	}
 }
+async function getUserByAsker(asker) {
+	return new data(200, {uid:asker.uid});
+}
 async function getMultipleUsers(asker, start, end) {
 	const query = {
 		text: 'SELECT first, last, users.uid, role, business.bid, name, section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
@@ -459,8 +462,8 @@ async function getBusinessByBid(asker, bid) {
 }
 async function createBusiness(asker, business) {
 	const query = {
-		text: 'INSERT INTO business (name, section) VALUES ($1, $2)',
-		values: [business.name, business.section]
+		text: 'INSERT INTO business (name, section, instructor) VALUES ($1, $2, $3)',
+		values: [business.name, business.section, business.instructor]
 	}
 	const client = await pool.connect();
 
@@ -1135,6 +1138,7 @@ exports.init = init;
 exports.getRole = getRole;
 exports.createUser = createUser;
 exports.getUserByUid = getUserByUid;
+exports.getUserByAsker = getUserByAsker;
 exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;

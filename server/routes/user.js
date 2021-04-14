@@ -11,6 +11,13 @@ router.get('/byuid', authorizor.authToken, async (req, res) => {
 	res.send(JSON.stringify(data));
 });
 
+router.get('/asker', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code, data} = await q.getUserByAsker(req.body.asker);
+	res.statusCode = code;
+	res.send(JSON.stringify(data));
+});
+
 router.get('/', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let {code, data} = await q.getMultipleUsers(req.body.asker, req.query.start, req.query.end);
