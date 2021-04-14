@@ -36,6 +36,7 @@ class App extends Component{
 						<Route path="/expenses" component={Expenses} />
 						<Route path="/querytestpage" component={QueryTestPage} />
 						<Route exact path= "/:int" component={SnapshotGroup} />
+						<Route path="*" component={Login} />
 						</Switch>
 					</div>
 				</div>
