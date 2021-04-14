@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { API_PATH } from '../Config';
+
 const now = 30;
 var resProfit = ''
 var resExpense = ''
@@ -23,7 +25,7 @@ export class ExpenseProgress extends Component {
             this.state.betternow = this.deposit_total;
               }
       get_business(){
-        fetch('http://' + '71.193.191.23' + ':2021/business/byuid', {
+        fetch(API_PATH + '/business/byuid', {
           mode: 'cors',
           method: 'GET',
           credentials: 'same-origin',

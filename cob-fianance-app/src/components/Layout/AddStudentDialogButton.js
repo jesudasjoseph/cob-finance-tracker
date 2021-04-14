@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { API_PATH } from '../Config';
 
 export class AddStudentDialogButton extends Component {
 	constructor(props){
@@ -39,7 +40,7 @@ export class AddStudentDialogButton extends Component {
 		e.preventDefault();
 
 		const user_body = {user:{uid:this.state.onidId, first:this.state.firstName, last: this.state.lastName, role:this.state.role, section: this.state.section}}
-		fetch('http://71.193.191.23:2021/user', {
+		fetch(API_PATH + '/user', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -56,7 +57,7 @@ export class AddStudentDialogButton extends Component {
 		});
 
 		const b_body = {uid:this.state.onidId, bid:this.state.bid}
-		fetch('http://71.193.191.23:2021/user/addtobusiness', {
+		fetch(API_PATH + '/user/addtobusiness', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

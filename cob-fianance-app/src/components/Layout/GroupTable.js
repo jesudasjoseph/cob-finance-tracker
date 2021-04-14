@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ProfitProgress from '../Layout/ProfitProgress';
+import { API_PATH } from '../Config';
 
 
 export class Tables extends Component {
@@ -20,7 +21,7 @@ export class Tables extends Component {
 
 	get_businesses(sortParam){
 
-		let URL = 'http://71.193.191.23:2021/business?start=0&end=50'
+		let URL = API_PATH + '/business?start=0&end=50'
 		switch(sortParam){
 			case "instructor":
 				URL = URL + '&sort=instructor';

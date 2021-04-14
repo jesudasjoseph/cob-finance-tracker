@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { API_PATH } from '../Config';
 
 export class AddBusinessDialogButton extends Component {
 	constructor(props){
@@ -20,7 +21,7 @@ export class AddBusinessDialogButton extends Component {
 
 	open_dialog() {
 		this.setState({modalShow: true});
-		fetch('http://71.193.191.23:2021/user/asker', {
+		fetch(API_PATH + '/user/asker', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -51,7 +52,7 @@ export class AddBusinessDialogButton extends Component {
 		e.preventDefault();
 
 		const business_body = {business:{name:this.state.name, section:this.state.section, instructor:this.state.instructor}}
-		fetch('http://71.193.191.23:2021/business', {
+		fetch(API_PATH + '/business', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

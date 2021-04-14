@@ -10,6 +10,7 @@ import NavibarI from '../Layout/MyNavBarI';
 import Searchbar from '../Layout/SearchBar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { API_PATH } from '../Config';
 
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
@@ -25,7 +26,7 @@ export default class SnapshotGroup extends React.Component{
     }
 
 	getbusiness(){
-      fetch('http://' + '71.193.191.23' + ':2021/business/bybid?bid=' + this.state.path, {
+      fetch(API_PATH + '/business/bybid?bid=' + this.state.path, {
         mode: 'cors',
         method: 'GET',
         credentials: 'same-origin',
@@ -46,7 +47,7 @@ export default class SnapshotGroup extends React.Component{
     }
 
 	exportExpenseData(){
-		fetch('http://' + '71.193.191.23' + ':2021/export/expense?bid=' + this.state.path, {
+		fetch(API_PATH + '/export/expense?bid=' + this.state.path, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -75,7 +76,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	exportTransactionData(){
-		fetch('http://' + '71.193.191.23' + ':2021/export/transaction?bid=' + this.state.path, {
+		fetch(API_PATH + '/export/transaction?bid=' + this.state.path, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -104,7 +105,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	exportDepositData(){
-		fetch('http://' + '71.193.191.23' + ':2021/export/deposit?bid=' + this.state.path, {
+		fetch(API_PATH + '/export/deposit?bid=' + this.state.path, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
+import { API_PATH } from '../Config';
 
 export class Tables extends Component {
 	constructor(props){
@@ -26,7 +27,7 @@ export class Tables extends Component {
             this.get_transactions(event)
           }
           get_transactions(){
-            fetch('http://71.193.191.23:2021/transaction/byuid?start=0&end=50', {
+            fetch(API_PATH + '/transaction/byuid?start=0&end=50', {
               mode: 'cors',
               method: 'GET',
               credentials: 'same-origin',
@@ -56,7 +57,7 @@ export class Tables extends Component {
               }
             }
             console.log(body)
-            fetch('http://71.193.191.23:2021/transaction', {
+            fetch(API_PATH + '/transaction', {
               mode: 'cors',
               method: 'POST',
               credentials: 'same-origin',

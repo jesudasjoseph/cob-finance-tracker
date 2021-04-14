@@ -9,6 +9,9 @@ const q = require('./queries');
 
 const app = express();
 
+const VERSION = 1;
+const API_URL = '/api/' + VERSION;
+
 //Init database connection
 q.init();
 
@@ -33,22 +36,23 @@ app.get('/ping', (req, res) => {
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
 
+//API Endpoints
 //Router for Authentication requests
-app.use('/auth', authRouter);
+app.use(API_URL + '/auth', authRouter);
 //Router for Business data requests
-app.use('/business', businessRouter);
+app.use(API_URL + '/business', businessRouter);
 //Router for User data requests
-app.use('/user', userRouter);
+app.use(API_URL + '/user', userRouter);
 //Router for Transaction data requests
-app.use('/transaction', transactionRouter);
+app.use(API_URL + '/transaction', transactionRouter);
 //Router for Expense data requests
-app.use('/expense', expenseRouter);
+app.use(API_URL + '/expense', expenseRouter);
 //Router for Deposit data requests
-app.use('/deposit', depositRouter);
+app.use(API_URL + '/deposit', depositRouter);
 //Router for Export data requests
-app.use('/export', exportRouter);
+app.use(API_URL + '/export', exportRouter);
 
-//Static Server (Front- End)
+//Static Server (Front-End)
 app.get(['/', '/*'], (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
