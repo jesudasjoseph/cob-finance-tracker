@@ -30,7 +30,9 @@ app.get('/ping', (req, res) => {
   return res.send('pong')
 })
 
-app.get('/site/*', (req, res) => {
+console.log(path.resolve(__dirname, 'build', 'index.html'));
+
+app.get(['/app', '/app/*'], (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
