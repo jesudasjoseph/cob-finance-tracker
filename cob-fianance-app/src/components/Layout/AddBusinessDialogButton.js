@@ -29,7 +29,6 @@ export class AddBusinessDialogButton extends Component {
 				'Content-type': 'application/json',
 				'Authorization': window.localStorage.getItem('jwt')
 			},
-			body: JSON.stringify(user_body)
 		}).then(response => {
 			console.log(response);
 		}).then(data => {
