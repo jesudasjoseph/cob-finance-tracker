@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
+import { API_PATH } from '../Config';
 
 export class ExpensesTables extends Component {
     constructor(props){
@@ -22,7 +23,7 @@ export class ExpensesTables extends Component {
             this.handleSubmit = this.handleSubmit.bind(this);
               }
               get_expenses(){
-                fetch('http://' + '71.193.191.23' + ':2021/expense/byuid?start=' + '0' + '&end=' + '50', {
+                fetch(API_PATH + '/expense/byuid?start=' + '0' + '&end=' + '50', {
                   mode: 'cors',
                   method: 'GET',
                   credentials: 'same-origin',
@@ -58,7 +59,7 @@ export class ExpensesTables extends Component {
                   }
                 }
                 console.log(body)
-                fetch('http://' + '71.193.191.23' + ':2021/expense', {
+                fetch(API_PATH + '/expense', {
                   mode: 'cors',
                   method: 'POST',
                   credentials: 'same-origin',

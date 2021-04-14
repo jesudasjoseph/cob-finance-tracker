@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { API_PATH } from '../Config';
 
 const containerStyle = {
 	display: 'flex'
@@ -48,7 +49,7 @@ export class ProfitProgress extends Component {
 	}
 
 	get_business_byuid(){
-		fetch('http://' + '71.193.191.23' + ':2021/business/byuid', {
+		fetch(API_PATH + '/business/byuid', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -69,7 +70,7 @@ export class ProfitProgress extends Component {
 	}
 
 	get_business_bybid(bid){
-		fetch('http://' + '71.193.191.23' + ':2021/business/bybid?bid=' + bid, {
+		fetch(API_PATH + '/business/bybid?bid=' + bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

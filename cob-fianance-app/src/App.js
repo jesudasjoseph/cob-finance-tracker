@@ -7,11 +7,8 @@ import SettingsInstructor from './components/pages/SettingsInstuctor';
 import UserManagement from './components/pages/UserManagement';
 import SnapshotGroup from './components/pages/SnapshotGroup.js';
 import Expenses from './components/pages/Expenses';
-import Navibar from './components/Layout/MyNavbar';
-import NavibarI from './components/Layout/MyNavBarI';
 import Transactions from './components/pages/Transactions';
 import Login from './components/pages/Login';
-import QueryTestPage from './components/pages/QueryTestPage';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -34,7 +31,6 @@ class App extends Component{
 						<Route path="/dashboard" component={Dashboard} />
 						<Route path="/transactions" component={Transactions} />
 						<Route path="/expenses" component={Expenses} />
-						<Route path="/querytestpage" component={QueryTestPage} />
 						<Route exact path= "/:int" component={SnapshotGroup} />
 						<Route path="*" component={Login} />
 						</Switch>

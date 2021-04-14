@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
+import { API_PATH } from '../Config';
 
 export class Tables extends Component {
 	constructor(props){
@@ -11,7 +12,7 @@ export class Tables extends Component {
 	}
 
 	get_allusers(){
-		fetch('http://71.193.191.23:2021/user?start=0&end=50', {
+		fetch(API_PATH + '/user?start=0&end=50', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
