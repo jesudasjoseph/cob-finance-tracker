@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-export class AddStudentDialogButton extends Component {
+export class AddBusinessDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -107,4 +107,4 @@ export class AddStudentDialogButton extends Component {
 		}
 	}
 }
-export default AddStudentDialogButton
+export default AddBusinessDialogButton
