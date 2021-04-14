@@ -101,7 +101,7 @@ async function getUserByUid(asker, uid) {
 	}
 }
 async function getUserByAsker(asker) {
-	return new data(200, asker.uid);
+	return new data(200, {uid:asker.uid});
 }
 async function getMultipleUsers(asker, start, end) {
 	const query = {
