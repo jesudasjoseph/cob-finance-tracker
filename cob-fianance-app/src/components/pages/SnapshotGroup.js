@@ -14,37 +14,39 @@ import { API_PATH } from '../Config';
 
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
-      super(props);
-      this.state = {path: 0};
-      this.get_path = this.get_path.bind(this);
-      this.getbusiness = this.getbusiness.bind(this);
-			this.exportExpenseData = this.exportExpenseData.bind(this);
-			this.exportTransactionData = this.exportTransactionData.bind(this);
-			this.exportDepositData = this.exportDepositData.bind(this);
-      this.get_path(this.state.path);
-      this.getbusiness();
-    }
+		super(props);
+		this.state = {
+			path: 0
+		};
+		this.get_path = this.get_path.bind(this);
+		this.getbusiness = this.getbusiness.bind(this);
+		this.exportExpenseData = this.exportExpenseData.bind(this);
+		this.exportTransactionData = this.exportTransactionData.bind(this);
+		this.exportDepositData = this.exportDepositData.bind(this);
+		this.get_path(this.state.path);
+		this.getbusiness();
+	}
 
 	getbusiness(){
-      fetch(API_PATH + '/business/bybid?bid=' + this.state.path, {
-        mode: 'cors',
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-          'Accept': 'application/json',
-          'Content-type': 'application/json',
-          'Authorization': window.localStorage.getItem('jwt')
-        }
-      }).then(response => {
-        console.log(response);
-        return response.json();
-      }).then(data => {
-        console.log('YUP:', data);
-        this.setState({businessTable:data});
-      }).catch((error) => {
-        console.error('Error:', error);
-      });
-    }
+		fetch(API_PATH + '/business/bybid?bid=' + this.state.path, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('YUP:', data);
+			this.setState({businessTable:data});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
 
 	exportExpenseData(){
 		fetch(API_PATH + '/export/expense?bid=' + this.state.path, {
@@ -134,10 +136,9 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	get_path(){
-        var {pathname} = this.props.location;
-        this.state.path = pathname.substring(1,pathname.length);
-
-      }
+		let {pathname} = this.props.location;
+		this.state.path = pathname.substring(1,pathname.length);
+	}
 
 	render () {
 		const handleexpensetable = () => {
