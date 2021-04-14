@@ -31,9 +31,10 @@ export class AddBusinessDialogButton extends Component {
 			},
 		}).then(response => {
 			console.log(response);
+			return response.json();
 		}).then(data => {
 			console.log('Success:', data)
-			this.setState({instructor:data});
+			this.setState({instructor:data.uid});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
