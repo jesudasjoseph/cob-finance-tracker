@@ -1,17 +1,15 @@
-import React from 'react';
+import React from 'react'
+import Buttons from '../Layout/ExpensesButtons';
+import Table from '../Layout/ExpensesTable';
 import Navbar from '../Layout/MyNavbar';
-import ExpenseTable from '../Layout/ExpenseTable';
-import AddExpenseDialogButton from '../Layout/AddExpenseDialogButton';
-
 export default function Expenses() {
-	return (
-		<>
-			<Navbar/>
-			<h1 style={{textAlign:'center'}}>Expenses</h1>
-			<div style={{textAlign: 'right', margin: '5px'}}>
-				<AddExpenseDialogButton/>
-			</div>
-			<ExpenseTable style = {{paddingTop: '10px 20px' }}></ExpenseTable>
-		</>
-	)
+    return (
+        <React.Fragment>
+             <Navbar></Navbar>
+            <h1 style={{textAlign:'center'}}>Expenses</h1>
+            <React.Fragment>
+            <Table style = {{paddingTop: '10px 20px' }}></Table>
+        </React.Fragment>
+        </React.Fragment>
+    )
 }
