@@ -23,9 +23,7 @@ class MyNavbar extends Component {
         <NavDropdown.Divider />
         <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>
       </NavDropdown>
-      <Nav.Link eventKey={2} href="profile">
-
-      </Nav.Link>
+      <Nav.Link eventKey={2} href="profile"></Nav.Link>
     </Nav>
   </Navbar.Collapse>
 </Navbar>

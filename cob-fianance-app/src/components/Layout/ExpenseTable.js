@@ -2,24 +2,18 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 import { API_PATH } from '../Config';
 
-export class TransactionsTable extends Component {
+export class ExpenseTable extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			customer: '',
-			date:'',
-			product: '',
-			payment_method: '',
-			quantity: '',
-			price_per_unit:'',
-			total:'',
-			transactionTable: []
+			expensesTable: []
 		}
-		this.get_transactions = this.get_transactions.bind(this);
-		this.get_transactions();
+		this.get_expenses = this.get_expenses.bind(this);
+		this.get_expenses();
 	}
-	get_transactions(){
-		fetch(API_PATH + '/transaction/byuid?start=0&end=50', {
+
+	get_expenses(){
+		fetch(API_PATH + '/expense/byuid?start=0&end=50', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -33,7 +27,7 @@ export class TransactionsTable extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({transactionTable:data});
+			this.setState({expensesTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -41,38 +35,40 @@ export class TransactionsTable extends Component {
 
 	render() {
 		return (
-			<>
+			<div>
 				<Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
 					<thead>
 						<tr>
-							<th>Date</th>
-							<th>Customer</th>
-							<th>Product</th>
-							<th>Payment Method</th>
 							<th>Quantity</th>
+							<th>Product</th>
+							<th>Company</th>
+							<th>Date</th>
+							<th>Payment Method</th>
 							<th>Price Per Unit</th>
+							<th>Justification</th>
 							<th>Total</th>
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.transactionTable.map((transaction, index) => {
-							const {customer,date,product,payment_method, quantity, price_per_unit, tid, total} = transaction;
+						{this.state.expensesTable.map((expense, index) => {
+							const {quantity,product,company, date, payment_method, price_per_unit, justification, total,eid} = expense;
 							return (
-								<tr key={tid}>
-									<td>{date.split('T')[0]} </td>
-									<td>{customer}</td>
-									<td>{product}</td>
-									<td>{payment_method}</td>
-									<td>{quantity}</td>
-									<td>{price_per_unit}</td>
-									<td>{total}</td>
+								<tr key={eid}>
+									<td> {quantity}</td>
+									<td> {product} </td>
+									<td>{company}</td>
+									<td> {date.split('T')[0]} </td>
+									<td> {payment_method} </td>
+									<td> {price_per_unit} </td>
+									<td> {justification} </td>
+									<td> {total} </td>
 								</tr>
 							);
 						})}
 					</tbody>
 				</Table>
-			</>
+			</div>
 		);
 	}
 }
-export default TransactionsTable
+export default ExpenseTable
