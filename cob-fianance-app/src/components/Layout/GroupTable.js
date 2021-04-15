@@ -15,7 +15,6 @@ export class Tables extends Component {
 			revenueTotal: 0,
 			quantityTotal: 0,
 			expenseTotal: 0,
-			transactionTotal: 0,
 			profitTotal: 0
 		}
 
@@ -27,7 +26,6 @@ export class Tables extends Component {
 
 	componentDidMount(){
 		this.get_businesses();
-		this.get_business_totals();
 	}
 
 	get_businesses(sortParam){
@@ -58,37 +56,25 @@ export class Tables extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({businessTable:data});
+			this.setState({
+					businessTable:data,
+					businessCount:data.length
+				});
+			this.get_business_totals();
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
 	}
 
 	get_business_totals(){
-		fetch(API_PATH + '/business/totals?start=0&end=50', {
-			mode: 'cors',
-			method: 'GET',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			}
-		}).then(response => {
-			console.log(response);
-			return response.json();
-		}).then(data => {
-			console.log('Success:', data);
-			this.setState({businessCount:data.total,
-				revenueTotal:data.revenue,
-				quantityTotal:data.quantity,
-				expenseTotal:data.expense,
-				transactionTotal:date.transaction,
-				profitTotal:data.profit
-				});
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
+		for (let i = 0; i < this.state.businessTable.length; i++){
+			this.setState({
+				revenueTotal:this.state.revenueTotal+parseFloat(this.state.businessTable[i].deposit_total),
+				quantityTotal:this.state.quantityTotal+parseFloat(this.state.businessTable[i].product_count),
+				expenseTotal:this.state.expenseTotal+parseFloat(this.state.businessTable[i].expense_total),
+				profitTotal:this.state.profitTotal+parseFloat(this.state.businessTable[i].profit)
+			});
+		}
 	}
 
 	sortByInstructorClickHandler() {
