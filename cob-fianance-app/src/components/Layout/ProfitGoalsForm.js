@@ -65,9 +65,6 @@ export class ProfitGoalsForm extends Component {
 			body: JSON.stringify(body)
 		}).then(response => {
 			console.log(response);
-			return response.json();
-		}).then(data => {
-			console.log('Success:', data);
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -83,9 +80,6 @@ export class ProfitGoalsForm extends Component {
 			body: JSON.stringify(body)
 		}).then(response => {
 			console.log(response);
-			return response.json();
-		}).then(data => {
-			console.log('Success:', data);
 			this.setState({profit_goal_current:this.state.profit_goal,
 				stretch_profit_goal_current:this.state.stretch_profit_goal,
 				saveEnabled: false,
