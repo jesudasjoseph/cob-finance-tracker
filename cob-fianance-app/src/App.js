@@ -9,6 +9,7 @@ import SnapshotGroup from './components/pages/SnapshotGroup.js';
 import Expenses from './components/pages/Expenses';
 import Transactions from './components/pages/Transactions';
 import Login from './components/pages/Login';
+import Page_Settings from './components/pages/Settings';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -31,6 +32,7 @@ class App extends Component{
 						<Route path="/dashboard" component={Dashboard} />
 						<Route path="/transactions" component={Transactions} />
 						<Route path="/expenses" component={Expenses} />
+						<Route path="/settings" component={Page_Settings}/>
 						<Route exact path= "/:int" component={SnapshotGroup} />
 						<Route path="*" component={Login} />
 						</Switch>

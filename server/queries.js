@@ -494,7 +494,7 @@ async function createBusiness(asker, business) {
 }
 async function modifyProfitGoalByUid(asker, profit_goal) {
 	const query = {
-		text: 'UPDATE business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) SET profit_goal = $1 WHERE uid=$2;',
+		text: 'UPDATE business SET profit_goal=$1 FROM user_has_business WHERE business.bid=user_has_business.bid AND uid=$2;',
 		values: [profit_goal, asker.uid]
 	}
 	const client = await pool.connect();
@@ -525,7 +525,7 @@ async function modifyProfitGoalByUid(asker, profit_goal) {
 }
 async function modifyStretchProfitGoalByUid(asker, stretch_profit_goal) {
 	const query = {
-		text: 'UPDATE business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) SET stretch_profit_goal = $1 WHERE uid=$2;',
+		text: 'UPDATE business SET stretch_profit_goal=$1 FROM user_has_business WHERE business.bid=user_has_business.bid AND uid=$2;',
 		values: [stretch_profit_goal, asker.uid]
 	}
 	const client = await pool.connect();
