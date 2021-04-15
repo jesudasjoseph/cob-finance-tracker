@@ -10,6 +10,13 @@ router.get('/', authorizor.authToken, async (req, res) => {
 	res.send(JSON.stringify(data));
 });
 
+router.get('/totals', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code, data} = await q.getBusinessTotals(req.body.asker, req.query.start, req.query.end);
+	res.statusCode = code;
+	res.send(JSON.stringify(data));
+});
+
 router.get('/byuid', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let {code, data} = await q.getBusinessByUid(req.body.asker);

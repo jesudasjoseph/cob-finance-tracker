@@ -65,7 +65,7 @@ export class Tables extends Component {
 	}
 
 	get_business_totals(){
-		fetch(API_PATH + '/businesstotals?start=0&end=50', {
+		fetch(API_PATH + '/business/totals?start=0&end=50', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
