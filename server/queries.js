@@ -753,7 +753,7 @@ async function deleteTransactionByTid(asker, tid, bid) {
 //Fix Permissions for students
 async function getMultipleExpenses(asker, start, end, bid) {
 	const query = {
-		text: 'SELECT * FROM expenses WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		text: 'SELECT * FROM expenses WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [bid, start, end]
 	}
 	const client = await pool.connect();
@@ -802,7 +802,7 @@ async function getMultipleExpensesByUid(asker, start, end) {
 		return new data(403);
 	}
 	const query = {
-		text: 'SELECT * FROM expenses WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		text: 'SELECT * FROM expenses WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [bid, start, end]
 	}
 	let res;
