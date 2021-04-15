@@ -118,7 +118,9 @@ export class Tables extends Component {
 							<th>
 								Section
 							</th>
-							<th>Instructor</th>
+							<th>
+								Instructor
+							</th>
 							<th>
 								Revenue
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.revenueTotal}</p>
