@@ -3,9 +3,17 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const bodyparser = require('body-parser');
+const https = require('https');
 const config = require('./config');
 const path = require('path');
 const q = require('./queries');
+
+let key = fs.readFileSync(__dirname + '/certs/selfsigned.key');
+let cert = fs.readFileSync(__dirname + '/certs/selfsigned.crt');
+let options = {
+  key: key,
+  cert: cert
+};
 
 const app = express();
 
@@ -57,8 +65,10 @@ app.get(['/', '/*'], (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
-app.listen(config.port, () => {
-	console.log(`Listening at http://localhost:${config.port}`);
+
+let server = https.createServer(options, app);
+server.listen(config.port, () => {
+	console.log(`Listening at https://localhost:${config.port}`);
 });
 
 module.exports = app;
