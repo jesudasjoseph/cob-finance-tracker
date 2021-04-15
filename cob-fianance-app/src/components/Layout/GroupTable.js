@@ -97,39 +97,35 @@ export class Tables extends Component {
 				<Table responsive="sm" size="sm" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
 					<thead>
  						<tr>
-							<th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Group
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.businessCount}</p>
 							</th>
-							<th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Section
 							</th>
-							<th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Instructor
 							</th>
-							<th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Revenue
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.revenueTotal}</p>
 							</th>
-							<th>
-								Bank
-							</th>
-							<th>
-								Square
-							</th>
-							<th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Items Sold
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.quantityTotal}</p>
 							</th>
-							<th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Expenses
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.expenseTotal}</p>
 							</th>
-							<th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Profits
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.profitTotal}</p>
 							</th>
-							<th>Sales Goals</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Sales Goals
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -141,8 +137,6 @@ export class Tables extends Component {
 									<td>{section}</td>
 									<td>{instructor}</td>
 									<td>{deposit_total}</td>
-									<td>Bank Money</td>
-									<td>Square Money</td>
 									<td>{product_count}</td>
 									<td>{expense_total}</td>
 									<td>{profit}</td>
