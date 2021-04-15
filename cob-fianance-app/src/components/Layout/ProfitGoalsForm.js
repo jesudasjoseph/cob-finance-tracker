@@ -31,9 +31,9 @@ export class ProfitGoalsForm extends Component {
 		}).then(data => {
 			console.log('Success:', data);
 			this.setState({
-				profit_goal:data.profit_goal,
-				stretch_profit_goal:data.stretch_profit_goal,
-				bid:data.bid
+				profit_goal:data[0].profit_goal,
+				stretch_profit_goal:data[0].stretch_profit_goal,
+				bid:data[0].bid
 			});
 		}).catch((error) => {
 			console.error('Error:', error);
