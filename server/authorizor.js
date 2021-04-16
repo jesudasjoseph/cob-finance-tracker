@@ -73,7 +73,7 @@ async function getToken(uid, ip){
 //authenticates jwts sent by clients
 function authToken(req, res, next){
 	const authHeader = req.headers['authorization'];
-	const token = 0;
+	let token = 0;
 	try {
 		token = authHeader.split(' ')[1];
 	}
