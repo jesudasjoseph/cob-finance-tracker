@@ -35,7 +35,8 @@ export class ExpenseTable extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({expensesTable:data});
+			if (data != null)
+				this.setState({expensesTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -55,7 +56,8 @@ export class ExpenseTable extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({expensesTable:data});
+			if (data != null)
+				this.setState({expensesTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
