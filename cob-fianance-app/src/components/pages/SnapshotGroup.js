@@ -11,16 +11,12 @@ export default class SnapshotGroup extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			path: 0
+			path: this.props.location.pathname.split('/')[1]
 		};
-		this.get_path = this.get_path.bind(this);
+		
 		this.exportExpenseData = this.exportExpenseData.bind(this);
 		this.exportTransactionData = this.exportTransactionData.bind(this);
 		this.exportDepositData = this.exportDepositData.bind(this);
-	}
-
-	componentDidMount(){
-		this.get_path(this.state.path);
 	}
 
 	exportExpenseData(){
@@ -51,7 +47,6 @@ export default class SnapshotGroup extends React.Component{
 			console.error('Error:', error);
 		});
 	}
-
 	exportTransactionData(){
 		fetch(API_PATH + '/export/transaction?bid=' + this.state.path, {
 			mode: 'cors',
@@ -80,7 +75,6 @@ export default class SnapshotGroup extends React.Component{
 			console.error('Error:', error);
 		});
 	}
-
 	exportDepositData(){
 		fetch(API_PATH + '/export/deposit?bid=' + this.state.path, {
 			mode: 'cors',
@@ -108,11 +102,6 @@ export default class SnapshotGroup extends React.Component{
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
-	}
-
-	get_path(){
-		let {pathname} = this.props.location;
-		this.setState({path: pathname.substring(1,pathname.length)});
 	}
 
 	render () {

@@ -97,7 +97,7 @@ export class ProfitProgress extends Component {
 			)
 		}
 		else {
-			let {deposit_count, deposit_total, expense_count, expense_total, name, product_count, profit, profit_goal, stretch_profit_goal} = this.state.business;
+			let {profit, profit_goal, stretch_profit_goal} = this.state.business;
 
 			if (profit_goal === 0){
 				return (
