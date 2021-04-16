@@ -105,14 +105,6 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	render () {
-		const handleexpensetable = () => {
-			return(
-				<React.Fragment>
-					<ExpenseTable style = {{padding: '10px 20px'}}></ExpenseTable>
-				</React.Fragment>
-			);
-		};
-
 		return (
 			<React.Fragment>
 				<NavibarI/>
@@ -128,7 +120,7 @@ export default class SnapshotGroup extends React.Component{
 					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
 					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 				</div>
-				<Button style={{margin: '0px 5px'}} onClick={() => handleexpensetable()}> Get Expense Table </Button>
+				<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.path}}/>
 			</React.Fragment>
 		)
 	}
