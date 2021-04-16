@@ -73,7 +73,14 @@ async function getToken(uid, ip){
 //authenticates jwts sent by clients
 function authToken(req, res, next){
 	const authHeader = req.headers['authorization'];
-	const token = authHeader.split(' ')[1];
+	let token = 0;
+	try {
+		token = authHeader.split(' ')[1];
+	}
+	catch(e) {
+		console.log(e);
+		return res.sendStatus(401);
+	}
 
 	if (token == null)
 		return res.sendStatus(401);
