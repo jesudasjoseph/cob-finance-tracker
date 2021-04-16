@@ -75,7 +75,7 @@ function authToken(req, res, next){
 	const authHeader = req.headers['authorization'];
 	const token = 0;
 	try {
-		authHeader.split(' ')[1];
+		token = authHeader.split(' ')[1];
 	}
 	catch(e) {
 		console.log(e);
