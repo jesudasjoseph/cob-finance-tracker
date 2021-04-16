@@ -8,13 +8,13 @@ export class ExpenseTable extends Component {
 		this.state = {
 			expensesTable: []
 		}
-		this.get_expenses_byuid = this.get_expenses.byuid.bind(this);
-		this.get_expenses_bybid = this.get_expenses.bybid.bind(this);
+		this.get_expenses_byuid = this.get_expenses_byuid.bind(this);
+		this.get_expenses_bybid = this.get_expenses_bybid.bind(this);
 	}
 
 	componentDidMount(){
 		//Check to see if a bid was passed to the Component
-		if (this.props.dataFromParent.bid === undefined)
+		if (this.props.dataFromParent === undefined)
 			this.get_expenses_byuid();
 		else
 			this.get_expenses_bybid(this.props.dataFromParent.bid);
@@ -41,7 +41,7 @@ export class ExpenseTable extends Component {
 		});
 	}
 	get_expenses_bybid(bid){
-		fetch(API_PATH + '/expense/bybid?start=0&end=50&bid=' + bid, {
+		fetch(API_PATH + '/expense?start=0&end=50&bid=' + bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
