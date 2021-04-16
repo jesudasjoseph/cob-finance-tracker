@@ -10,14 +10,23 @@ export class Tables extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			businessTable: []
+			businessTable: [],
+			businessCount: 0,
+			revenueTotal: 0,
+			quantityTotal: 0,
+			expenseTotal: 0,
+			profitTotal: 0
 		}
 
 		this.get_businesses = this.get_businesses.bind(this);
+		this.get_business_totals = this.get_business_totals.bind(this);
 		this.sortByInstructorClickHandler = this.sortByInstructorClickHandler.bind(this);
 		this.sortBySectionClickHandler = this.sortBySectionClickHandler.bind(this);
-		this.get_businesses();
 }
+
+	componentDidMount(){
+		this.get_businesses();
+	}
 
 	get_businesses(sortParam){
 
@@ -47,10 +56,25 @@ export class Tables extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({businessTable:data});
+			this.setState({
+					businessTable:data,
+					businessCount:data.length
+				});
+			this.get_business_totals();
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
+	}
+
+	get_business_totals(){
+		for (let i = 0; i < this.state.businessTable.length; i++){
+			this.setState({
+				revenueTotal:this.state.revenueTotal+parseFloat(this.state.businessTable[i].deposit_total),
+				quantityTotal:this.state.quantityTotal+parseFloat(this.state.businessTable[i].product_count),
+				expenseTotal:this.state.expenseTotal+parseFloat(this.state.businessTable[i].expense_total),
+				profitTotal:this.state.profitTotal+parseFloat(this.state.businessTable[i].profit)
+			});
+		}
 	}
 
 	sortByInstructorClickHandler() {
@@ -70,19 +94,38 @@ export class Tables extends Component {
 						<NavDropdown.Item onClick={this.sortBySectionClickHandler}>Section</NavDropdown.Item>
 					</NavDropdown>
 				</Nav>
-				<Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
+				<Table responsive="sm" size="sm" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
 					<thead>
  						<tr>
-							<th>Group Name</th>
-							<th>Section</th>
-							<th>Instructor</th>
-							<th>Revenue</th>
-							<th>Bank</th>
-							<th>Square</th>
-							<th>Quantity Sold</th>
-							<th>Expenses</th>
-							<th>Profits</th>
-							<th>Sales Goals</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Group
+								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.businessCount}</p>
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Section
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Instructor
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Revenue
+								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.revenueTotal}</p>
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Items Sold
+								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.quantityTotal}</p>
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Expenses
+								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.expenseTotal}</p>
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Profits
+								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.profitTotal}</p>
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Sales Goals
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -94,14 +137,12 @@ export class Tables extends Component {
 									<td>{section}</td>
 									<td>{instructor}</td>
 									<td>{deposit_total}</td>
-									<td>Bank Money</td>
-									<td>Square Money</td>
 									<td>{product_count}</td>
 									<td>{expense_total}</td>
 									<td>{profit}</td>
 									<td><ProfitProgress dataFromParent = {bid}/></td>
 								</tr>
-							)
+							);
 						})}
 					</tbody>
 				</Table>
