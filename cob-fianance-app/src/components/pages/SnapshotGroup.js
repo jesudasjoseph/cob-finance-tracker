@@ -131,7 +131,7 @@ export default class SnapshotGroup extends React.Component{
 					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
 					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 				</div>
-				<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {this.state.path}/>
+				<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.path}}/>
 			</React.Fragment>
 		)
 	}

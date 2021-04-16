@@ -8,12 +8,40 @@ export class ExpenseTable extends Component {
 		this.state = {
 			expensesTable: []
 		}
-		this.get_expenses = this.get_expenses.bind(this);
-		this.get_expenses();
+		this.get_expenses_byuid = this.get_expenses.byuid.bind(this);
+		this.get_expenses_bybid = this.get_expenses.bybid.bind(this);
 	}
 
-	get_expenses(){
+	componentDidMount(){
+		//Check to see if a bid was passed to the Component
+		if (this.props.dataFromParent.bid === undefined)
+			this.get_expenses_byuid();
+		else
+			this.get_expenses_bybid(this.props.dataFromParent.bid);
+	}
+
+	get_expenses_byuid(){
 		fetch(API_PATH + '/expense/byuid?start=0&end=50', {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+			this.setState({expensesTable:data});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+	get_expenses_bybid(bid){
+		fetch(API_PATH + '/expense/bybid?start=0&end=50&bid=' + bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -36,7 +64,11 @@ export class ExpenseTable extends Component {
 	render() {
 		return (
 			<div>
-				<Table responsive="sm" size="xl" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
+				<Table
+					responsive="sm"
+					size="xl"
+					style={{paddingBottom:'40px' , paddingTop: '10px'}}
+					striped bordered hover variant="dark">
 					<thead>
 						<tr>
 							<th>Quantity</th>
