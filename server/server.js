@@ -56,7 +56,7 @@ passport.use(new SamlStrategy({
 	},
 	async (profile, done) => {
 		let {code, data} = await authorizor.getToken(profile.nameID.split('@')[0]);
-		console.log("code, data" + code + ", data:" + data);
+		console.log("code, data" + code + ", data:" + data.toString());
 
 		if (code === 200){
 			return done(null, data);
