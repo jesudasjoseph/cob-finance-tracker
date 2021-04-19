@@ -66,7 +66,7 @@ passport.use(new SamlStrategy({
 	}));
 
 app.get('/l',
-	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	function(req, res) {
 		console.log("Redirect to SAML?!");
 		res.redirect('/');
@@ -75,7 +75,7 @@ app.get('/l',
 
 app.post('/saml/consume',
 	bodyparser.urlencoded({ extended: false }),
-	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true. session: false }),
 	(req, res) => {
 		console.log("SAML Consumed!");
 		console.log(req);
