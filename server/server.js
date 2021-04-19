@@ -61,8 +61,6 @@ app.get('/l',
 );
 
 app.post('/saml/consume',
-	bodyparser.urlencoded({extended: false}),
-	passport.authenticate('saml', {failureRedirect: '/', failureFlash: true}),
 	(req, res) => {
 		res.redirect('/');
 	});
