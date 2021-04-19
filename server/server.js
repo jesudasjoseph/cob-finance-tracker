@@ -36,14 +36,13 @@ let depositRouter = require('./routes/deposit');
 let exportRouter = require('./routes/export');
 
 app.use(cors()); //Use cors middleware
+app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
 
 //ping
 app.get('/ping', (req, res) => {
   return res.send('pong')
 })
-
-app.use(passport.initialize());
 
 //SAML Strategy config
 //This also checks if user exists.

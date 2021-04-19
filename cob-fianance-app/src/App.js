@@ -23,8 +23,6 @@ class App extends Component{
 				<div className="App" style={{background: '#d3d3d3', backgroundSize: 'cover',   width: '100%' , height: '100vh' , minHeight: '100%' }}>
 					<div className="container">
 					<Switch>
-						<Route exact path="/" component={Login} />
-						<Route path="/home" component={Login} />
 						<Route path="/DashboardI" component={DashboardI} />
 						<Route path= "/Profile" component={UserInstructor} />
 						<Route exact path= "/SettingsInstuctor" component={SettingsInstructor} />
@@ -34,7 +32,6 @@ class App extends Component{
 						<Route path="/expenses" component={Expenses} />
 						<Route path="/settings" component={Page_Settings}/>
 						<Route exact path= "/:int" component={SnapshotGroup} />
-						<Route path="*" component={Login} />
 						</Switch>
 					</div>
 				</div>
