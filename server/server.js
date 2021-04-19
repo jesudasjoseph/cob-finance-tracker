@@ -34,9 +34,13 @@ let expenseRouter = require('./routes/expense');
 let depositRouter = require('./routes/deposit');
 let exportRouter = require('./routes/export');
 
-//app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use(cors()); //Use cors middleware
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
+
+//ping
+app.get('/ping', (req, res) => {
+  return res.send('pong')
+})
 
 passport.use(new SamlStrategy({
 		entryPoint: 'https://login-int.iam.oregonstate.edu/idp/profile/SAML2/Redirect/SSO',
@@ -48,11 +52,6 @@ passport.use(new SamlStrategy({
 		console.log('profile', profile);
 	}));
 
-//ping
-app.get('/ping', (req, res) => {
-  return res.send('pong')
-})
-
 app.get('/l',
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
 	function(req, res) {
@@ -62,13 +61,18 @@ app.get('/l',
 );
 
 app.post('/saml/consume',
+	bodyparser.urlencoded({ extended: false }),
+	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
 	(req, res) => {
+		console.log("SAML Consumed!");
 		res.redirect('/');
 	});
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
 
 app.use(express.json()); //Parse body
+app.use(helmet()); //Use helmet as a middleware to help with http header security
+
 //API Endpoints
 //Router for Authentication requests
 app.use(API_URL + '/auth', authRouter);
