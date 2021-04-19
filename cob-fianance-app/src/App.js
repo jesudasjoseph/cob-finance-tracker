@@ -14,9 +14,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component{
-	state = {
-		todos: []
-	}
 	render(){
 		return (
 			<Router>
