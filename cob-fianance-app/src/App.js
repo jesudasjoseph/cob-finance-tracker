@@ -22,16 +22,16 @@ class App extends Component{
 			<Router>
 				<div className="App" style={{background: '#d3d3d3', backgroundSize: 'cover',   width: '100%' , height: '100vh' , minHeight: '100%' }}>
 					<div className="container">
-					<Switch>
-						<Route path="/DashboardI" component={DashboardI} />
-						<Route path= "/Profile" component={UserInstructor} />
-						<Route exact path= "/SettingsInstuctor" component={SettingsInstructor} />
-						<Route exact path="/UserManagement" component={UserManagement} />
-						<Route path="/dashboard" component={Dashboard} />
-						<Route path="/transactions" component={Transactions} />
-						<Route path="/expenses" component={Expenses} />
-						<Route path="/settings" component={Page_Settings}/>
-						<Route exact path= "/:int" component={SnapshotGroup} />
+						<Switch>
+							<Route path="/DashboardI" component={DashboardI} />
+							<Route path= "/Profile" component={UserInstructor} />
+							<Route exact path= "/SettingsInstuctor" component={SettingsInstructor} />
+							<Route exact path="/UserManagement" component={UserManagement} />
+							<Route path="/dashboard" component={Dashboard} />
+							<Route path="/transactions" component={Transactions} />
+							<Route path="/expenses" component={Expenses} />
+							<Route path="/settings" component={Page_Settings}/>
+							<Route exact path= "/:int" component={SnapshotGroup} />
 						</Switch>
 					</div>
 				</div>
