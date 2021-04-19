@@ -8,7 +8,7 @@ const authorizor = require('../authorizor');
 router.get('/', async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	if (req.query.uid != undefined) {
-		let {code, data} = await authorizor.getToken(req.query.uid, req.ip);
+		let {code, data} = await authorizor.getToken(req.query.uid);
 		console.log("Sending token to: '" + req.query.uid + "'");
 		res.send(JSON.stringify(data));
 	}

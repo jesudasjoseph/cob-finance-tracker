@@ -56,11 +56,11 @@ function generateToken(payload){
 //returns
 //on success - {200, {token, role}}
 //on fail - {http_status}
-async function getToken(uid, ip){
+async function getToken(uid){
 	let {code, data} = await q.getRole(new q.asker(uid, undefined));
 
 	if (code == 200) {
-		let ses = new session(uid, data, ip)
+		let ses = new session(uid, data)
 		addSession(ses);
 		return new packet(code, {token:generateToken(ses), role:data});
 	}
