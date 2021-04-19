@@ -51,6 +51,7 @@ passport.use(new SamlStrategy({
 	},
 	async (profile, done) => {
 		let {res} = await authorizor.getToken(profile.nameID.split('@')[0], 0);
+		console.log('res :' + res);
 		return done(null, res)
 	}));
 
