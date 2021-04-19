@@ -36,7 +36,6 @@ let exportRouter = require('./routes/export');
 
 //app.use(helmet()); //Use helmet as a middleware to help with http header security
 app.use(cors()); //Use cors middleware
-app.use(express.json()); //Parse body
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
 
 passport.use(new SamlStrategy({
@@ -62,12 +61,15 @@ app.get('/l',
 );
 
 app.post('/saml/consume',
+	bodyparser.urlencoded({extended: false}),
+	passport.authenticate('saml', {failureRedirect: '/', failureFlash: true}),
 	(req, res) => {
 		res.redirect('/');
 	});
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
 
+app.use(express.json()); //Parse body
 //API Endpoints
 //Router for Authentication requests
 app.use(API_URL + '/auth', authRouter);
