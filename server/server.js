@@ -43,6 +43,14 @@ app.get('/ping', (req, res) => {
   return res.send('pong')
 })
 
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 passport.use(new SamlStrategy({
 		entryPoint: 'https://login-int.iam.oregonstate.edu/idp/profile/SAML2/Redirect/SSO',
 		issuer: 'https://71.193.191.23:2020',
