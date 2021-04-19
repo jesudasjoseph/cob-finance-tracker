@@ -54,6 +54,13 @@ app.get('/ping', (req, res) => {
   return res.send('pong')
 })
 
+app.get('/l',
+  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+  function(req, res) {
+    res.redirect('/');
+  }
+);
+
 app.post('/saml/consume',
 	bodyparser.urlencoded({extended: false}),
 	passport.authenticate('saml', {failureRedirect: '/', failureFlash: true}),
