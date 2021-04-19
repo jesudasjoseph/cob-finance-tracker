@@ -78,7 +78,7 @@ app.post('/saml/consume',
 	bodyparser.urlencoded({ extended: false }),
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	(req, res) => {
-		res
+		auth_user = res.user;
 		res.redirect('/home');
 });
 
@@ -89,15 +89,19 @@ app.get('/home',
 		}
 		else {
 			let redirect = "Dashboard";
-			if (res.user.role === 0){
+			if (auth_user.role === 0){
 				redirect = "Dashboard";
 			}
 			else {
 				redirect = "DashboardI";
 			}
-			const authPage = `let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + ${req.user.token}); myStorage.setItem('role', ${req.user.role}); window.location.href = '/${redirect}';`;
+			const authPage = `let myStorage = window.localStorage;
+												myStorage.setItem('jwt','Bearer ' + ${auth_user.token});
+												myStorage.setItem('role', ${auth_user.role});
+												window.location.href = '/${redirect}';`;
+			auth_user = undefined;
 
-			res.type('.js')
+			res.type('.js');
 			res.send(authPage);
 		}
 });
