@@ -56,7 +56,7 @@ passport.use(new SamlStrategy({
 	},
 	async (profile, done) => {
 		let {code, data} = await authorizor.getToken(profile.nameID.split('@')[0]);
-		console.log("code, data" + code + ", data{" + data.user + data.role + "}");
+		console.log("code, data" + code + ", data:" + data);
 
 		if (code === 200){
 			return done(null, data);
@@ -96,13 +96,13 @@ app.get('/home',
 			else {
 				redirect = "DashboardI";
 			}
-			const authPage = `let myStorage = window.localStorage;
+			const authPage = `<script>let myStorage = window.localStorage;
 												myStorage.setItem('jwt','Bearer ' + ${auth_user.token});
 												myStorage.setItem('role', ${auth_user.role});
-												window.location.href = '/${redirect}';`;
+												window.location.href = '/${redirect}';</script>`;
 			auth_user = undefined;
 
-			res.type('.js');
+			res.type('.html');
 			res.send(authPage);
 		}
 });
