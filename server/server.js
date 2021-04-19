@@ -44,7 +44,6 @@ app.get('/ping', (req, res) => {
 })
 
 app.use(passport.initialize());
-app.use(passport.session());
 
 //SAML Strategy config
 //This also checks if user exists.
@@ -81,7 +80,6 @@ app.post('/saml/consume',
 		auth_user = req.user;
 		res.redirect('/home');
 });
-
 app.get('/home',
 	(req, res) => {
 		if (auth_user === undefined){
