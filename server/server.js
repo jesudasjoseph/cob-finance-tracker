@@ -46,6 +46,8 @@ app.get('/ping', (req, res) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
+//SAML Strategy config
+//This also checks if user exists.
 passport.use(new SamlStrategy({
 		entryPoint: 'https://login-int.iam.oregonstate.edu/idp/profile/SAML2/Redirect/SSO',
 		issuer: 'https://71.193.191.23:2020',
@@ -54,8 +56,6 @@ passport.use(new SamlStrategy({
 	},
 	async (profile, done) => {
 		let {code, data} = await authorizor.getToken(profile.nameID.split('@')[0]);
-		console.log('nameID - ' + profile.nameID.split('@')[0]);
-		console.log('{code, data}:' + code + ', ' + data);
 
 		if (code === 200){
 			return done(null, data);
@@ -65,22 +65,42 @@ passport.use(new SamlStrategy({
 		}
 	}));
 
-app.get('/l',
-	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
+app.get('/login',
+	passport.authenticate('saml', { failureRedirect: '/saml/fail', failureFlash: true, session: false }),
 	function(req, res) {
-		console.log("Redirect to SAML?!");
 		res.redirect('/');
 	}
 );
+
+let auth_user = undefined;
 
 app.post('/saml/consume',
 	bodyparser.urlencoded({ extended: false }),
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	(req, res) => {
-		console.log("SAML Consumed!");
-		console.log(req);
-		res.redirect('/');
-	});
+		res
+		res.redirect('/home');
+});
+
+app.get('/home',
+	(req, res) => {
+		if (auth_user === undefined){
+			res.redirect('/login');
+		}
+		else {
+			let redirect = "Dashboard";
+			if (res.user.role === 0){
+				redirect = "Dashboard";
+			}
+			else {
+				redirect = "DashboardI";
+			}
+			const authPage = `let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + ${req.user.token}); myStorage.setItem('role', ${req.user.role}); window.location.href = '/${redirect}';`;
+
+			res.type('.js')
+			res.send(authPage);
+		}
+});
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
 
