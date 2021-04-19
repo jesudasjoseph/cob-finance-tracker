@@ -6,6 +6,7 @@ const bodyparser = require('body-parser');
 const https = require('https');
 const config = require('./config');
 const path = require('path');
+const passport = require('passport');
 let SamlStrategy = require('passport-saml').Strategy;
 const q = require('./queries');
 
