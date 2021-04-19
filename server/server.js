@@ -104,7 +104,7 @@ app.get('/home',
 console.log(path.resolve(__dirname, 'build', 'index.html'));
 
 app.use(express.json()); //Parse body
-app.use(helmet()); //Use helmet as a middleware to help with http header security
+//app.use(helmet()); //Use helmet as a middleware to help with http header security
 
 //API Endpoints
 //Router for Authentication requests
