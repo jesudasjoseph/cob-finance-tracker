@@ -43,11 +43,6 @@ app.get('/ping', (req, res) => {
   return res.send('pong')
 })
 
-app.use(require('express-session')({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true
-}));
 app.use(passport.initialize());
 app.use(passport.session());
 
