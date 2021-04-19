@@ -54,10 +54,11 @@ app.get('/ping', (req, res) => {
 })
 
 app.get('/l',
-  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
-  function(req, res) {
-    res.redirect('/');
-  }
+	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+	function(req, res) {
+		console.log("Redirect to SAML?!");
+		res.redirect('/');
+	}
 );
 
 app.post('/saml/consume',
