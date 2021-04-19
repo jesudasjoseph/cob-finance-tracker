@@ -95,7 +95,7 @@ app.get('/home',
 			else {
 				redirect = "DashboardI";
 			}
-			const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + ${auth_user.token}); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/${redirect}';</script>`;
+			const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + '${auth_user.token}'); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/${redirect}';</script>`;
 			auth_user = undefined;
 
 			res.type('.html');
