@@ -56,6 +56,7 @@ passport.use(new SamlStrategy({
 	},
 	async (profile, done) => {
 		let {code, data} = await authorizor.getToken(profile.nameID.split('@')[0]);
+		console.log("code, data" + code + ", data{" + data.user + data.role + "}");
 
 		if (code === 200){
 			return done(null, data);
@@ -78,7 +79,7 @@ app.post('/saml/consume',
 	bodyparser.urlencoded({ extended: false }),
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	(req, res) => {
-		auth_user = res.user;
+		auth_user = req.user;
 		res.redirect('/home');
 });
 
