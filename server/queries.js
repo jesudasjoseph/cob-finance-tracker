@@ -323,9 +323,17 @@ async function getMultipleBusiness(asker, start, end, sort) {
 		text: 'SELECT * FROM business_view OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
-	const querySort = {
-		text: 'SELECT * FROM business_view ORDER BY $3 OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end, sort]
+	const querySortByInstructor = {
+		text: 'SELECT * FROM business_view ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end]
+	}
+	const querySortByName = {
+		text: 'SELECT * FROM business_view ORDER BY name OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end]
+	}
+	const querySortBySection = {
+		text: 'SELECT * FROM business_view ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end]
 	}
 	const client = await pool.connect();
 	let res;
@@ -336,10 +344,20 @@ async function getMultipleBusiness(asker, start, end, sort) {
 				return new data(403);
 				break;
 			default:
-				if (sort === undefined)
-					res = await client.query(query);
-				else
-					res = await client.query(querySort);
+				switch (sort){
+					case 'instructor':
+						res = await client.query(querySortByInstructor);
+						break;
+					case 'name':
+						res = await client.query(querySortByName);
+						break;
+					case 'section':
+						res = await client.query(querySortBySection);
+						break;
+					default:
+						res = await client.query(query);
+						break;
+				}
 				if (!res.rows.length) {
 					return new data(404);
 				}
