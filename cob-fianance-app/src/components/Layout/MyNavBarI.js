@@ -12,8 +12,8 @@ class MyNavbar extends Component {
   <Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="mr-auto">
-      <Nav.Link href="DashboardI">Dashboard</Nav.Link>
-      <Nav.Link href="UserManagement">User Management</Nav.Link>
+      <Nav.Link href="/DashboardI">Dashboard</Nav.Link>
+      <Nav.Link href="/UserManagement">User Management</Nav.Link>
     </Nav>
     <Nav>
       <NavDropdown title="User Profile" id="collasible-nav-dropdown">
