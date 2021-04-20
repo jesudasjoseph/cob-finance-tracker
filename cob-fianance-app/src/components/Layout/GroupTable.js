@@ -21,6 +21,7 @@ export class Tables extends Component {
 		this.get_business_totals = this.get_business_totals.bind(this);
 		this.sortByInstructorClickHandler = this.sortByInstructorClickHandler.bind(this);
 		this.sortBySectionClickHandler = this.sortBySectionClickHandler.bind(this);
+		this.sortByNameClickHandler = this.sortByNameClickHandler.bind(this);
 }
 
 	componentDidMount(){
@@ -83,6 +84,10 @@ export class Tables extends Component {
 		this.get_businesses("section");
 	}
 
+	sortByNameClickHandler() {
+		this.get_businesses("name");
+	}
+
 	render() {
 		return (
 			<div>
@@ -90,6 +95,7 @@ export class Tables extends Component {
 					<NavDropdown title="Filter By">
 						<NavDropdown.Item onClick={this.sortByInstructorClickHandler}>Instructor</NavDropdown.Item>
 						<NavDropdown.Item onClick={this.sortBySectionClickHandler}>Section</NavDropdown.Item>
+						<NavDropdown.Item onClick={this.sortByNameClickHandler}>Name</NavDropdown.Item>
 					</NavDropdown>
 				</Nav>
 				<Table responsive="sm" size="sm" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
