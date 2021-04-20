@@ -6,7 +6,7 @@ import ProfitProgress from '../Layout/ProfitProgress';
 import { API_PATH } from '../Config';
 
 
-export class Tables extends Component {
+export class BusinessTable extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -156,4 +156,4 @@ export class Tables extends Component {
 	}
 }
 
-export default Tables
+export default BusinessTable
