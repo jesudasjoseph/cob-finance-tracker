@@ -324,7 +324,7 @@ async function getMultipleBusiness(asker, start, end, sort) {
 		values: [start, end]
 	}
 	const querySort = {
-		text: 'SELECT * FROM business_view ORDER BY $3 OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM business_view ORDER BY ($3) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end, sort]
 	}
 	const client = await pool.connect();

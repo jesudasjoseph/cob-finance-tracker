@@ -11,7 +11,6 @@ export class Tables extends Component {
 		super(props);
 		this.state = {
 			businessTable: [],
-			businessCount: 0,
 			revenueTotal: 0,
 			quantityTotal: 0,
 			expenseTotal: 0,
@@ -25,21 +24,14 @@ export class Tables extends Component {
 }
 
 	componentDidMount(){
-		this.get_businesses();
+		this.get_businesses('name');
 	}
 
 	get_businesses(sortParam){
 
 		let URL = API_PATH + '/business?start=0&end=50'
-		switch(sortParam){
-			case "instructor":
-				URL = URL + '&sort=instructor';
-				break;
-			case "section":
-				URL = URL + '&sort=section';
-				break;
-			default:
-				break;
+		if (sortParam){
+			URL = URL + '&sort=' + sortParam;
 		}
 
 		fetch(URL, {
@@ -57,8 +49,7 @@ export class Tables extends Component {
 		}).then(data => {
 			console.log('Success:', data);
 			this.setState({
-					businessTable:data,
-					businessCount:data.length
+					businessTable:data
 				});
 			this.get_business_totals();
 		}).catch((error) => {
@@ -89,7 +80,7 @@ export class Tables extends Component {
 		return (
 			<div>
 				<Nav>
-					<NavDropdown title="Filter By" id="collasible-nav-dropdown">
+					<NavDropdown title="Filter By">
 						<NavDropdown.Item onClick={this.sortByInstructorClickHandler}>Instructor</NavDropdown.Item>
 						<NavDropdown.Item onClick={this.sortBySectionClickHandler}>Section</NavDropdown.Item>
 					</NavDropdown>
@@ -99,7 +90,7 @@ export class Tables extends Component {
  						<tr>
 							<th style={{verticalAlign: 'text-top'}}>
 								Group
-								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.businessCount}</p>
+								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.businessTable.length}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Section
