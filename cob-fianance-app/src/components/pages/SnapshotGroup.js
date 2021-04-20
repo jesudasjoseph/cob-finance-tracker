@@ -11,9 +11,9 @@ export default class SnapshotGroup extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			path: this.props.location.pathname.split('/')[1]
+			path: this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length]
 		};
-		
+
 		this.exportExpenseData = this.exportExpenseData.bind(this);
 		this.exportTransactionData = this.exportTransactionData.bind(this);
 		this.exportDepositData = this.exportDepositData.bind(this);

@@ -132,7 +132,7 @@ export class Tables extends Component {
 						{this.state.businessTable.map((business, index) => {
 							const {name,instructor,section,deposit_total,product_count,expense_total, bid, profit} = business;
 							return (
-								<tr key={bid} onClick={() => window.location=window.location.pathname.split('.')[1] + '/' + bid} style={{cursor: 'pointer'}}>
+								<tr key={bid} onClick={() => window.location='/DashboardI/' + bid} style={{cursor: 'pointer'}}>
 									<td style={{minWidth: '150px'}}>{name}</td>
 									<td>{section}</td>
 									<td>{instructor}</td>
