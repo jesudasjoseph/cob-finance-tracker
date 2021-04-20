@@ -61,7 +61,7 @@ app.use(API_URL + '/deposit', depositRouter);
 app.use(API_URL + '/export', exportRouter);
 
 //Static Server (Front-End)
-app.get(['/', '/*'], (req, res) => {
+app.get(['/', '*'], (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
