@@ -40,6 +40,7 @@ export class AddStudentDialogButton extends Component {
 		e.preventDefault();
 
 		const user_body = {user:{uid:this.state.onidId, first:this.state.firstName, last: this.state.lastName, role:this.state.role, section: this.state.section}}
+		const addUserToBusinessBody = {uid:this.state.onidId, bid:this.state.bid};
 		fetch(API_PATH + '/user', {
 			mode: 'cors',
 			method: 'POST',
@@ -52,23 +53,21 @@ export class AddStudentDialogButton extends Component {
 			body: JSON.stringify(user_body)
 		}).then(response => {
 			console.log(response);
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-
-		const b_body = {uid:this.state.onidId, bid:this.state.bid}
-		fetch(API_PATH + '/user/addtobusiness', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(b_body)
-		}).then(response => {
-			console.log(response);
+			fetch(API_PATH + '/user/addtobusiness', {
+				mode: 'cors',
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Accept': 'application/json',
+					'Content-type': 'application/json',
+					'Authorization': window.localStorage.getItem('jwt')
+				},
+				body: JSON.stringify(addUserToBusinessBody)
+			}).then(response => {
+				console.log(response);
+			}).catch((error) => {
+				console.error('Error:', error);
+			});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});

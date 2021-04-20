@@ -1,5 +1,5 @@
 import React from 'react'
-import GroupTable from '../Layout/GroupTable';
+import BusinessTable from '../Layout/BusinessTable';
 import NavibarI from '../Layout/MyNavBarI';
 import AddBusinessDialogButton from '../Layout/AddBusinessDialogButton';
 
@@ -11,7 +11,7 @@ export default function DashboardI() {
 			<div style={{textAlign: 'right'}}>
 				<AddBusinessDialogButton/>
 			</div>
-			<GroupTable/>
+			<BusinessTable/>
 		</React.Fragment>
 	)
 }
