@@ -8,11 +8,11 @@ export class Tables extends Component {
 		super(props);
 		this.state = {
 			userTable: [],
-			selectedUsers: [],
-			totalSelectedUsers: 0
+			selectedRow: undefined
 		};
 		this.get_allusers = this.get_allusers.bind(this);
-		this.handleRowCheckBoxClick = this.handleRowCheckBoxClick.bind(this);
+		this.handleRowClick = this.handleRowClick.bind(this);
+		this.handleDeleteUserButton = this.handleDeleteUserButton.bind(this);
 	}
 
 	get_allusers(){
@@ -44,32 +44,48 @@ export class Tables extends Component {
 		this.get_allusers();
 	}
 
-	handleRowCheckBoxClick(index){
-		let selectedUsersNew = this.state.selectedUsers;
-		let selectCount = 0;
-		switch (selectedUsersNew[index]){
-			case true:
-				selectCount = -1;
-				selectedUsersNew[index] = false;
-				break;
-			case false:
-				selectCount = 1;
-				selectedUsersNew[index] = true;
-				break;
+	handleRowClick(index){
+		if (this.state.selectedRow === undefined){
+			this.setState({selectedRow:index});
 		}
-		this.setState({selectedUsers: selectedUsersNew, totalSelectedUsers: this.state.totalSelectedUsers+selectCount});
+		else if (this.state.selectedRow === index){
+			this.setState({selectedRow:undefined});
+		}
+		else{
+			this.setState({selectedRow:index});
+		}
+	}
+
+	handleDeleteUserButton(){
+		fetch(API_PATH + '/user/byuid?uid=' + this.state.userTable[this.state.selectedRow].uid, {
+			mode: 'cors',
+			method: 'DELETE',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			let curTable = this.state.userTable;
+			curTable.splice(this.state.selectedRow, 1);
+			this.setState({userTable:curTable, selectedRow:undefined});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 	}
 
 	render() {
 		return (
 			<div>
+				<Button onClick={this.handleDeleteUserButton} disabled={!(this.state.selectedRow+1)}>Delete User</Button>
 				<Table responsive="sm"
 					size="xl"
 					style={{paddingBottom:'40px' , paddingTop: '10px'}}
 					striped bordered hover variant="dark">
 					<thead>
 						<tr>
-							<th></th>
 							<th>Onid</th>
 							<th>Group Name</th>
 							<th>First Name </th>
@@ -92,17 +108,33 @@ export class Tables extends Component {
 								roleType = 'Admin';
 							}
 
-							return (
-								<tr key={uid} onClick={() => this.handleRowCheckBoxClick(index)} style={{cursor: 'pointer'}}>
-									<td><Button as="input" type="checkbox" disabled readOnly checked={this.state.selectedUsers[index]}/></td>
-									<td>{uid}</td>
-									<td>({bid}) {name}</td>
-									<td>{first}</td>
-									<td>{last}</td>
-									<td>{section}</td>
-									<td>{roleType}</td>
-								</tr>
-							)
+							if (index === this.state.selectedRow){
+								return (
+									<tr
+										key={uid}
+										onClick={() => this.handleRowClick(index)}
+										style={{cursor: 'pointer', color:'grey', outlineStyle:'solid', outlineWidth:'2px', outlineColor:'black'}}>
+										<td>{uid}</td>
+										<td>({bid}) {name}</td>
+										<td>{first}</td>
+										<td>{last}</td>
+										<td>{section}</td>
+										<td>{roleType}</td>
+									</tr>
+								);
+							}
+							else{
+								return (
+									<tr key={uid} onClick={() => this.handleRowClick(index)} style={{cursor: 'pointer'}}>
+										<td>{uid}</td>
+										<td>({bid}) {name}</td>
+										<td>{first}</td>
+										<td>{last}</td>
+										<td>{section}</td>
+										<td>{roleType}</td>
+									</tr>
+								);
+							}
 						})}
 					</tbody>
 				</Table>
