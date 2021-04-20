@@ -8,11 +8,11 @@ export class Tables extends Component {
 		super(props);
 		this.state = {
 			userTable: [],
-			selectedUsers: []
+			selectedUsers: [],
+			totalSelectedUsers: 0
 		};
 		this.get_allusers = this.get_allusers.bind(this);
 		this.handleRowCheckBoxClick = this.handleRowCheckBoxClick.bind(this);
-		this.handleRowCheckBoxStateChange = this.handleRowCheckBoxStateChange.bind(this);
 	}
 
 	get_allusers(){
@@ -34,8 +34,7 @@ export class Tables extends Component {
 			for (let i =0; i < data.length; i++){
 				tempState[i] = false;
 			}
-			this.setState({selectedUsers: tempState});
-			this.setState({userTable:data});
+			this.setState({selectedUsers: tempState, userTable:data, totalSelectedUsers: 0});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -47,13 +46,18 @@ export class Tables extends Component {
 
 	handleRowCheckBoxClick(index){
 		let selectedUsersNew = this.state.selectedUsers;
-		selectedUsersNew[index] = !selectedUsersNew[index];
-		this.setState({selectedUsers: selectedUsersNew});
-		console.log(selectedUsersNew);
-	}
-
-	handleRowCheckBoxStateChange(index){
-
+		let selectCount = 0;
+		switch (selectedUsersNew[index]){
+			case true:
+				selectCount = -1;
+				selectedUsersNew[index] = false;
+				break;
+			case false:
+				selectCount = 1;
+				selectedUsersNew[index] = true;
+				break;
+		}
+		this.setState({selectedUsers: selectedUsersNew, totalSelectedUsers: this.state.totalSelectedUsers+selectCount});
 	}
 
 	render() {
