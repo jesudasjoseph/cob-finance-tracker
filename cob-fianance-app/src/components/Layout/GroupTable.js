@@ -51,6 +51,7 @@ export class Tables extends Component {
 			this.setState({
 					businessTable:data
 				});
+			console.log('Current Business Table: ', this.state.businessTable);
 			this.get_business_totals();
 		}).catch((error) => {
 			console.error('Error:', error);
@@ -58,6 +59,12 @@ export class Tables extends Component {
 	}
 
 	get_business_totals(){
+		this.setState({
+			revenueTotal:0,
+			quantityTotal:0,
+			expenseTotal:0,
+			profitTotal:0
+		});
 		for (let i = 0; i < this.state.businessTable.length; i++){
 			this.setState({
 				revenueTotal:this.state.revenueTotal+parseFloat(this.state.businessTable[i].deposit_total),
@@ -120,7 +127,8 @@ export class Tables extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.businessTable.map((business, index) => {
+						{
+							this.state.businessTable.map((business, index) => {
 							const {name,instructor,section,deposit_total,product_count,expense_total, bid, profit} = business;
 							return (
 								<tr key={bid} onClick={() => window.location=bid} style={{cursor: 'pointer'}}>
