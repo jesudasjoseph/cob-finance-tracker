@@ -358,7 +358,6 @@ async function getMultipleBusiness(asker, start, end, sort) {
 						res = await client.query(query);
 						break;
 				}
-				console.log(querySort);
 				if (!res.rows.length) {
 					return new data(404);
 				}
