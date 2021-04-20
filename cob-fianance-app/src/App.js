@@ -25,7 +25,7 @@ class App extends Component{
 					<Switch>
 						<Route exact path="/" component={Login} />
 						<Route path="/home" component={Login} />
-						<Route exact path= "/DashboardI/:int" component={SnapshotGroup} />
+						<Route path="/DashboardI/:int" component={SnapshotGroup} />
 						<Route exact path="/DashboardI" component={DashboardI} />
 						<Route path= "/Profile" component={UserInstructor} />
 						<Route exact path= "/SettingsInstuctor" component={SettingsInstructor} />
