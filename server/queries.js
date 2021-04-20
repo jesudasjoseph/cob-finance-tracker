@@ -336,10 +336,13 @@ async function getMultipleBusiness(asker, start, end, sort) {
 				return new data(403);
 				break;
 			default:
-				if (sort === undefined)
+				if (sort === undefined){
 					res = await client.query(query);
-				else
+				}
+				else {
 					res = await client.query(querySort);
+					console.log(querySort);
+				}
 				if (!res.rows.length) {
 					return new data(404);
 				}
