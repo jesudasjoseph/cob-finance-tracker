@@ -1,14 +1,18 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../Config';
 
 export class Tables extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			userTable: []}
+			userTable: [],
+			selectedUsers: []
+		};
 		this.get_allusers = this.get_allusers.bind(this);
-		this.get_allusers();
+		this.handleRowCheckBoxClick = this.handleRowCheckBoxClick.bind(this);
+		this.handleRowCheckBoxStateChange = this.handleRowCheckBoxStateChange.bind(this);
 	}
 
 	get_allusers(){
@@ -26,10 +30,30 @@ export class Tables extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
+			let tempState = [];
+			for (let i =0; i < data.length; i++){
+				tempState[i] = false;
+			}
+			this.setState({selectedUsers: tempState});
 			this.setState({userTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
+	}
+
+	componentDidMount(){
+		this.get_allusers();
+	}
+
+	handleRowCheckBoxClick(index){
+		let selectedUsersNew = this.state.selectedUsers;
+		selectedUsersNew[index] = !selectedUsersNew[index];
+		this.setState({selectedUsers: selectedUsersNew});
+		console.log(selectedUsersNew);
+	}
+
+	handleRowCheckBoxStateChange(index){
+
 	}
 
 	render() {
@@ -41,8 +65,9 @@ export class Tables extends Component {
 					striped bordered hover variant="dark">
 					<thead>
 						<tr>
-							<th>Group Name</th>
+							<th></th>
 							<th>Onid</th>
+							<th>Group Name</th>
 							<th>First Name </th>
 							<th>Last Name</th>
 							<th>Section</th>
@@ -64,9 +89,10 @@ export class Tables extends Component {
 							}
 
 							return (
-								<tr key={uid}>
-									<td>({bid}) {name}</td>
+								<tr key={uid} onClick={() => this.handleRowCheckBoxClick(index)} style={{cursor: 'pointer'}}>
+									<td><Button as="input" type="checkbox" disabled readOnly checked={this.state.selectedUsers[index]}/></td>
 									<td>{uid}</td>
+									<td>({bid}) {name}</td>
 									<td>{first}</td>
 									<td>{last}</td>
 									<td>{section}</td>
