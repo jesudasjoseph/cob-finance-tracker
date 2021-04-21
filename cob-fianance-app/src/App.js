@@ -26,7 +26,6 @@ class App extends Component{
 						<Route exact path="/" component={Login} />
 						<Route path="/home" component={Login} />
 						<Route exact path="/DashboardI" component={DashboardI} />
-						<Route path="/DashboardI/:id" component={SnapshotGroup} />
 						<Route path= "/Profile" component={UserInstructor} />
 						<Route exact path= "/SettingsInstuctor" component={SettingsInstructor} />
 						<Route exact path="/UserManagement" component={UserManagement} />
@@ -34,6 +33,7 @@ class App extends Component{
 						<Route path="/transactions" component={Transactions} />
 						<Route path="/expenses" component={Expenses} />
 						<Route path="/settings" component={Page_Settings}/>
+						<Route exact path="/DashboardI/:id" component={SnapshotGroup} />
 						<Route path="*" component={Login} />
 						</Switch>
 					</div>
