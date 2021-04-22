@@ -15,5 +15,4 @@ export class ExpenseProgress extends Component {
 		)
 	}
 }
-
 export default ExpenseProgress
