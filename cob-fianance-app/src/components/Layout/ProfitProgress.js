@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import { API_PATH } from '../Config';
 
 const containerStyle = {
 	display: 'flex'
@@ -28,85 +27,25 @@ const lossBarStyle = {
 }
 
 export class ProfitProgress extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			profitbar: '',
-			expensesbar: '',
-			business: null
-		}
-
-		this.get_business_byuid = this.get_business_byuid.bind(this);
-		this.get_business_bybid = this.get_business_bybid.bind(this);
-	}
-
-	componentDidMount(){
-		//Check to see if a bid was passed to the Component
-		if (this.props.dataFromParent === undefined)
-			this.get_business_byuid();
-		else
-			this.get_business_bybid(this.props.dataFromParent);
-	}
-
-	get_business_byuid(){
-		fetch(API_PATH + '/business/byuid', {
-			mode: 'cors',
-			method: 'GET',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			}
-		}).then(response => {
-			console.log(response);
-			return response.json();
-		}).then(data => {
-			console.log('Success:', data);
-			this.setState({business:data[0]});
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-	}
-
-	get_business_bybid(bid){
-		fetch(API_PATH + '/business/bybid?bid=' + bid, {
-			mode: 'cors',
-			method: 'GET',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			}
-		}).then(response => {
-			console.log(response);
-			return response.json();
-		}).then(data => {
-			console.log('Success:', data);
-			this.setState({business:data[0]});
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-	}
-
 	render() {
-		if (this.state.business === null){
+		if (this.props.profit === null){
 			return (
 					<div>LOADING...</div>
 			)
 		}
 		else {
-			let {profit, profit_goal, stretch_profit_goal} = this.state.business;
+			let profit = parseFloat(this.props.profit);
+			let profitGoal = parseFloat(this.props.profitGoal);
+			let profitStretchGoal = parseFloat(this.props.profitStretchGoal);
 
-			if (profit_goal === 0){
+			if (profitGoal === 0){
 				return (
 						<div>Profit goal not Set!</div>
 				)
 			}
 			else {
-				const percent_of_profit_goal = profit_goal/100;
-				const percent_of_stretch_goal = stretch_profit_goal/100;
+				const percent_of_profit_goal = profitGoal/100;
+				const percent_of_stretch_goal = profitStretchGoal/100;
 				const profit_percent = profit/percent_of_profit_goal;
 				const stretch_percent = profit/percent_of_stretch_goal;
 
@@ -125,7 +64,7 @@ export class ProfitProgress extends Component {
 									style={profitBarStyle}
 									now={100}
 									variant="info"
-									label={`Profit Goal: ($${profit_goal})`}/>
+									label={`Profit Goal: ($${profitGoal})`}/>
 							</div>
 						</div>
 					)
@@ -136,7 +75,7 @@ export class ProfitProgress extends Component {
 							style={profitBarStyle}
 							now={profit_percent}
 							variant="danger"
-							label={`Profit Goal ${profit_percent}% reached! ($${profit}/$${profit_goal})`}/>
+							label={`Profit Goal ${profit_percent}% reached! ($${profit}/$${profitGoal})`}/>
 					)
 				}
 				else if (profit_percent < 75){
@@ -145,7 +84,7 @@ export class ProfitProgress extends Component {
 							style={profitBarStyle}
 							now={profit_percent}
 							variant="warning"
-							label={`Profit Goal ${profit_percent}% reached! ($${profit}/$${profit_goal})`}/>
+							label={`Profit Goal ${profit_percent}% reached! ($${profit}/$${profitGoal})`}/>
 					)
 				}
 				else if (profit_percent > 100) {
@@ -156,14 +95,14 @@ export class ProfitProgress extends Component {
 									style={profitBarStyle}
 									now={100}
 									variant="success"
-									label={`Profit Goal Reached! ($${profit_goal}/$${profit_goal})`}/>
+									label={`Profit Goal Reached! ($${profitGoal}/$${profitGoal})`}/>
 							</div>
 							<div style={profitBarPlusContainerStyle}>
 								<ProgressBar
 									style={profitBarPlusStyle}
 									now={stretch_percent}
 									variant="success"
-									label={`Stretch Goal: ($${profit}/$${stretch_profit_goal})`}/>
+									label={`Stretch Goal: ($${profit}/$${profitStretchGoal})`}/>
 							</div>
 						</div>
 					);
@@ -175,7 +114,7 @@ export class ProfitProgress extends Component {
 							style={profitBarStyle}
 							now={profit_percent}
 							variant="success"
-							label={`$${profit}/$${profit_goal}, ${profit_percent}%`}/>
+							label={`$${profit}/$${profitGoal}, ${profit_percent}%`}/>
 					);
 				}
 			}
