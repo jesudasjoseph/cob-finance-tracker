@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router ,Switch, Route} from 'react-router-dom'
+
 import Dashboard from './components/pages/Dashboard';
 import DashboardI from './components/pages/DashboardI';
 import UserInstructor from './components/pages/UserInstructor';
@@ -10,6 +11,8 @@ import Expenses from './components/pages/Expenses';
 import Transactions from './components/pages/Transactions';
 import Login from './components/pages/Login';
 import Page_Settings from './components/pages/Settings';
+import Page404 from './components/pages/404';
+
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -34,7 +37,7 @@ class App extends Component{
 						<Route path="/transactions" component={Transactions} />
 						<Route path="/expenses" component={Expenses} />
 						<Route path="/settings" component={Page_Settings}/>
-						<Route path="*" component={Login} />
+						<Route path="*" component={Page404}/>
 						</Switch>
 					</div>
 				</div>
