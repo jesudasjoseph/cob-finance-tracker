@@ -23,7 +23,7 @@ class App extends Component{
 	render(){
 		return (
 			<Router>
-				<div className="App" style={{background: '#d3d3d3', backgroundSize: 'cover',   width: '100%' , height: '100vh' , minHeight: '100%' }}>
+				<div>
 					<div className="container">
 					<Switch>
 						<Route exact path="/" component={Login} />
