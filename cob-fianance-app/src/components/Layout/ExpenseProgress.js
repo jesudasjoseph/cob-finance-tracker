@@ -7,10 +7,25 @@ export class ExpenseProgress extends Component {
 		super(props);
 	}
 	render() {
+		let expenses = parseFloat(this.props.expenses);
+		let revenue = parseFloat(this.props.revenue);
+
+		let expense_percent = 0.0;
+		let revenue_percent = 0.0;
+
+		if (expenses > revenue){
+			expense_percent = 100;
+			revenue_percent = 100 * revenue / expenses;
+		}
+		else {
+			revenue_percent = 100;
+			expense_percent = 100 * expenses / revenue;
+		}
+
 		return(
 			<>
-				<ProgressBar  style= {{height:'50px'}} variant="danger" now={100*this.props.expenses/(this.props.expenses > this.props.revenue ? this.props.expenses : this.props.revenue)} label={`Expenses: $${this.props.expenses}`} />
-				<ProgressBar style= {{height:'50px'}} variant="success" now={100*this.props.revenue/(this.props.expenses > this.props.revenue ? this.props.expenses : this.props.revenue)} label={`Revenue: $${this.props.revenue}`}/>
+				<ProgressBar  style= {{height:'50px'}} variant="danger" now={expense_percent} label={`Expenses: $${expenses}`} />
+				<ProgressBar style= {{height:'50px'}} variant="success" now={revenue_percent} label={`Revenue: $${revenue}`}/>
 			</>
 		)
 	}
