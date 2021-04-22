@@ -30,11 +30,7 @@ export class Tables extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			let tempState = [];
-			for (let i =0; i < data.length; i++){
-				tempState[i] = false;
-			}
-			this.setState({selectedUsers: tempState, userTable:data, totalSelectedUsers: 0});
+			this.setState({userTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
