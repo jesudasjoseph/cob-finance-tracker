@@ -10,12 +10,16 @@ export class Tables extends Component {
 			userTable: [],
 			selectedRow: undefined
 		};
-		this.get_allusers = this.get_allusers.bind(this);
+		this.fetchAllUsers = this.fetchAllUsers.bind(this);
 		this.handleRowClick = this.handleRowClick.bind(this);
 		this.handleDeleteUserButton = this.handleDeleteUserButton.bind(this);
 	}
 
-	get_allusers(){
+	componentDidMount(){
+		this.fetchAllUsers();
+	}
+
+	fetchAllUsers(){
 		fetch(API_PATH + '/user?start=0&end=50', {
 			mode: 'cors',
 			method: 'GET',
@@ -34,10 +38,6 @@ export class Tables extends Component {
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
-	}
-
-	componentDidMount(){
-		this.get_allusers();
 	}
 
 	handleRowClick(index){
