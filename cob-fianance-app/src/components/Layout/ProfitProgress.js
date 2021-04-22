@@ -59,13 +59,6 @@ export class ProfitProgress extends Component {
 									variant="danger"
 									label={`$${profit} Loss`}/>
 							</div>
-							<div style={profitBarContainerStyle}>
-								<ProgressBar
-									style={profitBarStyle}
-									now={100}
-									variant="info"
-									label={`Profit Goal: ($${profitGoal})`}/>
-							</div>
 						</div>
 					)
 				}
