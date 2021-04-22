@@ -4,5 +4,6 @@ dotenv.config();
 
 module.exports = {
 	port: process.env.PORT,
-	secret: process.env.API_KEY
+	secret: process.env.API_KEY,
+	samlCert: process.env.SAML_CERT
 };
