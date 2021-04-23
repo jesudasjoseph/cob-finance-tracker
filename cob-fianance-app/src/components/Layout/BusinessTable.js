@@ -135,7 +135,7 @@ export class BusinessTable extends Component {
 					<tbody>
 						{
 							this.state.businessTable.map((business, index) => {
-							const {name,instructor,section,deposit_total,product_count,expense_total, bid, profit} = business;
+							const {name, instructor, section, deposit_total, product_count, expense_total, bid, profit, profit_goal, stretch_profit_goal} = business;
 							return (
 								<tr key={bid} onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>
 									<td style={{minWidth: '150px'}}>{name}</td>
@@ -145,7 +145,7 @@ export class BusinessTable extends Component {
 									<td>{product_count}</td>
 									<td>{expense_total}</td>
 									<td>{profit}</td>
-									<td><ProfitProgress dataFromParent = {bid}/></td>
+									<td><ProfitProgress profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
 								</tr>
 							);
 						})}
