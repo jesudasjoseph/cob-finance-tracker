@@ -2,68 +2,32 @@ import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { API_PATH } from '../Config';
 
-const now = 30;
-var resProfit = ''
-var resExpense = ''
-var a = 0
-var b = 0
-var c = 0
-var d =0
-var goal = 100
-var resRevenue=''
 export class ExpenseProgress extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            profitbar: '',
-            expensesbar: '',
-            revenuebar:'',
-            businessTable: []
-          , expenses:[]}
-            this.get_business = this.get_business.bind(this);
-            this.get_business();
-            this.state.betternow = this.deposit_total;
-              }
-      get_business(){
-        fetch(API_PATH + '/business/byuid', {
-          mode: 'cors',
-          method: 'GET',
-          credentials: 'same-origin',
-          headers: {
-            'Accept': 'application/json',
-            'Content-type': 'application/json',
-            'Authorization': window.localStorage.getItem('jwt')
-          }
-        }).then(response => {
-          console.log(response);
-          return response.json();
-        }).then(data => {
-          console.log('Success:', data);
-          this.setState({expenses:data});
-        }).catch((error) => {
-          console.error('Error:', error);
-        });
-      }
-    render() {
-        {this.state.expenses.map((expense, index) => {
-            const {deposit_count,deposit_total,expense_count,expense_total, name, product_count, profit,transaction_total,transaction_count} = expense;
-            this.state.profitbar = profit
-            this.state.expensesbar = expense_total
-            this.state.revenuebar = transaction_total
-            a = this.state.revenuebar
-            b = this.state.expensesbar
+	constructor(props){
+		super(props);
+	}
+	render() {
+		let expenses = parseFloat(this.props.expenses);
+		let revenue = parseFloat(this.props.revenue);
 
-            return (
-              <div>{expense_total}</div>
-            )
-            })}
-        return(
-        <div>
-            <ProgressBar  style= {{height:'50px'}} variant="danger" now={100*b/goal} label={`Expenses: $${b}`} />
-            <ProgressBar style= {{height:'50px'}} variant="success" now={100*a/goal} label={`Revenue: $${a}`}/>
-        </div>
-        )
-    }
+		let expense_percent = 0.0;
+		let revenue_percent = 0.0;
+
+		if (expenses > revenue){
+			expense_percent = 100;
+			revenue_percent = 100 * revenue / expenses;
+		}
+		else {
+			revenue_percent = 100;
+			expense_percent = 100 * expenses / revenue;
+		}
+
+		return(
+			<>
+				<ProgressBar  style= {{height:'50px'}} variant="danger" now={expense_percent} label={`Expenses: $${expenses}`} />
+				<ProgressBar style= {{height:'50px'}} variant="success" now={revenue_percent} label={`Revenue: $${revenue}`}/>
+			</>
+		)
+	}
 }
-
 export default ExpenseProgress
