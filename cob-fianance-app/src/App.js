@@ -24,7 +24,6 @@ class App extends Component{
 		return (
 			<Router>
 				<div>
-					<div className="container">
 					<Switch>
 						<Route exact path="/" component={Login} />
 						<Route path="/home" component={Login} />
@@ -39,7 +38,6 @@ class App extends Component{
 						<Route exact path="/DashboardI/:id" component={SnapshotGroup}/>
 						<Route path="*" component={Page404}/>
 						</Switch>
-					</div>
 				</div>
 			</Router>
 		);
