@@ -20,7 +20,7 @@ class MyNavbar extends Component {
         <NavDropdown.Item href="/Profile"> My Profile </NavDropdown.Item>
         <NavDropdown.Item href="/SettingsInstuctor">Settings</NavDropdown.Item>
         <NavDropdown.Divider />
-        <NavDropdown.Item href="/">Logout</NavDropdown.Item>
+        <NavDropdown.Item onClick={localStorage.clear} href="/">Logout</NavDropdown.Item>
       </NavDropdown>
       <Nav.Link eventKey={2} href="profile">
 
