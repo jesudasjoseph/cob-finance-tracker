@@ -45,6 +45,7 @@ export class Dashboard extends Component {
 		return (
 			<React.Fragment>
 				<Navbar></Navbar>
+				<div className="container">
 				<h1 style={{textAlign:'center'}}>Dashboard</h1>
 				<h3 style={{padding: '20px 0px 0px 0px'}}>Profit Goals</h3>
 				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
@@ -54,6 +55,7 @@ export class Dashboard extends Component {
 				<BankProgress/>
 				<AddTransactionDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
 				<AddExpenseDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
+				<div/>
 			</React.Fragment>
 		);
 	}
