@@ -97,7 +97,10 @@ export class AddTransactionDialogButton extends Component {
 									<Form.Label>Product</Form.Label>
 									<Form.Control type="text" value={this.state.product}  onChange={(e) => this.setState({product: e.target.value})}/>
 									<Form.Label>Payment Method</Form.Label>
-									<Form.Control type="text" value={this.state.payment_method}  onChange={(e) => this.setState({payment_method: e.target.value})}/>
+									<Form.Control as="select" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})}>
+										<option value="cash">Cash</option>
+										<option value="square">Square</option>
+									</Form.Control>
 									<Form.Label>Quantity</Form.Label>
 									<Form.Control type="text" value={this.state.quantity}  onChange={(e) => this.setState({quantity: e.target.value})}/>
 									<Form.Label>Price Per Unit</Form.Label>
