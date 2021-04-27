@@ -7,11 +7,13 @@ export default function Expenses() {
 	return (
 		<>
 			<Navbar/>
+			<div className="container">
 			<h1 style={{textAlign:'center'}}>Expenses</h1>
 			<div style={{textAlign: 'right', margin: '5px'}}>
 				<AddExpenseDialogButton/>
 			</div>
 			<ExpenseTable style = {{paddingTop: '10px 20px' }}></ExpenseTable>
+			</div>
 		</>
 	)
 }
