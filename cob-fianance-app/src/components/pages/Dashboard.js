@@ -55,7 +55,7 @@ export class Dashboard extends Component {
 				<BankProgress/>
 				<AddTransactionDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
 				<AddExpenseDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
-				<div/>
+				</div>
 			</React.Fragment>
 		);
 	}
