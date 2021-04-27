@@ -3,6 +3,8 @@ import ProfitProgress from '../Layout/ProfitProgress';
 import ExpenseProgress from '../Layout/ExpenseProgress';
 import BankProgress from '../Layout/BankProgress';
 import Navbar from '../Layout/MyNavbar';
+import AddTransactionDialogButton from '../Layout/AddTransactionDialogButton';
+import AddExpenseDialogButton from '../Layout/AddExpenseDialogButton';
 import { API_PATH } from '../Config';
 
 export class Dashboard extends Component {
@@ -51,7 +53,9 @@ export class Dashboard extends Component {
 				<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
 				<h3 style={{padding: '20px 0px 0px 0px'}}>Bank / Square Status</h3>
 				<BankProgress/>
-				</div>
+				<AddTransactionDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
+				<AddExpenseDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
+				<div/>
 			</React.Fragment>
 		);
 	}

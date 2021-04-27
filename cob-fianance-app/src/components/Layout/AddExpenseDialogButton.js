@@ -76,13 +76,13 @@ export class AddExpenseDialogButton extends Component {
 		if (this.state.modalShow === false)
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Expense</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add Expense</Button>
 				</>
 			)
 		else {
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Expense</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add Expense</Button>
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
 							<Modal.Title>
