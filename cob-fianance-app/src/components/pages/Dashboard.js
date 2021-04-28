@@ -46,15 +46,15 @@ export class Dashboard extends Component {
 			<React.Fragment>
 				<Navbar></Navbar>
 				<div className="container">
-				<h1 style={{textAlign:'center'}}>Dashboard</h1>
-				<h3 style={{padding: '20px 0px 0px 0px'}}>Profit Goals</h3>
-				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
-				<h3 style={{padding: '20px 0px 0px 0px'}}>Expenses / Revenue</h3>
-				<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
-				<h3 style={{padding: '20px 0px 0px 0px'}}>Bank / Square Status</h3>
-				<BankProgress/>
-				<AddTransactionDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
-				<AddExpenseDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
+					<h1 style={{textAlign:'center'}}>Dashboard</h1>
+					<h3 style={{padding: '20px 0px 0px 0px'}}>Profit Goals</h3>
+					<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
+					<h3 style={{padding: '20px 0px 0px 0px'}}>Expenses / Revenue</h3>
+					<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
+					<h3 style={{padding: '20px 0px 0px 0px'}}>Bank / Square Status</h3>
+					<BankProgress/>
+					<AddTransactionDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
+					<AddExpenseDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
 				</div>
 			</React.Fragment>
 		);
