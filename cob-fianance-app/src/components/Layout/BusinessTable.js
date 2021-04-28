@@ -164,7 +164,19 @@ export class BusinessTable extends Component {
 					<tbody>
 						{
 							this.state.businessTable.map((business, index) => {
-							const {name, instructor, section, transaction_total, deposit_total, product_count, expense_total, bid, profit, profit_goal, stretch_profit_goal, square} = business;
+							const {name,
+										instructor,
+										section,
+										transaction_total,
+										deposit_total,
+										product_count,
+										expense_total,
+										bid,
+										profit,
+										profit_goal,
+										stretch_profit_goal,
+										square_total} = business;
+										
 							return (
 								<tr key={bid}>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
@@ -172,7 +184,7 @@ export class BusinessTable extends Component {
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{instructor}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{product_count}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${deposit_total}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${square}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${square_total}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${transaction_total}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${expense_total}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${profit}</td>
