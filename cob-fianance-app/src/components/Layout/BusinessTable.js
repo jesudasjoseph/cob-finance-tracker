@@ -124,7 +124,7 @@ export class BusinessTable extends Component {
 					<thead>
  						<tr>
 							<th style={{verticalAlign: 'text-top'}}>
-								Group
+								Company
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.businessTable.length}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
@@ -134,20 +134,26 @@ export class BusinessTable extends Component {
 								Instructor
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
-								Revenue
-								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.revenueTotal}</p>
-							</th>
-							<th style={{verticalAlign: 'text-top'}}>
 								Items Sold
 								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.quantityTotal}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
+								Bank
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Square
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
+								Revenue
+								<p style={{fontSize:'14px', color:'grey'}}>Total: ${this.state.revenueTotal}</p>
+							</th>
+							<th style={{verticalAlign: 'text-top'}}>
 								Expenses
-								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.expenseTotal}</p>
+								<p style={{fontSize:'14px', color:'grey'}}>Total: ${this.state.expenseTotal}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Profits
-								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.profitTotal}</p>
+								<p style={{fontSize:'14px', color:'grey'}}>Total: ${this.state.profitTotal}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Sales Goals
@@ -158,16 +164,18 @@ export class BusinessTable extends Component {
 					<tbody>
 						{
 							this.state.businessTable.map((business, index) => {
-							const {name, instructor, section, deposit_total, product_count, expense_total, bid, profit, profit_goal, stretch_profit_goal} = business;
+							const {name, instructor, section, transaction_total, deposit_total, product_count, expense_total, bid, profit, profit_goal, stretch_profit_goal, square} = business;
 							return (
 								<tr key={bid}>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{section}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{instructor}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{deposit_total}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{product_count}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{expense_total}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{profit}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${deposit_total}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${square}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${transaction_total}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${expense_total}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${profit}</td>
 									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}><ProfitProgress profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
 									<td><Button onClick={() => this.onDeleteClick(bid,index)}>Delete</Button></td>
 								</tr>
