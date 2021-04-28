@@ -76,17 +76,17 @@ export class AddExpenseDialogButton extends Component {
 		if (this.state.modalShow === false)
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Expense</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add Expense</Button>
 				</>
 			)
 		else {
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Expense</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add Expense</Button>
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
 							<Modal.Title>
-								Add Transaction
+								Add Expense
 							</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
@@ -99,7 +99,7 @@ export class AddExpenseDialogButton extends Component {
 									<Form.Label>Date</Form.Label>
 									<Form.Control type="date" value={this.state.date}  onChange={(e) => this.setState({date: e.target.value})}/>
 									<Form.Label>Payment Method</Form.Label>
-									<Form.Control type="text" value={this.state.payment_method}  onChange={(e) => this.setState({payment_method: e.target.value})}/>
+									<Form.Control type="text" value={this.state.payment_method} onChange={(e) => this.setState({payment_method: e.target.value})}/>
 									<Form.Label>Quantity</Form.Label>
 									<Form.Control type="text" value={this.state.quantity}  onChange={(e) => this.setState({quantity: e.target.value})}/>
 									<Form.Label>Price Per Unit</Form.Label>

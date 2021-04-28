@@ -4,6 +4,7 @@ import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Container from 'react-bootstrap/Container';
 
+
 class MyNavbar extends Component {
   render(){
   return(
@@ -21,7 +22,7 @@ class MyNavbar extends Component {
         <NavDropdown.Item href="#action/3.1">My Profile</NavDropdown.Item>
         <NavDropdown.Item href="/settings">Settings</NavDropdown.Item>
         <NavDropdown.Divider />
-        <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
+        <NavDropdown.Item onClick={localStorage.clear} href="/">Logout</NavDropdown.Item>
       </NavDropdown>
       <Nav.Link eventKey={2} href="profile"></Nav.Link>
     </Nav>

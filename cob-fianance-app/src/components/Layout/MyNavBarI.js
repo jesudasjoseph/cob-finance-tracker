@@ -12,15 +12,15 @@ class MyNavbar extends Component {
   <Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="mr-auto">
-      <Nav.Link href="DashboardI">Dashboard</Nav.Link>
-      <Nav.Link href="UserManagement">User Management</Nav.Link>
+      <Nav.Link href="/DashboardI">Dashboard</Nav.Link>
+      <Nav.Link href="/UserManagement">User Management</Nav.Link>
     </Nav>
     <Nav>
       <NavDropdown title="User Profile" id="collasible-nav-dropdown">
         <NavDropdown.Item href="/Profile"> My Profile </NavDropdown.Item>
         <NavDropdown.Item href="/SettingsInstuctor">Settings</NavDropdown.Item>
         <NavDropdown.Divider />
-        <NavDropdown.Item href="/">Logout</NavDropdown.Item>
+        <NavDropdown.Item onClick={localStorage.clear} href="/">Logout</NavDropdown.Item>
       </NavDropdown>
       <Nav.Link eventKey={2} href="profile">
 

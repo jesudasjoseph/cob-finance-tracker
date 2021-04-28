@@ -51,6 +51,9 @@ export class AddBusinessDialogButton extends Component {
 	handle_submit(e) {
 		e.preventDefault();
 
+		if (this.state.section === ''){
+			this.state.section = 'no_section';
+		}
 		const business_body = {business:{name:this.state.name, section:this.state.section, instructor:this.state.instructor}}
 		fetch(API_PATH + '/business', {
 			mode: 'cors',

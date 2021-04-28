@@ -82,6 +82,7 @@ export default class Login extends React.Component {
 
     render () {
         return (
+            <div className="container">
             <React.Fragment >
                 <Form>
                     <Form.Group controlId="formBasicEmail">
@@ -93,6 +94,7 @@ export default class Login extends React.Component {
                     </Button>
                 </Form>
             </React.Fragment>
+            </div>
         );
     }
 

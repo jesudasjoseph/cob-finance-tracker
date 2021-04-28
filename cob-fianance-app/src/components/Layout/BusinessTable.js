@@ -3,43 +3,38 @@ import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ProfitProgress from '../Layout/ProfitProgress';
+import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../Config';
 
 
-export class Tables extends Component {
+export class BusinessTable extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			businessTable: [],
-			businessCount: 0,
 			revenueTotal: 0,
 			quantityTotal: 0,
 			expenseTotal: 0,
 			profitTotal: 0
 		}
 
-		this.get_businesses = this.get_businesses.bind(this);
-		this.get_business_totals = this.get_business_totals.bind(this);
+		this.fetchBusinessData = this.fetchBusinessData.bind(this);
+		this.getBusinessTotals = this.getBusinessTotals.bind(this);
 		this.sortByInstructorClickHandler = this.sortByInstructorClickHandler.bind(this);
 		this.sortBySectionClickHandler = this.sortBySectionClickHandler.bind(this);
+		this.sortByNameClickHandler = this.sortByNameClickHandler.bind(this);
+		this.onDeleteClick = this.onDeleteClick.bind(this);
 }
 
 	componentDidMount(){
-		this.get_businesses();
+		this.fetchBusinessData('name');
 	}
 
-	get_businesses(sortParam){
+	fetchBusinessData(sortParam){
 
 		let URL = API_PATH + '/business?start=0&end=50'
-		switch(sortParam){
-			case "instructor":
-				URL = URL + '&sort=instructor';
-				break;
-			case "section":
-				URL = URL + '&sort=section';
-				break;
-			default:
-				break;
+		if (sortParam){
+			URL = URL + '&sort=' + sortParam;
 		}
 
 		fetch(URL, {
@@ -57,16 +52,22 @@ export class Tables extends Component {
 		}).then(data => {
 			console.log('Success:', data);
 			this.setState({
-					businessTable:data,
-					businessCount:data.length
+					businessTable:data
 				});
-			this.get_business_totals();
+			console.log('Current Business Table: ', this.state.businessTable);
+			this.getBusinessTotals();
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
 	}
 
-	get_business_totals(){
+	getBusinessTotals(){
+		this.setState({
+			revenueTotal:0,
+			quantityTotal:0,
+			expenseTotal:0,
+			profitTotal:0
+		});
 		for (let i = 0; i < this.state.businessTable.length; i++){
 			this.setState({
 				revenueTotal:this.state.revenueTotal+parseFloat(this.state.businessTable[i].deposit_total),
@@ -78,20 +79,45 @@ export class Tables extends Component {
 	}
 
 	sortByInstructorClickHandler() {
-		this.get_businesses("instructor");
+		this.fetchBusinessData("instructor");
 	}
 
 	sortBySectionClickHandler() {
-		this.get_businesses("section");
+		this.fetchBusinessData("section");
+	}
+
+	sortByNameClickHandler() {
+		this.fetchBusinessData("name");
+	}
+
+	onDeleteClick(bid,index){
+		fetch(API_PATH + '/business/bybid?bid=' + bid, {
+			mode: 'cors',
+			method: 'DELETE',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			let curTable = this.state.businessTable;
+			curTable.splice(index, 1);
+			this.setState({businessTable:curTable});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 	}
 
 	render() {
 		return (
 			<div>
 				<Nav>
-					<NavDropdown title="Filter By" id="collasible-nav-dropdown">
+					<NavDropdown title="Filter By">
 						<NavDropdown.Item onClick={this.sortByInstructorClickHandler}>Instructor</NavDropdown.Item>
 						<NavDropdown.Item onClick={this.sortBySectionClickHandler}>Section</NavDropdown.Item>
+						<NavDropdown.Item onClick={this.sortByNameClickHandler}>Name</NavDropdown.Item>
 					</NavDropdown>
 				</Nav>
 				<Table responsive="sm" size="sm" style={{paddingBottom:'40px' , paddingTop: '10px'}} striped bordered hover variant="dark">
@@ -99,7 +125,7 @@ export class Tables extends Component {
  						<tr>
 							<th style={{verticalAlign: 'text-top'}}>
 								Group
-								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.businessCount}</p>
+								<p style={{fontSize:'14px', color:'grey'}}>Total: {this.state.businessTable.length}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Section
@@ -126,21 +152,24 @@ export class Tables extends Component {
 							<th style={{verticalAlign: 'text-top'}}>
 								Sales Goals
 							</th>
+							<th/>
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.businessTable.map((business, index) => {
-							const {name,instructor,section,deposit_total,product_count,expense_total, bid, profit} = business;
+						{
+							this.state.businessTable.map((business, index) => {
+							const {name, instructor, section, deposit_total, product_count, expense_total, bid, profit, profit_goal, stretch_profit_goal} = business;
 							return (
-								<tr key={bid} onClick={() => window.location=bid} style={{cursor: 'pointer'}}>
-									<td style={{minWidth: '150px'}}>{name}</td>
-									<td>{section}</td>
-									<td>{instructor}</td>
-									<td>{deposit_total}</td>
-									<td>{product_count}</td>
-									<td>{expense_total}</td>
-									<td>{profit}</td>
-									<td><ProfitProgress dataFromParent = {bid}/></td>
+								<tr key={bid}>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{section}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{instructor}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{deposit_total}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{product_count}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{expense_total}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{profit}</td>
+									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}><ProfitProgress profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+									<td><Button onClick={() => this.onDeleteClick(bid,index)}>Delete</Button></td>
 								</tr>
 							);
 						})}
@@ -151,4 +180,4 @@ export class Tables extends Component {
 	}
 }
 
-export default Tables
+export default BusinessTable
