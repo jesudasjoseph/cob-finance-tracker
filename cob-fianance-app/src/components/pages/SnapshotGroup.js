@@ -3,7 +3,6 @@ import ProfitProgress from '../Layout/ProfitProgress';
 import ExpenseProgress from '../Layout/ExpenseProgress';
 import ExpenseTable from '../Layout/ExpenseTable';
 import BankProgress from '../Layout/BankProgress';
-import NavibarI from '../Layout/MyNavBarI';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../Config';
 
@@ -135,7 +134,6 @@ export default class SnapshotGroup extends React.Component{
 	render () {
 		return (
 			<React.Fragment>
-				<NavibarI/>
 				<div className="container">
 					<h1 style={{textAlign:'center'}}>{this.state.business.name}</h1>
 					<h2> Profit Goals</h2>
