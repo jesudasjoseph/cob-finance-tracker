@@ -27,13 +27,13 @@ class App extends Component{
 	render(){
 		return (
 			<Router forceRefresh={false}>
-				<div>
-					<Switch>
-						<Route exact path="/" component={Login} />
-						<Route path="/home" component={Login} />
+				<Switch>
+					<Route exact path="/" component={Login} />
+					<Route path="/home" component={Login} />
 
-						<Route path="/instructor">
-							<InstructorNavbar/>
+					<Route path="/instructor">
+						<InstructorNavbar/>
+						<div className="container">
 							<Switch>
 								<Route exact path="/instructor/dashboard" component={DashboardI}/>
 								<Route exact path="/instructor/settings" component={SettingsInstructor} />
@@ -42,10 +42,12 @@ class App extends Component{
 								<Route exact path="/instructor/dashboard/:id" component={SnapshotGroup}/>
 								<Route path="*" component={Page404}/>
 							</Switch>
-						</Route>
+						</div>
+					</Route>
 
-						<Route path="/student">
-							<StudentNavbar/>
+					<Route path="/student">
+						<StudentNavbar/>
+						<div className="container">
 							<Switch>
 								<Route exact path="/student/dashboard" component={Dashboard}/>
 								<Route exact path="/student/settings" component={Page_Settings} />
@@ -53,11 +55,11 @@ class App extends Component{
 								<Route exact path="/student/expenses" component={Expenses}/>
 								<Route path="*" component={Page404}/>
 							</Switch>
-						</Route>
+						</div>
+					</Route>
 
-						<Route path="*" component={Page404}/>
-					</Switch>
-				</div>
+					<Route path="*" component={Page404}/>
+				</Switch>
 			</Router>
 		);
 	}
