@@ -23,7 +23,7 @@ class App extends Component{
 	}
 	render(){
 		return (
-			<Router forceRefresh='False'>
+			<Router forceRefresh={false}>
 				<div>
 					<Switch>
 						<Route exact path="/" component={Login} />
