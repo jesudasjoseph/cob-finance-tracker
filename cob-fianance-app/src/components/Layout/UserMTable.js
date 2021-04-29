@@ -12,17 +12,28 @@ export class Tables extends Component {
 			userTable: [],
 			selectedRow: undefined
 		};
-		this.fetchAllUsers = this.fetchAllUsers.bind(this);
+		this.fetchUserData = this.fetchUserData.bind(this);
 		this.handleRowClick = this.handleRowClick.bind(this);
+		this.sortByOnidClickHandler = this.sortByOnidClickHandler.bind(this);
+		this.sortByBusinessNameClickHandler = this.sortByBusinessNameClickHandler.bind(this);
+		this.sortByFirstNameClickHandler = this.sortByFirstNameClickHandler.bind(this);
+		this.sortByLastNameClickHandler = this.sortByLastNameClickHandler.bind(this);
+		this.sortByRoleClickHandler = this.sortByRoleClickHandler.bind(this);
 		this.handleDeleteUserButton = this.handleDeleteUserButton.bind(this);
 	}
 
 	componentDidMount(){
-		this.fetchAllUsers();
+		this.fetchUserData('role');
 	}
 
-	fetchAllUsers(){
-		fetch(API_PATH + '/user?start=0&end=50', {
+	fetchUserData(sortParam){
+
+		let URL = API_PATH + '/user?start=0&end=50'
+		if (sortParam){
+			URL = URL + '&sort=' + sortParam;
+		}
+
+		fetch(URL, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -52,6 +63,22 @@ export class Tables extends Component {
 		else{
 			this.setState({selectedRow:index});
 		}
+	}
+
+	sortByOnidClickHandler(){
+		this.fetchUserData('onid');
+	}
+	sortByBusinessNameClickHandler(){
+		this.fetchUserData('businessname');
+	}
+	sortByFirstNameClickHandler(){
+		this.fetchUserData('first');
+	}
+	sortByLastNameClickHandler(){
+		this.fetchUserData('last');
+	}
+	sortByRoleClickHandler(){
+		this.fetchUserData('role');
 	}
 
 	handleDeleteUserButton(){
