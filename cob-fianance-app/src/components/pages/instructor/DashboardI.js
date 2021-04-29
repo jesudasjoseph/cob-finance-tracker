@@ -1,6 +1,6 @@
 import React from 'react'
-import BusinessTable from '../Layout/BusinessTable';
-import AddBusinessDialogButton from '../Layout/AddBusinessDialogButton';
+import BusinessTable from '../../Layout/BusinessTable';
+import AddBusinessDialogButton from '../../Layout/AddBusinessDialogButton';
 
 export default function DashboardI() {
 	return (

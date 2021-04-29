@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import ProfitProgress from '../Layout/ProfitProgress';
-import ExpenseProgress from '../Layout/ExpenseProgress';
-import BankProgress from '../Layout/BankProgress';
-import AddTransactionDialogButton from '../Layout/AddTransactionDialogButton';
-import AddExpenseDialogButton from '../Layout/AddExpenseDialogButton';
-import { API_PATH } from '../Config';
+import ProfitProgress from '../../Layout/ProfitProgress';
+import ExpenseProgress from '../../Layout/ExpenseProgress';
+import BankProgress from '../../Layout/BankProgress';
+import AddTransactionDialogButton from '../../Layout/AddTransactionDialogButton';
+import AddExpenseDialogButton from '../../Layout/AddExpenseDialogButton';
+import { API_PATH } from '../../Config';
 
 export class Dashboard extends Component {
 	constructor(props){

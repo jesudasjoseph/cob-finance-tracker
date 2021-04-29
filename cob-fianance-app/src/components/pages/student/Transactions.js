@@ -1,7 +1,7 @@
 
 import React from 'react'
-import TransactionsTable from '../Layout/TransactionsTable';
-import AddTransactionDialogButton from '../Layout/AddTransactionDialogButton';
+import TransactionsTable from '../../Layout/TransactionsTable';
+import AddTransactionDialogButton from '../../Layout/AddTransactionDialogButton';
 
 export default function Transactions() {
 	return (

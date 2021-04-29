@@ -1,10 +1,10 @@
 import React from 'react'
-import ProfitProgress from '../Layout/ProfitProgress';
-import ExpenseProgress from '../Layout/ExpenseProgress';
-import ExpenseTable from '../Layout/ExpenseTable';
-import BankProgress from '../Layout/BankProgress';
+import ProfitProgress from '../../Layout/ProfitProgress';
+import ExpenseProgress from '../../Layout/ExpenseProgress';
+import ExpenseTable from '../../Layout/ExpenseTable';
+import BankProgress from '../../Layout/BankProgress';
 import Button from 'react-bootstrap/Button';
-import { API_PATH } from '../Config';
+import { API_PATH } from '../../Config';
 
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
