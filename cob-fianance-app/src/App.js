@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router ,Switch, Route} from 'react-router-dom'
 
 //Insructor Pages/Layouts
-import InstructorNavbar from './components/Layout/InstructorNavbar';
+import InstructorNavbar from './components/layout/InstructorNavbar';
 import DashboardI from './components/pages/instructor/DashboardI';
 import UserInstructor from './components/pages/instructor/UserInstructor';
 import SettingsInstructor from './components/pages/instructor/SettingsInstuctor';
@@ -10,7 +10,7 @@ import UserManagement from './components/pages/instructor/UserManagement';
 import SnapshotGroup from './components/pages/instructor/SnapshotGroup.js';
 
 //Student Pages/Layouts
-import StudentNavbar from './components/Layout/StudentNavbar';
+import StudentNavbar from './components/layout/StudentNavbar';
 import Dashboard from './components/pages/student/Dashboard';
 import Expenses from './components/pages/student/Expenses';
 import Transactions from './components/pages/student/Transactions';

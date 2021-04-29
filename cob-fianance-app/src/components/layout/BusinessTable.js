@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import ProfitProgress from '../Layout/ProfitProgress';
+import ProfitProgress from '../layout/ProfitProgress';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../Config';
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import ExpenseTable from '../../Layout/ExpenseTable';
-import AddExpenseDialogButton from '../../Layout/AddExpenseDialogButton';
+import ExpenseTable from '../../layout/ExpenseTable';
+import AddExpenseDialogButton from '../../layout/AddExpenseDialogButton';
 
 export default function Expenses() {
 	return (

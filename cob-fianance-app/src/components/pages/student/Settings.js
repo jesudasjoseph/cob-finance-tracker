@@ -1,5 +1,5 @@
 import React from 'react'
-import ProfitGoalsForm from '../../Layout/ProfitGoalsForm';
+import ProfitGoalsForm from '../../layout/ProfitGoalsForm';
 
 export default function Settings() {
 	return (

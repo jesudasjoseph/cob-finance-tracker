@@ -1,6 +1,6 @@
 import React from 'react'
-import Buttons from '../../Layout/UserMButtons';
-import Table from '../../Layout/UserMTable';
+import Buttons from '../../layout/UserMButtons';
+import Table from '../../layout/UserMTable';
 
 export default function StudentUsers() {
 	return (
