@@ -51,7 +51,7 @@ class App extends Component{
 						</Route>
 
 						<Route path="*" component={Page404}/>
-						</Switch>
+					</Switch>
 				</div>
 			</Router>
 		);

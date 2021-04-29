@@ -17,7 +17,7 @@ export default class Login extends React.Component {
 
 		if (myStorage.getItem('token') !== undefined ) {
             if (myStorage.getItem('role') === 'student' ) {
-                props.history.push('/dashboard');
+                props.history.push('/student/dashboard');
             }
             else if (myStorage.getItem('role') === 'instructor') {
                 props.history.push('/instructor/dashboard');
@@ -62,7 +62,7 @@ export default class Login extends React.Component {
                         this.setState({role: data.role});
                         myStorage.setItem('jwt',"Bearer " + this.state.token);
                         myStorage.setItem('role', data.role);
-                        this.props.history.push('/dashboard');
+                        this.props.history.push('/student/dashboard');
                     }
                     else {
                         alert("No role specified!");
