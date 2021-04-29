@@ -103,9 +103,9 @@ export class Tables extends Component {
 
 	render() {
 		return (
-			<div>
-				<div style={{display: 'flex', flexDirection: 'row'}}>
-					<Nav>
+			<div style={{marginTop: '25px'}}>
+				<div>
+					<Nav style={{float: 'left'}}>
 						<NavDropdown title="Filter By">
 							<NavDropdown.Item onClick={this.sortByOnidClickHandler}>ONID</NavDropdown.Item>
 							<NavDropdown.Item onClick={this.sortByBusinessNameClickHandler}>Company Name</NavDropdown.Item>
@@ -114,7 +114,7 @@ export class Tables extends Component {
 							<NavDropdown.Item onClick={this.sortByRoleClickHandler}>Role</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
-					<Button onClick={this.handleDeleteUserButton} disabled={!(this.state.selectedRow+1)}>Delete User</Button>
+					<Button style={{float: 'right'}} onClick={this.handleDeleteUserButton} disabled={!(this.state.selectedRow+1)}>Delete User</Button>
 				</div>
 				<Table responsive="sm"
 					size="xl"
