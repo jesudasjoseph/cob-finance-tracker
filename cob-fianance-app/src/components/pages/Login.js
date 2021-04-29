@@ -20,7 +20,7 @@ export default class Login extends React.Component {
                 props.history.push('/dashboard');
             }
             else if (myStorage.getItem('role') === 'instructor') {
-                props.history.push('/DashboardI');
+                props.history.push('/instructor/dashboard');
             }
             else {
                 myStorage.removeItem('token');
@@ -56,7 +56,7 @@ export default class Login extends React.Component {
                         this.setState({role: data.role});
                         myStorage.setItem('jwt',"Bearer " + this.state.token);
                         myStorage.setItem('role', data.role);
-                        this.props.history.push('/DashboardI');
+                        this.props.history.push('/instructor/dashboard');
                     }
                     else if (data.role === 0){
                         this.setState({role: data.role});
