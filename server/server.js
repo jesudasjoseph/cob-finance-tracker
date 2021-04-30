@@ -66,9 +66,17 @@ app.get(['/', '/*'], (req, res) => {
 });
 
 
-let server = https.createServer(options, app);
-server.listen(config.port, () => {
-	console.log(`Listening at https://localhost:${config.port}`);
+let serverhttps = https.createServer(options, app);
+let serverhttp = http.createServer((req, res) => {
+	res.sendFile(path.resolve(__dirname, 'nohttp.html'));
+});
+
+serverhttp.listen(config.porthttp, () => {
+	console.log(`Listening at http://localhost:${config.porthttp}`);
+});
+
+serverhttps.listen(config.porthttps, () => {
+	console.log(`Listening at https://localhost:${config.porthttps}`);
 });
 
 module.exports = app;
