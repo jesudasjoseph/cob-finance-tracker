@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const https = require('https');
+const http = require('http');
 const config = require('./config');
 const path = require('path');
 const q = require('./queries');
