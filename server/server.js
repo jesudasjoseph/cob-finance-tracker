@@ -62,6 +62,7 @@ app.get(['/', '/*'], (req, res) => {
 
 let serverhttps = https.createServer(options, app);
 let serverhttp = http.createServer((req, res) => {
+	res.setHeader('Content-Type', 'text/html');
 	res.sendFile(path.resolve(__dirname, 'nohttp.html'));
 });
 
