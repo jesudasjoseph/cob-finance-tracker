@@ -38,13 +38,6 @@ app.use(cors()); //Use cors middleware
 app.use(express.json()); //Parse body
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
 
-//ping
-app.get('/ping', (req, res) => {
-  return res.send('pong')
-})
-
-console.log(path.resolve(__dirname, 'build', 'index.html'));
-
 //API Endpoints
 //Router for Authentication requests
 app.use(API_URL + '/auth', authRouter);
