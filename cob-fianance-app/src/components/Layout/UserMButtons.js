@@ -10,12 +10,6 @@ export class UserMButtons extends Component {
 			<>
 				<AddStudentDialogButton/>
 				<Button as="input" type="button" value="Import Students" />
-				<Nav>
-					<NavDropdown title="Filter By" id="collasible-nav-dropdown">
-						<NavDropdown.Item href="#filterI">Instructor</NavDropdown.Item>
-						<NavDropdown.Item href="#filterS">Section</NavDropdown.Item>
-					</NavDropdown>
-				</Nav>
 			</>
 		)
 	}
