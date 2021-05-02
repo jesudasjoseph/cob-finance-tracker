@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const https = require('https');
+const http = require('http');
 const config = require('./config');
 const path = require('path');
 const q = require('./queries');
@@ -37,13 +38,6 @@ app.use(cors()); //Use cors middleware
 app.use(express.json()); //Parse body
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
 
-//ping
-app.get('/ping', (req, res) => {
-  return res.send('pong')
-})
-
-console.log(path.resolve(__dirname, 'build', 'index.html'));
-
 //API Endpoints
 //Router for Authentication requests
 app.use(API_URL + '/auth', authRouter);
@@ -66,9 +60,18 @@ app.get(['/', '/*'], (req, res) => {
 });
 
 
-let server = https.createServer(options, app);
-server.listen(config.port, () => {
-	console.log(`Listening at https://localhost:${config.port}`);
+let serverhttps = https.createServer(options, app);
+let serverhttp = http.createServer((req, res) => {
+	res.setHeader('Content-Type', 'text/html');
+	res.end(`<!DOCTYPE html><html lang="en"><meta charset="utf-8"><title>No HTTP!</title><p>HTTP is not a secure protocal and we do not support it, please use the HTTPS version of this site!</p><a href='https://71.193.191.23'>Click here to redirect!</a>`);
+});
+
+serverhttp.listen(config.porthttp, () => {
+	console.log(`Listening at http://localhost:${config.porthttp}`);
+});
+
+serverhttps.listen(config.porthttps, () => {
+	console.log(`Listening at https://localhost:${config.porthttps}`);
 });
 
 module.exports = app;
