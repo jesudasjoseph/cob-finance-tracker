@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import { API_PATH } from '../Config';
 
 export class ExpenseProgress extends Component {
-	constructor(props){
-		super(props);
-	}
 	render() {
 		let expenses = parseFloat(this.props.expenses);
 		let revenue = parseFloat(this.props.revenue);
