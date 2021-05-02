@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../Config';
 
@@ -10,17 +12,28 @@ export class Tables extends Component {
 			userTable: [],
 			selectedRow: undefined
 		};
-		this.fetchAllUsers = this.fetchAllUsers.bind(this);
+		this.fetchUserData = this.fetchUserData.bind(this);
 		this.handleRowClick = this.handleRowClick.bind(this);
+		this.sortByOnidClickHandler = this.sortByOnidClickHandler.bind(this);
+		this.sortByBusinessNameClickHandler = this.sortByBusinessNameClickHandler.bind(this);
+		this.sortByFirstNameClickHandler = this.sortByFirstNameClickHandler.bind(this);
+		this.sortByLastNameClickHandler = this.sortByLastNameClickHandler.bind(this);
+		this.sortByRoleClickHandler = this.sortByRoleClickHandler.bind(this);
 		this.handleDeleteUserButton = this.handleDeleteUserButton.bind(this);
 	}
 
 	componentDidMount(){
-		this.fetchAllUsers();
+		this.fetchUserData('role');
 	}
 
-	fetchAllUsers(){
-		fetch(API_PATH + '/user?start=0&end=50', {
+	fetchUserData(sortParam){
+
+		let URL = API_PATH + '/user?start=0&end=50'
+		if (sortParam){
+			URL = URL + '&sort=' + sortParam;
+		}
+
+		fetch(URL, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -52,6 +65,22 @@ export class Tables extends Component {
 		}
 	}
 
+	sortByOnidClickHandler(){
+		this.fetchUserData('onid');
+	}
+	sortByBusinessNameClickHandler(){
+		this.fetchUserData('businessname');
+	}
+	sortByFirstNameClickHandler(){
+		this.fetchUserData('first');
+	}
+	sortByLastNameClickHandler(){
+		this.fetchUserData('last');
+	}
+	sortByRoleClickHandler(){
+		this.fetchUserData('role');
+	}
+
 	handleDeleteUserButton(){
 		fetch(API_PATH + '/user/byuid?uid=' + this.state.userTable[this.state.selectedRow].uid, {
 			mode: 'cors',
@@ -74,8 +103,19 @@ export class Tables extends Component {
 
 	render() {
 		return (
-			<div>
-				<Button onClick={this.handleDeleteUserButton} disabled={!(this.state.selectedRow+1)}>Delete User</Button>
+			<div style={{marginTop: '25px'}}>
+				<div>
+					<Nav style={{float: 'left'}}>
+						<NavDropdown title="Filter By">
+							<NavDropdown.Item onClick={this.sortByOnidClickHandler}>ONID</NavDropdown.Item>
+							<NavDropdown.Item onClick={this.sortByBusinessNameClickHandler}>Company Name</NavDropdown.Item>
+							<NavDropdown.Item onClick={this.sortByFirstNameClickHandler}>First Name</NavDropdown.Item>
+							<NavDropdown.Item onClick={this.sortByLastNameClickHandler}>Last Name</NavDropdown.Item>
+							<NavDropdown.Item onClick={this.sortByRoleClickHandler}>Role</NavDropdown.Item>
+						</NavDropdown>
+					</Nav>
+					<Button style={{float: 'right'}} onClick={this.handleDeleteUserButton} disabled={!(this.state.selectedRow+1)}>Delete User</Button>
+				</div>
 				<Table responsive="sm"
 					size="xl"
 					style={{paddingBottom:'40px' , paddingTop: '10px'}}
