@@ -1,11 +1,10 @@
 import React from 'react'
-import ProfitProgress from '../Layout/ProfitProgress';
-import ExpenseProgress from '../Layout/ExpenseProgress';
-import ExpenseTable from '../Layout/ExpenseTable';
-import BankProgress from '../Layout/BankProgress';
-import NavibarI from '../Layout/MyNavBarI';
+import ProfitProgress from '../../layout/ProfitProgress';
+import ExpenseProgress from '../../layout/ExpenseProgress';
+import ExpenseTable from '../../layout/ExpenseTable';
+import BankProgress from '../../layout/BankProgress';
 import Button from 'react-bootstrap/Button';
-import { API_PATH } from '../Config';
+import { API_PATH } from '../../Config';
 
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
@@ -135,22 +134,19 @@ export default class SnapshotGroup extends React.Component{
 	render () {
 		return (
 			<React.Fragment>
-				<NavibarI/>
-				<div className="container">
-					<h1 style={{textAlign:'center'}}>{this.state.business.name}</h1>
-					<h2> Profit Goals</h2>
-					<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
-					<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
-					<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
-					<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
-					<BankProgress/>
-					<div style={{textAlign: 'left', margin: '20px 0px 5px 0px'}}>
-						<Button style={{margin: '0px 5px'}} onClick={this.exportExpenseData}>Download Expense Data</Button>
-						<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
-						<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
-					</div>
-					<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.bid}}/>
+				<h1 style={{textAlign:'center'}}>{this.state.business.name}</h1>
+				<h2> Profit Goals</h2>
+				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
+				<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
+				<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
+				<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
+				<BankProgress/>
+				<div style={{textAlign: 'left', margin: '20px 0px 5px 0px'}}>
+					<Button style={{margin: '0px 5px'}} onClick={this.exportExpenseData}>Download Expense Data</Button>
+					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
+					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 				</div>
+				<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.bid}}/>
 			</React.Fragment>
 		)
 	}
