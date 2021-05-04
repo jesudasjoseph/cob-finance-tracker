@@ -5,16 +5,19 @@ import ExpenseTable from '../../layout/ExpenseTable';
 import BankProgress from '../../layout/BankProgress';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../../Config';
+import StudentTable from '../../layout/BuisnessStudents';
 
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
 			bid: this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length-1],
-			business: []
+			business: [],
+			students: []
 		};
 
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
+		//this.fetchBusinessStudents= this.fetchBusinessStudents.bind(this);
 
 		this.exportExpenseData = this.exportExpenseData.bind(this);
 		this.exportTransactionData = this.exportTransactionData.bind(this);
@@ -22,9 +25,10 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	componentDidMount(){
+		//this.fetchBusinessStudents();
 		this.fetchBusinessData();
 	}
-
+	
 	fetchBusinessData(){
 		fetch(API_PATH + '/business/bybid?bid=' + this.state.bid, {
 			mode: 'cors',
@@ -132,9 +136,11 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	render () {
+		//console.log(this.state.business)
 		return (
 			<React.Fragment>
 				<h1 style={{textAlign:'center'}}>{this.state.business.name}</h1>
+				<StudentTable dataFromParent = {{bid: this.state.bid}} Mystudents = {{students: this.state.students}}/>
 				<h2> Profit Goals</h2>
 				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
 				<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
@@ -147,6 +153,7 @@ export default class SnapshotGroup extends React.Component{
 					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 				</div>
 				<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.bid}}/>
+
 			</React.Fragment>
 		)
 	}
