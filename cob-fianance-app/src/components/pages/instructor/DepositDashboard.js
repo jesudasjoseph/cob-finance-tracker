@@ -1,5 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import AddDepositDialogButton from '../../layout/AddDepositDialogButton';
 import { API_PATH } from '../../Config';
 
 export default class DepositDashboard extends React.Component{
@@ -68,7 +69,39 @@ export default class DepositDashboard extends React.Component{
 	}
 
 	render () {
-		if (this.state.depositData != null && this.state.depositData.length ) {
+		if (this.state.selectedBid == null) {
+			return (
+				<React.Fragment>
+				<div style={{display: 'grid', gridTemplateColumns: '20% 70% 10%'}}>
+					<div style={{margin: '20px'}}>
+						<Table responsive="sm" size="xl" striped bordered hover variant="dark">
+							<thead>
+								<tr>
+									<th>Business</th>
+								</tr>
+							</thead>
+							<tbody>
+								{this.state.businessData.map((business, index) => {
+									const {name, bid} = business;
+									return (
+										<tr key={bid} style={{cursor: 'pointer'}} onClick={() => this.businessTableRowClickHandler(bid, name)}>
+											<td>{name}</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</Table>
+					</div>
+					<div style={{margin: '20px'}}>
+						<h4 style={{color: 'red'}}>Select a business!</h4>
+					</div>
+					<div style={{margin: '20px'}}>
+					</div>
+				</div>
+				</React.Fragment>
+			);
+		}
+		else if (this.state.depositData != null && this.state.depositData.length ) {
 			return (
 				<React.Fragment>
 					<div  style={{display: 'grid', gridTemplateColumns: '20% 70% 10%'}}>
@@ -117,8 +150,8 @@ export default class DepositDashboard extends React.Component{
 								</tbody>
 							</Table>
 						</div>
-						<div>
-
+						<div style={{margin: '20px'}}>
+							<AddDepositDialogButton bid={this.state.selectedBid} style={{margin: '20px'}}/>
 						</div>
 					</div>
 				</React.Fragment>
@@ -151,8 +184,8 @@ export default class DepositDashboard extends React.Component{
 						<h2>{this.state.businessName}</h2>
 						<h4 style={{color: 'red'}}>This business has no deposits!</h4>
 					</div>
-					<div>
-
+					<div style={{margin: '20px'}}>
+						<AddDepositDialogButton bid={this.state.selectedBid} style={{margin: '20px'}}/>
 					</div>
 				</div>
 				</React.Fragment>

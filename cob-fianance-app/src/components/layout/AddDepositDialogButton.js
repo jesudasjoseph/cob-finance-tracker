@@ -34,8 +34,8 @@ export class AddDepositDialogButton extends Component {
 	handle_submit(e) {
 		e.preventDefault();
 
-		const depositBody = {deposit:{val:this.state.val, description:this.state.description, uid:this.state.uid}}
-		fetch(API_PATH + '/business', {
+		const depositBody = {deposit:{bid:this.state.bid, val:this.state.val, description:this.state.description, uid:this.state.uid}}
+		fetch(API_PATH + '/deposit', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
