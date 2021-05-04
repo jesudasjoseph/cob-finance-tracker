@@ -1043,7 +1043,7 @@ async function getMultipleDeposits(asker, start, end, bid) {
 async function addDeposit(asker, deposit) {
 	const query = {
 		text: 'CALL insert_deposit($1, $2, $3, $4)',
-		values: [deposit.uid, deposit.bid, deposit.product, deposit.company]
+		values: [deposit.bid, deposit.uid, deposit.val, deposit.description]
 	}
 	const client = await pool.connect();
 
