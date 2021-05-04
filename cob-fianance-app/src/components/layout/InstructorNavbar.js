@@ -15,12 +15,7 @@ class InstructorNavbar extends Component {
 						<Nav.Link href="/instructor/usermanagement">User Management</Nav.Link>
 						</Nav>
 						<Nav>
-						<NavDropdown title="User Profile" id="collasible-nav-dropdown">
-						<NavDropdown.Item href="/instructor/profile"> My Profile </NavDropdown.Item>
-						<NavDropdown.Item href="/instructor/settings">Settings</NavDropdown.Item>
-						<NavDropdown.Divider />
-						<NavDropdown.Item onClick={localStorage.clear} href="/">Logout</NavDropdown.Item>
-						</NavDropdown>
+						<Nav.Link href="/" onClick={localStorage.clear}>Logout</Nav.Link>
 						<Nav.Link eventKey={2} href="profile">
 
 						</Nav.Link>
