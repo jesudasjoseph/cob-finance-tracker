@@ -1023,7 +1023,7 @@ async function getMultipleDeposits(asker, start, end, bid) {
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(404, []);
 				}
 				else {
 					return new data(200, res.rows);
