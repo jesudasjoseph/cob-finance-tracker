@@ -8,6 +8,7 @@ import UserInstructor from './components/pages/instructor/UserInstructor';
 import SettingsInstructor from './components/pages/instructor/SettingsInstuctor';
 import UserManagement from './components/pages/instructor/UserManagement';
 import SnapshotGroup from './components/pages/instructor/SnapshotGroup.js';
+import DepositDashboard from './components/pages/instructor/DepositDashboard.js';
 
 //Student Pages/Layouts
 import StudentNavbar from './components/layout/StudentNavbar';
@@ -36,6 +37,7 @@ class App extends Component{
 						<div className="container">
 							<Switch>
 								<Route exact path="/instructor/dashboard" component={DashboardI}/>
+								<Route exact path="/instructor/depositdashboard" component={DepositDashboard}/>
 								<Route exact path="/instructor/settings" component={SettingsInstructor} />
 								<Route exact path="/instructor/profile" component={UserInstructor} />
 								<Route exact path="/instructor/usermanagement" component={UserManagement} />
