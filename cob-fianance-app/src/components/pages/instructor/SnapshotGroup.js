@@ -5,7 +5,7 @@ import ExpenseTable from '../../layout/ExpenseTable';
 import BankProgress from '../../layout/BankProgress';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../../Config';
-import StudentTable from '../../layout/BuisnessStudents';
+import StudentTable from '../../layout/BusinessStudents';
 
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
