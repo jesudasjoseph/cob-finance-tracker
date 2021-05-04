@@ -11,8 +11,7 @@ export class AddDepositDialogButton extends Component {
 			modalShow: false,
 			val: '',
 			description: '',
-			uid: '',
-			bid: this.props.bid
+			uid: ''
 		};
 
 		this.open_dialog = this.open_dialog.bind(this);
@@ -34,7 +33,8 @@ export class AddDepositDialogButton extends Component {
 	handle_submit(e) {
 		e.preventDefault();
 
-		const depositBody = {deposit:{bid:this.state.bid, val:this.state.val, description:this.state.description, uid:this.state.uid}}
+		const depositBody = {deposit:{bid:this.props.bid, val:this.state.val, description:this.state.description, uid:this.state.uid}}
+		console.log(depositBody);
 		fetch(API_PATH + '/deposit', {
 			mode: 'cors',
 			method: 'POST',

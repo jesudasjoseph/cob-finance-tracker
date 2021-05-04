@@ -43,7 +43,7 @@ export default class DepositDashboard extends React.Component{
 			console.error('Error:', error);
 		});
 	}
-	fetchDepositData(bid, name){
+	fetchDepositData(bid){
 		fetch(API_PATH + '/deposit?start=0&end=50&bid=' + bid, {
 			mode: 'cors',
 			method: 'GET',
@@ -58,14 +58,16 @@ export default class DepositDashboard extends React.Component{
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({selectedBid:bid, businessName:name, depositData:data});
+			this.setState({depositData:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
 	}
 
 	businessTableRowClickHandler(bid, name){
-		this.fetchDepositData(bid, name);
+		this.setState({selectedBid:bid, businessName:name});
+		console.log(bid);
+		this.fetchDepositData(bid);
 	}
 
 	render () {
