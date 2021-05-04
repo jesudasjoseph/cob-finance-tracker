@@ -20,7 +20,7 @@ router.get('/asker', authorizor.authToken, async (req, res) => {
 
 router.get('/bybid', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	let {code, data} = await q.getMultipleUsersByBid(req.body.asker, req.body.query.bid);
+	let {code, data} = await q.getMultipleUsersByBid(req.body.asker, req.query.bid);
 	res.statusCode = code;
 	res.send(JSON.stringify(data));
 });
