@@ -21,6 +21,10 @@ export class AddDepositDialogButton extends Component {
 		this.fetchUsers = this.fetchUsers.bind(this);
 	}
 
+	componentDidMount(){
+		this.fetchUsers(this.props.bid);
+	}
+
 	componentDidUpdate(prevProps){
 		if (this.props.bid !== prevProps.bid){
 			this.fetchUsers(this.props.bid);
@@ -104,7 +108,15 @@ export class AddDepositDialogButton extends Component {
 									<Form.Control type="number" value={this.state.val}  onChange={(e) => this.setState({val: e.target.value})} />
 
 									<Form.Label>Student ONID</Form.Label>
-									<Form.Control type="text" value={this.state.uid} onChange={(e) => this.setState({uid: e.target.value})} />
+									<Form.Control as="select" value={this.state.uid} onChange={(e) => this.setState({uid: e.target.value})}>
+										{this.state.userList.map((user, index) => {
+											return(
+												<React.Fragment key={user.uid}>
+													<option>{user.uid}</option>
+												</React.Fragment>
+											);
+										})}
+									</Form.Control>
 
 									<Form.Label>Description</Form.Label>
 									<Form.Control type="text" value={this.state.description} onChange={(e) => this.setState({description: e.target.value})} />
