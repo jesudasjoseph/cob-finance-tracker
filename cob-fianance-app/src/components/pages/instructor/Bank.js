@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import AddDepositDialogButton from '../../layout/AddDepositDialogButton';
 import { API_PATH } from '../../Config';
 
-export default class DepositDashboard extends React.Component{
+export default class Bank extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {

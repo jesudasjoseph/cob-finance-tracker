@@ -12,7 +12,7 @@ class InstructorNavbar extends Component {
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="mr-auto">
 						<Nav.Link href="/instructor/dashboard">Dashboard</Nav.Link>
-						<Nav.Link href="/instructor/depositdashboard">Deposit Dashboard</Nav.Link>
+						<Nav.Link href="/instructor/bank">Bank</Nav.Link>
 						<Nav.Link href="/instructor/usermanagement">User Management</Nav.Link>
 						</Nav>
 						<Nav>
