@@ -8,16 +8,11 @@ export class ProfitGoalsForm extends Component {
 		super(props);
 		this.state = {
 			bid: '',
-			saveEnabled: false,
-			saveText: 'saved',
-			profit_goal_current: 0,
-			stretch_profit_goal_current: 0,
 			profit_goal: 0,
 			stretch_profit_goal: 0
 		};
 
 		this.handle_submit = this.handle_submit.bind(this);
-		this.renderSaveButton = this.renderSaveButton.bind(this);
 		this.handleProfitGoalChange = this.handleProfitGoalChange.bind(this);
 		this.handleStretchProfitGoalChange = this.handleStretchProfitGoalChange.bind(this);
 	}
@@ -38,8 +33,6 @@ export class ProfitGoalsForm extends Component {
 		}).then(data => {
 			console.log('Success:', data);
 			this.setState({
-				profit_goal_current:data[0].profit_goal,
-				stretch_profit_goal_current:data[0].stretch_profit_goal,
 				profit_goal:data[0].profit_goal,
 				stretch_profit_goal:data[0].stretch_profit_goal,
 				bid:data[0].bid
@@ -80,10 +73,7 @@ export class ProfitGoalsForm extends Component {
 			body: JSON.stringify(body)
 		}).then(response => {
 			console.log(response);
-			this.setState({profit_goal_current:this.state.profit_goal,
-				stretch_profit_goal_current:this.state.stretch_profit_goal,
-				saveEnabled: false,
-				saveText: 'saved'
+			this.setState({profit_goal_current:this.state.profit_goal
 			});
 		}).catch((error) => {
 			console.error('Error:', error);
@@ -91,31 +81,12 @@ export class ProfitGoalsForm extends Component {
 
 	}
 
-	renderSaveButton() {
-		if (this.state.saveEnabled === true)
-			return (
-				<Button variant="primary" type="submit">{this.state.saveText}</Button>
-			);
-		else
-			return (
-				<Button variant="primary" type="submit" disabled>{this.state.saveText}</Button>
-			);
-	}
-
 	handleProfitGoalChange(e) {
 		this.setState({profit_goal: e.target.value});
-		if (this.state.profit_goal !== this.state.profit_goal_current) {
-			this.setState({saveEnabled: true,
-					saveText: 'save'
-				});
-		}
 	}
 
 	handleStretchProfitGoalChange(e) {
 		this.setState({stretch_profit_goal: e.target.value});
-		if (this.state.stretch_profit_goal !== this.state.stretch_profit_goal_current) {
-			this.setState({saveEnabled: true});
-		}
 	}
 
 	render() {
@@ -128,7 +99,7 @@ export class ProfitGoalsForm extends Component {
 						<Form.Label>Profit Stretch Goal</Form.Label>
 						<Form.Control type="number" value={this.state.stretch_profit_goal} onChange={this.handleStretchProfitGoalChange} />
 					</Form.Group>
-					<this.renderSaveButton />
+					<Button variant="primary" type="submit">Save</Button>
 				</Form>
 			</>
 		)
