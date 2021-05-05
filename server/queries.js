@@ -128,7 +128,7 @@ async function getMultipleUsersByBid(asker, bid) {
 				return new data(403);
 		}
 		if (!res.rows.length) {
-			return new data(404);
+			return new data(404, []);
 		}
 		else {
 			return new data(200, res.rows);
