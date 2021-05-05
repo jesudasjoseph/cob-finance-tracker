@@ -95,7 +95,7 @@ export default class Bank extends React.Component{
 						</Table>
 					</div>
 					<div style={{margin: '20px'}}>
-						<h4 style={{color: 'red'}}>Select a business!</h4>
+						<h4 style={{color: 'red'}}>Select a company!</h4>
 					</div>
 					<div style={{margin: '20px'}}>
 					</div>
@@ -167,7 +167,7 @@ export default class Bank extends React.Component{
 						<Table responsive="sm" size="xl" striped bordered hover variant="dark">
 							<thead>
 								<tr>
-									<th>Business</th>
+									<th>Company</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -184,7 +184,7 @@ export default class Bank extends React.Component{
 					</div>
 					<div style={{margin: '20px'}}>
 						<h2>{this.state.businessName}</h2>
-						<h4 style={{color: 'red'}}>This business has no deposits!</h4>
+						<h4 style={{color: 'red'}}>This company has no deposits!</h4>
 					</div>
 					<div style={{margin: '20px'}}>
 						<AddDepositDialogButton bid={this.state.selectedBid} style={{margin: '20px'}}/>
