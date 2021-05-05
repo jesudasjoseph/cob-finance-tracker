@@ -18,6 +18,7 @@ import Transactions from './components/pages/student/Transactions';
 import Page_Settings from './components/pages/student/Settings';
 
 //Common Pages
+import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Page404 from './components/pages/404';
 
@@ -29,8 +30,9 @@ class App extends Component{
 		return (
 			<Router forceRefresh={false}>
 				<Switch>
-					<Route exact path="/" component={Login} />
-					<Route path="/home" component={Login} />
+					<Route exact path="/" component={Home}/>
+					<Route path="/home" component={Home}/>
+					<Route path="/login" component={Login}/>
 
 					<Route path="/instructor">
 						<InstructorNavbar/>
