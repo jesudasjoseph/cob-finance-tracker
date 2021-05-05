@@ -20,8 +20,8 @@ export class ExpenseProgress extends Component {
 
 		return(
 			<>
-				<ProgressBar  style= {{height:'50px'}} variant="danger" now={expense_percent} label={`Expenses: $${expenses}`} />
-				<ProgressBar style= {{height:'50px'}} variant="success" now={revenue_percent} label={`Revenue: $${revenue}`}/>
+				<ProgressBar style={{fontSize: '1em', height: '3em'}} variant="danger" now={expense_percent} label={`Expenses: $${expenses}`} />
+				<ProgressBar style={{fontSize: '1em', height: '3em'}} variant="success" now={revenue_percent} label={`Revenue: $${revenue}`}/>
 			</>
 		)
 	}
