@@ -79,7 +79,7 @@ export default class Bank extends React.Component{
 						<Table responsive="sm" size="xl" striped bordered hover variant="dark">
 							<thead>
 								<tr>
-									<th>Business</th>
+									<th>Company</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -111,7 +111,7 @@ export default class Bank extends React.Component{
 							<Table responsive="sm" size="xl" striped bordered hover variant="dark">
 								<thead>
 									<tr>
-										<th>Business</th>
+										<th>Company</th>
 									</tr>
 								</thead>
 								<tbody>
