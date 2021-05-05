@@ -11,12 +11,41 @@ export class AddDepositDialogButton extends Component {
 			modalShow: false,
 			val: '',
 			description: '',
-			uid: ''
+			uid: '',
+			userList: []
 		};
 
 		this.open_dialog = this.open_dialog.bind(this);
 		this.close_dialog = this.close_dialog.bind(this);
 		this.handle_submit = this.handle_submit.bind(this);
+		this.fetchUsers = this.fetchUsers.bind(this);
+	}
+
+	componentDidUpdate(prevProps){
+		if (this.props.bid !== prevProps.bid){
+			this.fetchUsers(this.props.bid);
+		}
+	}
+
+	fetchUsers(bid){
+		fetch(API_PATH + '/user/bybid?bid=' + bid, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+			this.setState({userList:data});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 	}
 
 	open_dialog() {
