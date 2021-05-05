@@ -2,17 +2,16 @@ import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export class BankProgress extends Component {
-    render() {
-        return (
-        <div>
-            <ProgressBar style= {{height:'50px'}} variant="dark" now={40} label={'Total Revenue'} />
-            <ProgressBar style= {{height:'50px'}}>
-                <ProgressBar style= {{height:'50px'}} variant="blue" now={15} key={1} label={'Sqaure'} />
-                <ProgressBar style= {{height:'50px'}} variant="success" now={60} key={2} label={'Bank'}/>
-                </ProgressBar>
-        </div>
-        )
-    }
+	render() {
+		return (
+			<React.Fragment>
+				<ProgressBar style={{fontSize: '1em', height: '1.4em'}} variant="dark" now={100} label={`Total Revenue = $${this.props.revenue}`} />
+				<ProgressBar style={{fontSize: '1em', height: '3em'}}>
+					<ProgressBar variant="blue" now={this.props.square/this.props.revenue*100} key={1} label={`Square = $${this.props.square}`} />
+					<ProgressBar variant="success" now={this.props.bank/this.props.revenue*100} key={2} label={`Bank = $${this.props.bank}`}/>
+				</ProgressBar>
+			</React.Fragment>
+		)
+	}
 }
-
 export default BankProgress
