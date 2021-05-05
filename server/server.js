@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const https = require('https');
+const http = require('http');
 const config = require('./config');
 const path = require('path');
 const passport = require('passport');
@@ -17,6 +18,12 @@ let options = {
   key: key,
   cert: cert
 };
+
+const httpServer = express();
+
+httpServer.get('*', (req, res) => {
+	res.redirect('https://' + req.hostname + req.url);
+});
 
 const app = express();
 
@@ -39,10 +46,6 @@ app.use(cors()); //Use cors middleware
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
 
-//ping
-app.get('/ping', (req, res) => {
-  return res.send('pong')
-})
 
 //SAML Strategy config
 //This also checks if user exists.
@@ -63,7 +66,7 @@ passport.use(new SamlStrategy({
 		}
 	}));
 
-app.get('/login',
+app.get('/saml/auth',
 	passport.authenticate('saml', { failureRedirect: '/saml/fail', failureFlash: true, session: false }),
 	function(req, res) {
 		res.redirect('/');
@@ -126,10 +129,14 @@ app.get(['/', '/*'], (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
+let serverhttps = https.createServer(options, app);
 
-let server = https.createServer(options, app);
-server.listen(config.port, () => {
-	console.log(`Listening at https://localhost:${config.port}`);
+httpServer.listen(config.porthttp, () => {
+	console.log(`Listening at http://localhost:${config.porthttp}`);
+});
+
+serverhttps.listen(config.porthttps, () => {
+	console.log(`Listening at https://localhost:${config.porthttps}`);
 });
 
 module.exports = app;

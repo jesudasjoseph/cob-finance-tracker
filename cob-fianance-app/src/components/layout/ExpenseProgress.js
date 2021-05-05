@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import { API_PATH } from '../Config';
 
 export class ExpenseProgress extends Component {
-	constructor(props){
-		super(props);
-	}
 	render() {
 		let expenses = parseFloat(this.props.expenses);
 		let revenue = parseFloat(this.props.revenue);
@@ -24,8 +20,8 @@ export class ExpenseProgress extends Component {
 
 		return(
 			<>
-				<ProgressBar  style= {{height:'50px'}} variant="danger" now={expense_percent} label={`Expenses: $${expenses}`} />
-				<ProgressBar style= {{height:'50px'}} variant="success" now={revenue_percent} label={`Revenue: $${revenue}`}/>
+				<ProgressBar style={{fontSize: '1em', height: '3em'}} variant="danger" now={expense_percent} label={`Expenses: $${expenses}`} />
+				<ProgressBar style={{fontSize: '1em', height: '3em'}} variant="success" now={revenue_percent} label={`Revenue: $${revenue}`}/>
 			</>
 		)
 	}

@@ -103,17 +103,92 @@ async function getUserByUid(asker, uid) {
 async function getUserByAsker(asker) {
 	return new data(200, {uid:asker.uid});
 }
-async function getMultipleUsers(asker, start, end) {
+//Permissions Instructor, Admin
+async function getMultipleUsersByBid(asker, bid) {
 	const query = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT users.first, users.last, users.uid, users.role, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE business.bid=$1 ORDER BY users.uid',
+		values: [bid]
+	}
+
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch (asker.role){
+			case 0:
+				return new data(403);
+				break;
+			case 1:
+				res = await client.query(query);
+				break;
+			case 2:
+				res = await client.query(query);
+				break;
+			default:
+				return new data(403);
+		}
+		if (!res.rows.length) {
+			return new data(404, []);
+		}
+		else {
+			return new data(200, res.rows);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+}
+async function getMultipleUsers(asker, start, end, sort) {
+	const querySortByOnid = {
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.uid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end]
 	}
+	const querySortByBusinessName = {
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY business.name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end]
+	}
+	const querySortByLastName = {
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end]
+	}
+	const querySortByFirstName = {
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.first OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end]
+	}
+	const querySortByRole = {
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.role, users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end]
+	}
+
 	const client = await pool.connect();
 	let res;
 
 	try {
 		if (asker.role >= 1){
-			res = await client.query(query);
+			switch (sort){
+				case 'onid':
+					res = await client.query(querySortByOnid);
+					break;
+				case 'businessname':
+					res = await client.query(querySortByBusinessName);
+					break;
+				case 'first':
+					res = await client.query(querySortByFirstName);
+					break;
+				case 'last':
+					res = await client.query(querySortByLastName);
+					break;
+				case 'role':
+					res = await client.query(querySortByRole);
+					break;
+				default:
+					res = await client.query(querySortByRole);
+					break;
+			}
 			if (!res.rows.length) {
 				return new data(404);
 			}
@@ -934,7 +1009,7 @@ async function deleteExpenseByEid(asker, eid, bid) {
 //Permitted - Admin, Instructor
 async function getMultipleDeposits(asker, start, end, bid) {
 	const query = {
-		text: 'SELECT * FROM deposits WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		text: 'SELECT * FROM deposits WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [bid, start, end]
 	}
 	const client = await pool.connect();
@@ -948,7 +1023,7 @@ async function getMultipleDeposits(asker, start, end, bid) {
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(404, []);
 				}
 				else {
 					return new data(200, res.rows);
@@ -968,7 +1043,7 @@ async function getMultipleDeposits(asker, start, end, bid) {
 async function addDeposit(asker, deposit) {
 	const query = {
 		text: 'CALL insert_deposit($1, $2, $3, $4)',
-		values: [deposit.uid, deposit.bid, deposit.product, deposit.company]
+		values: [deposit.bid, deposit.uid, deposit.val, deposit.description]
 	}
 	const client = await pool.connect();
 
@@ -1157,6 +1232,7 @@ exports.getRole = getRole;
 exports.createUser = createUser;
 exports.getUserByUid = getUserByUid;
 exports.getUserByAsker = getUserByAsker;
+exports.getMultipleUsersByBid = getMultipleUsersByBid;
 exports.getMultipleUsers = getMultipleUsers;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
