@@ -128,7 +128,7 @@ async function getMultipleUsersByBid(asker, bid) {
 				return new data(403);
 		}
 		if (!res.rows.length) {
-			return new data(404);
+			return new data(404, []);
 		}
 		else {
 			return new data(200, res.rows);
@@ -1009,7 +1009,7 @@ async function deleteExpenseByEid(asker, eid, bid) {
 //Permitted - Admin, Instructor
 async function getMultipleDeposits(asker, start, end, bid) {
 	const query = {
-		text: 'SELECT * FROM deposits WHERE bid=$1 OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		text: 'SELECT * FROM deposits WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [bid, start, end]
 	}
 	const client = await pool.connect();
@@ -1023,7 +1023,7 @@ async function getMultipleDeposits(asker, start, end, bid) {
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(404, []);
 				}
 				else {
 					return new data(200, res.rows);
@@ -1043,7 +1043,7 @@ async function getMultipleDeposits(asker, start, end, bid) {
 async function addDeposit(asker, deposit) {
 	const query = {
 		text: 'CALL insert_deposit($1, $2, $3, $4)',
-		values: [deposit.uid, deposit.bid, deposit.product, deposit.company]
+		values: [deposit.bid, deposit.uid, deposit.val, deposit.description]
 	}
 	const client = await pool.connect();
 
