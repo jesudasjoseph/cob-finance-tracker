@@ -19,12 +19,7 @@ let options = {
 const httpServer = express();
 
 httpServer.get('*', (req, res) => {
-	res.redirect('https://' + res.headers.host + req.url);
-});
-
-let serverhttp = http.createServer((req, res) => {
-	res.setHeader('Content-Type', 'text/html');
-	res.end(`<!DOCTYPE html><html lang="en"><meta charset="utf-8"><title>No HTTP!</title><p>HTTP is not a secure protocal and we do not support it, please use the HTTPS version of this site!</p><a href='https://71.193.191.23'>Click here to redirect!</a>`);
+	res.redirect('https://' + req.hostname + req.url);
 });
 
 const app = express();
