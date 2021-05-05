@@ -17,6 +17,8 @@ export default class Bank extends React.Component{
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
 
 		this.businessTableRowClickHandler = this.businessTableRowClickHandler.bind(this);
+
+		this.onDepositAdd = this.onDepositAdd.bind(this);
 	}
 
 	componentDidMount(){
@@ -68,6 +70,10 @@ export default class Bank extends React.Component{
 		this.setState({selectedBid:bid, businessName:name});
 		console.log(bid);
 		this.fetchDepositData(bid);
+	}
+
+	onDepositAdd(){
+		this.fetchDepositData(this.state.selectedBid);
 	}
 
 	render () {
@@ -153,7 +159,7 @@ export default class Bank extends React.Component{
 							</Table>
 						</div>
 						<div style={{margin: '20px'}}>
-							<AddDepositDialogButton bid={this.state.selectedBid} style={{margin: '20px'}}/>
+							<AddDepositDialogButton onSave={this.onDepositAdd} bid={this.state.selectedBid} style={{margin: '20px'}}/>
 						</div>
 					</div>
 				</React.Fragment>

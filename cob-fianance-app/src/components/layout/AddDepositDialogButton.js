@@ -46,7 +46,7 @@ export class AddDepositDialogButton extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({userList:data});
+			this.setState({userList:data, uid:data[0].uid});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -78,6 +78,8 @@ export class AddDepositDialogButton extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			},
 			body: JSON.stringify(depositBody)
+		}).then((response) => {
+			this.props.onSave();
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -112,7 +114,7 @@ export class AddDepositDialogButton extends Component {
 										{this.state.userList.map((user, index) => {
 											return(
 												<React.Fragment key={user.uid}>
-													<option>{user.uid}</option>
+													<option value={user.uid}>{user.uid}</option>
 												</React.Fragment>
 											);
 										})}
