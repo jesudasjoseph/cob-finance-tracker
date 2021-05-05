@@ -6,7 +6,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 class StudentNavbar extends Component {
 	render(){
 		return(
-			<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+			<Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
 				<Navbar.Brand href="home">College of Buisness App</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
