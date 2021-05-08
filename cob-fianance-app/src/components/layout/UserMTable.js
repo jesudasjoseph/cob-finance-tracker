@@ -3,6 +3,8 @@ import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
+import AddStudentDialogButton from './AddStudentDialogButton.js';
+import ImportStudentButton from './ImportStudentButton.js'
 import { API_PATH } from '../Config';
 
 export class Tables extends Component {
@@ -119,6 +121,8 @@ export class Tables extends Component {
 							<NavDropdown.Item onClick={this.sortByRoleClickHandler}>Role</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
+					<AddStudentDialogButton style={{float:'right', margin: '5px'}}/>
+					<ImportStudentButton style={{float:'right', margin: '5px'}}/>
 				</div>
 				<Table responsive="sm"
 					size="xl"
