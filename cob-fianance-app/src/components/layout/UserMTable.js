@@ -67,18 +67,23 @@ export class Tables extends Component {
 
 	sortByOnidClickHandler(){
 		this.fetchUserData('onid');
+		this.setState({selectedRow:undefined});
 	}
 	sortByBusinessNameClickHandler(){
 		this.fetchUserData('businessname');
+		this.setState({selectedRow:undefined});
 	}
 	sortByFirstNameClickHandler(){
 		this.fetchUserData('first');
+		this.setState({selectedRow:undefined});
 	}
 	sortByLastNameClickHandler(){
 		this.fetchUserData('last');
+		this.setState({selectedRow:undefined});
 	}
 	sortByRoleClickHandler(){
 		this.fetchUserData('role');
+		this.setState({selectedRow:undefined});
 	}
 
 	handleDeleteUserButton(uid){
@@ -106,7 +111,7 @@ export class Tables extends Component {
 			<div style={{marginTop: '25px'}}>
 				<div>
 					<Nav style={{float: 'left'}}>
-						<NavDropdown title="Filter By">
+						<NavDropdown title="Sort By">
 							<NavDropdown.Item onClick={this.sortByOnidClickHandler}>ONID</NavDropdown.Item>
 							<NavDropdown.Item onClick={this.sortByBusinessNameClickHandler}>Company Name</NavDropdown.Item>
 							<NavDropdown.Item onClick={this.sortByFirstNameClickHandler}>First Name</NavDropdown.Item>
@@ -114,7 +119,6 @@ export class Tables extends Component {
 							<NavDropdown.Item onClick={this.sortByRoleClickHandler}>Role</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
-					<Button style={{float: 'right'}} onClick={this.handleDeleteUserButton} disabled={!(this.state.selectedRow+1)}>Delete User</Button>
 				</div>
 				<Table responsive="sm"
 					size="xl"
