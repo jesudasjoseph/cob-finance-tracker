@@ -81,8 +81,8 @@ export class Tables extends Component {
 		this.fetchUserData('role');
 	}
 
-	handleDeleteUserButton(){
-		fetch(API_PATH + '/user/byuid?uid=' + this.state.userTable[this.state.selectedRow].uid, {
+	handleDeleteUserButton(uid){
+		fetch(API_PATH + '/user/byuid?uid=' + uid, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
@@ -119,11 +119,11 @@ export class Tables extends Component {
 				<Table responsive="sm"
 					size="xl"
 					style={{paddingBottom:'40px' , paddingTop: '10px'}}
-					striped bordered hover variant="dark">
+					bordered hover variant="dark">
 					<thead>
-						<tr>
+						<tr key="head">
 							<th>Onid</th>
-							<th>Group Name</th>
+							<th>Company</th>
 							<th>First Name </th>
 							<th>Last Name</th>
 							<th>Section</th>
@@ -146,17 +146,24 @@ export class Tables extends Component {
 
 							if (index === this.state.selectedRow){
 								return (
-									<tr
-										key={uid}
-										onClick={() => this.handleRowClick(index)}
-										style={{cursor: 'pointer', color:'grey', outlineStyle:'solid', outlineWidth:'2px', outlineColor:'black'}}>
-										<td>{uid}</td>
-										<td>({bid}) {name}</td>
-										<td>{first}</td>
-										<td>{last}</td>
-										<td>{section}</td>
-										<td>{roleType}</td>
-									</tr>
+									<React.Fragment key={uid}>
+										<tr key={uid}
+											onClick={() => this.handleRowClick(index)}
+											style={{cursor: 'pointer', border: '2px solid white', borderTop: '3px solid white', borderBottom: '0px solid'}}>
+											<td>{uid}</td>
+											<td>({bid}) {name}</td>
+											<td>{first}</td>
+											<td>{last}</td>
+											<td>{section}</td>
+											<td>{roleType}</td>
+										</tr>
+										<tr key={uid+1} style={{color:'white', border: '2px solid', borderTop: '0px'}}>
+											<td colSpan="6">
+												<Button style={{float:'right', margin: '8px'}} onClick={() => this.handleDeleteUserButton(uid)}>Delete</Button>
+												<Button style={{float:'right', margin: '8px'}}>Change Company</Button>
+											</td>
+										</tr>
+									</React.Fragment>
 								);
 							}
 							else{
