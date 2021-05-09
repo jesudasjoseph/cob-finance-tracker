@@ -362,13 +362,13 @@ async function addUserToBusiness(asker, uid, bid) {
 
 	const client = await pool.connect();
 	try {
-		let {code, data} = await getRole({uid: uid});
+		let codeData = await getRole({uid: uid});
 		switch(asker.role){
 			case roleType.admin:
-				if (code !== 200)
+				if (codeData.code !== 200)
 					return new data(404);
 
-				if (parseInt(data) === 0)
+				if (parseInt(codeData.data) === 0)
 					await client.query(deleteQuery);
 
 				await client.query(query);
@@ -376,10 +376,10 @@ async function addUserToBusiness(asker, uid, bid) {
 
 				break;
 			case roleType.instructor:
-				if (code !== 200)
+				if (codeData.code !== 200)
 					return new data(404);
 
-				if (parseInt(data) === 0)
+				if (parseInt(codeData.data) === 0)
 					await client.query(deleteQuery);
 
 				await client.query(query);
