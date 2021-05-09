@@ -368,7 +368,7 @@ async function addUserToBusiness(asker, uid, bid) {
 				if (code !== 200)
 					return new data(404);
 
-				if (parseInt(role) === 0)
+				if (parseInt(data) === 0)
 					await client.query(deleteQuery);
 
 				await client.query(query);
@@ -379,7 +379,7 @@ async function addUserToBusiness(asker, uid, bid) {
 				if (code !== 200)
 					return new data(404);
 
-				if (parseInt(role) === 0)
+				if (parseInt(data) === 0)
 					await client.query(deleteQuery);
 
 				await client.query(query);
