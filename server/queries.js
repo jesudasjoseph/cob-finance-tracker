@@ -362,7 +362,7 @@ async function addUserToBusiness(asker, uid, bid) {
 
 	const client = await pool.connect();
 	try {
-		let {code, role} = await getRole({uid: uid});
+		let {code, data} = await getRole({uid: uid});
 		switch(asker.role){
 			case roleType.admin:
 				if (code !== 200)
