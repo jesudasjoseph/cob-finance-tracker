@@ -4,7 +4,8 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
 import AddStudentDialogButton from './AddStudentDialogButton.js';
-import ImportStudentButton from './ImportStudentButton.js'
+import AddStudentToBusinessDialogButton from './AddStudentToBusinessDialogButton.js';
+import ImportStudentButton from './ImportStudentButton.js';
 import { API_PATH } from '../Config';
 
 export class Tables extends Component {
@@ -168,7 +169,7 @@ export class Tables extends Component {
 										<tr key={uid+1} style={{color:'white', border: '2px solid', borderTop: '0px'}}>
 											<td colSpan="6">
 												<Button style={{float:'right', margin: '8px'}} onClick={() => this.handleDeleteUserButton(uid)}>Delete</Button>
-												<Button style={{float:'right', margin: '8px'}}>Change Company</Button>
+												<AddStudentToBusinessDialogButton uid={uid} bid={bid} style={{float:'right', margin: '8px'}} onSave={this.fetchUserData}/>
 											</td>
 										</tr>
 									</React.Fragment>
