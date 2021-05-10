@@ -73,14 +73,14 @@ export class ExpenseTable extends Component {
 					striped bordered hover variant="dark">
 					<thead>
 						<tr>
-							<th>Quantity</th>
+							<th>Date</th>
 							<th>Product</th>
 							<th>Company</th>
-							<th>Date</th>
 							<th>Payment Method</th>
+							<th>Quantity</th>
 							<th>Price Per Unit</th>
-							<th>Justification</th>
 							<th>Total</th>
+							<th>Justification</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -88,14 +88,14 @@ export class ExpenseTable extends Component {
 							const {quantity,product,company, date, payment_method, price_per_unit, justification, total,eid} = expense;
 							return (
 								<tr key={eid}>
-									<td> {quantity}</td>
+									<td> {date.split('T')[0]} </td>
 									<td> {product} </td>
 									<td>{company}</td>
-									<td> {date.split('T')[0]} </td>
 									<td> {payment_method} </td>
+									<td> {quantity}</td>
 									<td> {price_per_unit} </td>
-									<td> {justification} </td>
 									<td> {total} </td>
+									<td> {justification} </td>
 								</tr>
 							);
 						})}
