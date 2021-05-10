@@ -3,6 +3,9 @@ import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
+import AddStudentDialogButton from './AddStudentDialogButton.js';
+import AddStudentToBusinessDialogButton from './AddStudentToBusinessDialogButton.js';
+import ImportStudentButton from './ImportStudentButton.js';
 import { API_PATH } from '../Config';
 
 export class Tables extends Component {
@@ -67,22 +70,27 @@ export class Tables extends Component {
 
 	sortByOnidClickHandler(){
 		this.fetchUserData('onid');
+		this.setState({selectedRow:undefined});
 	}
 	sortByBusinessNameClickHandler(){
 		this.fetchUserData('businessname');
+		this.setState({selectedRow:undefined});
 	}
 	sortByFirstNameClickHandler(){
 		this.fetchUserData('first');
+		this.setState({selectedRow:undefined});
 	}
 	sortByLastNameClickHandler(){
 		this.fetchUserData('last');
+		this.setState({selectedRow:undefined});
 	}
 	sortByRoleClickHandler(){
 		this.fetchUserData('role');
+		this.setState({selectedRow:undefined});
 	}
 
-	handleDeleteUserButton(){
-		fetch(API_PATH + '/user/byuid?uid=' + this.state.userTable[this.state.selectedRow].uid, {
+	handleDeleteUserButton(uid){
+		fetch(API_PATH + '/user/byuid?uid=' + uid, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
@@ -106,7 +114,7 @@ export class Tables extends Component {
 			<div style={{marginTop: '25px'}}>
 				<div>
 					<Nav style={{float: 'left'}}>
-						<NavDropdown title="Filter By">
+						<NavDropdown title="Sort By">
 							<NavDropdown.Item onClick={this.sortByOnidClickHandler}>ONID</NavDropdown.Item>
 							<NavDropdown.Item onClick={this.sortByBusinessNameClickHandler}>Company Name</NavDropdown.Item>
 							<NavDropdown.Item onClick={this.sortByFirstNameClickHandler}>First Name</NavDropdown.Item>
@@ -114,16 +122,17 @@ export class Tables extends Component {
 							<NavDropdown.Item onClick={this.sortByRoleClickHandler}>Role</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
-					<Button style={{float: 'right'}} onClick={this.handleDeleteUserButton} disabled={!(this.state.selectedRow+1)}>Delete User</Button>
+					<AddStudentDialogButton style={{float:'right', margin: '5px'}}/>
+					<ImportStudentButton style={{float:'right', margin: '5px'}}/>
 				</div>
 				<Table responsive="sm"
 					size="xl"
 					style={{paddingBottom:'40px' , paddingTop: '10px'}}
-					striped bordered hover variant="dark">
+					bordered hover variant="dark">
 					<thead>
-						<tr>
+						<tr key="head">
 							<th>Onid</th>
-							<th>Group Name</th>
+							<th>Company</th>
 							<th>First Name </th>
 							<th>Last Name</th>
 							<th>Section</th>
@@ -146,17 +155,24 @@ export class Tables extends Component {
 
 							if (index === this.state.selectedRow){
 								return (
-									<tr
-										key={uid}
-										onClick={() => this.handleRowClick(index)}
-										style={{cursor: 'pointer', color:'grey', outlineStyle:'solid', outlineWidth:'2px', outlineColor:'black'}}>
-										<td>{uid}</td>
-										<td>({bid}) {name}</td>
-										<td>{first}</td>
-										<td>{last}</td>
-										<td>{section}</td>
-										<td>{roleType}</td>
-									</tr>
+									<React.Fragment key={uid}>
+										<tr key={uid}
+											onClick={() => this.handleRowClick(index)}
+											style={{cursor: 'pointer', border: '2px solid white', borderTop: '3px solid white', borderBottom: '0px solid'}}>
+											<td>{uid}</td>
+											<td>({bid}) {name}</td>
+											<td>{first}</td>
+											<td>{last}</td>
+											<td>{section}</td>
+											<td>{roleType}</td>
+										</tr>
+										<tr key={uid+1} style={{color:'white', border: '2px solid', borderTop: '0px'}}>
+											<td colSpan="6">
+												<Button style={{float:'right', margin: '8px'}} onClick={() => this.handleDeleteUserButton(uid)}>Delete</Button>
+												<AddStudentToBusinessDialogButton uid={uid} bid={bid} style={{float:'right', margin: '8px'}} onSave={this.fetchUserData}/>
+											</td>
+										</tr>
+									</React.Fragment>
 								);
 							}
 							else{
