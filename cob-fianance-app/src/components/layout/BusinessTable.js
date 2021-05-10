@@ -176,19 +176,19 @@ export class BusinessTable extends Component {
 										profit_goal,
 										stretch_profit_goal,
 										square_total} = business;
-										
+
 							return (
 								<tr key={bid}>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{section}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{instructor}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>{product_count}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${deposit_total}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${square_total}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${transaction_total}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${expense_total}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}>${profit}</td>
-									<td onClick={() => window.location+=("/"+bid)} style={{cursor: 'pointer'}}><ProfitProgress profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{section}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{instructor}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{product_count}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${deposit_total}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${square_total}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${transaction_total}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${expense_total}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${profit}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}><ProfitProgress profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
 									<td><Button onClick={() => this.onDeleteClick(bid,index)}>Delete</Button></td>
 								</tr>
 							);
