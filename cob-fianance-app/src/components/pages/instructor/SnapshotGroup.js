@@ -10,14 +10,16 @@ import StudentTable from '../../layout/BusinessStudents';
 export default class SnapshotGroup extends React.Component{
 	constructor(props){
 		super(props);
+
+		let bid = parseInt(this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length-1]);
+
 		this.state = {
-			bid: this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length-1],
+			bid: bid,
 			business: [],
 			students: []
 		};
 
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
-		//this.fetchBusinessStudents= this.fetchBusinessStudents.bind(this);
 
 		this.exportExpenseData = this.exportExpenseData.bind(this);
 		this.exportTransactionData = this.exportTransactionData.bind(this);
@@ -25,10 +27,12 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	componentDidMount(){
-		//this.fetchBusinessStudents();
-		this.fetchBusinessData();
+		if (isNaN(this.state.bid))
+			this.props.history.push('/404');
+		else
+			this.fetchBusinessData();
 	}
-	
+
 	fetchBusinessData(){
 		fetch(API_PATH + '/business/bybid?bid=' + this.state.bid, {
 			mode: 'cors',
@@ -136,7 +140,6 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	render () {
-		//console.log(this.state.business)
 		return (
 			<React.Fragment>
 				<h1 style={{textAlign:'center'}}>{this.state.business.name}</h1>
