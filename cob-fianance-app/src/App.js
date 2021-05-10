@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router ,Switch, Route} from 'react-router-dom'
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
 //Insructor Pages/Layouts
 import InstructorNavbar from './components/layout/InstructorNavbar';
@@ -28,7 +28,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class App extends Component{
 	render(){
 		return (
-			<Router forceRefresh={false}>
+			<BrowserRouter>
 				<Switch>
 					<Route exact path="/" component={Home}/>
 					<Route path="/home" component={Home}/>
@@ -65,7 +65,7 @@ class App extends Component{
 
 					<Route path="*" component={Page404}/>
 				</Switch>
-			</Router>
+			</BrowserRouter>
 		);
 	}
 }

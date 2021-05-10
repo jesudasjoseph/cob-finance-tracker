@@ -94,9 +94,9 @@ export class ProfitGoalsForm extends Component {
 			<>
 				<Form onSubmit={this.handle_submit}>
 					<Form.Group>
-						<Form.Label>Profit Goal</Form.Label>
+						<Form.Label>Minimum Profit Goal</Form.Label>
 						<Form.Control type="number" value={this.state.profit_goal}  onChange={this.handleProfitGoalChange} />
-						<Form.Label>Profit Stretch Goal</Form.Label>
+						<Form.Label>Stretch Profit Goal</Form.Label>
 						<Form.Control type="number" value={this.state.stretch_profit_goal} onChange={this.handleStretchProfitGoalChange} />
 					</Form.Group>
 					<Button variant="primary" type="submit">Save</Button>
