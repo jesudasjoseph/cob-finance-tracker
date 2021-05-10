@@ -80,27 +80,9 @@ app.post('/saml/consume',
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	(req, res) => {
 		auth_user = req.user;
-		res.redirect('/home');
-});
-app.get('/home',
-	(req, res) => {
-		if (auth_user === undefined){
-			res.redirect('/login');
-		}
-		else {
-			let redirect = "Dashboard";
-			if (auth_user.role === 0){
-				redirect = "Dashboard";
-			}
-			else {
-				redirect = "DashboardI";
-			}
-			const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + '${auth_user.token}'); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/${redirect}';</script>`;
-			auth_user = undefined;
-
-			res.type('.html');
-			res.send(authPage);
-		}
+		const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + '${auth_user.token}'); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/login';</script>`;
+		res.type('.html');
+		res.send(authPage);
 });
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
