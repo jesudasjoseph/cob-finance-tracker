@@ -32,6 +32,60 @@ async function init(){
 	})
 }
 
+//Helper
+async function get_bid_from_uid(uid, client) {
+	const query = {
+		text: 'SELECT bid FROM user_has_business WHERE uid = $1',
+		values: [uid]
+	};
+
+	let res = await client.query(query);
+	if (!res.rows.length) {
+		return -1;
+	}
+	else {
+		return res.rows[0].bid;
+	}
+}
+async function is_user_in_business(uid, client, bid = null) {
+	if (bid == null){
+		bid = await get_bid_from_uid(uid, client);
+		if (bid < 0){
+			return false;
+		}
+
+		const query = {
+			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
+			values: [bid, uid]
+		};
+
+		let res = await client.query(query);
+		if (!res.rows.length) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	else {
+		if (bid < 0){
+			return false;
+		}
+		const query = {
+			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
+			values: [bid, uid]
+		};
+
+		let res = await client.query(query);
+		if (!res.rows.length) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+}
+
 //This is a model function
 async function createUser(asker, user) {
 	const createUserQuery = {
@@ -297,29 +351,40 @@ async function getRole(asker){
 	}
 }
 async function addUserToBusiness(asker, uid, bid) {
+	const deleteQuery = {
+		text: 'DELETE FROM user_has_business WHERE uid=$1',
+		values: [uid]
+	}
 	const query = {
 		text: 'INSERT INTO user_has_business (uid, bid) VALUES ($1, $2)',
 		values: [uid, bid]
 	}
+
 	const client = await pool.connect();
 	try {
+		let codeData = await getRole({uid: uid});
 		switch(asker.role){
 			case roleType.admin:
-				if (await get_bid_from_uid(uid, client) == -1){
-					await client.query(query);
-					return new data(201);
-				} else {
-					return new data(409);
-				}
+				if (codeData.code !== 200)
+					return new data(404);
+
+				if (parseInt(codeData.data) === 0)
+					await client.query(deleteQuery);
+
+				await client.query(query);
+				return new data(201);
 
 				break;
 			case roleType.instructor:
-				if (await get_bid_from_uid(uid, client) == -1){
-					await client.query(query);
-					return new data(201);
-				} else {
-					return new data(409);
-				}
+				if (codeData.code !== 200)
+					return new data(404);
+
+				if (parseInt(codeData.data) === 0)
+					await client.query(deleteQuery);
+
+				await client.query(query);
+				return new data(201);
+
 				break;
 			case roleType.student:
 				return new data(403);
@@ -335,60 +400,6 @@ async function addUserToBusiness(asker, uid, bid) {
 	}
 
 	return new data(500);
-}
-
-//Helper
-async function get_bid_from_uid(uid, client) {
-	const query = {
-		text: 'SELECT bid FROM user_has_business WHERE uid = $1',
-		values: [uid]
-	};
-
-	let res = await client.query(query);
-	if (!res.rows.length) {
-		return -1;
-	}
-	else {
-		return res.rows[0].bid;
-	}
-}
-async function is_user_in_business(uid, client, bid = null) {
-	if (bid == null){
-		bid = await get_bid_from_uid(uid, client);
-		if (bid < 0){
-			return false;
-		}
-
-		const query = {
-			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
-			values: [bid, uid]
-		};
-
-		let res = await client.query(query);
-		if (!res.rows.length) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-	else {
-		if (bid < 0){
-			return false;
-		}
-		const query = {
-			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
-			values: [bid, uid]
-		};
-
-		let res = await client.query(query);
-		if (!res.rows.length) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
 }
 
 //Business Queries
