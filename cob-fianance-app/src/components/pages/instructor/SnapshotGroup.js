@@ -2,6 +2,7 @@ import React from 'react'
 import ProfitProgress from '../../layout/ProfitProgress';
 import ExpenseProgress from '../../layout/ExpenseProgress';
 import ExpenseTable from '../../layout/ExpenseTable';
+import TransactionTable from '../../layout/TransactionsTable';
 import BankProgress from '../../layout/BankProgress';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../../Config';
@@ -144,7 +145,7 @@ export default class SnapshotGroup extends React.Component{
 			<React.Fragment>
 				<h1 style={{textAlign:'center'}}>{this.state.business.name}</h1>
 				<StudentTable dataFromParent = {{bid: this.state.bid}} Mystudents = {{students: this.state.students}}/>
-				<h2> Profit Goals</h2>
+				<h3> Profit Goals</h3>
 				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
 				<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
 				<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
@@ -155,7 +156,10 @@ export default class SnapshotGroup extends React.Component{
 					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
 					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 				</div>
+				<h3 style={{padding: '20px 0px'}}>Expenses</h3>
 				<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.bid}}/>
+				<h3 style={{padding: '20px 0px'}}>Transactions</h3>
+				<TransactionTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.bid}}/>
 
 			</React.Fragment>
 		)

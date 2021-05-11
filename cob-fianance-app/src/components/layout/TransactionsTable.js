@@ -16,8 +16,16 @@ export class TransactionsTable extends Component {
 			transactionTable: []
 		}
 		this.get_transactions = this.get_transactions.bind(this);
-		this.get_transactions();
+		this.get_transactions_bybid = this.get_transactions_bybid.bind(this);
 	}
+	componentDidMount(){
+		//Check to see if a bid was passed to the Component
+		if (this.props.dataFromParent === undefined)
+			this.get_transactions();
+		else
+			this.get_transactions_bybid(this.props.dataFromParent.bid);
+	}
+
 	get_transactions(){
 		fetch(API_PATH + '/transaction/byuid?start=0&end=50', {
 			mode: 'cors',
@@ -34,6 +42,27 @@ export class TransactionsTable extends Component {
 		}).then(data => {
 			console.log('Success:', data);
 			this.setState({transactionTable:data});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+	get_transactions_bybid(bid){
+		fetch(API_PATH + '/transaction?start=0&end=50&bid=' + bid, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+			if (data != null)
+				this.setState({transactionTable:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
