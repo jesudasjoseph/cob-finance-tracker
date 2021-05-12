@@ -6,7 +6,7 @@ import { API_PATH } from '../Config';
 import DataTable from 'react-data-table-component';
 import * as XLSX from 'xlsx';
 
-export class AddStudentDialogButton extends Component {
+export class AddUserDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -151,17 +151,17 @@ export class AddStudentDialogButton extends Component {
 		if (this.state.modalShow === false)
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Import Students</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Import Users</Button>
 				</>
 			)
 		else {
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Import Students</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Import Users</Button>
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
 							<Modal.Title>
-								Import Students
+								Import Users
 							</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
@@ -183,4 +183,4 @@ export class AddStudentDialogButton extends Component {
 		}
 	}
 }
-export default AddStudentDialogButton
+export default AddUserDialogButton

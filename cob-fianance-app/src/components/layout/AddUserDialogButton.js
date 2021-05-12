@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { API_PATH } from '../Config';
 
-export class AddStudentDialogButton extends Component {
+export class AddUserDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -79,17 +79,17 @@ export class AddStudentDialogButton extends Component {
 		if (this.state.modalShow === false)
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add Student</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add User</Button>
 				</>
 			)
 		else {
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add Student</Button>
+					<Button variant="primary" onClick={this.open_dialog} style={this.props.style}>Add User</Button>
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
 							<Modal.Title>
-								Add Student
+								Add User
 							</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
@@ -127,4 +127,4 @@ export class AddStudentDialogButton extends Component {
 		}
 	}
 }
-export default AddStudentDialogButton
+export default AddUserDialogButton

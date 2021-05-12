@@ -3,7 +3,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
 //Insructor Pages/Layouts
 import InstructorNavbar from './components/layout/InstructorNavbar';
-import DashboardI from './components/pages/instructor/DashboardI';
+import DashboardI from './components/pages/instructor/Dashboard';
 import UserInstructor from './components/pages/instructor/UserInstructor';
 import SettingsInstructor from './components/pages/instructor/SettingsInstuctor';
 import UserManagement from './components/pages/instructor/UserManagement';
