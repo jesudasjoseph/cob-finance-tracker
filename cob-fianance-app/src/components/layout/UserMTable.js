@@ -3,9 +3,9 @@ import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
-import AddStudentDialogButton from './AddStudentDialogButton.js';
-import AddStudentToBusinessDialogButton from './AddStudentToBusinessDialogButton.js';
-import ImportStudentButton from './ImportStudentButton.js';
+import AddUserDialogButton from './AddUserDialogButton.js';
+import AddUserToBusinessDialogButton from './AddUserToBusinessDialogButton.js';
+import ImportUserButton from './ImportUserButton.js';
 import { API_PATH } from '../Config';
 
 export class Tables extends Component {
@@ -122,8 +122,8 @@ export class Tables extends Component {
 							<NavDropdown.Item onClick={this.sortByRoleClickHandler}>Role</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
-					<AddStudentDialogButton style={{float:'right', margin: '5px'}}/>
-					<ImportStudentButton style={{float:'right', margin: '5px'}}/>
+					<AddUserDialogButton style={{float:'right', margin: '5px'}}/>
+					<ImportUserButton style={{float:'right', margin: '5px'}}/>
 				</div>
 				<Table responsive="sm"
 					size="xl"
@@ -169,7 +169,7 @@ export class Tables extends Component {
 										<tr key={uid+1} style={{color:'white', border: '2px solid', borderTop: '0px'}}>
 											<td colSpan="6">
 												<Button style={{float:'right', margin: '8px'}} onClick={() => this.handleDeleteUserButton(uid)}>Delete</Button>
-												<AddStudentToBusinessDialogButton uid={uid} bid={bid} style={{float:'right', margin: '8px'}} onSave={this.fetchUserData}/>
+												<AddUserToBusinessDialogButton uid={uid} bid={bid} style={{float:'right', margin: '8px'}} onSave={this.fetchUserData}/>
 											</td>
 										</tr>
 									</React.Fragment>
