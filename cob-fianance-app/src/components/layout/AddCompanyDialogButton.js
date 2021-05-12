@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { API_PATH } from '../Config';
 
-export class AddBusinessDialogButton extends Component {
+export class AddCompanyDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -77,17 +77,17 @@ export class AddBusinessDialogButton extends Component {
 		if (this.state.modalShow === false)
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Business</Button>
+					<Button variant="primary" onClick={this.open_dialog}>Add Company</Button>
 				</>
 			)
 		else {
 			return (
 				<>
-					<Button variant="primary" onClick={this.open_dialog}>Add Business</Button>
+					<Button variant="primary" onClick={this.open_dialog}>Add Company</Button>
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
 							<Modal.Title>
-								Add Business
+								Add Company
 							</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
@@ -112,4 +112,4 @@ export class AddBusinessDialogButton extends Component {
 		}
 	}
 }
-export default AddBusinessDialogButton
+export default AddCompanyDialogButton

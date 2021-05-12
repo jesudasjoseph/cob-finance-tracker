@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { API_PATH } from '../Config';
 
-export class AddStudentDialogButton extends Component {
+export class AddUserDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -63,7 +63,7 @@ export class AddStudentDialogButton extends Component {
 					<Modal show={true} onHide={this.close_dialog}>
 						<Modal.Header closeButton>
 							<Modal.Title>
-								Add/Move Student to Company
+								Add/Move '{this.props.uid}' to Company
 							</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
@@ -71,7 +71,7 @@ export class AddStudentDialogButton extends Component {
 								<Form.Group>
 									<Form.Label>ONID: {this.props.uid}</Form.Label><br/>
 
-									<Form.Label>Business ID:</Form.Label>
+									<Form.Label>Company ID:</Form.Label>
 									<Form.Control type="number" value={this.state.bid} onChange={(e) => this.setState({bid: e.target.value})} />
 								</Form.Group>
 
@@ -84,4 +84,4 @@ export class AddStudentDialogButton extends Component {
 		}
 	}
 }
-export default AddStudentDialogButton
+export default AddUserDialogButton

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import BusinessTable from '../../layout/BusinessTable';
-import AddBusinessDialogButton from '../../layout/AddBusinessDialogButton';
+import AddCompanyDialogButton from '../../layout/AddCompanyDialogButton';
 
 export default class Dashboard extends React.Component {
 	render(){
@@ -10,7 +10,7 @@ export default class Dashboard extends React.Component {
 			<React.Fragment>
 				<h1 style={{textAlign:'center'}}> Dashboard </h1>
 				<div style={{textAlign: 'right'}}>
-					<AddBusinessDialogButton/>
+					<AddCompanyDialogButton/>
 				</div>
 				<BusinessTableWithRouter/>
 			</React.Fragment>
