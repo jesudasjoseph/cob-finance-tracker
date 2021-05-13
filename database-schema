@@ -1,0 +1,588 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.6 (Ubuntu 12.6-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.6 (Ubuntu 12.6-0ubuntu0.20.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: delete_deposit(integer); Type: PROCEDURE; Schema: public; Owner: devserver
+--
+
+CREATE PROCEDURE public.delete_deposit(in_d_id integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	this_deposit deposits%ROWTYPE;
+BEGIN
+	SELECT * INTO this_deposit FROM deposits WHERE d_id=in_d_id;
+
+	UPDATE business 
+	SET deposit_count = deposit_count - 1 
+	WHERE bid=this_deposit.bid;
+
+	UPDATE business 
+	SET deposit_total = deposit_total - this_deposit.val 
+	WHERE bid=this_deposit.bid;
+
+	DELETE FROM deposits WHERE d_id=in_d_id;
+END;
+$$;
+
+
+ALTER PROCEDURE public.delete_deposit(in_d_id integer) OWNER TO devserver;
+
+--
+-- Name: delete_expense(integer); Type: PROCEDURE; Schema: public; Owner: devserver
+--
+
+CREATE PROCEDURE public.delete_expense(in_eid integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	this_expense expenses%ROWTYPE;
+BEGIN
+	SELECT * INTO this_expense FROM expenses WHERE eid=in_eid;
+
+	UPDATE business 
+	SET expense_count = expense_count - 1 
+	WHERE bid=this_expense.bid;
+
+	UPDATE business 
+	SET expense_total = expense_total - (this_expense.quantity*this_expense.price_per_unit) 
+	WHERE bid=this_expense.bid;
+
+	DELETE FROM expenses WHERE eid=in_eid;
+END;
+$$;
+
+
+ALTER PROCEDURE public.delete_expense(in_eid integer) OWNER TO devserver;
+
+--
+-- Name: delete_transaction(integer); Type: PROCEDURE; Schema: public; Owner: devserver
+--
+
+CREATE PROCEDURE public.delete_transaction(in_tid integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	this_transaction transactions%ROWTYPE;
+BEGIN
+	SELECT * INTO this_transaction FROM transactions WHERE tid=in_tid;
+
+	UPDATE business 
+	SET transaction_count = transaction_count - 1 
+	WHERE bid=this_transaction.bid;
+
+	UPDATE business 
+	SET transaction_total = transaction_total - (this_transaction.quantity*this_transaction.price_per_unit) 
+	WHERE bid=this_transaction.bid;
+
+	UPDATE business 
+	SET product_count = product_count - this_transaction.quantity
+	WHERE bid=this_transaction.bid;
+	
+	IF this_transaction.payment_method = 'square' THEN
+		UPDATE business
+		SET square_total = square_total - this_transaction.quantity
+		WHERE bid=this_transaction.bid;
+	END IF;
+
+	DELETE FROM transactions WHERE tid=in_tid;
+END;
+$$;
+
+
+ALTER PROCEDURE public.delete_transaction(in_tid integer) OWNER TO devserver;
+
+--
+-- Name: get_num_expenses(integer); Type: FUNCTION; Schema: public; Owner: devserver
+--
+
+CREATE FUNCTION public.get_num_expenses(integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare
+	val integer;
+BEGIN
+	SELECT COUNT(*) into val FROM expenses WHERE BID=$1;
+	RETURN val;
+END;
+$_$;
+
+
+ALTER FUNCTION public.get_num_expenses(integer) OWNER TO devserver;
+
+--
+-- Name: get_num_product(integer); Type: FUNCTION; Schema: public; Owner: devserver
+--
+
+CREATE FUNCTION public.get_num_product(integer) RETURNS numeric
+    LANGUAGE plpgsql
+    AS $_$
+declare
+	val numeric;
+BEGIN
+	SELECT SUM(quantity) into val FROM transactions WHERE BID=$1;
+	RETURN val;
+END;
+$_$;
+
+
+ALTER FUNCTION public.get_num_product(integer) OWNER TO devserver;
+
+--
+-- Name: get_num_transactions(integer); Type: FUNCTION; Schema: public; Owner: devserver
+--
+
+CREATE FUNCTION public.get_num_transactions(integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare
+	val integer;
+BEGIN
+	SELECT COUNT(*) into val FROM transactions WHERE BID=$1;
+	RETURN val;
+END;
+$_$;
+
+
+ALTER FUNCTION public.get_num_transactions(integer) OWNER TO devserver;
+
+--
+-- Name: get_total_expenses(integer); Type: FUNCTION; Schema: public; Owner: devserver
+--
+
+CREATE FUNCTION public.get_total_expenses(integer) RETURNS money
+    LANGUAGE plpgsql
+    AS $_$
+declare
+	val money;
+BEGIN
+	SELECT SUM(total) into val FROM expenses WHERE BID=$1;
+	RETURN val;
+END;
+$_$;
+
+
+ALTER FUNCTION public.get_total_expenses(integer) OWNER TO devserver;
+
+--
+-- Name: get_total_transactions(integer); Type: FUNCTION; Schema: public; Owner: devserver
+--
+
+CREATE FUNCTION public.get_total_transactions(integer) RETURNS money
+    LANGUAGE plpgsql
+    AS $_$
+declare
+	val money;
+BEGIN
+	SELECT SUM(total) into val FROM transactions WHERE BID=$1;
+	RETURN val;
+END;
+$_$;
+
+
+ALTER FUNCTION public.get_total_transactions(integer) OWNER TO devserver;
+
+--
+-- Name: insert_deposit(integer, text, money, text); Type: PROCEDURE; Schema: public; Owner: devserver
+--
+
+CREATE PROCEDURE public.insert_deposit(in_bid integer, in_uid text, in_val money, in_description text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+INSERT INTO deposits (uid, bid, val, description) 
+VALUES (in_uid, in_bid, in_val, in_description);
+
+UPDATE business 
+SET deposit_count = deposit_count + 1 
+WHERE bid=in_bid;
+
+UPDATE business 
+SET deposit_total = deposit_total + in_val 
+WHERE bid=in_bid;
+END;
+$$;
+
+
+ALTER PROCEDURE public.insert_deposit(in_bid integer, in_uid text, in_val money, in_description text) OWNER TO devserver;
+
+--
+-- Name: insert_expense(text, integer, text, text, numeric, date, text, money, text); Type: PROCEDURE; Schema: public; Owner: devserver
+--
+
+CREATE PROCEDURE public.insert_expense(in_uid text, in_bid integer, in_product text, in_company text, in_quantity numeric, in_date date, in_payment text, in_price money, in_justification text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+INSERT INTO expenses (uid, bid, product, company, quantity, date, payment_method, price_per_unit, justification) 
+VALUES (in_uid, in_bid, in_product, in_company, in_quantity, in_date, in_payment, in_price, in_justification);
+
+UPDATE business 
+SET expense_count = expense_count + 1 
+WHERE bid=in_bid;
+
+UPDATE business 
+SET expense_total = expense_total + (in_quantity*in_price) 
+WHERE bid=in_bid;
+END;
+$$;
+
+
+ALTER PROCEDURE public.insert_expense(in_uid text, in_bid integer, in_product text, in_company text, in_quantity numeric, in_date date, in_payment text, in_price money, in_justification text) OWNER TO devserver;
+
+--
+-- Name: insert_transaction(text, integer, text, date, text, text, numeric, money); Type: PROCEDURE; Schema: public; Owner: devserver
+--
+
+CREATE PROCEDURE public.insert_transaction(in_uid text, in_bid integer, in_customer text, in_date date, in_product text, in_payment text, in_quantity numeric, in_price money)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+INSERT INTO transactions (uid, bid, customer, date, product, payment_method, quantity, price_per_unit) 
+VALUES (in_uid, in_bid, in_customer, in_date, in_product, in_payment, in_quantity, in_price);
+
+UPDATE business 
+SET transaction_count = transaction_count + 1 
+WHERE bid=in_bid;
+
+UPDATE business 
+SET transaction_total = transaction_total + (in_quantity*in_price) 
+WHERE bid=in_bid;
+
+UPDATE business 
+SET product_count = product_count + in_quantity 
+WHERE bid=in_bid;
+
+IF in_payment::text = 'square' then
+	UPDATE business
+	SET square_total = square_total + (in_quantity*in_price)
+	WHERE bid=in_bid; 
+END IF;
+END;
+$$;
+
+
+ALTER PROCEDURE public.insert_transaction(in_uid text, in_bid integer, in_customer text, in_date date, in_product text, in_payment text, in_quantity numeric, in_price money) OWNER TO devserver;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: business; Type: TABLE; Schema: public; Owner: devserver
+--
+
+CREATE TABLE public.business (
+    name text NOT NULL,
+    bid integer NOT NULL,
+    section text DEFAULT 'No Section'::text NOT NULL,
+    deposit_total money DEFAULT 0 NOT NULL,
+    expense_total money DEFAULT 0 NOT NULL,
+    transaction_total money DEFAULT 0 NOT NULL,
+    transaction_count integer DEFAULT 0 NOT NULL,
+    expense_count integer DEFAULT 0 NOT NULL,
+    deposit_count integer DEFAULT 0 NOT NULL,
+    product_count numeric DEFAULT 0 NOT NULL,
+    profit money GENERATED ALWAYS AS ((transaction_total - expense_total)) STORED NOT NULL,
+    profit_goal money DEFAULT 500 NOT NULL,
+    stretch_profit_goal money DEFAULT 750 NOT NULL,
+    instructor text,
+    square_total money DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.business OWNER TO devserver;
+
+--
+-- Name: business_bid_seq; Type: SEQUENCE; Schema: public; Owner: devserver
+--
+
+ALTER TABLE public.business ALTER COLUMN bid ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.business_bid_seq
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 1000
+    CACHE 1
+    CYCLE
+);
+
+
+--
+-- Name: business_view; Type: VIEW; Schema: public; Owner: devserver
+--
+
+CREATE VIEW public.business_view AS
+ SELECT business.name,
+    business.bid,
+    business.section,
+    business.instructor,
+    (business.square_total)::numeric AS square_total,
+    (business.deposit_total)::numeric AS deposit_total,
+    (business.expense_total)::numeric AS expense_total,
+    (business.transaction_total)::numeric AS transaction_total,
+    business.transaction_count,
+    business.expense_count,
+    business.deposit_count,
+    business.product_count,
+    (business.profit)::numeric AS profit,
+    (business.profit_goal)::numeric AS profit_goal,
+    (business.stretch_profit_goal)::numeric AS stretch_profit_goal
+   FROM public.business;
+
+
+ALTER TABLE public.business_view OWNER TO devserver;
+
+--
+-- Name: deposits; Type: TABLE; Schema: public; Owner: devserver
+--
+
+CREATE TABLE public.deposits (
+    val money NOT NULL,
+    uid text DEFAULT 'student'::text NOT NULL,
+    description text,
+    bid bigint NOT NULL,
+    d_id bigint NOT NULL,
+    tag text DEFAULT 'bank'::text,
+    date date DEFAULT CURRENT_DATE NOT NULL
+);
+
+
+ALTER TABLE public.deposits OWNER TO devserver;
+
+--
+-- Name: deposits_id_seq; Type: SEQUENCE; Schema: public; Owner: devserver
+--
+
+ALTER TABLE public.deposits ALTER COLUMN d_id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.deposits_id_seq
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 20000
+    CACHE 1
+    CYCLE
+);
+
+
+--
+-- Name: expenses; Type: TABLE; Schema: public; Owner: devserver
+--
+
+CREATE TABLE public.expenses (
+    eid integer NOT NULL,
+    quantity numeric NOT NULL,
+    product text NOT NULL,
+    company text NOT NULL,
+    date date NOT NULL,
+    payment_method text NOT NULL,
+    price_per_unit money NOT NULL,
+    justification text NOT NULL,
+    bid integer NOT NULL,
+    uid text DEFAULT 'student'::text NOT NULL,
+    total money GENERATED ALWAYS AS ((price_per_unit * (quantity)::double precision)) STORED
+);
+
+
+ALTER TABLE public.expenses OWNER TO devserver;
+
+--
+-- Name: expense_eid_seq; Type: SEQUENCE; Schema: public; Owner: devserver
+--
+
+ALTER TABLE public.expenses ALTER COLUMN eid ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.expense_eid_seq
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 20000
+    CACHE 5
+    CYCLE
+);
+
+
+--
+-- Name: transactions; Type: TABLE; Schema: public; Owner: devserver
+--
+
+CREATE TABLE public.transactions (
+    customer text NOT NULL,
+    date date NOT NULL,
+    product text NOT NULL,
+    payment_method text NOT NULL,
+    quantity numeric NOT NULL,
+    price_per_unit money NOT NULL,
+    tid integer NOT NULL,
+    bid integer NOT NULL,
+    uid text DEFAULT 'student'::text NOT NULL,
+    total money GENERATED ALWAYS AS ((price_per_unit * (quantity)::double precision)) STORED
+);
+
+
+ALTER TABLE public.transactions OWNER TO devserver;
+
+--
+-- Name: transactions_tid_seq; Type: SEQUENCE; Schema: public; Owner: devserver
+--
+
+ALTER TABLE public.transactions ALTER COLUMN tid ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.transactions_tid_seq
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 20000
+    CACHE 1
+    CYCLE
+);
+
+
+--
+-- Name: user_has_business; Type: TABLE; Schema: public; Owner: devserver
+--
+
+CREATE TABLE public.user_has_business (
+    uid text NOT NULL,
+    bid integer NOT NULL
+);
+
+
+ALTER TABLE public.user_has_business OWNER TO devserver;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: devserver
+--
+
+CREATE TABLE public.users (
+    first text NOT NULL,
+    last text NOT NULL,
+    uid text NOT NULL,
+    role integer NOT NULL,
+    section text
+);
+
+
+ALTER TABLE public.users OWNER TO devserver;
+
+--
+-- Name: business business_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.business
+    ADD CONSTRAINT business_pkey PRIMARY KEY (bid);
+
+
+--
+-- Name: deposits deposits_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.deposits
+    ADD CONSTRAINT deposits_pkey PRIMARY KEY (d_id);
+
+
+--
+-- Name: expenses expenses_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.expenses
+    ADD CONSTRAINT expenses_pkey PRIMARY KEY (eid);
+
+
+--
+-- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_pkey PRIMARY KEY (tid);
+
+
+--
+-- Name: users user_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT user_pkey PRIMARY KEY (uid);
+
+
+--
+-- Name: user_has_business bid; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.user_has_business
+    ADD CONSTRAINT bid FOREIGN KEY (bid) REFERENCES public.business(bid) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deposits deposits_bid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.deposits
+    ADD CONSTRAINT deposits_bid_fkey FOREIGN KEY (bid) REFERENCES public.business(bid) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deposits deposits_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.deposits
+    ADD CONSTRAINT deposits_uid_fkey FOREIGN KEY (uid) REFERENCES public.users(uid) ON UPDATE CASCADE ON DELETE SET DEFAULT;
+
+
+--
+-- Name: expenses expenses_bid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.expenses
+    ADD CONSTRAINT expenses_bid_fkey FOREIGN KEY (bid) REFERENCES public.business(bid) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: expenses expesses_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.expenses
+    ADD CONSTRAINT expesses_uid_fkey FOREIGN KEY (uid) REFERENCES public.users(uid) ON UPDATE CASCADE ON DELETE SET DEFAULT NOT VALID;
+
+
+--
+-- Name: transactions transactions_bid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_bid_fkey FOREIGN KEY (bid) REFERENCES public.business(bid) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: transactions transactions_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_uid_fkey FOREIGN KEY (uid) REFERENCES public.users(uid) ON UPDATE CASCADE ON DELETE SET DEFAULT NOT VALID;
+
+
+--
+-- Name: user_has_business uid; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+--
+
+ALTER TABLE ONLY public.user_has_business
+    ADD CONSTRAINT uid FOREIGN KEY (uid) REFERENCES public.users(uid) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
