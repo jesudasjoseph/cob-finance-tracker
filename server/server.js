@@ -51,8 +51,8 @@ app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Bu
 //This also checks if user exists.
 passport.use(new SamlStrategy({
 		entryPoint: 'https://login-int.iam.oregonstate.edu/idp/profile/SAML2/Redirect/SSO',
-		issuer: 'https://71.193.191.23:2020',
-		callbackUrl: 'https://71.193.191.23:2020/saml/consume',
+		issuer: config.samlIssuer,
+		callbackUrl: config.samlCallbackUrl,
 		cert: config.samlCert
 	},
 	async (profile, done) => {
