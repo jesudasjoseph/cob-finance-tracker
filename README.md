@@ -31,6 +31,7 @@ The file: `server/template.env` has all required fields to be filled out for the
 
 ### SSL
 Our application runs on HTTPS only. So you'll need a SSL certificate.
+The `template.env` file has a line for the path of your .key and .cert files.
 
 ## Deployment
 Once all the steps above have been completed then the application is ready to be launched.
