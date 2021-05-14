@@ -29,6 +29,9 @@ To deploy the server side API and the static web-page files:
 Setting up port numbers and PostgreSQL server access.
 The file: `server/template.env` has all required fields to be filled out for the application to connect to a PostgreSQL server and connect to OSU's identity provider. This file must be filled out and renamed to `.env`.
 
+### SSL
+Our application runs on HTTPS only. So you'll need a SSL certificate.
+
 ## Deployment
 Once all the steps above have been completed then the application is ready to be launched.
 
