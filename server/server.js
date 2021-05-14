@@ -9,8 +9,8 @@ const config = require('./config');
 const path = require('path');
 const q = require('./queries');
 
-let key = fs.readFileSync(__dirname + '/certs/selfsigned.key');
-let cert = fs.readFileSync(__dirname + '/certs/selfsigned.crt');
+let key = fs.readFileSync(__dirname + config.sslKeyPath);
+let cert = fs.readFileSync(__dirname + config.sslCertPath);
 let options = {
   key: key,
   cert: cert
