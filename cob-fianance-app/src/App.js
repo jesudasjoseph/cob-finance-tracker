@@ -21,6 +21,7 @@ import Page_Settings from './components/pages/student/Settings';
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Page404 from './components/pages/404';
+import UnknownONID from './components/pages/UnknownONID';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -34,6 +35,7 @@ class App extends Component{
 					<Route path="/home" component={Home}/>
 					<Route path="/login" component={Login}/>
 					<Route path="/404" component={Page404}/>
+					<Route path="/unknown-onid" component={UnknownONID}/>
 
 					<Route path="/instructor">
 						<InstructorNavbar/>
