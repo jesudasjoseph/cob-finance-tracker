@@ -62,7 +62,7 @@ passport.use(new SamlStrategy({
 			return done(null, data);
 		}
 		else{
-			return done(code);
+			return done(null, code);
 		}
 	}));
 
@@ -79,10 +79,15 @@ app.post('/saml/consume',
 	bodyparser.urlencoded({ extended: false }),
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	(req, res) => {
-		auth_user = req.user;
-		const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + '${auth_user.token}'); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/login';</script>`;
-		res.type('.html');
-		res.send(authPage);
+		if (parseInt(req.user) == 404){
+			res.redirect('/unknown-onid')
+		}
+		else {
+			auth_user = req.user;
+			const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + '${auth_user.token}'); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/login';</script>`;
+			res.type('.html');
+			res.send(authPage);
+		}
 });
 
 console.log(path.resolve(__dirname, 'build', 'index.html'));
