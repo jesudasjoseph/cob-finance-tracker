@@ -96,8 +96,6 @@ app.use(express.json()); //Parse body
 //app.use(helmet()); //Use helmet as a middleware to help with http header security
 
 //API Endpoints
-//Router for Authentication requests
-app.use(API_URL + '/auth', authRouter);
 //Router for Business data requests
 app.use(API_URL + '/business', businessRouter);
 //Router for User data requests
