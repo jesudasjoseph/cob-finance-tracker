@@ -56,7 +56,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	exportExpenseData(){
-		fetch(API_PATH + '/export/expense?bid=' + this.state.path, {
+		fetch(API_PATH + '/export/expense?bid=' + this.state.bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -73,7 +73,7 @@ export default class SnapshotGroup extends React.Component{
 			var blob = new Blob(["\ufeff", data]);
 			var url = URL.createObjectURL(blob);
 			downloadLink.href = url;
-			downloadLink.download = "Bid_" + this.state.path + "_expenseData.csv";
+			downloadLink.download = "Bid_" + this.state.bid + "_expenseData.csv";
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
@@ -84,7 +84,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	exportTransactionData(){
-		fetch(API_PATH + '/export/transaction?bid=' + this.state.path, {
+		fetch(API_PATH + '/export/transaction?bid=' + this.state.bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -101,7 +101,7 @@ export default class SnapshotGroup extends React.Component{
 			var blob = new Blob(["\ufeff", data]);
 			var url = URL.createObjectURL(blob);
 			downloadLink.href = url;
-			downloadLink.download = "Bid_" + this.state.path + "_transactionData.csv";
+			downloadLink.download = "Bid_" + this.state.bid + "_transactionData.csv";
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
@@ -112,7 +112,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	exportDepositData(){
-		fetch(API_PATH + '/export/deposit?bid=' + this.state.path, {
+		fetch(API_PATH + '/export/deposit?bid=' + this.state.bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -129,7 +129,7 @@ export default class SnapshotGroup extends React.Component{
 			var blob = new Blob(["\ufeff", data]);
 			var url = URL.createObjectURL(blob);
 			downloadLink.href = url;
-			downloadLink.download = "Bid_" + this.state.path + "_depositData.csv";
+			downloadLink.download = "Bid_" + this.state.bid + "_depositData.csv";
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
