@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import ProfitProgress from '../layout/ProfitProgress';
+import ProgressBarSmallProfit from '../layout/ProgressBarSmallProfit';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../Config';
 
@@ -188,7 +188,7 @@ export class BusinessTable extends Component {
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${transaction_total}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${expense_total}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${profit}</td>
-									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}><ProfitProgress profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer', minWidth: '200px'}}><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
 									<td><Button onClick={() => this.onDeleteClick(bid,index)}>Delete</Button></td>
 								</tr>
 							);
