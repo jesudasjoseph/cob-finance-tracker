@@ -36,10 +36,26 @@ export class AddUserDialogButton extends Component {
 		});
 		this.setState({modalShow: false});
 	}
+
+	//Removes Spaces from input text and returns string without spaces
+	removeSpaces(text) {
+		if (text != null){
+			text = text.trim();
+			let index = text.indexOf(' ');
+			while(index >= 0){
+				let firstHalf = text.slice(0, index);
+				let secondHalf = text.slice(index + 1, text.length);
+				text = firstHalf + secondHalf;
+				index = text.indexOf(' ');
+			}
+		}
+		return text;
+	}
+
 	handle_submit(e) {
 		e.preventDefault();
 
-		const user_body = {user:{uid:this.state.onidId, first:this.state.firstName, last: this.state.lastName, role:this.state.role, section: this.state.section}}
+		const user_body = {user:{uid:this.removeSpaces(this.state.onidId), first:this.state.firstName, last: this.state.lastName, role:this.state.role, section: this.state.section}}
 		const addUserToBusinessBody = {uid:this.state.onidId, bid:this.state.bid};
 		fetch(API_PATH + '/user', {
 			mode: 'cors',
