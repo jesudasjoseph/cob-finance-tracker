@@ -1,39 +1,17 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const containerStyle = {
-	display: 'flex'
-}
-const profitBarContainerStyle = {
-	flexGrow: 3
-}
-const profitBarStyle = {
-	fontSize: '1em',
-	height: '3em',
-	minWidth: '10em'
-}
-const profitBarPlusContainerStyle = {
-	flexGrow: 7
-}
-const profitBarPlusStyle = {
-	fontSize: '1em',
-	height: '3em',
-	minWidth: '10em'
-}
-const lossBarContainerStyle = {
-	flexGrow: 1
-}
-const lossBarStyle = {
-	fontSize: '1em',
-	height: '3em',
-	minWidth: '10em'
-}
+import '../styles/ProfitProgress.css';
 
 export class ProfitProgress extends Component {
 	render() {
 		if (this.props.profit === null){
 			return (
-					<div>LOADING...</div>
+				<>
+					<div className='progressBarContainer'>
+						<p className='centerText'>LOADING...</p>
+					</div>
+				</>
 			)
 		}
 		else {
@@ -43,80 +21,58 @@ export class ProfitProgress extends Component {
 
 			if (profitGoal === 0){
 				return (
-						<div>Profit goal not Set!</div>
+					<div className='progressBarContainer'>
+						<p className='centerText'>Profit goal not Set!</p>
+					</div>
 				)
 			}
 			else {
 				const percent_of_profit_goal = profitGoal/100;
 				const percent_of_stretch_goal = profitStretchGoal/100;
-				const profit_percent = profit/percent_of_profit_goal;
-				const stretch_percent = profit/percent_of_stretch_goal;
+				const profit_percent = parseFloat(profit/percent_of_profit_goal).toFixed(2);
+				const stretch_percent = parseFloat(profit/percent_of_stretch_goal).toFixed(2);
 
-				if (profit < 0){
-					return (
-						<div style={containerStyle}>
-							<div style={lossBarContainerStyle}>
-								<ProgressBar
-									style={lossBarStyle}
-									now={100}
-									variant="danger"
-									label={`$${profit} Loss`}/>
-							</div>
-						</div>
-					)
+				let lossLabel = '';
+				let profitLabel = '';
+				let stretchLabel = '';
+
+				if (profit < 0) {
+					lossLabel = '$'+profit;
 				}
-				else if (profit_percent < 25){
-					return (
-						<ProgressBar
-							style={profitBarStyle}
-							now={profit_percent}
-							variant="danger"
-							label={`Profit Goal ${profit_percent}% reached! ($${profit}/$${profitGoal})`}/>
-					)
+				else if (profit < profitGoal){
+					profitLabel = '$'+profit+'/'+profitGoal+' ('+profit_percent+'%)'
 				}
-				else if (profit_percent < 75){
-					return (
-						<ProgressBar
-							style={profitBarStyle}
-							now={profit_percent}
-							variant="warning"
-							label={`Profit Goal ${profit_percent}% reached! ($${profit}/$${profitGoal})`}/>
-					)
-				}
-				else if (profit_percent > 100) {
-					return (
-						<div style={containerStyle}>
-							<div style={profitBarContainerStyle}>
-								<ProgressBar
-									style={profitBarStyle}
-									now={100}
-									variant="success"
-									label={`Profit Goal Reached! ($${profitGoal}/$${profitGoal})`}/>
-							</div>
-							<div style={profitBarPlusContainerStyle}>
-								<ProgressBar
-									style={profitBarPlusStyle}
-									now={stretch_percent}
-									variant="success"
-									label={`Stretch Goal: ($${profit}/$${profitStretchGoal})`}/>
-							</div>
-						</div>
-					);
-				}
-				//If all else fails return a progress bar
 				else {
-					return (
-						<ProgressBar
-							style={profitBarStyle}
-							now={profit_percent}
-							variant="success"
-							label={`$${profit}/$${profitGoal}, ${profit_percent}%`}/>
-					);
+					profitLabel = '$'+profitGoal+'/'+profitGoal+' (100%)'
+					stretchLabel = '$'+profit+'/'+profitStretchGoal+' ('+stretch_percent+'%)'
 				}
+
+				return (
+					<>
+						<div className='progressBarContainer'>
+							<div className='lossBarDefault' style={{backgroundColor: (profit < 0) ? '#dc3545' : '#28a745' }}>
+							</div>
+							<ProgressBar
+								className='profitBarDefault'
+								variant="success"
+								now={(profit > 0) ? profit_percent : 0}
+								label={(profit > 0) ? `${profit_percent}%` : ''}
+							/>
+							<ProgressBar
+								className='stretchBarDefault'
+								now={(profit > profitGoal) ? stretch_percent : 0}
+								variant="success"
+							/>
+						</div>
+						<div className='labelContainer'>
+							<p className='labelLoss'>{lossLabel}</p>
+							<p className='labelProfit'>{profitLabel}</p>
+							<p className='labelStretch'>{stretchLabel}</p>
+						</div>
+					</>
+				)
 			}
 		}
 	}
 }
-
-
 export default ProfitProgress
