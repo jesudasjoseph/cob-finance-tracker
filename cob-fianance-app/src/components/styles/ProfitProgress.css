@@ -3,9 +3,35 @@
 	flex-direction: row;
 	height: 3em;
 	border-radius: 5px;
-	background-color: white;
+	background-color: #e9ecef;
 	width: 100%;
 	text-align: center;
+}
+
+.labelContainer {
+	display: flex;
+	flex-direction: row;
+	height: 2em;
+	width: 100%;
+	margin: auto;
+}
+
+.labelLoss {
+	flex-grow: 1;
+	text-align: left;
+	margin-bottom: 0;
+}
+
+.labelProfit {
+	flex-grow: 1;
+	text-align: center;
+	margin-bottom: 0;
+}
+
+.labelStretch {
+	flex-grow: 1;
+	text-align: right;
+	margin-bottom: 0;
 }
 
 .centerText {

@@ -32,6 +32,21 @@ export class ProfitProgress extends Component {
 				const profit_percent = parseFloat(profit/percent_of_profit_goal).toFixed(2);
 				const stretch_percent = parseFloat(profit/percent_of_stretch_goal).toFixed(2);
 
+				let lossLabel = '';
+				let profitLabel = '';
+				let stretchLabel = '';
+
+				if (profit < 0) {
+					lossLabel = '$'+profit;
+				}
+				else if (profit < profitGoal){
+					profitLabel = '$'+profit+'/'+profitGoal+' ('+profit_percent+'%)'
+				}
+				else {
+					profitLabel = '$'+profitGoal+'/'+profitGoal+' (100%)'
+					stretchLabel = '$'+profit+'/'+profitStretchGoal+' ('+stretch_percent+'%)'
+				}
+
 				return (
 					<>
 						<div className='progressBarContainer'>
@@ -45,9 +60,14 @@ export class ProfitProgress extends Component {
 							/>
 							<ProgressBar
 								className='stretchBarDefault'
-								now={(profit > profitStretchGoal) ? stretch_percent : 0}
+								now={(profit > profitGoal) ? stretch_percent : 0}
 								variant="success"
 							/>
+						</div>
+						<div className='labelContainer'>
+							<p className='labelLoss'>{lossLabel}</p>
+							<p className='labelProfit'>{profitLabel}</p>
+							<p className='labelStretch'>{stretchLabel}</p>
 						</div>
 					</>
 				)
