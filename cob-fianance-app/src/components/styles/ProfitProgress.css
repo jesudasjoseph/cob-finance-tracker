@@ -1,0 +1,35 @@
+.progressBarContainer {
+	display: flex;
+	flex-direction: row;
+	height: 3em;
+	border-radius: 5px;
+	background-color: white;
+	width: 100%;
+	text-align: center;
+}
+
+.centerText {
+	flex-grow: 1;
+	margin: auto;
+}
+
+.progressBarContainer .progress {
+	font-size: 1em;
+	height: inherit;
+}
+.progressBarContainer .progress div {
+	padding: 0px;
+}
+
+.lossBarDefault {
+	flex-grow: 3;
+	border-radius: 5px;
+}
+
+.profitBarDefault {
+	flex-grow: 7;
+}
+
+.stretchBarDefault {
+	flex-grow: 3;
+}
