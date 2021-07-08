@@ -150,7 +150,7 @@ export default class SnapshotGroup extends React.Component{
 				<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
 				<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
 				<h3 style={{padding: '20px 0px'}}>Bank / Square Status</h3>
-				<BankProgress/>
+				<BankProgress revenue={this.state.business.transaction_total} square={this.state.business.square_total} bank={this.state.business.deposit_total}/>
 				<div style={{textAlign: 'left', margin: '20px 0px 5px 0px'}}>
 					<Button style={{margin: '0px 5px'}} onClick={this.exportExpenseData}>Download Expense Data</Button>
 					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
