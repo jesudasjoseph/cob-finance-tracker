@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import ProfitProgress from '../layout/ProfitProgress';
+import ProgressBarSmallProfit from '../layout/ProgressBarSmallProfit';
 import Button from 'react-bootstrap/Button';
 import { API_PATH } from '../Config';
 
@@ -15,7 +15,9 @@ export class BusinessTable extends Component {
 			revenueTotal: 0,
 			quantityTotal: 0,
 			expenseTotal: 0,
-			profitTotal: 0
+			profitTotal: 0,
+			bankTotal: 0,
+			squareTotal: 0
 		}
 
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
@@ -66,14 +68,18 @@ export class BusinessTable extends Component {
 			revenueTotal:0,
 			quantityTotal:0,
 			expenseTotal:0,
-			profitTotal:0
+			profitTotal:0,
+			bankTotal:0,
+			squareTotal:0
 		});
 		for (let i = 0; i < this.state.businessTable.length; i++){
 			this.setState({
 				revenueTotal:this.state.revenueTotal+parseFloat(this.state.businessTable[i].deposit_total),
 				quantityTotal:this.state.quantityTotal+parseFloat(this.state.businessTable[i].product_count),
 				expenseTotal:this.state.expenseTotal+parseFloat(this.state.businessTable[i].expense_total),
-				profitTotal:this.state.profitTotal+parseFloat(this.state.businessTable[i].profit)
+				profitTotal:this.state.profitTotal+parseFloat(this.state.businessTable[i].profit),
+				bankTotal:this.state.bankTotal+parseFloat(this.state.businessTable[i].deposit_total),
+				squareTotal:this.state.squareTotal+parseFloat(this.state.businessTable[i].square_total)
 			});
 		}
 	}
@@ -112,7 +118,7 @@ export class BusinessTable extends Component {
 
 	render() {
 		return (
-			<div>
+			<>
 				<Nav>
 					<NavDropdown title="Filter By">
 						<NavDropdown.Item onClick={this.sortByInstructorClickHandler}>Instructor</NavDropdown.Item>
@@ -139,9 +145,11 @@ export class BusinessTable extends Component {
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Bank
+								<p style={{fontSize:'14px', color:'grey'}}>Total: ${this.state.bankTotal}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Square
+								<p style={{fontSize:'14px', color:'grey'}}>Total: ${this.state.squareTotal}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Revenue
@@ -178,7 +186,7 @@ export class BusinessTable extends Component {
 										square_total} = business;
 
 							return (
-								<tr key={bid}>
+								<tr key={bid} style={{verticalAlign: 'text-center'}}>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{section}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{instructor}</td>
@@ -188,14 +196,14 @@ export class BusinessTable extends Component {
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${transaction_total}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${expense_total}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>${profit}</td>
-									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}><ProfitProgress profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer', minWidth: '200px'}}><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
 									<td><Button onClick={() => this.onDeleteClick(bid,index)}>Delete</Button></td>
 								</tr>
 							);
 						})}
 					</tbody>
 				</Table>
-			</div>
+			</>
 		);
 	}
 }
