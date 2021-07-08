@@ -15,7 +15,9 @@ export class BusinessTable extends Component {
 			revenueTotal: 0,
 			quantityTotal: 0,
 			expenseTotal: 0,
-			profitTotal: 0
+			profitTotal: 0,
+			bankTotal: 0,
+			squareTotal: 0
 		}
 
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
@@ -66,14 +68,18 @@ export class BusinessTable extends Component {
 			revenueTotal:0,
 			quantityTotal:0,
 			expenseTotal:0,
-			profitTotal:0
+			profitTotal:0,
+			bankTotal:0,
+			squareTotal:0
 		});
 		for (let i = 0; i < this.state.businessTable.length; i++){
 			this.setState({
 				revenueTotal:this.state.revenueTotal+parseFloat(this.state.businessTable[i].deposit_total),
 				quantityTotal:this.state.quantityTotal+parseFloat(this.state.businessTable[i].product_count),
 				expenseTotal:this.state.expenseTotal+parseFloat(this.state.businessTable[i].expense_total),
-				profitTotal:this.state.profitTotal+parseFloat(this.state.businessTable[i].profit)
+				profitTotal:this.state.profitTotal+parseFloat(this.state.businessTable[i].profit),
+				bankTotal:this.state.bankTotal+parseFloat(this.state.businessTable[i].deposit_total),
+				squareTotal:this.state.squareTotal+parseFloat(this.state.businessTable[i].square_total)
 			});
 		}
 	}
@@ -139,9 +145,11 @@ export class BusinessTable extends Component {
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Bank
+								<p style={{fontSize:'14px', color:'grey'}}>Total: ${this.state.bankTotal}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Square
+								<p style={{fontSize:'14px', color:'grey'}}>Total: ${this.state.squareTotal}</p>
 							</th>
 							<th style={{verticalAlign: 'text-top'}}>
 								Revenue
