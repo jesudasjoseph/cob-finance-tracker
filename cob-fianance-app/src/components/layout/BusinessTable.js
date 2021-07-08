@@ -112,7 +112,7 @@ export class BusinessTable extends Component {
 
 	render() {
 		return (
-			<div>
+			<>
 				<Nav>
 					<NavDropdown title="Filter By">
 						<NavDropdown.Item onClick={this.sortByInstructorClickHandler}>Instructor</NavDropdown.Item>
@@ -178,7 +178,7 @@ export class BusinessTable extends Component {
 										square_total} = business;
 
 							return (
-								<tr key={bid}>
+								<tr key={bid} style={{verticalAlign: 'text-center'}}>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{section}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{instructor}</td>
@@ -195,7 +195,7 @@ export class BusinessTable extends Component {
 						})}
 					</tbody>
 				</Table>
-			</div>
+			</>
 		);
 	}
 }
