@@ -9,21 +9,24 @@ const profitBarContainerStyle = {
 }
 const profitBarStyle = {
 	fontSize: '1em',
-	height: '3em'
+	height: '3em',
+	minWidth: '10em'
 }
 const profitBarPlusContainerStyle = {
 	flexGrow: 7
 }
 const profitBarPlusStyle = {
 	fontSize: '1em',
-	height: '3em'
+	height: '3em',
+	minWidth: '10em'
 }
 const lossBarContainerStyle = {
 	flexGrow: 1
 }
 const lossBarStyle = {
 	fontSize: '1em',
-	height: '3em'
+	height: '3em',
+	minWidth: '10em'
 }
 
 export class ProfitProgress extends Component {
