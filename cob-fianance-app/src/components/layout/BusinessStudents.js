@@ -10,7 +10,7 @@ export class StudentTable extends Component {
 			students: []
 		}
 		//this.fetchBusinessStudents = this.fetchBusinessStudents.bind(this);
-		this.fetchBusinessStudents= this.fetchBusinessStudents.bind(this);
+		this.fetchBusinessStudents = this.fetchBusinessStudents.bind(this);
 	}
 
 	componentDidMount(){
