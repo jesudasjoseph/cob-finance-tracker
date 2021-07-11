@@ -1,0 +1,12 @@
+.user-management-container {
+	display: flex;
+	flex-direction: row;
+}
+
+.left {
+	flex-grow: 5;
+}
+
+.right {
+	flex-grow: 1;
+}

@@ -1,12 +1,6 @@
-.controlContainer {
+.control-container {
 	display: flex;
 	flex-direction: column;
-	margin: 5px;
-	padding: 5px;
-	margin-top: 0px;
-	border-radius: 5px;
-	background-color: white;
-	box-shadow: 3px 3px 10px black;
 }
 
 .editButton {

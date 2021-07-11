@@ -7,7 +7,8 @@ export default class EditUserDialog extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			bid: -1
+			bid: -1,
+			uid: ''
 		};
 
 		this.close_dialog = this.close_dialog.bind(this);
@@ -15,8 +16,8 @@ export default class EditUserDialog extends Component {
 	}
 
 	static getDerivedStateFromProps(props, state){
-		if (state.bid === -1)
-			return {bid: props.bid};
+		if (state.bid !== props.bid || state.uid !== props.uid)
+			return {bid: props.bid, uid: props.uid};
 		else
 			return null;
 	}
@@ -25,13 +26,14 @@ export default class EditUserDialog extends Component {
 		this.setState({
 			bid: -1
 		});
-
 		this.props.handleClose();
 	}
 	handle_submit(e) {
 		e.preventDefault();
 		this.props.handleSubmit({uid:this.props.uid, bid:this.state.bid})
-		this.close_dialog();
+		this.setState({
+			bid: -1
+		});
 	}
 
 	render() {
@@ -40,7 +42,7 @@ export default class EditUserDialog extends Component {
 				<Modal show={this.props.show} onHide={this.close_dialog}>
 					<Modal.Header closeButton>
 						<Modal.Title>
-							Add/Move '{this.props.uid}' to Company
+							Add/Move '{this.state.uid}' to Company
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
