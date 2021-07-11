@@ -151,12 +151,12 @@ export default class UserManagementTable extends Component {
 			},
 			body: JSON.stringify(dataObject)
 		}).then(response => {
-			this.props.onSave();
+			this.fetchTableData();
 			console.log(response);
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
-		this.setState({showEditUserDialog: true, selectedRow: -1});
+		this.setState({showEditUserDialog: false});
 	}
 	editDialogHandleClose(){
 		this.setState({showEditUserDialog: false});
@@ -217,7 +217,7 @@ export default class UserManagementTable extends Component {
 					<TableControl className="right" add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
 				</div>
 				<AddUserDialog show={this.state.showAddUserDialog} handleSubmit={this.addDialogHandleSubmit} handleClose={this.addDialogHandleClose}/>
-				<EditUserDialog show={this.state.showEditUserDialog} bid={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid} uid={(this.state.tableSelectedRow === -1) ? '' : this.state.tableRows[this.state.tableSelectedRow].uid} handleSubmit={this.editDialogHandleSubmit} handleClose={this.editDialogHandleClose}/>
+				<EditUserDialog show={this.state.showEditUserDialog} key={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid+this.state.tableRows[this.state.tableSelectedRow].uid} dataFromParent={{bid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid, uid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].uid}} handleSubmit={this.editDialogHandleSubmit} handleClose={this.editDialogHandleClose}/>
 			</>
 		);
 	}

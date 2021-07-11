@@ -8,32 +8,30 @@ export default class EditUserDialog extends Component {
 		super(props);
 		this.state = {
 			bid: -1,
-			uid: ''
+			uid: ' '
 		};
 
 		this.close_dialog = this.close_dialog.bind(this);
 		this.handle_submit = this.handle_submit.bind(this);
 	}
-
+/*
 	static getDerivedStateFromProps(props, state){
-		if (state.bid !== props.bid || state.uid !== props.uid)
+		if (state.bid === -1)
 			return {bid: props.bid, uid: props.uid};
 		else
 			return null;
 	}
+	*/
+	componentDidMount(){
+		this.setState({bid: this.props.dataFromParent.bid, uid: this.props.dataFromParent.uid});
+	}
 
 	close_dialog() {
-		this.setState({
-			bid: -1
-		});
 		this.props.handleClose();
 	}
 	handle_submit(e) {
 		e.preventDefault();
-		this.props.handleSubmit({uid:this.props.uid, bid:this.state.bid})
-		this.setState({
-			bid: -1
-		});
+		this.props.handleSubmit({uid:this.props.dataFromParent.uid, bid:this.state.bid})
 	}
 
 	render() {
