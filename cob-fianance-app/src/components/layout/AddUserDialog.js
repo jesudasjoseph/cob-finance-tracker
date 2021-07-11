@@ -56,7 +56,7 @@ export default class AddUserDialog extends Component {
 
 	handle_submit(e) {
 		e.preventDefault();
-		this.props.handleSubmit({bid: this.state.bid, firstName: this.state.firstName, lastName: this.state.lastName, onid: this.removeSpaces(this.state.onid), section: this.state.section, role: this.state.role});
+		this.props.handleSubmit({bid: this.state.bid, firstName: this.state.firstName, lastName: this.state.lastName, uid: this.removeSpaces(this.state.onid), section: this.state.section, role: this.state.role});
 		this.setState({
 			bid: '',
 			firstName: '',

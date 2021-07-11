@@ -100,7 +100,7 @@ export default class UserManagementTable extends Component {
 
 	//Add Dialog Functions
 	addDialogHandleSubmit(userObject){
-		const addUserToBusinessBody = {onid: userObject.uid, bid: userObject.bid};
+		const addUserToBusinessBody = {uid: userObject.uid, bid: userObject.bid};
 		fetch(API_PATH + '/user', {
 			mode: 'cors',
 			method: 'POST',
