@@ -100,6 +100,7 @@ export default class UserManagementTable extends Component {
 
 	//Add Dialog Functions
 	addDialogHandleSubmit(userObject){
+		const userBody = {user: {uid: userObject.uid, bid: userObject.bid, first: userObject.firstName, last: userObject.lastName, section: userObject.section, role: userObject.role}}
 		const addUserToBusinessBody = {uid: userObject.uid, bid: userObject.bid};
 		fetch(API_PATH + '/user', {
 			mode: 'cors',
@@ -110,7 +111,7 @@ export default class UserManagementTable extends Component {
 				'Content-type': 'application/json',
 				'Authorization': window.localStorage.getItem('jwt')
 			},
-			body: JSON.stringify(userObject)
+			body: JSON.stringify(userBody)
 		}).then(response => {
 			console.log(response);
 			fetch(API_PATH + '/user/addtobusiness', {
