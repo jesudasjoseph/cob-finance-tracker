@@ -3,6 +3,12 @@
 	flex-direction: row;
 }
 
+@media only screen and (max-width: 767px) {
+	.user-management-container {
+		flex-direction: column;
+	}
+}
+
 .left {
 	flex-grow: 5;
 }

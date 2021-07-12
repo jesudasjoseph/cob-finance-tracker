@@ -36,6 +36,10 @@ h2 {
 	border: none;
 }
 
+.table thead .table-secondary-header {
+	color: grey;
+}
+
 .table tbody {
 	cursor: pointer;
 }
