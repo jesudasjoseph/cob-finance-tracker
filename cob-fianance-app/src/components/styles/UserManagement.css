@@ -14,5 +14,8 @@
 }
 
 .right {
+	display: flex;
+	flex-direction: column;
+	min-width: 250px;
 	flex-grow: 1;
 }

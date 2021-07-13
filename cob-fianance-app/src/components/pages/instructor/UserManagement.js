@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 import TableControl from '../../layout/TableControl.js';
 import AddUserDialog from '../../layout/AddUserDialog.js';
 import EditUserDialog from '../../layout/EditUserDialog.js';
+import SortSelector from '../../layout/SortSelector.js';
+import ImportUserDialog from '../../layout/ImportUserDialog.js';
+
 import '../../styles/UserManagement.css';
 
 import {API_PATH} from '../../Config.js';
@@ -18,6 +22,7 @@ export default class UserManagement extends Component {
 			deleteDisabled: true,
 			showAddUserDialog: false,
 			showEditUserDialog: false,
+			sortOption: 'Role',
 			bid: 0
 		}
 
@@ -33,6 +38,11 @@ export default class UserManagement extends Component {
 
 		this.editDialogHandleSubmit = this.editDialogHandleSubmit.bind(this);
 		this.editDialogHandleClose = this.editDialogHandleClose.bind(this);
+
+		this.importDialogHandleSubmit = this.importDialogHandleSubmit.bind(this);
+		this.importDialogHandleClose = this.importDialogHandleClose.bind(this);
+
+		this.onSortOptionChange = this.onSortOptionChange.bind(this);
 	}
 
 	componentDidMount(){
@@ -163,6 +173,36 @@ export default class UserManagement extends Component {
 		this.setState({showEditUserDialog: false});
 	}
 
+	//Import Dialog Functions
+	importDialogHandleSubmit(userObject){
+		this.setState({showImportUserDialog: false});
+	}
+	importDialogHandleClose(){
+		this.setState({showImportUserDialog: false});
+	}
+
+	//Sort Selection Functions
+	onSortOptionChange(option){
+		this.setState({sortOption: option});
+		switch(option){
+			case 'ONID':
+				this.fetchTableData('onid');
+				break;
+			case 'Company':
+				this.fetchTableData('businessname');
+				break;
+			case 'First Name':
+				this.fetchTableData('first');
+				break;
+			case 'Last Name':
+				this.fetchTableData('last');
+				break;
+			case 'Role':
+				this.fetchTableData('role');
+				break;
+		}
+	}
+
 	render(){
 		return(
 			<>
@@ -216,10 +256,17 @@ export default class UserManagement extends Component {
 							</tbody>
 						</Table>
 					</div>
-					<TableControl className="right" add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
+					<div className='right'>
+						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
+						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={this.state.sortOption} onOptionChange={this.onSortOptionChange}/>
+						<div className='flex-container'>
+							<Button onClick={()=>{this.setState({showImportUserDialog: true})}} style={{width: '100%'}}>Import Users</Button>
+						</div>
+					</div>
 				</div>
 				<AddUserDialog show={this.state.showAddUserDialog} handleSubmit={this.addDialogHandleSubmit} handleClose={this.addDialogHandleClose}/>
 				<EditUserDialog show={this.state.showEditUserDialog} key={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid+this.state.tableRows[this.state.tableSelectedRow].uid} dataFromParent={{bid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid, uid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].uid}} handleSubmit={this.editDialogHandleSubmit} handleClose={this.editDialogHandleClose}/>
+				<ImportUserDialog show={this.state.showImportUserDialog} handleSubmit={this.importDialogHandleSubmit} handleClose={this.importDialogHandleClose}/>
 			</>
 		);
 	}
