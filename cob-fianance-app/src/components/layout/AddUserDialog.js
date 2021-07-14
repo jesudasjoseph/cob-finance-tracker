@@ -54,8 +54,7 @@ export default class AddUserDialog extends Component {
 		return text;
 	}
 
-	handle_submit(e) {
-		e.preventDefault();
+	handle_submit() {
 		this.props.handleSubmit({bid: this.state.bid, firstName: this.state.firstName, lastName: this.state.lastName, uid: this.removeSpaces(this.state.onid), section: this.state.section, role: this.state.role});
 		this.setState({
 			bid: '',
@@ -70,14 +69,14 @@ export default class AddUserDialog extends Component {
 	render() {
 		return(
 			<>
-				<Modal show={this.props.show} onHide={this.close_dialog}>
+				<Modal show={this.props.show} onHide={this.close_dialog} autoFocus>
 					<Modal.Header closeButton>
 						<Modal.Title>
 							Add User
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<Form onSubmit={this.handle_submit}>
+						<Form>
 							<Form.Group>
 								<Form.Label>ONID:</Form.Label>
 								<Form.Control type="text" value={this.state.onid}  onChange={(e) => this.setState({onid: e.target.value})} />
@@ -101,9 +100,11 @@ export default class AddUserDialog extends Component {
 								<Form.Label>Business ID:</Form.Label>
 								<Form.Control type="number" value={this.state.bid} onChange={(e) => this.setState({bid: e.target.value})} />
 							</Form.Group>
-							<Button variant="primary" type="submit">Add</Button>
 						</Form>
 					</Modal.Body>
+					<Modal.Footer>
+						<Button variant="primary" onClick={this.handle_submit}>Add User</Button>
+					</Modal.Footer>
 				</Modal>
 			</>
 		)
