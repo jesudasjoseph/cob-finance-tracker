@@ -18,7 +18,7 @@ export default class AddTransactionDialog extends Component {
 			customer: '',
 			date:'',
 			product: '',
-			payment_method: '',
+			payment_method: 'cash',
 			quantity: '',
 			price_per_unit:''
 		};
@@ -33,7 +33,7 @@ export default class AddTransactionDialog extends Component {
 				customer: '',
 				date:'',
 				product: '',
-				payment_method: '',
+				payment_method: 'cash',
 				quantity: '',
 				price_per_unit:''
 			}
@@ -55,39 +55,11 @@ export default class AddTransactionDialog extends Component {
 				customer: '',
 				date:'',
 				product: '',
-				payment_method: '',
+				payment_method: 'cash',
 				quantity: '',
 				price_per_unit:''
 			}
 		});
-
-		const transaction_body = {
-			transaction:{
-				customer:this.state.customer,
-				date:this.state.date,
-				product:this.state.product ,
-				payment_method:this.state.payment_method,
-				quantity:this.state.quantity,
-				price_per_unit:this.state.price_per_unit
-				}
-			};
-
-		fetch(API_PATH + '/transaction', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(transaction_body)
-		}).then(response => {
-			console.log(response);
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-		this.close_dialog();
 	}
 
 	render() {
