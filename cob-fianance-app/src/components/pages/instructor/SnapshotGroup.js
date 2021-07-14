@@ -205,7 +205,7 @@ export default class SnapshotGroup extends React.Component{
 					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
 					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 				</div>
-				<div className='flex-container'>
+				<div className='flex-container table-container'>
 					<h3>Expenses</h3>
 					<Table
 						responsive
@@ -242,7 +242,7 @@ export default class SnapshotGroup extends React.Component{
 						</tbody>
 					</Table>
 				</div>
-				<div className='flex-container'>
+				<div className='flex-container table-container'>
 					<h3>Transactions</h3>
 					<Table
 						responsive
