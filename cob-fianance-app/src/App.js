@@ -13,7 +13,7 @@ import Bank from './components/pages/instructor/Bank.js';
 //Student Pages/Layouts
 import StudentNavbar from './components/layout/StudentNavbar';
 import Dashboard from './components/pages/student/Dashboard';
-import Expenses from './components/pages/student/Expenses';
+import ExpensePage from './components/pages/student/ExpensePage';
 import Transactions from './components/pages/student/Transactions';
 import Page_Settings from './components/pages/student/Settings';
 
@@ -57,7 +57,7 @@ class App extends Component{
 								<Route exact path="/student/dashboard" component={Dashboard}/>
 								<Route exact path="/student/settings" component={Page_Settings} />
 								<Route exact path="/student/transactions" component={Transactions} />
-								<Route exact path="/student/expenses" component={Expenses}/>
+								<Route exact path="/student/expenses" component={ExpensePage}/>
 								<Route path="*" component={Page404}/>
 							</Switch>
 						</div>

@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import ProfitProgress from '../../layout/ProfitProgress';
 import ExpenseProgress from '../../layout/ExpenseProgress';
 import BankProgress from '../../layout/BankProgress';
-import AddTransactionDialogButton from '../../layout/AddTransactionDialogButton';
-import AddExpenseDialogButton from '../../layout/AddExpenseDialogButton';
 import { API_PATH } from '../../Config';
 
 export class Dashboard extends Component {
@@ -50,8 +48,6 @@ export class Dashboard extends Component {
 				<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
 				<h3 style={{padding: '20px 0px 0px 0px'}}>Bank / Square Status</h3>
 				<BankProgress revenue={this.state.business.transaction_total} square={this.state.business.square_total} bank={this.state.business.deposit_total}/>
-				<AddTransactionDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
-				<AddExpenseDialogButton style={{marginTop: '10px', marginLeft: '10px', marginRight: '10px'}}/>
 			</React.Fragment>
 		);
 	}
