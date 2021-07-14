@@ -1,10 +1,9 @@
 import React from 'react'
 import ProfitProgress from '../../layout/ProfitProgress';
 import ExpenseProgress from '../../layout/ExpenseProgress';
-import ExpenseTable from '../../layout/ExpenseTable';
-import TransactionTable from '../../layout/TransactionsTable';
 import BankProgress from '../../layout/BankProgress';
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import { API_PATH } from '../../Config';
 import StudentTable from '../../layout/BusinessStudents';
 
@@ -15,11 +14,15 @@ export default class SnapshotGroup extends React.Component{
 		let bid = parseInt(this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length-1]);
 
 		this.state = {
+			expenseTableData: [],
+			transactionTableData: [],
 			bid: bid,
 			business: [],
 			students: []
 		};
 
+		this.fetchExpenseTableData = this.fetchExpenseTableData.bind(this);
+		this.fetchTransactionTableData = this.fetchTransactionTableData.bind(this);
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
 
 		this.exportExpenseData = this.exportExpenseData.bind(this);
@@ -30,8 +33,54 @@ export default class SnapshotGroup extends React.Component{
 	componentDidMount(){
 		if (isNaN(this.state.bid))
 			this.props.history.push('/404');
-		else
+		else {
 			this.fetchBusinessData();
+			this.fetchExpenseTableData();
+			this.fetchTransactionTableData();
+		}
+	}
+
+	fetchExpenseTableData(){
+		fetch(API_PATH + '/expense?start=0&end=50&bid=' + this.state.bid, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+			if (data != null)
+				this.setState({expenseTableData:data});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+	fetchTransactionTableData(){
+		fetch(API_PATH + '/transaction?start=0&end=50&bid=' + this.state.bid, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			console.log(response);
+			return response.json();
+		}).then(data => {
+			console.log('Success:', data);
+			if (data != null)
+				this.setState({transactionTableData:data});
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 	}
 
 	fetchBusinessData(){
@@ -156,10 +205,81 @@ export default class SnapshotGroup extends React.Component{
 					<Button style={{margin: '0px 5px'}} onClick={this.exportTransactionData}>Download Transaction Data</Button>
 					<Button style={{margin: '0px 5px'}} onClick={this.exportDepositData}>Download Deposit Data</Button>
 				</div>
-				<h3 style={{padding: '20px 0px'}}>Expenses</h3>
-				<ExpenseTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.bid}}/>
-				<h3 style={{padding: '20px 0px'}}>Transactions</h3>
-				<TransactionTable style = {{padding: '10px 20px'}} dataFromParent = {{bid: this.state.bid}}/>
+				<div className='flex-container'>
+					<h3>Expenses</h3>
+					<Table
+						responsive
+						size="m"
+						striped bordered hover variant="dark">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Product</th>
+								<th>Company</th>
+								<th>Payment Method</th>
+								<th>Quantity</th>
+								<th>Price Per Unit</th>
+								<th>Total</th>
+								<th>Justification</th>
+							</tr>
+						</thead>
+						<tbody>
+							{this.state.expenseTableData.map((expense, index) => {
+								const {quantity,product,company, date, payment_method, price_per_unit, justification, total,eid} = expense;
+								return (
+									<tr key={eid}>
+										<td> {date.split('T')[0]} </td>
+										<td> {product}</td>
+										<td>{company}</td>
+										<td>{payment_method}</td>
+										<td>{quantity}</td>
+										<td>{price_per_unit}</td>
+										<td>{total}</td>
+										<td>{justification}</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</Table>
+				</div>
+				<div className='flex-container'>
+					<h3>Transactions</h3>
+					<Table
+						responsive
+						size="m"
+						striped
+						bordered
+						hover
+						variant="dark">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Customer</th>
+								<th>Product</th>
+								<th>Payment Method</th>
+								<th>Quantity</th>
+								<th>Price Per Unit</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							{this.state.transactionTableData.map((transaction, index) => {
+								const {customer,date,product,payment_method, quantity, price_per_unit, tid, total} = transaction;
+								return (
+									<tr key={tid}>
+										<td>{date.split('T')[0]} </td>
+										<td>{customer}</td>
+										<td>{product}</td>
+										<td>{payment_method}</td>
+										<td>{quantity}</td>
+										<td>{price_per_unit}</td>
+										<td>{total}</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</Table>
+				</div>
 
 			</React.Fragment>
 		)

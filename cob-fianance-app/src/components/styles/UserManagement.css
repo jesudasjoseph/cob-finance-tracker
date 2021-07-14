@@ -1,0 +1,21 @@
+.user-management-container {
+	display: flex;
+	flex-direction: row;
+}
+
+@media only screen and (max-width: 767px) {
+	.user-management-container {
+		flex-direction: column;
+	}
+}
+
+.left {
+	flex-grow: 5;
+}
+
+.right {
+	display: flex;
+	flex-direction: column;
+	min-width: 250px;
+	flex-grow: 1;
+}
