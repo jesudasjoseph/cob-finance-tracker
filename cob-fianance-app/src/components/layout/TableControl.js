@@ -47,7 +47,7 @@ export default class TableControl extends Component {
 				</div>
 				<Modal show={this.state.showWarning}>
 					<Modal.Body>
-						<p>Are you sure you want to delete this item?</p>
+						<h3>Are you sure you want to delete this item?</h3>
 					</Modal.Body>
 					<Modal.Footer>
 						<Button onClick={()=>this.onConfirm('')} variant="secondary">Cancel</Button>

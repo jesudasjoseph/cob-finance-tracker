@@ -41,8 +41,7 @@ export default class AddExpenseDialog extends Component {
 		});
 		this.props.handleClose();
 	}
-	handle_submit(e) {
-		e.preventDefault();
+	handle_submit() {
 		this.props.handleSubmit({
 			product:this.state.product,
 			company:this.state.company,
@@ -74,7 +73,7 @@ export default class AddExpenseDialog extends Component {
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<Form onSubmit={this.handle_submit}>
+						<Form>
 							<Form.Group>
 								<Form.Label>Product</Form.Label>
 								<Form.Control type="text" value={this.state.product}  onChange={(e) => this.setState({product: e.target.value})}/>
@@ -91,9 +90,11 @@ export default class AddExpenseDialog extends Component {
 								<Form.Label>Justification</Form.Label>
 								<Form.Control type="text" value={this.state.justification}  onChange={(e) => this.setState({justification: e.target.value})}/>
 							</Form.Group>
-							<Button variant="primary" type="submit">Add</Button>
 						</Form>
 					</Modal.Body>
+					<Modal.Footer>
+						<Button variant="primary" onClick={this.handle_submit}>Add</Button>
+					</Modal.Footer>
 				</Modal>
 			</>
 		)
