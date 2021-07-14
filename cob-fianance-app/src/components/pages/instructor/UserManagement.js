@@ -200,7 +200,6 @@ export default class UserManagement extends Component {
 			body: JSON.stringify(dataObject)
 		}).then(response => {
 			this.fetchTableData();
-			console.log(response);
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
