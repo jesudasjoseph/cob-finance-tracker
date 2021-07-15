@@ -3,13 +3,14 @@ import React, {Component} from 'react';
 import '../styles/Notification.css';
 
 export default class Notification extends Component {
-	
+
 	componentDidUpdate(){
 		if (this.props.show && this.props.timeout)
 			setTimeout(this.props.onClose, parseInt(this.props.timeout));
 	}
 
 	render(){
+		console.log("Notification Updated");
 		if (this.props.show){
 			return(
 				<>

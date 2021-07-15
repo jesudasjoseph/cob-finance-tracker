@@ -164,9 +164,11 @@ export default class UserManagement extends Component {
 					body: JSON.stringify(addUserToBusinessBody)
 				}).then(response => {
 					if (Math.floor(response.status / 200) === 1){
+						console.log("success");
 						this.sendNotification('success', 'Successfully Added New User', '', 4000);
 					}
 					else{
+						console.log("success");
 						this.sendNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 					}
 					this.fetchTableData(this.state.sortOption);
