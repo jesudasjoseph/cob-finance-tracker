@@ -164,11 +164,9 @@ export default class UserManagement extends Component {
 					body: JSON.stringify(addUserToBusinessBody)
 				}).then(response => {
 					if (Math.floor(response.status / 200) === 1){
-						console.log("success");
 						this.sendNotification('success', 'Successfully Added New User', '', 4000);
 					}
 					else{
-						console.log("success");
 						this.sendNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 					}
 					this.fetchTableData(this.state.sortOption);
@@ -310,7 +308,7 @@ export default class UserManagement extends Component {
 
 				<ImportUserDialog show={this.state.showImportUserDialog} handleSubmit={this.importDialogHandleSubmit} handleClose={this.importDialogHandleClose}/>
 
-				<Notification show={this.state.showNotification} type={this.state.notificationType} content={this.state.notificationContent} title={this.state.notificationTitle} onClose={this.notificationOnClose} timeout={this.state.notificationTimeout}/>
+				<Notification key={this.state.showNotification} show={this.state.showNotification} type={this.state.notificationType} content={this.state.notificationContent} title={this.state.notificationTitle} onClose={this.notificationOnClose} timeout={this.state.notificationTimeout}/>
 			</>
 		);
 	}
