@@ -56,7 +56,7 @@ export default class AddUserDialog extends Component {
 			}
 		}).then((data) => {
 			console.log(data);
-			this.setState({comapanyNameList:data});
+			this.setState({comapanyNameList:data, bid:data[0].bid});
 		}).catch((error) => {
 			console.log(error);
 		});
