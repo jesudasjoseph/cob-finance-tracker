@@ -20,11 +20,46 @@ export default class AddUserDialog extends Component {
 			lastName: '',
 			onid: '',
 			section: '',
-			role: '0'
+			role: '0',
+			comapanyNameList: []
 		};
+
+		this.fetchCompanyNames = this.fetchCompanyNames.bind(this);
 
 		this.close_dialog = this.close_dialog.bind(this);
 		this.handle_submit = this.handle_submit.bind(this);
+	}
+
+	componentDidMount(){
+		this.fetchCompanyNames();
+	}
+
+	fetchCompanyNames(){
+		let URL = API_PATH + '/business/names'
+
+		fetch(URL, {
+			mode: 'cors',
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			}
+		}).then(response => {
+			if (Math.floor(response.status / 200) === 1){
+				return response.json();
+			}
+			else {
+				console.log(response);
+				return [];
+			}
+		}).then((data) => {
+			console.log(data);
+			this.setState({comapanyNameList:data});
+		}).catch((error) => {
+			console.log(error);
+		});
 	}
 
 	close_dialog() {
@@ -98,7 +133,17 @@ export default class AddUserDialog extends Component {
 								</Form.Control>
 
 								<Form.Label>Business ID:</Form.Label>
-								<Form.Control type="number" value={this.state.bid} onChange={(e) => this.setState({bid: e.target.value})} />
+								<Form.Control as="select" type="text" value={this.state.bid} onChange={(e) => this.setState({bid: e.target.value})}>
+									{
+										this.state.comapanyNameList.map((company, index) => {
+											return(
+												<>
+													<option key={company.name} value={company.bid}>{company.name}</option>
+												</>
+											);
+										})
+									}
+								</Form.Control>
 							</Form.Group>
 						</Form>
 					</Modal.Body>
