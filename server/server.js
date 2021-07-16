@@ -17,7 +17,9 @@ let options = {
 };
 
 const httpServer = express();
-
+httpServer.get(config.certbotCertificateRenewalURL, (req, res) => {
+	res.send(config.certBotMSG);
+});
 httpServer.get('*', (req, res) => {
 	res.redirect('https://' + req.hostname + req.url);
 });
