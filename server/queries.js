@@ -244,7 +244,7 @@ async function getMultipleUsers(asker, start, end, sort) {
 					break;
 			}
 			if (!res.rows.length) {
-				return new data(404);
+				return new data(404, []);
 			}
 			else {
 				return new data(200, res.rows);
@@ -434,7 +434,7 @@ async function getMultipleBusiness(asker, start, end, sort) {
 						break;
 				}
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(404, []);
 				}
 				else {
 					return new data(200, res.rows);
@@ -707,7 +707,7 @@ async function getMultipleTransactions(asker, start, end, bid) {
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(404, []);
 				}
 				else {
 					return new data(200, res.rows);
@@ -742,7 +742,7 @@ async function getMultipleTransactionsByUid(asker, start, end) {
 				if (await is_user_in_business(asker.uid, client)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
-						return new data(404);
+						return new data(404, []);
 					}
 					else {
 						return new data(200, res.rows);
@@ -858,7 +858,7 @@ async function getMultipleExpenses(asker, start, end, bid) {
 				if (await is_user_in_business(asker.uid, client)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
-						return new data(404);
+						return new data(404, []);
 					}
 					else {
 						return new data(200, res.rows);
@@ -905,7 +905,7 @@ async function getMultipleExpensesByUid(asker, start, end) {
 				if (await is_user_in_business(asker.uid, client)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
-						return new data(404);
+						return new data(404, []);
 					}
 					else {
 						return new data(200, res.rows);
