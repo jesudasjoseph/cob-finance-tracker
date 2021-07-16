@@ -451,6 +451,39 @@ async function getMultipleBusiness(asker, start, end, sort) {
 
 	return new data(500);
 }
+async function getMultipleBusinessNames(asker) {
+	const query = {
+		text: "SELECT name, bid FROM business_view;"
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			default:
+				res = await client.query(query);
+
+			if (!res.rows.length) {
+				return new data(404, []);
+			}
+			else {
+				return new data(200, res.rows);
+			}
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function getBusinessByUid(asker) {
 	const query = {
 		text: 'SELECT * FROM business_view LEFT JOIN user_has_business ON (business_view.bid=user_has_business.bid) WHERE uid=$1;',
@@ -1239,6 +1272,7 @@ exports.deleteUserByUid = deleteUserByUid;
 exports.addUserToBusiness = addUserToBusiness;
 
 exports.getMultipleBusiness = getMultipleBusiness;
+exports.getMultipleBusinessNames = getMultipleBusinessNames;
 exports.getBusinessByUid = getBusinessByUid;
 exports.getBusinessByBid = getBusinessByBid;
 exports.createBusiness = createBusiness;
