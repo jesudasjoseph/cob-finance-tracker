@@ -12,6 +12,9 @@ module.exports = {
 	samlCallbackUrl: process.env.SAML_CBURL,
 
 	sslKeyPath: process.env.SSL_KEY_PATH,
-	sslCertPath: process.env.SSL_CERT_PATH
+	sslCertPath: process.env.SSL_CERT_PATH,
+
+	certbotCertificateRenewalURL: process.env.certBotURL,
+	certbotCertificateRenewalMSG: process.env.certBotMSG
 
 };

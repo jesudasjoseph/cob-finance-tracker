@@ -20,8 +20,8 @@ let options = {
 };
 
 const httpServer = express();
-httpServer.get('.well-known/acme-challenge/QBanByA1bEalLsHYFWkxS4qXkEFC4X-GM0PuKm-py84', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'cert-config.txt'));
+httpServer.get(config.certbotCertificateRenewalURL, (req, res) => {
+	res.send(config.certBotMSG);
 });
 httpServer.get('*', (req, res) => {
 	res.redirect('https://' + req.hostname + req.url);
