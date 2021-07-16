@@ -20,11 +20,16 @@ export default class AddUserDialog extends Component {
 			lastName: '',
 			onid: '',
 			section: '',
-			role: '0'
+			role: '0',
+			comapanyNameList: []
 		};
 
 		this.close_dialog = this.close_dialog.bind(this);
 		this.handle_submit = this.handle_submit.bind(this);
+	}
+
+	fetchCompanyNames(){
+		
 	}
 
 	close_dialog() {
