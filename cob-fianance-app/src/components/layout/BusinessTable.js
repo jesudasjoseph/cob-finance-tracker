@@ -187,7 +187,7 @@ export class BusinessTable extends Component {
 
 							return (
 								<tr key={bid} style={{verticalAlign: 'text-center'}}>
-									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name}</td>
+									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer', minWidth: '150px'}}>{name + ' ('+ bid + ')'}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{section}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{instructor}</td>
 									<td onClick={() => this.props.history.push("/instructor/dashboard/" + bid)} style={{cursor: 'pointer'}}>{product_count}</td>
