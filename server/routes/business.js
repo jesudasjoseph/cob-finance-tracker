@@ -3,9 +3,20 @@ const router = express.Router();
 const authorizor = require('../authorizor');
 const q = require('../queries');
 
+//Endpoint: '/business'
+//Get Multiple Businesses
 router.get('/', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let {code, data} = await q.getMultipleBusiness(req.body.asker, req.query.start, req.query.end, req.query.sort);
+	res.statusCode = code;
+	res.send(JSON.stringify(data));
+});
+
+//Endpoint: '/business/names'
+//Get Multiple Business Names
+router.get('/names', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code, data} = await q.getMultipleBusinessNames(req.body.asker);
 	res.statusCode = code;
 	res.send(JSON.stringify(data));
 });

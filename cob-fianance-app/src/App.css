@@ -34,6 +34,10 @@ h2 {
 	overflow: auto;
 }
 
+.table table {
+	column-width: 200px;
+}
+
 .table thead {
 	box-shadow: 0px 3px 4px black;
 	border: none;
@@ -54,4 +58,10 @@ h2 {
 	box-shadow: 0px 3px 4px black, 0px -1px  3px black;
 	text-shadow: 2px 2px 3px #000000;
 	background-color: #43494e;
+}
+
+.container {
+  padding: 15px;
+	display: block;
+	min-width: 80vw;
 }

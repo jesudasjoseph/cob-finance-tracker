@@ -28,7 +28,7 @@ export default class UserManagement extends Component {
 			notificationContent: '',
 			notificationTitle: '',
 			notificationTimeout: 0,
-			sortOption: 'Role',
+			sortOption: 'role',
 			bid: 0
 		}
 
@@ -73,9 +73,11 @@ export default class UserManagement extends Component {
 	}
 
 	fetchTableData(sortParam){
-		let URL = API_PATH + '/user?start=0&end=50'
+		let URL = API_PATH + '/user?start=0&end=100'
 		if (sortParam){
 			URL = URL + '&sort=' + sortParam;
+		} else {
+			URL = URL + '&sort=' + this.state.sortOption;
 		}
 
 		fetch(URL, {
@@ -130,6 +132,9 @@ export default class UserManagement extends Component {
 			}
 		}).then(response => {
 			console.log(response);
+			if (this.state.tableSelectedRow === this.state.tableRows.length - 1){
+				this.setState({tableSelectedRow: this.state.tableRows.length - 2});
+			}
 			this.fetchTableData();
 		}).catch((error) => {
 			console.error('Error:', error);
@@ -219,21 +224,25 @@ export default class UserManagement extends Component {
 
 	//Sort Selection Functions
 	onSortOptionChange(option){
-		this.setState({sortOption: option});
 		switch(option){
 			case 'ONID':
+				this.setState({sortOption: 'onid'});
 				this.fetchTableData('onid');
 				break;
 			case 'Company':
+				this.setState({sortOption: 'businessname'});
 				this.fetchTableData('businessname');
 				break;
 			case 'First Name':
+				this.setState({sortOption: 'first'});
 				this.fetchTableData('first');
 				break;
 			case 'Last Name':
+				this.setState({sortOption: 'last'});
 				this.fetchTableData('last');
 				break;
 			case 'Role':
+				this.setState({sortOption: 'role'});
 				this.fetchTableData('role');
 				break;
 			default:
@@ -246,7 +255,7 @@ export default class UserManagement extends Component {
 			<>
 				<div className='user-management-container'>
 					<div className='flex-container left'>
-						<h2>User Management Table</h2>
+						<h2>User Table</h2>
 						<Table size='sm' variant='dark' bordered hover responsive>
 							<thead>
 								<tr>
@@ -267,25 +276,34 @@ export default class UserManagement extends Component {
 							<tbody>
 								{
 									this.state.tableRows.map((row, index) => {
+										const {
+											uid,
+											bid,
+											name,
+											first,
+											last,
+											section,
+											role
+										} = row;
 										if (index === this.state.tableSelectedRow){
 											return(
-												<tr className='selectedRow' key={this.state.tableRows[index].uid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{this.state.tableRows[index].uid}</td>
-													<td>{'(' + this.state.tableRows[index].bid + ') ' + this.state.tableRows[index].name}</td>
-													<td>{this.state.tableRows[index].last + ', ' + this.state.tableRows[index].first}</td>
-													<td>{this.state.tableRows[index].section}</td>
-													<td>{this.state.tableRows[index].role}</td>
+												<tr className='selectedRow' key={uid} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{uid}</td>
+													<td>{'(' + bid + ') ' + name}</td>
+													<td>{last + ', ' + first}</td>
+													<td>{section}</td>
+													<td>{role}</td>
 												</tr>
 											);
 										}
 										else {
 											return(
-												<tr key={this.state.tableRows[index].uid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{this.state.tableRows[index].uid}</td>
-													<td>{'(' + this.state.tableRows[index].bid + ') ' + this.state.tableRows[index].name}</td>
-													<td>{this.state.tableRows[index].last + ', ' + this.state.tableRows[index].first}</td>
-													<td>{this.state.tableRows[index].section}</td>
-													<td>{this.state.tableRows[index].role}</td>
+												<tr key={uid} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{uid}</td>
+													<td>{'(' + bid + ') ' + name}</td>
+													<td>{last + ', ' + first}</td>
+													<td>{section}</td>
+													<td>{role}</td>
 												</tr>
 											);
 										}
@@ -296,7 +314,7 @@ export default class UserManagement extends Component {
 					</div>
 					<div className='right'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
-						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={this.state.sortOption} onOptionChange={this.onSortOptionChange}/>
+						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={'Role'} onOptionChange={this.onSortOptionChange}/>
 						<div className='flex-container'>
 							<Button onClick={()=>{this.setState({showImportUserDialog: true})}} style={{width: '100%'}}>Import Users</Button>
 						</div>
