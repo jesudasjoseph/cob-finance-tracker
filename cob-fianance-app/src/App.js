@@ -3,7 +3,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
 //Insructor Pages/Layouts
 import InstructorNavbar from './components/layout/InstructorNavbar';
-import DashboardI from './components/pages/instructor/Dashboard';
+import CompanyManagementPage from './components/pages/instructor/CompanyManagementPage';
 import UserInstructor from './components/pages/instructor/UserInstructor';
 import SettingsInstructor from './components/pages/instructor/SettingsInstuctor';
 import UserManagement from './components/pages/instructor/UserManagement';
@@ -39,7 +39,8 @@ class App extends Component{
 						<InstructorNavbar/>
 						<div className="container">
 							<Switch>
-								<Route exact path="/instructor/dashboard" component={DashboardI}/>
+								<Route exact path="/instructor/dashboard" component={CompanyManagementPage}/>
+								<Route exact path="/instructor/companymanagementpage" component={CompanyManagementPage}/>
 								<Route exact path="/instructor/bank" component={Bank}/>
 								<Route exact path="/instructor/settings" component={SettingsInstructor} />
 								<Route exact path="/instructor/profile" component={UserInstructor} />

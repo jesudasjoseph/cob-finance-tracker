@@ -255,7 +255,7 @@ export default class UserManagement extends Component {
 			<>
 				<div className='user-management-container'>
 					<div className='flex-container left'>
-						<h2>User Management Table</h2>
+						<h2>User Table</h2>
 						<Table size='sm' variant='dark' bordered hover responsive>
 							<thead>
 								<tr>
@@ -276,25 +276,34 @@ export default class UserManagement extends Component {
 							<tbody>
 								{
 									this.state.tableRows.map((row, index) => {
+										const {
+											uid,
+											bid,
+											name,
+											first,
+											last,
+											section,
+											role
+										} = row;
 										if (index === this.state.tableSelectedRow){
 											return(
-												<tr className='selectedRow' key={this.state.tableRows[index].uid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{this.state.tableRows[index].uid}</td>
-													<td>{'(' + this.state.tableRows[index].bid + ') ' + this.state.tableRows[index].name}</td>
-													<td>{this.state.tableRows[index].last + ', ' + this.state.tableRows[index].first}</td>
-													<td>{this.state.tableRows[index].section}</td>
-													<td>{this.state.tableRows[index].role}</td>
+												<tr className='selectedRow' key={uid} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{uid}</td>
+													<td>{'(' + bid + ') ' + name}</td>
+													<td>{last + ', ' + first}</td>
+													<td>{section}</td>
+													<td>{role}</td>
 												</tr>
 											);
 										}
 										else {
 											return(
-												<tr key={this.state.tableRows[index].uid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{this.state.tableRows[index].uid}</td>
-													<td>{'(' + this.state.tableRows[index].bid + ') ' + this.state.tableRows[index].name}</td>
-													<td>{this.state.tableRows[index].last + ', ' + this.state.tableRows[index].first}</td>
-													<td>{this.state.tableRows[index].section}</td>
-													<td>{this.state.tableRows[index].role}</td>
+												<tr key={uid} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{uid}</td>
+													<td>{'(' + bid + ') ' + name}</td>
+													<td>{last + ', ' + first}</td>
+													<td>{section}</td>
+													<td>{role}</td>
 												</tr>
 											);
 										}
