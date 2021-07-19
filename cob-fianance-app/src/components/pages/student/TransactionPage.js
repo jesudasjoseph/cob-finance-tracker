@@ -80,7 +80,7 @@ export default class TransactionPage extends Component {
 		return (
 			<>
 				<div className='transaction-container'>
-					<div className='flex-container left'>
+					<div className='flex-container left table-container'>
 						<h2>Transactions</h2>
 						<Table responsive size="m" striped bordered hover variant="dark">
 							<thead>
