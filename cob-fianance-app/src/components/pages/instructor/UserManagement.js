@@ -115,6 +115,9 @@ export default class UserManagement extends Component {
 			if (data.length < this.state.tableMaxRows){
 				this.setState({nextDisabled: true});
 			}
+			else {
+				this.setState({nextDisabled: false});
+			}
 			this.setState({tableRows:data});
 		}).catch((error) => {
 			this.sendNotification('fail', 'App Error', error.toString(), 0);
@@ -287,7 +290,7 @@ export default class UserManagement extends Component {
 			<>
 				<div className='user-management-container'>
 					<div className='flex-container left'>
-						<h2>User Table</h2>
+						<h2>Users</h2>
 						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
 						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
 						<Table size='sm' variant='dark' bordered hover responsive>

@@ -15,6 +15,8 @@ export default class CompanyManagementPage extends Component {
 		super(props);
 		this.state = {
 			businessTable: [],
+			tableMaxRows: 18,
+			tableInitialIndex: 0,
 			selectedRow: -1,
 			revenueTotal: 0,
 			quantityTotal: 0,
@@ -30,7 +32,9 @@ export default class CompanyManagementPage extends Component {
 			notificationType: '',
 			notificationTitle: '',
 			notificationContent: '',
-			notificationTimeout: 0
+			notificationTimeout: 0,
+			lastDisabled: true,
+			nextDisabled: false
 		}
 
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
@@ -50,15 +54,25 @@ export default class CompanyManagementPage extends Component {
 		this.onSortOptionChange = this.onSortOptionChange.bind(this);
 
 		this.overviewBusinessOnClick = this.overviewBusinessOnClick.bind(this);
+
+		this.lastPage = this.lastPage.bind(this);
+		this.nextPage = this.nextPage.bind(this);
 }
 
 	componentDidMount(){
 		this.fetchBusinessData('name');
 	}
 
-	fetchBusinessData(sortParam){
+	fetchBusinessData(sortParam, start){
 
-		let URL = API_PATH + '/business?start=0&end=50'
+		let URL = API_PATH + '/business?';
+		if (start != null){
+			URL = URL + 'start=' + start + '&end=' + this.state.tableMaxRows;
+		}
+		else {
+			URL = URL + 'start=' + this.state.tableInitialIndex + '&end=' + this.state.tableMaxRows;
+		}
+
 		if (sortParam){
 			URL = URL + '&sort=' + sortParam;
 		}
@@ -79,7 +93,12 @@ export default class CompanyManagementPage extends Component {
 			console.log(response);
 			return response.json();
 		}).then(data => {
-			console.log('Success:', data);
+			if (data.length < this.state.tableMaxRows){
+				this.setState({nextDisabled: true});
+			}
+			else {
+				this.setState({nextDisabled: false});
+			}
 			this.setState({ businessTable:data });
 			this.getBusinessTotals();
 		}).catch((error) => {
@@ -178,6 +197,7 @@ export default class CompanyManagementPage extends Component {
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
 				this.sendNotification('success', 'Successfully Added New Business', '', 4000);
+
 			}
 			else{
 				this.sendNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
@@ -217,12 +237,29 @@ export default class CompanyManagementPage extends Component {
 		this.props.history.push("/instructor/dashboard/" + this.state.businessTable[this.state.selectedRow].bid);
 	}
 
+	//Paging
+	nextPage(){
+		this.fetchTableData(null, this.state.tableInitialIndex + this.state.tableMaxRows);
+		this.setState({tableInitialIndex: this.state.tableInitialIndex + this.state.tableMaxRows, lastDisabled: false})
+	}
+	lastPage(){
+		this.fetchTableData(null, this.state.tableInitialIndex - this.state.tableMaxRows);
+		if (this.state.tableInitialIndex - this.state.tableMaxRows == 0){
+			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: true, nextDisabled: false});
+		}
+		else {
+			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: false, nextDisabled: false});
+		}
+	}
+
 	render() {
 		return (
 			<>
 				<div className='company-management-container'>
 					<div className='flex-container left'>
-						<h2>Company Table</h2>
+						<h2>Companies</h2>
+						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
+						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
 						<Table responsive size="sm" bordered hover variant="dark">
 							<thead>
 								<tr>
