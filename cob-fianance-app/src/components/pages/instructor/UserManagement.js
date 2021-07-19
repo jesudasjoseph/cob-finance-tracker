@@ -127,8 +127,11 @@ export default class UserManagement extends Component {
 
 	//Table Function
 	tableHandleRowClick(index){
-		if (index != null) {
+		if (index >= 0) {
 			this.setState({editDisabled: false, deleteDisabled: false});
+		}
+		else {
+			this.setState({editDisabled: true, deleteDisabled: true});
 		}
 		this.setState({tableSelectedRow: index});
 	}
@@ -274,6 +277,7 @@ export default class UserManagement extends Component {
 	nextPage(){
 		this.fetchTableData(null, this.state.tableInitialIndex + this.state.tableMaxRows);
 		this.setState({tableInitialIndex: this.state.tableInitialIndex + this.state.tableMaxRows, lastDisabled: false})
+		this.tableHandleRowClick(-1);
 	}
 	lastPage(){
 		this.fetchTableData(null, this.state.tableInitialIndex - this.state.tableMaxRows);
@@ -283,6 +287,7 @@ export default class UserManagement extends Component {
 		else {
 			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: false, nextDisabled: false});
 		}
+		this.tableHandleRowClick(-1);
 	}
 
 	render(){

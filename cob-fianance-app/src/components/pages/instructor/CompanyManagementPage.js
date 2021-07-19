@@ -135,8 +135,11 @@ export default class CompanyManagementPage extends Component {
 	}
 
 	tableHandleRowClick(index){
-		if (index != null) {
+		if (index >= 0) {
 			this.setState({deleteDisabled: false});
+		}
+		else {
+			this.setState({deleteDisabled: true});
 		}
 		this.setState({selectedRow: index});
 	}
@@ -240,7 +243,8 @@ export default class CompanyManagementPage extends Component {
 	//Paging
 	nextPage(){
 		this.fetchTableData(null, this.state.tableInitialIndex + this.state.tableMaxRows);
-		this.setState({tableInitialIndex: this.state.tableInitialIndex + this.state.tableMaxRows, lastDisabled: false})
+		this.setState({tableInitialIndex: this.state.tableInitialIndex + this.state.tableMaxRows, lastDisabled: false});
+		this.tableHandleRowClick(-1);
 	}
 	lastPage(){
 		this.fetchTableData(null, this.state.tableInitialIndex - this.state.tableMaxRows);
@@ -250,6 +254,7 @@ export default class CompanyManagementPage extends Component {
 		else {
 			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: false, nextDisabled: false});
 		}
+		this.tableHandleRowClick(-1);
 	}
 
 	render() {
