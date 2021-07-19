@@ -18,6 +18,8 @@ export default class UserManagement extends Component {
 		this.state = {
 			tableRows: [],
 			tableSelectedRow: -1,
+			tableMaxRows: 18,
+			tableInitialIndex: 0,
 			addDisabled: false,
 			editDisabled: true,
 			deleteDisabled: true,
@@ -29,7 +31,9 @@ export default class UserManagement extends Component {
 			notificationTitle: '',
 			notificationTimeout: 0,
 			sortOption: 'role',
-			bid: 0
+			bid: 0,
+			lastDisabled: true,
+			nextDisabled: false
 		}
 
 		this.fetchTableData = this.fetchTableData.bind(this);
@@ -52,6 +56,9 @@ export default class UserManagement extends Component {
 
 		this.sendNotification = this.sendNotification.bind(this);
 		this.notificationOnClose = this.notificationOnClose.bind(this);
+
+		this.lastPage = this.lastPage.bind(this);
+		this.nextPage = this.nextPage.bind(this);
 	}
 
 	componentDidMount(){
@@ -72,8 +79,15 @@ export default class UserManagement extends Component {
 		this.setState({showNotification: false});
 	}
 
-	fetchTableData(sortParam){
-		let URL = API_PATH + '/user?start=0&end=100'
+	fetchTableData(sortParam, start){
+		let URL = API_PATH + '/user?';
+		if (start != null){
+			URL = URL + 'start=' + start + '&end=' + this.state.tableMaxRows;
+		}
+		else {
+			URL = URL + 'start=' + this.state.tableInitialIndex + '&end=' + this.state.tableMaxRows;
+		}
+
 		if (sortParam){
 			URL = URL + '&sort=' + sortParam;
 		} else {
@@ -98,6 +112,9 @@ export default class UserManagement extends Component {
 				return [];
 			}
 		}).then((data) => {
+			if (data.length < this.state.tableMaxRows){
+				this.setState({nextDisabled: true});
+			}
 			this.setState({tableRows:data});
 		}).catch((error) => {
 			this.sendNotification('fail', 'App Error', error.toString(), 0);
@@ -250,12 +267,29 @@ export default class UserManagement extends Component {
 		}
 	}
 
+	//Paging
+	nextPage(){
+		this.fetchTableData(null, this.state.tableInitialIndex + this.state.tableMaxRows);
+		this.setState({tableInitialIndex: this.state.tableInitialIndex + this.state.tableMaxRows, lastDisabled: false})
+	}
+	lastPage(){
+		this.fetchTableData(null, this.state.tableInitialIndex - this.state.tableMaxRows);
+		if (this.state.tableInitialIndex - this.state.tableMaxRows == 0){
+			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: true, nextDisabled: false});
+		}
+		else {
+			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: false, nextDisabled: false});
+		}
+	}
+
 	render(){
 		return(
 			<>
 				<div className='user-management-container'>
 					<div className='flex-container left'>
 						<h2>User Table</h2>
+						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
+						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
 						<Table size='sm' variant='dark' bordered hover responsive>
 							<thead>
 								<tr>
