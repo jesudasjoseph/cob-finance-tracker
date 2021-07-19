@@ -22,10 +22,20 @@ h2 {
 	box-shadow: 3px 3px 10px black;
 }
 
+/*.table-container{
+	max-height: 70vh;
+}*/
+
 /*Look for data tables*/
 .table {
 	border-radius: 5px;
 	border-bottom: none;
+	max-height: 70vh;
+	overflow: auto;
+}
+
+.table table {
+	column-width: 200px;
 }
 
 .table thead {
@@ -50,9 +60,17 @@ h2 {
 	background-color: #43494e;
 }
 
-
+.global-last-page-button {
+	width: 50%;
+	float: left;
+}
+.global-next-page-button {
+	width: 50%;
+	float: right;
+}
 
 .container {
   padding: 15px;
 	display: block;
+	min-width: 80vw;
 }
