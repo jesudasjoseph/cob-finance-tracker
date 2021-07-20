@@ -402,15 +402,15 @@ async function getMultipleBusiness(asker, start, end, sort, searchText) {
 	}
 	const querySortByInstructor = {
 		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		values: [start, end, searchText]
 	}
 	const querySortByName = {
 		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY name OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		values: [start, end, searchText]
 	}
 	const querySortBySection = {
 		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		values: [start, end, searchText]
 	}
 	const client = await pool.connect();
 	let res;
