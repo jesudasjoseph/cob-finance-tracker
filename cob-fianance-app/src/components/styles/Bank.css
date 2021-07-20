@@ -1,0 +1,23 @@
+.bank-container{
+	display: flex;
+	flex-basis: auto;
+	flex-direction: row;
+}
+
+@media only screen and (max-width: 767px) {
+	.bank-container {
+		flex-direction: column;
+	}
+}
+
+.left {
+	flex-grow: 1;
+}
+
+.middle {
+	flex-grow: 10;
+}
+
+.right {
+	flex-grow: 1;
+}

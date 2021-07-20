@@ -3,14 +3,17 @@ import Table from 'react-bootstrap/Table';
 import AddDepositDialogButton from '../../layout/AddDepositDialogButton';
 import { API_PATH } from '../../Config';
 
+import '../../styles/Bank.css';
+
 export default class Bank extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			selectedBid: null,
 			depositData: [],
 			businessData: [],
-			businessName: ''
+			businessTableSelectedRow: -1,
+			depositTableMaxRows: 18,
+			depositTableInitialIndex: 0
 		};
 
 		this.fetchDepositData = this.fetchDepositData.bind(this);
@@ -26,7 +29,7 @@ export default class Bank extends React.Component{
 	}
 
 	fetchBusinessData(){
-		fetch(API_PATH + '/business?start=0&end=50', {
+		fetch(API_PATH + '/business/names', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -66,10 +69,9 @@ export default class Bank extends React.Component{
 		});
 	}
 
-	businessTableRowClickHandler(bid, name){
-		this.setState({selectedBid:bid, businessName:name});
-		console.log(bid);
-		this.fetchDepositData(bid);
+	businessTableRowClickHandler(index){
+		this.setState({businessTableSelectedRow: index});
+		this.fetchDepositData(this.state.businessData[index].bid);
 	}
 
 	onDepositAdd(){
@@ -77,6 +79,76 @@ export default class Bank extends React.Component{
 	}
 
 	render () {
+		return(
+			<>
+			<div className='bank-container'>
+				<div className='left'>
+					<div className='flex-container'>
+						<Table responsive size="sm" bordered hover variant="dark">
+							<thead>
+								<tr>
+									<th>Select Company</th>
+								</tr>
+							</thead>
+							<tbody>
+								{this.state.businessData.map((business, index) => {
+									const {name, bid} = business;
+									if (this.state.businessTableSelectedRow === index){
+										return (
+											<tr className='selectedRow' key={bid} onClick={() => this.businessTableRowClickHandler(index)}>
+												<td>{name}</td>
+											</tr>
+										);
+									}
+									else{
+										return (
+											<tr key={bid} onClick={() => this.businessTableRowClickHandler(index)}>
+												<td>{name}</td>
+											</tr>
+										);
+									}
+								})}
+							</tbody>
+						</Table>
+					</div>
+				</div>
+				<div className='middle'>
+					<div className='flex-container'>
+						<h2>{}</h2>
+						<Table responsive size="sm" striped bordered hover variant="dark">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Amount</th>
+									<th>ONID</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								{this.state.depositData.map((deposit, index) => {
+									const {d_id, date, uid, val, description} = deposit;
+									return (
+										<tr key={d_id}>
+											<td>{date.split('T')[0]}</td>
+											<td>{val}</td>
+											<td>{uid}</td>
+											<td>{description}</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</Table>
+					</div>
+				</div>
+				<div className='right'>
+					<div className='flex-container'>
+						<AddDepositDialogButton bid={0} onSave={this.onDepositAdd} style={{margin: '20px'}}/>
+					</div>
+				</div>
+			</div>
+			</>
+		);
+		/*
 		if (this.state.selectedBid == null) {
 			return (
 				<React.Fragment>
@@ -199,5 +271,6 @@ export default class Bank extends React.Component{
 				</React.Fragment>
 			);
 		}
+		*/
 	}
 }
