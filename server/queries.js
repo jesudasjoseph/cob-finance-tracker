@@ -455,7 +455,7 @@ async function getMultipleBusiness(asker, start, end, sort, searchText) {
 }
 async function getMultipleBusinessNames(asker) {
 	const query = {
-		text: "SELECT name, bid FROM business_view;"
+		text: "SELECT name, bid FROM business_view ORDER BY name;"
 	}
 	const client = await pool.connect();
 	let res;
