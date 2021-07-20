@@ -394,22 +394,23 @@ async function addUserToBusiness(asker, uid, bid) {
 
 //Business Queries
 //name, instructor, section, revenue, bank, square, expenses, profit
-async function getMultipleBusiness(asker, start, end, sort) {
+async function getMultipleBusiness(asker, start, end, sort, searchText) {
+	searchText = '%' + searchText + '%';
 	const query = {
-		text: 'SELECT * FROM business_view OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const querySortByInstructor = {
-		text: 'SELECT * FROM business_view ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const querySortByName = {
-		text: 'SELECT * FROM business_view ORDER BY name OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY name OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const querySortBySection = {
-		text: 'SELECT * FROM business_view ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const client = await pool.connect();
 	let res;
@@ -454,7 +455,7 @@ async function getMultipleBusiness(asker, start, end, sort) {
 }
 async function getMultipleBusinessNames(asker) {
 	const query = {
-		text: "SELECT name, bid FROM business_view;"
+		text: "SELECT name, bid FROM business_view ORDER BY name;"
 	}
 	const client = await pool.connect();
 	let res;
