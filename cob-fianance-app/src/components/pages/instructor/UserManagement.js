@@ -98,11 +98,11 @@ export default class UserManagement extends Component {
 			URL = URL + '&sort=' + this.state.sortOption;
 		}
 
-		if (searchParam){
-			URL = URL + '&search=' + searchParam;
+		if (searchParam === undefined){
+			URL = URL + '&search=' + this.state.searchText;
 		}
 		else {
-			URL = URL + '&search=' + this.state.searchText;
+			URL = URL + '&search=' + searchParam;
 		}
 
 		fetch(URL, {
