@@ -100,7 +100,6 @@ export default class CompanyManagementPage extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
 			if (data.length < this.state.tableMaxRows){
