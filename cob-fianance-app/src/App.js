@@ -25,7 +25,7 @@ import Page404 from './components/pages/404';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class App extends Component{
+export default class App extends Component{
 	render(){
 		return (
 			<BrowserRouter>
@@ -70,5 +70,3 @@ class App extends Component{
 		);
 	}
 }
-
-export default App;
