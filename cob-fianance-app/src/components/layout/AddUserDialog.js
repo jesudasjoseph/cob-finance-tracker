@@ -125,14 +125,7 @@ export default class AddUserDialog extends Component {
 								<Form.Label>Section:</Form.Label>
 								<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
 
-								<Form.Label>Role:</Form.Label>
-								<Form.Control as="select" type="text" value={this.state.role} onChange={(e) => this.setState({role: e.target.value})}>
-									<option value="0">Student</option>
-									<option value="1">Instructor</option>
-									<option value="2">Admin</option>
-								</Form.Control>
-
-								<Form.Label>Business ID:</Form.Label>
+								<Form.Label>Business:</Form.Label>
 								<Form.Control as="select" type="text" value={this.state.bid} onChange={(e) => this.setState({bid: e.target.value})}>
 									{
 										this.state.comapanyNameList.map((company, index) => {
@@ -143,6 +136,13 @@ export default class AddUserDialog extends Component {
 											);
 										})
 									}
+								</Form.Control>
+
+								<Form.Label>Role:</Form.Label>
+								<Form.Control as="select" type="text" value={this.state.role} onChange={(e) => this.setState({role: e.target.value})}>
+									<option value="0">Student</option>
+									<option value="1">Instructor</option>
+									<option value="2">Admin</option>
 								</Form.Control>
 							</Form.Group>
 						</Form>

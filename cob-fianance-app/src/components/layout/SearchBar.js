@@ -19,8 +19,7 @@ export default class SearchBar extends Component {
 		this.props.onChange(e.target.value);
 	}
 
-	onClearClick(e){
-		e.preventDefault();
+	onClearClick(){
 		this.setState({searchValue: ''});
 		this.props.onChange('');
 	}
@@ -29,10 +28,10 @@ export default class SearchBar extends Component {
 		return(
 			<>
 				<div className='flex-container'>
-					<Form>
+					<Form onSubmit={(e) => {e.preventDefault();}}>
 						<Form.Control className='search-bar' type='text' placeholder='Search...' value={this.state.searchValue} onChange={(e) => this.onChange(e)}/>
-						<button className='clear-search' onClick={(e) => this.onClearClick(e)}>x</button>
 					</Form>
+					<button className='clear-search' onClick={this.onClearClick}>x</button>
 				</div>
 			</>
 		);

@@ -199,23 +199,23 @@ async function getMultipleUsersByBid(asker, bid) {
 async function getMultipleUsers(asker, start, end, sort, searchText) {
 	searchText = '%' + searchText + '%';
 	const querySortByOnid = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 ORDER BY users.uid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.uid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByBusinessName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE business.name ILIKE $3 ORDER BY business.name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY business.name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByLastName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.last ILIKE $3 ORDER BY users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByFirstName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.first ILIKE $3 ORDER BY users.first OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.first OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByRole = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.last ILIKE $3 ORDER BY users.role, users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.role, users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 
@@ -394,22 +394,23 @@ async function addUserToBusiness(asker, uid, bid) {
 
 //Business Queries
 //name, instructor, section, revenue, bank, square, expenses, profit
-async function getMultipleBusiness(asker, start, end, sort) {
+async function getMultipleBusiness(asker, start, end, sort, searchText) {
+	searchText = '%' + searchText + '%';
 	const query = {
-		text: 'SELECT * FROM business_view OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const querySortByInstructor = {
-		text: 'SELECT * FROM business_view ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const querySortByName = {
-		text: 'SELECT * FROM business_view ORDER BY name OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY name OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const querySortBySection = {
-		text: 'SELECT * FROM business_view ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		values: [start, end]
+		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end, searchText]
 	}
 	const client = await pool.connect();
 	let res;
@@ -454,7 +455,7 @@ async function getMultipleBusiness(asker, start, end, sort) {
 }
 async function getMultipleBusinessNames(asker) {
 	const query = {
-		text: "SELECT name, bid FROM business_view;"
+		text: "SELECT name, bid FROM business_view ORDER BY name;"
 	}
 	const client = await pool.connect();
 	let res;
