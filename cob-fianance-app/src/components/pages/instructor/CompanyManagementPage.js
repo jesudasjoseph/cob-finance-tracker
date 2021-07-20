@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import ProgressBarSmallProfit from '../../layout/ProgressBarSmallProfit';
+import SearchBar from '../../layout/SearchBar.js';
 import TableControl from '../../layout/TableControl.js';
 import AddCompanyDialog from '../../layout/AddCompanyDialog';
 import SortSelector from '../../layout/SortSelector.js';
@@ -34,7 +35,8 @@ export default class CompanyManagementPage extends Component {
 			notificationContent: '',
 			notificationTimeout: 0,
 			lastDisabled: true,
-			nextDisabled: false
+			nextDisabled: false,
+			searchText: ''
 		}
 
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
@@ -57,13 +59,15 @@ export default class CompanyManagementPage extends Component {
 
 		this.lastPage = this.lastPage.bind(this);
 		this.nextPage = this.nextPage.bind(this);
+
+		this.searchOnChange = this.searchOnChange.bind(this);
 }
 
 	componentDidMount(){
 		this.fetchBusinessData('name');
 	}
 
-	fetchBusinessData(sortParam, start){
+	fetchBusinessData(sortParam, start, searchParam){
 
 		let URL = API_PATH + '/business?';
 		if (start != null){
@@ -75,9 +79,15 @@ export default class CompanyManagementPage extends Component {
 
 		if (sortParam){
 			URL = URL + '&sort=' + sortParam;
+		} else {
+			URL = URL + '&sort=' + this.state.sortOption;
+		}
+
+		if (searchParam === undefined){
+			URL = URL + '&search=' + this.state.searchText;
 		}
 		else {
-			URL = URL + '&sort=' + this.state.sortOption;
+			URL = URL + '&search=' + searchParam;
 		}
 
 		fetch(URL, {
@@ -257,91 +267,99 @@ export default class CompanyManagementPage extends Component {
 		this.tableHandleRowClick(-1);
 	}
 
+	searchOnChange(text){
+		this.setState({searchText: text});
+		this.fetchBusinessData(null, null, text);
+	}
+
 	render() {
 		return (
 			<>
 				<div className='company-management-container'>
-					<div className='flex-container left'>
-						<h2>Companies</h2>
-						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
-						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
-						<Table responsive size="sm" bordered hover variant="dark">
-							<thead>
-								<tr>
-									<th>Company</th>
-									<th>Section</th>
-									<th>Instructor</th>
-									<th>Items Sold</th>
-									<th>Bank</th>
-									<th>Square</th>
-									<th>Revenue</th>
-									<th>Expenses</th>
-									<th>Profits</th>
-									<th>Sales Goals</th>
-								</tr>
-								<tr className='table-secondary-header'>
-									<th>Total: {this.state.businessTable.length}</th>
-									<th></th>
-									<th></th>
-									<th>Total: {this.state.quantityTotal}</th>
-									<th>Total: ${this.state.bankTotal}</th>
-									<th>Total: ${this.state.squareTotal}</th>
-									<th>Total: ${this.state.revenueTotal}</th>
-									<th>Total: ${this.state.expenseTotal}</th>
-									<th>Total: ${this.state.profitTotal}</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								{
-									this.state.businessTable.map((business, index) => {
-									const {name,
-												instructor,
-												section,
-												transaction_total,
-												deposit_total,
-												product_count,
-												expense_total,
-												bid,
-												profit,
-												profit_goal,
-												stretch_profit_goal,
-												square_total} = business;
-									if (index === this.state.selectedRow){
-										return (
-											<tr key={bid} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
-												<td>{name + ' ('+ bid + ')'}</td>
-												<td>{section}</td>
-												<td>{instructor}</td>
-												<td>{product_count}</td>
-												<td>${deposit_total}</td>
-												<td>${square_total}</td>
-												<td>${transaction_total}</td>
-												<td>${expense_total}</td>
-												<td>${profit}</td>
-												<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
-											</tr>
-										);
-									}
-									else {
-										return (
-											<tr key={bid} onClick={() => this.tableHandleRowClick(index)}>
-												<td>{name + ' ('+ bid + ')'}</td>
-												<td>{section}</td>
-												<td>{instructor}</td>
-												<td>{product_count}</td>
-												<td>${deposit_total}</td>
-												<td>${square_total}</td>
-												<td>${transaction_total}</td>
-												<td>${expense_total}</td>
-												<td>${profit}</td>
-												<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
-											</tr>
-										);
-									}
-								})}
-							</tbody>
-						</Table>
+					<div className='left'>
+						<SearchBar onChange={this.searchOnChange}/>
+						<div className='flex-container'>
+							<h2>Companies</h2>
+							<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
+							<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
+							<Table responsive size="sm" bordered hover variant="dark">
+								<thead>
+									<tr>
+										<th>Company</th>
+										<th>Section</th>
+										<th>Instructor</th>
+										<th>Items Sold</th>
+										<th>Bank</th>
+										<th>Square</th>
+										<th>Revenue</th>
+										<th>Expenses</th>
+										<th>Profits</th>
+										<th>Sales Goals</th>
+									</tr>
+									<tr className='table-secondary-header'>
+										<th>Total: {this.state.businessTable.length}</th>
+										<th></th>
+										<th></th>
+										<th>{this.state.quantityTotal}</th>
+										<th>${this.state.bankTotal}</th>
+										<th>${this.state.squareTotal}</th>
+										<th>${this.state.revenueTotal}</th>
+										<th>${this.state.expenseTotal}</th>
+										<th>${this.state.profitTotal}</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{
+										this.state.businessTable.map((business, index) => {
+										const {name,
+													instructor,
+													section,
+													transaction_total,
+													deposit_total,
+													product_count,
+													expense_total,
+													bid,
+													profit,
+													profit_goal,
+													stretch_profit_goal,
+													square_total} = business;
+										if (index === this.state.selectedRow){
+											return (
+												<tr key={bid} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
+													<td>{name + ' ('+ bid + ')'}</td>
+													<td>{section}</td>
+													<td>{instructor}</td>
+													<td>{product_count}</td>
+													<td>${deposit_total}</td>
+													<td>${square_total}</td>
+													<td>${transaction_total}</td>
+													<td>${expense_total}</td>
+													<td>${profit}</td>
+													<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+												</tr>
+											);
+										}
+										else {
+											return (
+												<tr key={bid} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{name + ' ('+ bid + ')'}</td>
+													<td>{section}</td>
+													<td>{instructor}</td>
+													<td>{product_count}</td>
+													<td>${deposit_total}</td>
+													<td>${square_total}</td>
+													<td>${transaction_total}</td>
+													<td>${expense_total}</td>
+													<td>${profit}</td>
+													<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+												</tr>
+											);
+										}
+									})}
+								</tbody>
+							</Table>
+						</div>
 					</div>
 					<div className='right'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>

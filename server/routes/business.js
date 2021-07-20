@@ -6,8 +6,12 @@ const q = require('../queries');
 //Endpoint: '/business'
 //Get Multiple Businesses
 router.get('/', authorizor.authToken, async (req, res) => {
+	let searchText = '';
+	if (req.query.search){
+		searchText = req.query.search;
+	}
 	res.setHeader('Content-Type', 'application/json');
-	let {code, data} = await q.getMultipleBusiness(req.body.asker, req.query.start, req.query.end, req.query.sort);
+	let {code, data} = await q.getMultipleBusiness(req.body.asker, req.query.start, req.query.end, req.query.sort, searchText);
 	res.statusCode = code;
 	res.send(JSON.stringify(data));
 });
