@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+import SearchBar from '../../layout/SearchBar.js';
 import TableControl from '../../layout/TableControl.js';
 import AddUserDialog from '../../layout/AddUserDialog.js';
 import EditUserDialog from '../../layout/EditUserDialog.js';
@@ -33,7 +34,8 @@ export default class UserManagement extends Component {
 			sortOption: 'role',
 			bid: 0,
 			lastDisabled: true,
-			nextDisabled: false
+			nextDisabled: false,
+			searchText: ''
 		}
 
 		this.fetchTableData = this.fetchTableData.bind(this);
@@ -59,6 +61,8 @@ export default class UserManagement extends Component {
 
 		this.lastPage = this.lastPage.bind(this);
 		this.nextPage = this.nextPage.bind(this);
+
+		this.searchOnChange = this.searchOnChange.bind(this);
 	}
 
 	componentDidMount(){
@@ -79,7 +83,7 @@ export default class UserManagement extends Component {
 		this.setState({showNotification: false});
 	}
 
-	fetchTableData(sortParam, start){
+	fetchTableData(sortParam, start, searchParam){
 		let URL = API_PATH + '/user?';
 		if (start != null){
 			URL = URL + 'start=' + start + '&end=' + this.state.tableMaxRows;
@@ -92,6 +96,13 @@ export default class UserManagement extends Component {
 			URL = URL + '&sort=' + sortParam;
 		} else {
 			URL = URL + '&sort=' + this.state.sortOption;
+		}
+
+		if (searchParam === undefined){
+			URL = URL + '&search=' + this.state.searchText;
+		}
+		else {
+			URL = URL + '&search=' + searchParam;
 		}
 
 		fetch(URL, {
@@ -290,11 +301,19 @@ export default class UserManagement extends Component {
 		this.tableHandleRowClick(-1);
 	}
 
+	//Search Function
+	searchOnChange(text){
+		this.setState({searchText: text});
+		this.fetchTableData(null, null, text);
+	}
+
 	render(){
 		return(
 			<>
 				<div className='user-management-container'>
-					<div className='flex-container left'>
+					<div className='left'>
+						<SearchBar onChange={this.searchOnChange}/>
+						<div className='flex-container'>
 						<h2>Users</h2>
 						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
 						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
@@ -353,6 +372,7 @@ export default class UserManagement extends Component {
 								}
 							</tbody>
 						</Table>
+						</div>
 					</div>
 					<div className='right'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
