@@ -1,0 +1,16 @@
+.search-bar{
+	display: block;
+}
+
+.clear-search{
+	float: right;
+	display: block;
+	position: relative;
+	width: 2.25em;
+	height: 2.25em;
+	top: -2.25em;
+	border: none;
+	background-color: Transparent;
+	color: red;
+	text-align: center;
+}
