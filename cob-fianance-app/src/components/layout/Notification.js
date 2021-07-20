@@ -10,7 +10,6 @@ export default class Notification extends Component {
 	}
 
 	render(){
-		console.log("Notification Updated");
 		if (this.props.show){
 			return(
 				<>

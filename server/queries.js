@@ -196,26 +196,26 @@ async function getMultipleUsersByBid(asker, bid) {
 		client.release();
 	}
 }
-async function getMultipleUsers(asker, start, end, sort) {
+async function getMultipleUsers(asker, start, end, sort, searchText) {
 	const querySortByOnid = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.uid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
-		values: [start, end]
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.onid ILIKE "%$3%" ORDER BY users.uid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end, searchText]
 	}
 	const querySortByBusinessName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY business.name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
-		values: [start, end]
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE business.name ILIKE "%$3%" ORDER BY business.name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end, searchText]
 	}
 	const querySortByLastName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
-		values: [start, end]
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.last ILIKE "%$3%" ORDER BY users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end, searchText]
 	}
 	const querySortByFirstName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.first OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
-		values: [start, end]
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.first ILIKE "%$3%" ORDER BY users.first OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end, searchText]
 	}
 	const querySortByRole = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid ORDER BY users.role, users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
-		values: [start, end]
+		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.last ILIKE "%$3%" ORDER BY users.role, users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		values: [start, end, searchText]
 	}
 
 	const client = await pool.connect();
