@@ -8,11 +8,11 @@
 	}
 }
 
-.left {
+.expense-container .left {
 	flex-grow: 5;
 }
 
-.right {
+.expense-container .right {
 	display: flex;
 	flex-direction: column;
 	min-width: 250px;

@@ -1,0 +1,26 @@
+.deposit-table-container {
+	display: flex;
+	flex-direction: row;
+	width: 60vw;
+}
+
+.deposit-table-container .left {
+	flex-grow: 5;
+}
+.deposit-table-container .right {
+	flex-grow: 1;
+}
+
+@media only screen and (max-width: 767px) {
+	.deposit-table-container {
+		flex-direction: column;
+		width: auto;
+	}
+	.deposit-table-container .left {
+		order: 2;
+	}
+	.deposit-table-container .right {
+		order: 1;
+	}
+
+}

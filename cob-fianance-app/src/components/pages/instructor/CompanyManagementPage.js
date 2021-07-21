@@ -6,8 +6,9 @@ import SearchBar from '../../layout/SearchBar.js';
 import TableControl from '../../layout/TableControl.js';
 import AddCompanyDialog from '../../layout/AddCompanyDialog';
 import SortSelector from '../../layout/SortSelector.js';
-import Notification from '../../layout/Notification.js';
 import { API_PATH } from '../../Config';
+
+import { AppContext } from '../../../AppContext';
 
 import '../../styles/CompanyManagementPage.css';
 
@@ -29,11 +30,6 @@ export default class CompanyManagementPage extends Component {
 			deleteDisabled: true,
 			sortOption: 'name',
 			showAddCompanyDialog: false,
-			showNotification: false,
-			notificationType: '',
-			notificationTitle: '',
-			notificationContent: '',
-			notificationTimeout: 0,
 			lastDisabled: true,
 			nextDisabled: false,
 			searchText: ''
@@ -43,9 +39,6 @@ export default class CompanyManagementPage extends Component {
 		this.getBusinessTotals = this.getBusinessTotals.bind(this);
 
 		this.tableHandleRowClick = this.tableHandleRowClick.bind(this);
-
-		this.sendNotification = this.sendNotification.bind(this);
-		this.notificationOnClose = this.notificationOnClose.bind(this);
 
 		this.addOnClick = this.addOnClick.bind(this);
 		this.deleteOnClick = this.deleteOnClick.bind(this);
@@ -153,20 +146,6 @@ export default class CompanyManagementPage extends Component {
 		this.setState({selectedRow: index});
 	}
 
-	sendNotification(type, title, content, timeout){
-
-		this.setState({
-			showNotification: true,
-			notificationType: type,
-			notificationTitle: title,
-			notificationContent: content,
-			notificationTimeout: timeout
-		});
-	}
-	notificationOnClose(){
-		this.setState({showNotification: false});
-	}
-
 	addOnClick(){
 		this.setState({showAddCompanyDialog: true});
 	}
@@ -208,15 +187,15 @@ export default class CompanyManagementPage extends Component {
 			body: JSON.stringify(businessBody)
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
-				this.sendNotification('success', 'Successfully Added New Business', '', 4000);
+				this.context.pushNotification('success', 'Successfully Added New Business', '', 4000);
 
 			}
 			else{
-				this.sendNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 			}
 			this.fetchBusinessData(this.state.sortOption);
 		}).catch((error) => {
-			this.sendNotification('fail', 'App Error', error.toString(), 0);
+			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
 		});
 		this.setState({showAddCompanyDialog: false});
 	}
@@ -369,8 +348,8 @@ export default class CompanyManagementPage extends Component {
 					</div>
 				</div>
 				<AddCompanyDialog show={this.state.showAddCompanyDialog} handleSubmit={this.addDialogHandleSubmit} handleClose={this.addDialogHandleClose}/>
-				<Notification show={this.state.showNotification} type={this.state.notificationType} content={this.state.notificationContent} title={this.state.notificationTitle} onClose={this.notificationOnClose} timeout={this.state.notificationTimeout}/>
 			</>
 		);
 	}
 }
+CompanyManagementPage.contextType = AppContext;
