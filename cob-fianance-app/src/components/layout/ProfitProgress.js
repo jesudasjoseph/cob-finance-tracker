@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-import '../styles/ProfitProgress.css';
+import './styles/ProfitProgress.css';
 
 export class ProfitProgress extends Component {
 	render() {

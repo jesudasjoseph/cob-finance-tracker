@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import TableControl from '../../layout/TableControl';
 import AddExpenseDialog from '../../layout/AddExpenseDialog';
 import { API_PATH } from '../../Config';
-import '../../styles/ExpensePage.css';
+import './styles/ExpensePage.css';
 
 export default class ExpensePage extends Component {
 	constructor(props){
