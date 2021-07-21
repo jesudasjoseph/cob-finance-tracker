@@ -2,6 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import memoize from 'memoize-one';
 import Table from 'react-bootstrap/Table';
 import TableControl from './TableControl';
+import AddDepositDialog from './AddDepositDialog';
 
 import { API_PATH } from '../Config';
 import './styles/DepositTable.css';
@@ -10,18 +11,25 @@ export default class DepositTable extends PureComponent{
 	constructor(props){
 		super(props);
 		this.state = {
-			depositData: []
+			depositData: [],
+			tableMaxRows: 18,
+			tablePageIndex: 0,
+			showAddDepositDialog: false
 		}
 
 		this.fetchDepositData = this.fetchDepositData.bind(this);
+		this.addOnClick = this.addOnClick.bind(this);
+
+		this.handleSubmitDeposit = this.handleSubmitDeposit.bind(this);
+		this.handleCloseDeposit = this.handleCloseDeposit.bind(this);
 	}
 
 	componentDidMount(){
 		this.updateComponent(this.props.companyInfo);
 	};
 
-	fetchDepositData(bid){
-		fetch(API_PATH + '/deposit?start=0&end=50&bid=' + bid, {
+	fetchDepositData(bid, pageIndex){
+		fetch(API_PATH + '/deposit?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -43,7 +51,7 @@ export default class DepositTable extends PureComponent{
 
 	updateComponent = memoize((companyInfo) => {
 			if (companyInfo.bid >= 0){
-				this.fetchDepositData(companyInfo.bid);
+				this.fetchDepositData(companyInfo.bid, this.state.tablePageIndex);
 				return {addDisabled: false, companyName: companyInfo.name};
 			}
 			else {
@@ -51,6 +59,33 @@ export default class DepositTable extends PureComponent{
 			}
 		}
 	);
+
+	addOnClick() {
+		this.setState({showAddDepositDialog: true});
+	}
+
+	handleSubmitDeposit(depositObject) {
+		this.setState({showAddDepositDialog: false});
+		const depositBody = {deposit: depositObject}
+		fetch(API_PATH + '/deposit', {
+			mode: 'cors',
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			},
+			body: JSON.stringify(depositBody)
+		}).then((response) => {
+			this.fetchDepositData(this.props.companyInfo.bid, this.state.tablePageIndex);
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+	handleCloseDeposit() {
+		this.setState({showAddDepositDialog: false});
+	}
 
 	render(){
 		const {companyName, addDisabled} = this.updateComponent(this.props.companyInfo);
@@ -92,6 +127,7 @@ export default class DepositTable extends PureComponent{
 							<TableControl add addDisabled={addDisabled} addOnClick={this.addOnClick}/>
 						</div>
 					</div>
+					<AddDepositDialog bid={this.props.companyInfo.bid} show={this.state.showAddDepositDialog} handleSubmit={this.handleSubmitDeposit} handleClose={this.handleCloseDeposit}/>
 				</>
 			);
 		}
