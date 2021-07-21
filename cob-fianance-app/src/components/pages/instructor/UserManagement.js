@@ -9,7 +9,7 @@ import SortSelector from '../../layout/SortSelector.js';
 import ImportUserDialog from '../../layout/ImportUserDialog.js';
 import Notification from '../../layout/Notification.js';
 
-import '../../styles/UserManagement.css';
+import './styles/UserManagement.css';
 
 import {API_PATH} from '../../Config.js';
 

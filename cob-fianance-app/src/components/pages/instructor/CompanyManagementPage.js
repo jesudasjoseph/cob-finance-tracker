@@ -10,7 +10,7 @@ import { API_PATH } from '../../Config';
 
 import { AppContext } from '../../../AppContext';
 
-import '../../styles/CompanyManagementPage.css';
+import './styles/CompanyManagementPage.css';
 
 export default class CompanyManagementPage extends Component {
 	constructor(props){
