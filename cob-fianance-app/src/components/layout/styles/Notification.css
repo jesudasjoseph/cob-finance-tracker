@@ -10,11 +10,11 @@
 	border: solid 1px;
 	border-radius: 5px;
 	background-color: white;
-	opacity: 90%;
+	opacity: 0.9;
 	cursor: pointer;
 }
 .notification-alert:hover{
-	opacity: 100%;
+	opacity: 1.0;
 }
 .notification-alert h6{
 	padding: inherit;
