@@ -99,7 +99,7 @@ export default class App extends Component{
 					</BrowserRouter>
 				</AppContext.Provider>
 
-				<Notification show={this.state.showNotification} type={this.state.notificationType} content={this.state.notificationContent} title={this.state.notificationTitle} onClose={this.notificationOnClose} timeout={this.state.notificationTimeout}/>
+				<Notification key={this.state.showNotification} show={this.state.showNotification} type={this.state.notificationType} content={this.state.notificationContent} title={this.state.notificationTitle} onClose={this.notificationOnClose} timeout={this.state.notificationTimeout}/>
 			</>
 		);
 	}

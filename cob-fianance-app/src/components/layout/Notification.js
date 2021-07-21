@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import '../styles/Notification.css';
+import './styles/Notification.css';
 
 export default class Notification extends Component {
 
