@@ -7,10 +7,10 @@
 		flex-direction: column;
 	}
 }
-.left {
+.transaction-container .left {
 	flex-grow: 5;
 }
-.right {
+.transaction-container .right {
 	display: flex;
 	flex-direction: column;
 	min-width: 250px;

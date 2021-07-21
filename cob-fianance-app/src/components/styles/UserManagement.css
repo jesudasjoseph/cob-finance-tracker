@@ -9,11 +9,11 @@
 	}
 }
 
-.left {
+.user-management-container .left {
 	flex-grow: 5;
 }
 
-.right {
+.user-management-container .right {
 	display: flex;
 	flex-direction: column;
 	min-width: 250px;

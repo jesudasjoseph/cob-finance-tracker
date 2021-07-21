@@ -9,21 +9,21 @@
 	}
 }
 
-.left {
+.company-management-container .left {
 	flex-grow: 3;
 }
 
-.right {
+.company-management-container .right {
 	display: flex;
 	flex-direction: column;
 	min-width: 250px;
 	flex-grow: 1;
 }
 
-.overview-button {
+.company-management-container .overview-button {
 	width: 100%;
 }
 
-.progress-column {
+.company-management-container .progress-column {
 	min-width: 150px;
 }
