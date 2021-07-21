@@ -7,9 +7,10 @@ import AddUserDialog from '../../layout/AddUserDialog.js';
 import EditUserDialog from '../../layout/EditUserDialog.js';
 import SortSelector from '../../layout/SortSelector.js';
 import ImportUserDialog from '../../layout/ImportUserDialog.js';
-import Notification from '../../layout/Notification.js';
 
-import '../../styles/UserManagement.css';
+import { AppContext } from '../../../AppContext';
+
+import './styles/UserManagement.css';
 
 import {API_PATH} from '../../Config.js';
 
@@ -26,11 +27,6 @@ export default class UserManagement extends Component {
 			deleteDisabled: true,
 			showAddUserDialog: false,
 			showEditUserDialog: false,
-			showNotification: false,
-			notificationType: 'success',
-			notificationContent: '',
-			notificationTitle: '',
-			notificationTimeout: 0,
 			sortOption: 'role',
 			bid: 0,
 			lastDisabled: true,
@@ -56,9 +52,6 @@ export default class UserManagement extends Component {
 
 		this.onSortOptionChange = this.onSortOptionChange.bind(this);
 
-		this.sendNotification = this.sendNotification.bind(this);
-		this.notificationOnClose = this.notificationOnClose.bind(this);
-
 		this.lastPage = this.lastPage.bind(this);
 		this.nextPage = this.nextPage.bind(this);
 
@@ -67,20 +60,6 @@ export default class UserManagement extends Component {
 
 	componentDidMount(){
 		this.fetchTableData();
-	}
-
-	sendNotification(type, title, content, timeout){
-
-		this.setState({
-			showNotification: true,
-			notificationType: type,
-			notificationTitle: title,
-			notificationContent: content,
-			notificationTimeout: timeout
-		});
-	}
-	notificationOnClose(){
-		this.setState({showNotification: false});
 	}
 
 	fetchTableData(sortParam, start, searchParam){
@@ -119,7 +98,7 @@ export default class UserManagement extends Component {
 				return response.json();
 			}
 			else {
-				this.sendNotification('fail', 'Network Error', response.status+': '+response.statusText, 0);
+				this.context.pushNotification('fail', 'Network Error', response.status+': '+response.statusText, 0);
 				return [];
 			}
 		}).then((data) => {
@@ -131,7 +110,7 @@ export default class UserManagement extends Component {
 			}
 			this.setState({tableRows:data});
 		}).catch((error) => {
-			this.sendNotification('fail', 'App Error', error.toString(), 0);
+			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
 			console.log(error);
 		});
 	}
@@ -203,21 +182,21 @@ export default class UserManagement extends Component {
 					body: JSON.stringify(addUserToBusinessBody)
 				}).then(response => {
 					if (Math.floor(response.status / 200) === 1){
-						this.sendNotification('success', 'Successfully Added New User', '', 4000);
+						this.context.pushNotification('success', 'Successfully Added New User', '', 4000);
 					}
 					else{
-						this.sendNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+						this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 					}
 					this.fetchTableData(this.state.sortOption);
 				}).catch((error) => {
-					this.sendNotification('fail', 'App Error', error.toString(), 0);
+					this.context.pushNotification('fail', 'App Error', error.toString(), 0);
 				});
 			}
 			else {
-				this.sendNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 			}
 		}).catch((error) => {
-			this.sendNotification('fail', 'App Error', error.toString(), 0);
+			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
 		});
 		this.setState({showAddUserDialog: false})
 	}
@@ -387,8 +366,6 @@ export default class UserManagement extends Component {
 				<EditUserDialog show={this.state.showEditUserDialog} key={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid+this.state.tableRows[this.state.tableSelectedRow].uid} dataFromParent={{bid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid, uid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].uid}} handleSubmit={this.editDialogHandleSubmit} handleClose={this.editDialogHandleClose}/>
 
 				<ImportUserDialog show={this.state.showImportUserDialog} handleSubmit={this.importDialogHandleSubmit} handleClose={this.importDialogHandleClose}/>
-
-				<Notification key={this.state.showNotification} show={this.state.showNotification} type={this.state.notificationType} content={this.state.notificationContent} title={this.state.notificationTitle} onClose={this.notificationOnClose} timeout={this.state.notificationTimeout}/>
 			</>
 		);
 	}

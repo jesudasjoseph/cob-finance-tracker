@@ -4,7 +4,7 @@ import AddTransactionDialog from '../../layout/AddTransactionDialog';
 import TableControl from '../../layout/TableControl';
 import { API_PATH } from '../../Config';
 
-import '../../styles/TransactionPage.css';
+import './styles/TransactionPage.css';
 
 export default class TransactionPage extends Component {
 	constructor(props){

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-import '../styles/TableControl.css';
+import './styles/TableControl.css';
 
 /*
 Props

@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import DepositTable from '../../layout/DepositTable';
 import { API_PATH } from '../../Config';
 
-import '../../styles/Bank.css';
+import './styles/Bank.css';
 
 export default class Bank extends React.Component{
 	constructor(props){
