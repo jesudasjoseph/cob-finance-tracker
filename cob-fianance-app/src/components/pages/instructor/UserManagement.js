@@ -369,5 +369,5 @@ export default class UserManagement extends Component {
 			</>
 		);
 	}
-
 }
+UserManagement.contextType = AppContext;
