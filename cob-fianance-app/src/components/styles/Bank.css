@@ -14,10 +14,6 @@
 	flex-grow: 1;
 }
 
-.middle {
-	flex-grow: 10;
-}
-
 .right {
-	flex-grow: 1;
+	flex-grow: 10;
 }
