@@ -1042,10 +1042,11 @@ async function deleteExpenseByEid(asker, eid, bid) {
 
 //Deposit Queries
 //Permitted - Admin, Instructor
-async function getMultipleDeposits(asker, start, end, bid) {
+async function getMultipleDeposits(asker, start, end, bid, searchText) {
+	searchText = '%' + searchText + '%';
 	const query = {
-		text: 'SELECT * FROM deposits WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end]
+		text: 'SELECT * FROM deposits WHERE bid=$1 AND deposits.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end, searchText]
 	}
 	const client = await pool.connect();
 	let res;

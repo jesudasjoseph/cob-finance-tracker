@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 import { API_PATH } from '../Config';
 
-export class StudentTable extends Component {
+export default class StudentTable extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -72,4 +72,3 @@ export class StudentTable extends Component {
 		);
 	}
 }
-export default StudentTable
