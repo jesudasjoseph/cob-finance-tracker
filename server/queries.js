@@ -759,16 +759,16 @@ async function getMultipleTransactions(asker, start, end, bid) {
 
 	return new data(500);
 }
-async function getMultipleTransactionsByUid(asker, start, end) {
+async function getMultipleTransactionsByUid(asker, start, end, searchText) {
+	searchText = '%' + searchText + '%';
 	const client = await pool.connect();
 	const bid = await get_bid_from_uid(asker.uid, client);
 	if (bid == -1){
 		return new data(403);
 	}
 	const query = {
-		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		text: 'SELECT * FROM transactions WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end]
+		text: 'SELECT * FROM transactions WHERE bid=$1 AND transactions.date ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end, searchText]
 	}
 	let res;
 	try {
