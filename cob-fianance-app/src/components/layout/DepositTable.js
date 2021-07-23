@@ -13,7 +13,7 @@ export default class DepositTable extends PureComponent{
 		super(props);
 		this.state = {
 			depositData: [],
-			tableMaxRows: 18,
+			tableMaxRows: 100,
 			tablePageIndex: 0,
 			showAddDepositDialog: false,
 			searchText: ''
@@ -24,6 +24,8 @@ export default class DepositTable extends PureComponent{
 
 		this.handleSubmitDeposit = this.handleSubmitDeposit.bind(this);
 		this.handleCloseDeposit = this.handleCloseDeposit.bind(this);
+
+		this.searchOnChange = this.searchOnChange.bind(this);
 	}
 
 	componentDidMount(){
@@ -31,7 +33,7 @@ export default class DepositTable extends PureComponent{
 	};
 
 	fetchDepositData(bid, pageIndex, searchText = ''){
-		fetch(API_PATH + '/deposit?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid + '&search' + searchText, {
+		fetch(API_PATH + '/deposit?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid + '&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
