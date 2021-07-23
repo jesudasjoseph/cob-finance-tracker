@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-import '../styles/SortSelector.css';
+import './styles/SortSelector.css';
 
 export default class SortSelector extends Component{
 	constructor(props){

@@ -2,6 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import memoize from 'memoize-one';
 import Table from 'react-bootstrap/Table';
 import TableControl from './TableControl';
+import SearchBar from './SearchBar';
 import AddDepositDialog from './AddDepositDialog';
 
 import { API_PATH } from '../Config';
@@ -12,9 +13,10 @@ export default class DepositTable extends PureComponent{
 		super(props);
 		this.state = {
 			depositData: [],
-			tableMaxRows: 18,
+			tableMaxRows: 100,
 			tablePageIndex: 0,
-			showAddDepositDialog: false
+			showAddDepositDialog: false,
+			searchText: ''
 		}
 
 		this.fetchDepositData = this.fetchDepositData.bind(this);
@@ -22,14 +24,16 @@ export default class DepositTable extends PureComponent{
 
 		this.handleSubmitDeposit = this.handleSubmitDeposit.bind(this);
 		this.handleCloseDeposit = this.handleCloseDeposit.bind(this);
+
+		this.searchOnChange = this.searchOnChange.bind(this);
 	}
 
 	componentDidMount(){
 		this.updateComponent(this.props.companyInfo);
 	};
 
-	fetchDepositData(bid, pageIndex){
-		fetch(API_PATH + '/deposit?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid, {
+	fetchDepositData(bid, pageIndex, searchText = ''){
+		fetch(API_PATH + '/deposit?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid + '&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -43,7 +47,7 @@ export default class DepositTable extends PureComponent{
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
-			this.setState({depositData:data, bid: bid});
+			this.setState({depositData:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -51,7 +55,7 @@ export default class DepositTable extends PureComponent{
 
 	updateComponent = memoize((companyInfo) => {
 			if (companyInfo.bid >= 0){
-				this.fetchDepositData(companyInfo.bid, this.state.tablePageIndex);
+				this.fetchDepositData(companyInfo.bid, this.state.tablePageIndex, this.state.searchText);
 				return {addDisabled: false, companyName: companyInfo.name};
 			}
 			else {
@@ -87,6 +91,11 @@ export default class DepositTable extends PureComponent{
 		this.setState({showAddDepositDialog: false});
 	}
 
+	searchOnChange(text){
+		this.setState({searchText: text});
+		this.fetchDepositData(this.props.companyInfo.bid, this.state.tablePageIndex, text);
+	}
+
 	render(){
 		const {companyName, addDisabled} = this.updateComponent(this.props.companyInfo);
 
@@ -97,7 +106,9 @@ export default class DepositTable extends PureComponent{
 			return(
 				<>
 					<div className='deposit-table-container'>
-						<div className='flex-container left'>
+						<div className='left'>
+							<SearchBar onChange={this.searchOnChange}/>
+							<div className='flex-container'>
 							<h2>{companyName} - Bank Deposit</h2>
 							<Table responsive size="sm" striped bordered hover variant="dark">
 								<thead>
@@ -122,6 +133,7 @@ export default class DepositTable extends PureComponent{
 									})}
 								</tbody>
 							</Table>
+							</div>
 						</div>
 						<div className='right'>
 							<TableControl add addDisabled={addDisabled} addOnClick={this.addOnClick}/>

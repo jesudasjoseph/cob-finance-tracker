@@ -6,8 +6,6 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 //Insructor Pages/Layouts
 import InstructorNavbar from './components/layout/InstructorNavbar';
 import CompanyManagementPage from './components/pages/instructor/CompanyManagementPage';
-import UserInstructor from './components/pages/instructor/UserInstructor';
-import SettingsInstructor from './components/pages/instructor/SettingsInstuctor';
 import UserManagement from './components/pages/instructor/UserManagement';
 import SnapshotGroup from './components/pages/instructor/SnapshotGroup.js';
 import Bank from './components/pages/instructor/Bank.js';
@@ -76,8 +74,6 @@ export default class App extends Component{
 										<Route exact path="/instructor/dashboard" component={CompanyManagementPage}/>
 										<Route exact path="/instructor/companymanagementpage" component={CompanyManagementPage}/>
 										<Route exact path="/instructor/bank" component={Bank}/>
-										<Route exact path="/instructor/settings" component={SettingsInstructor} />
-										<Route exact path="/instructor/profile" component={UserInstructor} />
 										<Route exact path="/instructor/usermanagement" component={UserManagement} />
 										<Route exact path="/instructor/dashboard/:id" component={SnapshotGroup}/>
 										<Route path="*" component={Page404}/>
