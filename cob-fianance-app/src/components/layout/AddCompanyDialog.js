@@ -48,8 +48,7 @@ export default class AddCompanyDialogButton extends Component {
 	close_dialog() {
 		this.setState({
 			name: '',
-			section: '',
-			instructor: ''
+			section: ''
 		});
 		this.props.handleClose();
 	}
@@ -62,8 +61,7 @@ export default class AddCompanyDialogButton extends Component {
 		this.props.handleSubmit({name:this.state.name, section:this.state.section, instructor:this.state.instructor});
 		this.setState({
 			name: '',
-			section: '',
-			instructor: ''
+			section: ''
 		});
 	}
 
