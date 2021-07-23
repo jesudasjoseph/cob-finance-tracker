@@ -767,7 +767,7 @@ async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 		return new data(403);
 	}
 	const query = {
-		text: 'SELECT * FROM transactions WHERE bid=$1 AND transactions.date ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		text: 'SELECT * FROM transactions WHERE bid=$1 AND transactions.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [bid, start, end, searchText]
 	}
 	let res;
