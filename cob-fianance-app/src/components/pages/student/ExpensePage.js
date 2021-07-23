@@ -25,7 +25,7 @@ export default class ExpensePage extends Component {
 	}
 
 	componentDidMount(){
-		this.fetchExpenseTableData();
+		this.fetchExpenseTableData(this.state.searchText);
 	}
 
 	addOnClick(){
@@ -51,13 +51,13 @@ export default class ExpensePage extends Component {
 			body: JSON.stringify(expense_body)
 		}).then(response => {
 			console.log(response);
-			this.fetchExpenseTableData();
+			this.fetchExpenseTableData(this.state.searchText);
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
 	}
 
-	fetchExpenseTableData(searchParam){
+	fetchExpenseTableData(searchParam = ''){
 		fetch(API_PATH + '/expense/byuid?start=0&end=50' + '&search=' + searchParam, {
 			mode: 'cors',
 			method: 'GET',
