@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import TableControl from './TableControl';
 import SearchBar from './SearchBar';
 import AddDepositDialog from './AddDepositDialog';
+import {AppContext} from '../../AppContext';
 
 import { API_PATH } from '../Config';
 import './styles/DepositTable.css';
@@ -43,10 +44,8 @@ export default class DepositTable extends PureComponent{
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
-			console.log('Success:', data);
 			this.setState({depositData:data});
 		}).catch((error) => {
 			console.error('Error:', error);
@@ -82,9 +81,17 @@ export default class DepositTable extends PureComponent{
 			},
 			body: JSON.stringify(depositBody)
 		}).then((response) => {
-			this.fetchDepositData(this.props.companyInfo.bid, this.state.tablePageIndex);
+			if (Math.floor(response.status / 200) === 1){
+				this.context.pushNotification('success', 'Successfully Added Deposit', '', 4000);
+
+			}
+			else{
+				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+			}
+			this.fetchDepositData(this.props.companyInfo.bid, this.state.tablePageIndex, this.state.searchText);
 		}).catch((error) => {
 			console.error('Error:', error);
+			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
 		});
 	}
 	handleCloseDeposit() {
@@ -145,3 +152,4 @@ export default class DepositTable extends PureComponent{
 		}
 	}
 }
+DepositTable.contextType = AppContext;

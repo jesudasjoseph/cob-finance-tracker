@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
 import DepositTable from '../../layout/DepositTable';
 import { API_PATH } from '../../Config';
 
 import './styles/Bank.css';
 
-export default class Bank extends React.Component{
+export default class Bank extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -37,10 +37,8 @@ export default class Bank extends React.Component{
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
-			console.log('Success:', data);
 			this.setState({businessData:data});
 		}).catch((error) => {
 			console.error('Error:', error);
