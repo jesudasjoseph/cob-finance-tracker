@@ -923,15 +923,16 @@ async function getMultipleExpenses(asker, start, end, bid) {
 
 	return new data(500);
 }
-async function getMultipleExpensesByUid(asker, start, end) {
+async function getMultipleExpensesByUid(asker, start, end, searchText) {
+	searchText = '%' + searchText + '%';
 	const client = await pool.connect();
 	const bid = await get_bid_from_uid(asker.uid, client);
 	if (bid == -1){
 		return new data(403);
 	}
 	const query = {
-		text: 'SELECT * FROM expenses WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end]
+		text: 'SELECT * FROM expenses WHERE bid=$1 AND expenses.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [bid, start, end, searchText]
 	}
 	let res;
 	try {

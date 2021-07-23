@@ -246,7 +246,7 @@ export default class CompanyManagementPage extends Component {
 	}
 
 	searchOnChange(text){
-		this.setState({searchText: text});
+		this.setState({searchText: text, selectedRow: -1});
 		this.fetchBusinessData(null, null, text);
 	}
 

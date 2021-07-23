@@ -282,7 +282,7 @@ export default class UserManagement extends Component {
 
 	//Search Function
 	searchOnChange(text){
-		this.setState({searchText: text});
+		this.setState({searchText: text, tableSelectedRow: -1});
 		this.fetchTableData(null, null, text);
 	}
 
