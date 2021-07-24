@@ -11,7 +11,19 @@ export default class DatabaseManagementPage extends Component{
 			showWarning: false
 		}
 
+		this.importOnClick = this.importOnClick.bind(this);
+		this.exportOnClick = this.exportOnClick.bind(this);
 		this.resetOnClick = this.resetOnClick.bind(this);
+	}
+
+	//Import Database
+	importOnClick(){
+
+	}
+
+	//Export Database
+	exportOnClick(){
+
 	}
 
 	//Reset Database
@@ -28,8 +40,8 @@ export default class DatabaseManagementPage extends Component{
 						<h3>Manage Database</h3>
 					</div>
 					<div className='flex-container button-container'>
-						<Button disabled className='left'>Export Database</Button>
-						<Button disabled className='middle'>Import Database</Button>
+						<Button disabled className='left' onClick={this.exportOnClick}>Export Database</Button>
+						<Button disabled className='middle' onClick={this.importOnClick}>Import Database</Button>
 						<Button disabled className='right' variant='danger' onClick={() => {this.setState({showWarning: true})}}>Reset Database</Button>
 					</div>
 				</div>
