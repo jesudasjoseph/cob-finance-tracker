@@ -80,6 +80,7 @@ export function startExport(callBack){
 	getUsers();
 	getDeposits();
 	getTransactions();
+	getExpenses();
 	callBack(100);
 }
 
@@ -166,5 +167,23 @@ function getTransactions(){
 }
 
 function getExpenses(){
-
+	fetch(API_PATH + '/expense?start=0&end=100', {
+		mode: 'cors',
+		method: 'GET',
+		credentials: 'same-origin',
+		headers: {
+			'Accept': 'application/json',
+			'Content-type': 'application/json',
+			'Authorization': window.localStorage.getItem('jwt')
+		}
+	}).then(response => {
+		console.log(response);
+		return response.json();
+	}).then(data => {
+		console.log(data);
+		databaseBackup.expenses = data.map(expense => expenseObject(expense.bid, expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
+		console.log(databaseBackup);
+	}).catch((error) => {
+		console.error('Error:', error);
+	});
 }
