@@ -41,7 +41,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	fetchExpenseTableData(){
-		fetch(API_PATH + '/expense?start=0&end=50&bid=' + this.state.bid, {
+		fetch(API_PATH + '/expense/bybid?start=0&end=50&bid=' + this.state.bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -62,7 +62,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	fetchTransactionTableData(){
-		fetch(API_PATH + '/transaction?start=0&end=50&bid=' + this.state.bid, {
+		fetch(API_PATH + '/transaction/bybid?start=0&end=50&bid=' + this.state.bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

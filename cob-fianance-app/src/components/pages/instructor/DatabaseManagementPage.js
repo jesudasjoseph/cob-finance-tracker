@@ -2,7 +2,11 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+import { API_PATH } from '../../Config';
+
 import './styles/DatabaseManagementPage.css';
+
+const exportUtil = require('./utils/exportFunctions');
 
 export default class DatabaseManagementPage extends Component{
 	constructor(props){
@@ -14,6 +18,8 @@ export default class DatabaseManagementPage extends Component{
 		this.importOnClick = this.importOnClick.bind(this);
 		this.exportOnClick = this.exportOnClick.bind(this);
 		this.resetOnClick = this.resetOnClick.bind(this);
+
+		this.updateExportProgress = this.updateExportProgress.bind(this);
 	}
 
 	//Import Database
@@ -23,7 +29,10 @@ export default class DatabaseManagementPage extends Component{
 
 	//Export Database
 	exportOnClick(){
-
+		exportUtil.startExport(this.updateExportProgress);
+	}
+	updateExportProgress(progress){
+		console.log(progress);
 	}
 
 	//Reset Database
@@ -40,7 +49,7 @@ export default class DatabaseManagementPage extends Component{
 						<h3>Manage Database</h3>
 					</div>
 					<div className='flex-container button-container'>
-						<Button disabled className='left' onClick={this.exportOnClick}>Export Database</Button>
+						<Button className='left' onClick={this.exportOnClick}>Export Database</Button>
 						<Button disabled className='middle' onClick={this.importOnClick}>Import Database</Button>
 						<Button disabled className='right' variant='danger' onClick={() => {this.setState({showWarning: true})}}>Reset Database</Button>
 					</div>

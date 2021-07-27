@@ -34,7 +34,7 @@ export default class DepositTable extends PureComponent{
 	};
 
 	fetchDepositData(bid, pageIndex, searchText = ''){
-		fetch(API_PATH + '/deposit?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid + '&search=' + searchText, {
+		fetch(API_PATH + '/deposit/bybid?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid + '&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
