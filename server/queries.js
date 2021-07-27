@@ -1154,7 +1154,6 @@ async function getMultipleDepositsByBid(asker, start, end, bid, searchText) {
 	return new data(500);
 }
 async function getMultipleDeposits(asker, start, end) {
-	searchText = '%' + searchText + '%';
 	const query = {
 		text: 'SELECT * FROM deposits ORDER BY date DESC OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]

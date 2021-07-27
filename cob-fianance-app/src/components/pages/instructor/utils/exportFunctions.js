@@ -78,6 +78,7 @@ export function startExport(callBack){
 	databaseBackup = { companies: [] , users: [], deposits: [], transactions: [], expenses: [] };
 	getCompanies();
 	getUsers();
+	getDeposits();
 	callBack(100);
 }
 
@@ -134,7 +135,7 @@ function getDeposits(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackup.users = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
+		databaseBackup.deposits = data.map(deposit => userObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
 		console.log(databaseBackup);
 	}).catch((error) => {
 		console.error('Error:', error);
