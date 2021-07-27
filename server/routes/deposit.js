@@ -3,6 +3,12 @@ const router = express.Router();
 const authorizor = require('../authorizor');
 const q = require('../queries');
 
+router.get('/', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code, data} = await q.getMultipleDeposits(req.body.asker, req.query.start, req.query.end);
+	res.statusCode = code;
+	res.send(JSON.stringify(data));
+});
 router.get('/bybid', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let searchText = '';
