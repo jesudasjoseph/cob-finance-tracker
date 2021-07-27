@@ -1410,7 +1410,7 @@ exports.addExpense = addExpense;
 exports.deleteExpenseByEid = deleteExpenseByEid;
 
 exports.getMultipleDeposits = getMultipleDeposits;
-exports.getMultipleDepositsByBid = getMultipleDepositsBybid;
+exports.getMultipleDepositsByBid = getMultipleDepositsByBid;
 exports.addDeposit = addDeposit;
 exports.deleteDepositByDid = deleteDepositByDid;
 
