@@ -58,24 +58,39 @@ function expenseObject(bid, uid, customer, product, payment_method, quantity, co
 	});
 }
 
-let databaseBackup;
+let databaseBackupObject;
 /*
-databaseBackup = {
+databaseBackupObject = {
 	companies = [
 		companyObject,
-		companyObject
+		companyObject,
+		...
 		],
 	users = [
 		userObject,
-		userObject
+		userObject,
+		...
 		],
-	deposits = []
+	deposits = [
+		depositObject,
+		depositObject,
+		...
+	],
+	transactions = [
+		transactionObject,
+		transactionObject,
+		...
+	],
+	expenses = [
+		expenseObject,
+		expenseObject,
+		...
+	]
 }
 */
-let companyList;
 
 export function startExport(callBack){
-	databaseBackup = { companies: [] , users: [], deposits: [], transactions: [], expenses: [] };
+	databaseBackupObject = { companies: [] , users: [], deposits: [], transactions: [], expenses: [] };
 	getCompanies();
 	getUsers();
 	getDeposits();
@@ -97,8 +112,8 @@ function getCompanies(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackup.companies = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
-		console.log(databaseBackup);
+		databaseBackupObject.companies = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
+		console.log(databaseBackupObject);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
@@ -117,8 +132,8 @@ function getUsers(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackup.users = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
-		console.log(databaseBackup);
+		databaseBackupObject.users = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
+		console.log(databaseBackupObject);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
@@ -137,8 +152,8 @@ function getDeposits(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackup.deposits = data.map(deposit => depositObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
-		console.log(databaseBackup);
+		databaseBackupObject.deposits = data.map(deposit => depositObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
+		console.log(databaseBackupObject);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
@@ -159,8 +174,8 @@ function getTransactions(){
 		return response.json();
 	}).then(data => {
 		console.log(data);
-		databaseBackup.transactions = data.map(transaction => transactionObject(transaction.bid, transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
-		console.log(databaseBackup);
+		databaseBackupObject.transactions = data.map(transaction => transactionObject(transaction.bid, transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
+		console.log(databaseBackupObject);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
@@ -181,8 +196,8 @@ function getExpenses(){
 		return response.json();
 	}).then(data => {
 		console.log(data);
-		databaseBackup.expenses = data.map(expense => expenseObject(expense.bid, expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
-		console.log(databaseBackup);
+		databaseBackupObject.expenses = data.map(expense => expenseObject(expense.bid, expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
+		console.log(databaseBackupObject);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
