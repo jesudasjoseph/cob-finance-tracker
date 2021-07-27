@@ -79,6 +79,7 @@ export function startExport(callBack){
 	getCompanies();
 	getUsers();
 	getDeposits();
+	getTransactions();
 	callBack(100);
 }
 
@@ -135,7 +136,7 @@ function getDeposits(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackup.deposits = data.map(deposit => userObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
+		databaseBackup.deposits = data.map(deposit => depositObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
 		console.log(databaseBackup);
 	}).catch((error) => {
 		console.error('Error:', error);
@@ -143,7 +144,25 @@ function getDeposits(){
 }
 
 function getTransactions(){
-
+	fetch(API_PATH + '/transaction?start=0&end=100', {
+		mode: 'cors',
+		method: 'GET',
+		credentials: 'same-origin',
+		headers: {
+			'Accept': 'application/json',
+			'Content-type': 'application/json',
+			'Authorization': window.localStorage.getItem('jwt')
+		}
+	}).then(response => {
+		console.log(response);
+		return response.json();
+	}).then(data => {
+		console.log(data);
+		databaseBackup.transactions = data.map(transaction => transactionObject(transaction.bid, transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
+		console.log(databaseBackup);
+	}).catch((error) => {
+		console.error('Error:', error);
+	});
 }
 
 function getExpenses(){

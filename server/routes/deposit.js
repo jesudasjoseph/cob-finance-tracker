@@ -9,6 +9,7 @@ router.get('/', authorizor.authToken, async (req, res) => {
 	res.statusCode = code;
 	res.send(JSON.stringify(data));
 });
+
 router.get('/bybid', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let searchText = '';
