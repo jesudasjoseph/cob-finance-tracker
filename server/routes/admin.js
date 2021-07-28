@@ -11,7 +11,7 @@ router.get('/reset-code', authorizor.authToken, async (req, res) => {
 
 router.delete('/reset-database', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	let {code, data} = await q.resetDatabase(req.body.asker, req.query.code);
+	let {code} = await q.resetDatabase(req.body.asker, req.query.code);
 	res.statusCode = code;
-	res.send(JSON.stringify(data));
+	res.end();
 });

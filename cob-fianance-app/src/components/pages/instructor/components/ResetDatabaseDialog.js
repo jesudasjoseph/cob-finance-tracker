@@ -11,6 +11,7 @@ export default class ResetDatabaseDialog extends Component{
 	}
 
 	componentDidMount(){
+		
 	}
 
 	render(){
