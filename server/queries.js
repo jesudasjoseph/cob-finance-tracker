@@ -1,7 +1,5 @@
 const { Pool } = require('pg');
-
 const pool = new Pool();
-
 const roleType = {
 	'admin':2,
 	'instructor':1,
@@ -25,11 +23,71 @@ function user(uid, role, first, last){
 	this.last = last;
 }
 
+let resetCode;
+
 async function init(){
 	pool.on('error', (err, client) => {
 		console.error('Unexpected error on idle client', err)
 		process.exit(-1)
 	})
+}
+
+
+async function generateResetCode() {
+	let code = 'Code';
+	resetCode = code;
+	return code;
+}
+//Database management
+async function getResetCode(asker) {
+	switch(asker.role){
+		case roleType.student:
+			return new data(403);
+			break;
+		case roleType.instructor:
+		case roleType.admin:
+			let res = await generateResetCode();
+			return new data(200, {code: res});
+		default:
+			return new data(403);
+	}
+}
+async function resetDatabase(asker, code){
+	const deleteBusinessQuery = {
+		text: 'DELETE FROM business'
+	}
+	const deleteUserQuery = {
+		text: 'DELETE FROM users WHERE uid!=$1',
+		values: [asker.uid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+			case roleType.instructor:
+				if (code === resetCode){
+					await client.query(deleteBusinessQuery);
+					await client.query(deleteUserQuery);
+					return new data(200);
+				}
+				else{
+					return new data(403);
+				}
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+			default:
+				return new data(403);
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
 }
 
 //Helper
@@ -1378,6 +1436,10 @@ async function getDepositDataCSV(asker, bid) {
 
 exports.init = init;
 exports.getRole = getRole;
+
+exports.getResetCode = getResetCode;
+exports.resetDatabase = resetDatabase;
+
 exports.createUser = createUser;
 exports.getUserByUid = getUserByUid;
 exports.getUserByAsker = getUserByAsker;

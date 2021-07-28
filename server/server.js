@@ -34,6 +34,7 @@ q.init();
 
 //Request Routing
 let authRouter = require('./routes/auth');
+let adminRouter = require('./routes/admin');
 let businessRouter = require('./routes/business');
 let userRouter = require('./routes/user');
 let transactionRouter = require('./routes/transaction');
@@ -49,6 +50,8 @@ app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Bu
 //API Endpoints
 //Router for Authentication requests
 app.use(API_URL + '/auth', authRouter);
+//Router for Database Admin requests
+app.use(API_URL + '/admin', adminRouter);
 //Router for Business data requests
 app.use(API_URL + '/business', businessRouter);
 //Router for User data requests
