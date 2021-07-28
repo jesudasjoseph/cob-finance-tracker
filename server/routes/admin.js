@@ -16,3 +16,5 @@ router.delete('/reset-database', authorizor.authToken, async (req, res) => {
 	res.statusCode = code;
 	res.end();
 });
+
+module.exports = router;
