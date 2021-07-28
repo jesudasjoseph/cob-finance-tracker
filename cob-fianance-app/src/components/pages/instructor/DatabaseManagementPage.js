@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
-import { API_PATH } from '../../Config';
+//import { API_PATH } from '../../Config';
 
 import './styles/DatabaseManagementPage.css';
 
@@ -12,7 +13,9 @@ export default class DatabaseManagementPage extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			showWarning: false
+			showWarning: false,
+			progressPercent: 0,
+			progressLabel: 'Import/Export Progress'
 		}
 
 		this.importOnClick = this.importOnClick.bind(this);
@@ -29,15 +32,14 @@ export default class DatabaseManagementPage extends Component{
 
 	//Export Database
 	exportOnClick(){
-		exportUtil.startExport(this.updateExportProgress);
+		exportUtil.startExport(this.updateExportProgress, this.exportComplete);
 	}
-	updateExportProgress(progress){
-		console.log(progress);
+	updateExportProgress(progress, label){
+		this.setState({progressPercent: progress, progressLabel: label});
 	}
 
 	//Reset Database
 	resetOnClick(){
-
 		this.setState({showWarning: false});
 	}
 
@@ -52,6 +54,10 @@ export default class DatabaseManagementPage extends Component{
 						<Button className='left' onClick={this.exportOnClick}>Export Database</Button>
 						<Button disabled className='middle' onClick={this.importOnClick}>Import Database</Button>
 						<Button disabled className='right' variant='danger' onClick={() => {this.setState({showWarning: true})}}>Reset Database</Button>
+					</div>
+					<div className='flex-container'>
+						<ProgressBar now={this.state.progressPercent} label={`${this.state.progressPercent}%`}/>
+						<h4>{this.state.progressLabel}</h4>
 					</div>
 				</div>
 				<Modal show={this.state.showWarning}>

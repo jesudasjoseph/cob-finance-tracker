@@ -89,14 +89,12 @@ databaseBackupObject = {
 }
 */
 
+let updateFunction;
+
 export function startExport(callBack){
 	databaseBackupObject = { companies: [] , users: [], deposits: [], transactions: [], expenses: [] };
+	updateFunction = callBack;
 	getCompanies();
-	getUsers();
-	getDeposits();
-	getTransactions();
-	getExpenses();
-	callBack(100);
 }
 
 function getCompanies(){
@@ -112,11 +110,15 @@ function getCompanies(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackupObject.companies = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
-		console.log(databaseBackupObject);
+		getCompaniesSuccess(data);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
+}
+function getCompaniesSuccess(data){
+	databaseBackupObject.companies = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
+	getUsers();
+	updateFunction(10, 'Downloading Company Info');
 }
 
 function getUsers(){
@@ -132,11 +134,15 @@ function getUsers(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackupObject.users = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
-		console.log(databaseBackupObject);
+		getUsersSuccess(data);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
+}
+function getUsersSuccess(data){
+	databaseBackupObject.users = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
+	getDeposits();
+	updateFunction(20, 'Downloading User Info');
 }
 
 function getDeposits(){
@@ -152,11 +158,15 @@ function getDeposits(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		databaseBackupObject.deposits = data.map(deposit => depositObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
-		console.log(databaseBackupObject);
+		getDepositsSuccess(data);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
+}
+function getDepositsSuccess(data){
+	databaseBackupObject.deposits = data.map(deposit => depositObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
+	getTransactions();
+	updateFunction(50, 'Downloading Deposits');
 }
 
 function getTransactions(){
@@ -170,15 +180,17 @@ function getTransactions(){
 			'Authorization': window.localStorage.getItem('jwt')
 		}
 	}).then(response => {
-		console.log(response);
 		return response.json();
 	}).then(data => {
-		console.log(data);
-		databaseBackupObject.transactions = data.map(transaction => transactionObject(transaction.bid, transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
-		console.log(databaseBackupObject);
+		getTransactionsSuccess(data);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
+}
+function getTransactionsSuccess(data){
+	databaseBackupObject.transactions = data.map(transaction => transactionObject(transaction.bid, transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
+	getExpenses();
+	updateFunction(70, 'Downloading Transactions');
 }
 
 function getExpenses(){
@@ -192,13 +204,26 @@ function getExpenses(){
 			'Authorization': window.localStorage.getItem('jwt')
 		}
 	}).then(response => {
-		console.log(response);
 		return response.json();
 	}).then(data => {
-		console.log(data);
-		databaseBackupObject.expenses = data.map(expense => expenseObject(expense.bid, expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
-		console.log(databaseBackupObject);
+		getExpensesSuccess(data);
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
+}
+function getExpensesSuccess(data){
+	databaseBackupObject.expenses = data.map(expense => expenseObject(expense.bid, expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
+	updateFunction( 100, 'Export Download Complete!');
+	triggerDownload();
+}
+
+function triggerDownload(){
+	//Create a CSV Download link
+	let downloadLink = document.createElement("a");
+	const blob = new Blob([JSON.stringify(databaseBackupObject, null, 2)], {type : 'application/json'});
+	downloadLink.href = URL.createObjectURL(blob);
+	downloadLink.download = "New.ftbac";
+	document.body.appendChild(downloadLink);
+	downloadLink.click();
+	document.body.removeChild(downloadLink);
 }
