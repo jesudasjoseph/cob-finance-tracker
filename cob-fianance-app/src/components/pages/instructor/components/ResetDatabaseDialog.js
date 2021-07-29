@@ -38,6 +38,7 @@ export default class ResetDatabaseDialog extends Component{
 	}
 
 	close_dialog(){
+		this.setState({userResetCode: ''});
 		this.props.handleClose();
 	}
 	handle_submit(){
@@ -59,6 +60,7 @@ export default class ResetDatabaseDialog extends Component{
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
+		this.setState({userResetCode: ''});
 		this.props.handleSubmit();
 	}
 
