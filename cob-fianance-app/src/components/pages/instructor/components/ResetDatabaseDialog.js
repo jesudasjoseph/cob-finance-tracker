@@ -52,9 +52,11 @@ export default class ResetDatabaseDialog extends Component{
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
 				this.context.pushNotification('success', 'Successfully Reset Database', '', 4000);
-
 			}
-			else{
+			else if (response.status === 406){
+				this.context.pushNotification('fail', 'Server Error', 'Reset code does not match! Try again!', 6000);
+			}
+			else {
 				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 			}
 		}).catch((error) => {
@@ -75,6 +77,7 @@ export default class ResetDatabaseDialog extends Component{
 					</Modal.Header>
 					<Modal.Body>
 						<Form>
+							<p>This will delete all information in the database except for the current user information.</p>
 							<Form.Label>Confirm database reset by typing out: "{this.state.resetCode}"</Form.Label>
 							<Form.Control type="text" value={this.state.userResetCode}  onChange={(e) => this.setState({userResetCode: e.target.value})} />
 						</Form>

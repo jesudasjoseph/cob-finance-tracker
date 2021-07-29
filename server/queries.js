@@ -86,7 +86,7 @@ async function resetDatabase(asker, code){
 					return new data(200);
 				}
 				else{
-					return new data(403);
+					return new data(406);
 				}
 				break;
 			case roleType.student:

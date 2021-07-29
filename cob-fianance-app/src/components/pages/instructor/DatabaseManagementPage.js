@@ -59,7 +59,7 @@ export default class DatabaseManagementPage extends Component{
 					</div>
 					<div className='flex-container'>
 						<ProgressBar now={this.state.progressPercent} label={`${this.state.progressPercent}%`}/>
-						<h4>{this.state.progressLabel}</h4>
+						<h4 className='progress-label'>{this.state.progressLabel}</h4>
 					</div>
 				</div>
 				<ImportDatabaseDialog show={this.state.showImportDialog} handleClose={() => {this.setState({showImportDialog: false})}} updateProgress={(progress, label) => {this.setState({progressPercent: progress, progressLabel: label})}}/>
