@@ -188,7 +188,6 @@ export default class CompanyManagementPage extends Component {
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
 				this.context.pushNotification('success', 'Successfully Added New Business', '', 4000);
-
 			}
 			else{
 				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);

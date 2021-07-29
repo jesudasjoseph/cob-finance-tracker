@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import ResetDatabaseDialog from './components/ResetDatabaseDialog'
 
-//import { API_PATH } from '../../Config';
+import { AppContext } from '../../../AppContext';
 
 import './styles/DatabaseManagementPage.css';
 
@@ -13,7 +13,7 @@ export default class DatabaseManagementPage extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			showWarning: false,
+			showResetDialog: false,
 			progressPercent: 0,
 			progressLabel: 'Import/Export Progress'
 		}
@@ -27,7 +27,6 @@ export default class DatabaseManagementPage extends Component{
 
 	//Import Database
 	importOnClick(){
-
 	}
 
 	//Export Database
@@ -40,7 +39,7 @@ export default class DatabaseManagementPage extends Component{
 
 	//Reset Database
 	resetOnClick(){
-		this.setState({showWarning: false});
+		this.setState({showResetDialog: true});
 	}
 
 	render(){
@@ -53,23 +52,16 @@ export default class DatabaseManagementPage extends Component{
 					<div className='flex-container button-container'>
 						<Button className='left' onClick={this.exportOnClick}>Export Database</Button>
 						<Button disabled className='middle' onClick={this.importOnClick}>Import Database</Button>
-						<Button disabled className='right' variant='danger' onClick={() => {this.setState({showWarning: true})}}>Reset Database</Button>
+						<Button className='right' variant='danger' onClick={this.resetOnClick}>Reset Database</Button>
 					</div>
 					<div className='flex-container'>
 						<ProgressBar now={this.state.progressPercent} label={`${this.state.progressPercent}%`}/>
 						<h4>{this.state.progressLabel}</h4>
 					</div>
 				</div>
-				<Modal show={this.state.showWarning}>
-					<Modal.Body>
-						<p>Are you sure you want to reset the whole database? This will delete all data that currently exists in the database.</p>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button onClick={()=>{this.setState({showWarning: false})}} variant="secondary">Cancel</Button>
-						<Button onClick={this.resetOnClick} variant="primary">Reset</Button>
-					</Modal.Footer>
-				</Modal>
+				<ResetDatabaseDialog show={this.state.showResetDialog} handleClose={() => {this.setState({showResetDialog: false})}} handleSubmit={() => {this.setState({showResetDialog: false})}}/>
 			</>
 		);
 	}
 }
+DatabaseManagementPage.contextType = AppContext;
