@@ -3,7 +3,7 @@ const router = express.Router();
 const authorizor = require('../authorizor');
 const q = require('../queries');
 
-router.get('/reset-code', authorizor.authToken, async (req, res) => {
+router.get('/resetcode', authorizor.authToken, async (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	let {code, data} = await q.getResetCode(req.body.asker);
 	res.statusCode = code;
