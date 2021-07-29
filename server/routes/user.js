@@ -33,7 +33,6 @@ router.get('/', authorizor.authToken, async (req, res) => {
 	}
 	let {code, data} = await q.getMultipleUsers(req.body.asker, req.query.start, req.query.end, req.query.sort, searchText);
 	res.statusCode = code;
-	console.log(data);
 	res.send(JSON.stringify(data));;
 });
 
