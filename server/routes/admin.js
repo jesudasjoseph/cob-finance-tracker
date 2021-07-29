@@ -8,6 +8,7 @@ router.get('/resetcode', authorizor.authToken, async (req, res) => {
 	let {code, data} = await q.getResetCode(req.body.asker);
 	res.statusCode = code;
 	console.log(data);
+	console.log(JSON.stringify(data));
 	res.send(JSON.stringify(data));
 });
 
