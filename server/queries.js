@@ -34,7 +34,21 @@ async function init(){
 
 
 async function generateResetCode() {
-	let code = 'Code';
+	let firstHalf = [
+		'banana',
+		'orange',
+		'mango',
+		'peach',
+		'watermelon'
+	]
+	let secondHalf = [
+		'spinach',
+		'carrot',
+		'peas',
+		'onion',
+		'tomato'
+	]
+	let code = firstHalf[Math.floor(Math.random() * 5)] + '-' + secondHalf[Math.floor(Math.random() * 5)];
 	resetCode = code;
 	return code;
 }
