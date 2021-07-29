@@ -47,7 +47,7 @@ async function getResetCode(asker) {
 		case roleType.instructor:
 		case roleType.admin:
 			let res = await generateResetCode();
-			return new data(200, {code: res});
+			return new data(200, {code: 'Code'});
 		default:
 			return new data(403);
 	}
