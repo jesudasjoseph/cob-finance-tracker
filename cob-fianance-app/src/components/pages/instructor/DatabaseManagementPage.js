@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import ResetDatabaseDialog from './components/ResetDatabaseDialog'
+import ResetDatabaseDialog from './components/ResetDatabaseDialog';
+import ImportDatabaseDialog from './components/ImportDatabaseDialog';
 
 import { AppContext } from '../../../AppContext';
 
@@ -14,24 +15,26 @@ export default class DatabaseManagementPage extends Component{
 		super(props);
 		this.state = {
 			showResetDialog: false,
+			showImportDialog: false,
 			progressPercent: 0,
 			progressLabel: 'Import/Export Progress'
 		}
 
-		this.importOnClick = this.importOnClick.bind(this);
 		this.exportOnClick = this.exportOnClick.bind(this);
 		this.resetOnClick = this.resetOnClick.bind(this);
 
 		this.updateExportProgress = this.updateExportProgress.bind(this);
+		this.updateImportProgress = this.updateImportProgress.bind(this);
 	}
 
 	//Import Database
-	importOnClick(){
+	updateImportProgress(progress, label){
+		this.setState({progressPercent: progress, progressLabel: label});
 	}
 
 	//Export Database
 	exportOnClick(){
-		exportUtil.startExport(this.updateExportProgress, this.exportComplete);
+		exportUtil.startExport(this.updateExportProgress);
 	}
 	updateExportProgress(progress, label){
 		this.setState({progressPercent: progress, progressLabel: label});
@@ -51,7 +54,7 @@ export default class DatabaseManagementPage extends Component{
 					</div>
 					<div className='flex-container button-container'>
 						<Button className='left' onClick={this.exportOnClick}>Export Database</Button>
-						<Button disabled className='middle' onClick={this.importOnClick}>Import Database</Button>
+						<Button className='middle' onClick={() => {this.setState({showImportDialog: true})}}>Import Database</Button>
 						<Button className='right' variant='danger' onClick={this.resetOnClick}>Reset Database</Button>
 					</div>
 					<div className='flex-container'>
@@ -59,7 +62,8 @@ export default class DatabaseManagementPage extends Component{
 						<h4>{this.state.progressLabel}</h4>
 					</div>
 				</div>
-				<ResetDatabaseDialog show={this.state.showResetDialog} handleClose={() => {this.setState({showResetDialog: false})}} handleSubmit={() => {this.setState({showResetDialog: false})}}/>
+				<ImportDatabaseDialog show={this.state.showImportDialog} handleClose={() => {this.setState({showImportDialog: false})}} updateProgress={(progress, label) => {this.setState({progressPercent: progress, progressLabel: label})}}/>
+				<ResetDatabaseDialog show={this.state.showResetDialog} handleClose={() => {this.setState({showResetDialog: false})}}/>
 			</>
 		);
 	}

@@ -61,7 +61,7 @@ export default class ResetDatabaseDialog extends Component{
 			console.error('Error:', error);
 		});
 		this.setState({userResetCode: ''});
-		this.props.handleSubmit();
+		this.props.handleClose();
 	}
 
 	render(){
@@ -70,7 +70,7 @@ export default class ResetDatabaseDialog extends Component{
 				<Modal show={this.props.show} onHide={this.close_dialog}>
 					<Modal.Header closeButton>
 						<Modal.Title>
-							Add Deposit
+							Reset Database
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
@@ -79,7 +79,7 @@ export default class ResetDatabaseDialog extends Component{
 							<Form.Control type="text" value={this.state.userResetCode}  onChange={(e) => this.setState({userResetCode: e.target.value})} />
 						</Form>
 						<Modal.Footer>
-						<Button variant="primary" onClick={this.handle_submit}>Add</Button>
+						<Button variant="primary" onClick={this.handle_submit}>Reset</Button>
 						</Modal.Footer>
 					</Modal.Body>
 				</Modal>
