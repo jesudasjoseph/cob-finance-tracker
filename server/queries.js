@@ -232,7 +232,7 @@ async function getUserByAsker(asker) {
 //Permissions Instructor, Admin
 async function getMultipleUsersByBid(asker, company_id) {
 	const query = {
-		text: 'SELECT user_table.first_name, user_table.last, user_table.uid, user_table.role, user_table.section FROM user_table LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE company_table.company_id=$1 ORDER BY user_table.user_id',
+		text: 'SELECT user_table.first_name, user_table.last_name, user_table.user_id, user_table.role, user_table.section FROM user_table LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE company_table.company_id=$1 ORDER BY user_table.user_id',
 		values: [company_id]
 	}
 
