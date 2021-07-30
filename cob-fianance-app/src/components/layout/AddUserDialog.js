@@ -15,10 +15,10 @@ export default class AddUserDialog extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			bid: '',
-			firstName: '',
-			lastName: '',
-			onid: '',
+			company_id: '',
+			first_name: '',
+			last_name: '',
+			user_id: '',
 			section: '',
 			role: '0',
 			comapanyNameList: []
@@ -56,7 +56,7 @@ export default class AddUserDialog extends Component {
 			}
 		}).then((data) => {
 			console.log(data);
-			this.setState({comapanyNameList:data, bid:data[0].bid});
+			this.setState({comapanyNameList:data, company_id:data[0].company_id});
 		}).catch((error) => {
 			console.log(error);
 		});
@@ -64,10 +64,10 @@ export default class AddUserDialog extends Component {
 
 	close_dialog() {
 		this.setState({
-			bid: '',
-			firstName: '',
-			lastName: '',
-			onid: '',
+			company_id: '',
+			first_name: '',
+			last_name: '',
+			user_id: '',
 			section: '',
 			role: 0
 		});
@@ -90,12 +90,12 @@ export default class AddUserDialog extends Component {
 	}
 
 	handle_submit() {
-		this.props.handleSubmit({bid: this.state.bid, firstName: this.state.firstName, lastName: this.state.lastName, uid: this.removeSpaces(this.state.onid), section: this.state.section, role: this.state.role});
+		this.props.handleSubmit({company_id: this.state.company_id, first_name: this.state.first_name, last_name: this.state.last_name, user_id: this.removeSpaces(this.state.user_id), section: this.state.section, role: this.state.role});
 		this.setState({
-			bid: '',
-			firstName: '',
-			lastName: '',
-			onid: '',
+			company_id: '',
+			first_name: '',
+			last_name: '',
+			user_id: '',
 			section: '',
 			role: 0
 		});
@@ -114,24 +114,24 @@ export default class AddUserDialog extends Component {
 						<Form>
 							<Form.Group>
 								<Form.Label>ONID:</Form.Label>
-								<Form.Control type="text" value={this.state.onid}  onChange={(e) => this.setState({onid: e.target.value})} />
+								<Form.Control type="text" value={this.state.user_id}  onChange={(e) => this.setState({user_id: e.target.value})} />
 
 								<Form.Label>First name:</Form.Label>
-								<Form.Control type="text" value={this.state.firstName} onChange={(e) => this.setState({firstName: e.target.value})} />
+								<Form.Control type="text" value={this.state.first_name} onChange={(e) => this.setState({first_name: e.target.value})} />
 
 								<Form.Label>Last name:</Form.Label>
-								<Form.Control type="text" value={this.state.lastName} onChange={(e) => this.setState({lastName: e.target.value})} />
+								<Form.Control type="text" value={this.state.last_name} onChange={(e) => this.setState({last_name: e.target.value})} />
 
 								<Form.Label>Section:</Form.Label>
 								<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
 
 								<Form.Label>Business:</Form.Label>
-								<Form.Control as="select" type="text" value={this.state.bid} onChange={(e) => this.setState({bid: e.target.value})}>
+								<Form.Control as="select" type="text" value={this.state.company_id} onChange={(e) => this.setState({company_id: e.target.value})}>
 									{
 										this.state.comapanyNameList.map((company, index) => {
 											return(
 												<>
-													<option key={company.name} value={company.bid}>{company.name}</option>
+													<option key={company.company_id} value={company.company_id}>{company.company_id}</option>
 												</>
 											);
 										})

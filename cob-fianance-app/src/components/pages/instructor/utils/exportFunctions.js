@@ -1,19 +1,18 @@
 import { API_PATH } from '../../../Config';
 
-function userObject(uid, role, first, last, section){
+function userObject(user_id, role, first_name, last_name, section){
 	return({
-		uid: uid,
+		user_id: user_id,
 		role: role,
-		first: first,
-		last: last,
+		first_name: first_name,
+		last_name: last_name,
 		section: section
 	});
 }
 
-function companyObject(bid, name, section, instructor){
+function companyObject(company_id, section, instructor){
 	return({
-		bid: bid,
-		name: name,
+		company_id: company_id,
 		section: section,
 		instructor: instructor,
 		users: [],
@@ -23,19 +22,20 @@ function companyObject(bid, name, section, instructor){
 	});
 }
 
-function depositObject(uid, val, tag, date, description){
+function depositObject(company_id, user_id, value, date, description){
 	return({
-		uid: uid,
-		val: val,
-		tag: tag,
+		company_id: company_id,
+		user_id: user_id,
+		value: value,
 		date: date,
 		description: description
 	});
 }
 
-function transactionObject(uid, customer, product, payment_method, quantity, price_per_unit, date){
+function transactionObject(company_id, user_id, customer, product, payment_method, quantity, price_per_unit, date){
 	return({
-		uid: uid,
+		company_id: company_id,
+		user_id: user_id,
 		customer: customer,
 		product: product,
 		payment_method: payment_method,
@@ -45,9 +45,10 @@ function transactionObject(uid, customer, product, payment_method, quantity, pri
 	});
 }
 
-function expenseObject(uid, customer, product, payment_method, quantity, company, date, price_per_unit, justification){
+function expenseObject(company_id, user_id, customer, product, payment_method, quantity, company, date, price_per_unit, description){
 	return({
-		uid: uid,
+		company_id: company_id,
+		user_id: user_id,
 		customer: customer,
 		product: product,
 		payment_method: payment_method,
@@ -55,7 +56,7 @@ function expenseObject(uid, customer, product, payment_method, quantity, company
 		company: company,
 		date: date,
 		price_per_unit: price_per_unit,
-		justification: justification
+		description: description
 	});
 }
 
@@ -155,7 +156,7 @@ function getCompanies(){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0){
-			let tempCompanyList = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
+			let tempCompanyList = data.map(company => companyObject(company.company_id, company.section, company.instructor));
 			companyList = companyList.concat(tempCompanyList);
 			companyIndex += DATA_LENGTH;
 			getCompanies();
@@ -192,10 +193,11 @@ function getDeposits(companyIndex, depositIndex = 0){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		if (data.length) {
-			let tempDepositList = data.map(deposit => depositObject(deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
-			companyList[companyIndex].deposits = companyList[companyIndex].deposits.concat(tempDepositList);
-			getDeposits(companyIndex, depositIndex += DATA_LENGTH);
+		if (data.length !== 0) {
+			let tempUserList = data.map(user => userObject(user.user_id, user.role, user.first_name, user.last_name, user.section));
+			userList = userList.concat(tempUserList);
+			userIndex += dataLength;
+			getUsers();
 		}
 		else {
 			updateFunction(50, 'Downloading Deposits');

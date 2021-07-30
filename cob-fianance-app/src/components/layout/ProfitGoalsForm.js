@@ -7,7 +7,7 @@ export class ProfitGoalsForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			bid: '',
+			company_id: '',
 			profit_goal: 0,
 			stretch_profit_goal: 0
 		};
@@ -35,7 +35,7 @@ export class ProfitGoalsForm extends Component {
 			this.setState({
 				profit_goal:data[0].profit_goal,
 				stretch_profit_goal:data[0].stretch_profit_goal,
-				bid:data[0].bid
+				company_id:data[0].company_id
 			});
 		}).catch((error) => {
 			console.error('Error:', error);

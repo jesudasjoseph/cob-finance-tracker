@@ -33,8 +33,8 @@ export default class DepositTable extends PureComponent{
 		this.updateComponent(this.props.companyInfo);
 	};
 
-	fetchDepositData(bid, pageIndex, searchText = ''){
-		fetch(API_PATH + '/deposit/bybid?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + bid + '&search=' + searchText, {
+	fetchDepositData(company_id, pageIndex, searchText = ''){
+		fetch(API_PATH + '/deposit/bybid?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + company_id + '&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -52,10 +52,10 @@ export default class DepositTable extends PureComponent{
 		});
 	}
 
-	updateComponent = memoize((companyInfo) => {
-			if (companyInfo.bid >= 0){
-				this.fetchDepositData(companyInfo.bid, this.state.tablePageIndex, this.state.searchText);
-				return {addDisabled: false, companyName: companyInfo.name};
+	updateComponent = memoize((company_id) => {
+			if (company_id != null){
+				this.fetchDepositData(company_id, this.state.tablePageIndex, this.state.searchText);
+				return {addDisabled: false, companyName: company_id};
 			}
 			else {
 				return {addDisabled: true, companyName: 'Select a Company'};
@@ -88,7 +88,7 @@ export default class DepositTable extends PureComponent{
 			else{
 				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 			}
-			this.fetchDepositData(this.props.companyInfo.bid, this.state.tablePageIndex, this.state.searchText);
+			this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, this.state.searchText);
 		}).catch((error) => {
 			console.error('Error:', error);
 			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
@@ -100,11 +100,11 @@ export default class DepositTable extends PureComponent{
 
 	searchOnChange(text){
 		this.setState({searchText: text});
-		this.fetchDepositData(this.props.companyInfo.bid, this.state.tablePageIndex, text);
+		this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, text);
 	}
 
 	render(){
-		const {companyName, addDisabled} = this.updateComponent(this.props.companyInfo);
+		const {companyName, addDisabled} = this.updateComponent(this.props.company_id);
 
 		if (addDisabled){
 			return (<h2>{companyName}</h2>);
@@ -128,12 +128,12 @@ export default class DepositTable extends PureComponent{
 								</thead>
 								<tbody>
 									{this.state.depositData.map((deposit, index) => {
-										const {d_id, date, uid, val, description} = deposit;
+										const {deposit_id, date, user_id, value, description} = deposit;
 										return (
-											<tr key={d_id}>
+											<tr key={deposit_id}>
 												<td>{date.split('T')[0]}</td>
-												<td>{val}</td>
-												<td>{uid}</td>
+												<td>{value}</td>
+												<td>{user_id}</td>
 												<td>{description}</td>
 											</tr>
 										);
@@ -146,7 +146,7 @@ export default class DepositTable extends PureComponent{
 							<TableControl add addDisabled={addDisabled} addOnClick={this.addOnClick}/>
 						</div>
 					</div>
-					<AddDepositDialog bid={this.props.companyInfo.bid} show={this.state.showAddDepositDialog} handleSubmit={this.handleSubmitDeposit} handleClose={this.handleCloseDeposit}/>
+					<AddDepositDialog company_id={this.props.company_id} show={this.state.showAddDepositDialog} handleSubmit={this.handleSubmitDeposit} handleClose={this.handleCloseDeposit}/>
 				</>
 			);
 		}
