@@ -1,12 +1,14 @@
 import {API_PATH} from '../../../Config';
 
-export function startImport(data, updateProgress){
+//let updateProgress;
 
-	importUsers(data.users, updateProgress);
-	importCompanies(data, updateProgress);
+export function startImport(data, callBack){
+	//updateProgress = callBack;
+	importUsers(data.users);
+	importCompanies(data);
 }
 
-function importUsers(users, updateProgress){
+function importUsers(users){
 	if (users){
 		let userBody;
 		for (let i = 0; i < users.length; i++){
@@ -21,14 +23,13 @@ function importUsers(users, updateProgress){
 				},
 				body: JSON.stringify(userBody)
 			}).then(response => {
-				updateProgress(100/users.length*(i+1), 'Importing Users');
 			}).catch((error) => {
 				console.log(error);
 			});
 		}
 	}
 }
-function importCompanies(data, updateProgress){
+function importCompanies(data){
 	if (data.companies){
 		let companyBody;
 		for (let i = 0; i < data.companies.length; i++){
@@ -43,19 +44,28 @@ function importCompanies(data, updateProgress){
 				},
 				body: JSON.stringify(companyBody)
 			}).then(response => {
-				updateProgress(100/data.companies.length*(i+1), 'Importing Companies');
-				if (i+1 === data.companies.length){
-					updateProgress(100, 'Companies Imported');
-					importDeposits(data, updateProgress);
-				}
+				importDeposits(data.companies[i].deposits);
+				importExpenses(data.companies[i].expenses);
+				importTransactions(data.companies[i].transactions);
 			}).catch((error) => {
 				console.log(error);
 			});
 		}
 	}
 }
-function importDeposits(data, updateProgress){
-	if (data.deposits){
-		
+
+function importDeposits(deposits){
+	if (deposits){
+
+	}
+}
+function importExpenses(expenses){
+	if (expenses){
+
+	}
+}
+function importTransactions(transactions){
+	if (transactions){
+
 	}
 }
