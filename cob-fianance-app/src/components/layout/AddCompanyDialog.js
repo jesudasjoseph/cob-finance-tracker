@@ -15,7 +15,7 @@ export default class AddCompanyDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			comapny_id: '',
+			company_id: '',
 			section: '',
 			instructor: 'default'
 		};
@@ -47,7 +47,7 @@ export default class AddCompanyDialogButton extends Component {
 
 	close_dialog() {
 		this.setState({
-			comapny_id: '',
+			company_id: '',
 			section: ''
 		});
 		this.props.handleClose();
@@ -58,9 +58,9 @@ export default class AddCompanyDialogButton extends Component {
 		if (this.state.section === ''){
 			this.setState({section: 'no_section'});
 		}
-		this.props.handleSubmit({comapny_id:this.state.comapny_id, section:this.state.section, instructor:this.state.instructor});
+		this.props.handleSubmit({company_id:this.state.company_id, section:this.state.section, instructor:this.state.instructor});
 		this.setState({
-			comapny_id: '',
+			company_id: '',
 			section: ''
 		});
 	}
@@ -78,7 +78,7 @@ export default class AddCompanyDialogButton extends Component {
 						<Form>
 							<Form.Group>
 								<Form.Label>Name</Form.Label>
-								<Form.Control type="text" value={this.state.comapny_id}  onChange={(e) => this.setState({comapny_id: e.target.value})} />
+								<Form.Control type="text" value={this.state.company_id}  onChange={(e) => this.setState({company_id: e.target.value})} />
 
 								<Form.Label>Section</Form.Label>
 								<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
