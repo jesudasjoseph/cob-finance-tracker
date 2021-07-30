@@ -189,7 +189,7 @@ export default class SnapshotGroup extends React.Component{
 		return (
 			<React.Fragment>
 				<h1 style={{textAlign:'center'}}>{this.state.business.company_id}</h1>
-				<StudentTable company_id={company_id} Mystudents={{students: this.state.students}}/>
+				<StudentTable company_id={this.state.company_id} Mystudents={{students: this.state.students}}/>
 				<h3> Profit Goals</h3>
 				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
 				<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
