@@ -662,7 +662,7 @@ async function getBusinessByBid(asker, company_id) {
 }
 async function createBusiness(asker, company) {
 	const query = {
-		text: 'INSERT INTO company_table (comapny_id, section, instructor) VALUES ($1, $2, $3)',
+		text: 'INSERT INTO company_table (company_id, section, instructor) VALUES ($1, $2, $3)',
 		values: [company.company_id, company.section, company.instructor]
 	}
 	const client = await pool.connect();
