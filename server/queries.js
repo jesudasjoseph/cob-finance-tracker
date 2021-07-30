@@ -417,7 +417,7 @@ async function getRole(asker){
 	}
 
 	if (!res.rows.length) {
-		return new data(404);
+		return new data(200, []);
 	}
 	else {
 		return new data(200, res.rows[0].role);
@@ -560,7 +560,7 @@ async function getMultipleBusinessNames(asker) {
 }
 async function getBusinessByUid(asker) {
 	const query = {
-		text: 'SELECT * FROM company_view LEFT JOIN user_has_company ON (company_view.bid=user_has_comapny.company_id) WHERE user_id=$1;',
+		text: 'SELECT * FROM company_view LEFT JOIN user_has_company ON (company_view.bid=user_has_company.company_id) WHERE user_id=$1;',
 		values: [asker.uid]
 	}
 	const client = await pool.connect();
