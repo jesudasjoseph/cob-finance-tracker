@@ -1079,7 +1079,7 @@ async function getMultipleExpensesByUid(asker, start, end, searchText) {
 		return new data(403);
 	}
 	const query = {
-		text: 'SELECT * FROM expense_table WHERE company_id=$1 AND expenses.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		text: 'SELECT * FROM expense_table WHERE company_id=$1 AND expense_table.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [company_id, start, end, searchText]
 	}
 	let res;
