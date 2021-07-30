@@ -15,7 +15,7 @@ export default class AddCompanyDialogButton extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			name: '',
+			comapny_id: '',
 			section: '',
 			instructor: 'default'
 		};
@@ -39,7 +39,7 @@ export default class AddCompanyDialogButton extends Component {
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data)
-			this.setState({instructor:data.uid});
+			this.setState({instructor:data.user_id});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -47,7 +47,7 @@ export default class AddCompanyDialogButton extends Component {
 
 	close_dialog() {
 		this.setState({
-			name: '',
+			comapny_id: '',
 			section: ''
 		});
 		this.props.handleClose();
@@ -58,9 +58,9 @@ export default class AddCompanyDialogButton extends Component {
 		if (this.state.section === ''){
 			this.setState({section: 'no_section'});
 		}
-		this.props.handleSubmit({name:this.state.name, section:this.state.section, instructor:this.state.instructor});
+		this.props.handleSubmit({comapny_id:this.state.comapny_id, section:this.state.section, instructor:this.state.instructor});
 		this.setState({
-			name: '',
+			comapny_id: '',
 			section: ''
 		});
 	}
@@ -78,7 +78,7 @@ export default class AddCompanyDialogButton extends Component {
 						<Form>
 							<Form.Group>
 								<Form.Label>Name</Form.Label>
-								<Form.Control type="text" value={this.state.name}  onChange={(e) => this.setState({name: e.target.value})} />
+								<Form.Control type="text" value={this.state.comapny_id}  onChange={(e) => this.setState({comapny_id: e.target.value})} />
 
 								<Form.Label>Section</Form.Label>
 								<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />

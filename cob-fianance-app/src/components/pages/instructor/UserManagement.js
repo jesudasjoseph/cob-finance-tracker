@@ -28,7 +28,7 @@ export default class UserManagement extends Component {
 			showAddUserDialog: false,
 			showEditUserDialog: false,
 			sortOption: 'role',
-			bid: 0,
+			company_id: '',
 			lastDisabled: true,
 			nextDisabled: false,
 			searchText: ''
@@ -134,7 +134,7 @@ export default class UserManagement extends Component {
 		this.setState({showEditUserDialog: true});
 	}
 	deleteOnClick(){
-		fetch(API_PATH + '/user/byuid?uid=' + this.state.tableRows[this.state.tableSelectedRow].uid, {
+		fetch(API_PATH + '/user/byuid?uid=' + this.state.tableRows[this.state.tableSelectedRow].user_id, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
@@ -156,8 +156,8 @@ export default class UserManagement extends Component {
 
 	//Add Dialog Functions
 	addDialogHandleSubmit(userObject){
-		const userBody = {user: {uid: userObject.uid, bid: userObject.bid, first: userObject.firstName, last: userObject.lastName, section: userObject.section, role: userObject.role}}
-		const addUserToBusinessBody = {uid: userObject.uid, bid: userObject.bid};
+		const userBody = {user: {user_id: userObject.user_id, company_id: userObject.company_id, first_name: userObject.first_name, last_name: userObject.last_name, section: userObject.section, role: userObject.role}}
+		const addUserToBusinessBody = {user_id: userObject.user_id, company_id: userObject.company_id};
 		fetch(API_PATH + '/user', {
 			mode: 'cors',
 			method: 'POST',
@@ -317,20 +317,19 @@ export default class UserManagement extends Component {
 								{
 									this.state.tableRows.map((row, index) => {
 										const {
-											uid,
-											bid,
-											name,
-											first,
-											last,
+											user_id,
+											company_id,
+											first_name,
+											last_name,
 											section,
 											role
 										} = row;
 										if (index === this.state.tableSelectedRow){
 											return(
-												<tr className='selectedRow' key={uid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{uid}</td>
-													<td>{'(' + bid + ') ' + name}</td>
-													<td>{last + ', ' + first}</td>
+												<tr className='selectedRow' key={user_id} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{user_id}</td>
+													<td>{company_id}</td>
+													<td>{last_name + ', ' + first_name}</td>
 													<td>{section}</td>
 													<td>{role}</td>
 												</tr>
@@ -338,10 +337,10 @@ export default class UserManagement extends Component {
 										}
 										else {
 											return(
-												<tr key={uid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{uid}</td>
-													<td>{'(' + bid + ') ' + name}</td>
-													<td>{last + ', ' + first}</td>
+												<tr key={user_id} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{user_id}</td>
+													<td>{company_id}</td>
+													<td>{last_name + ', ' + first_name}</td>
 													<td>{section}</td>
 													<td>{role}</td>
 												</tr>
@@ -363,7 +362,7 @@ export default class UserManagement extends Component {
 				</div>
 				<AddUserDialog show={this.state.showAddUserDialog} handleSubmit={this.addDialogHandleSubmit} handleClose={this.addDialogHandleClose}/>
 
-				<EditUserDialog show={this.state.showEditUserDialog} key={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid+this.state.tableRows[this.state.tableSelectedRow].uid} dataFromParent={{bid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].bid, uid: (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].uid}} handleSubmit={this.editDialogHandleSubmit} handleClose={this.editDialogHandleClose}/>
+				<EditUserDialog show={this.state.showEditUserDialog} key={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].company_id+this.state.tableRows[this.state.tableSelectedRow].user_id} company_id={ (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].company_id} user_id={ (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].user_id} handleSubmit={this.editDialogHandleSubmit} handleClose={this.editDialogHandleClose}/>
 
 				<ImportUserDialog show={this.state.showImportUserDialog} handleSubmit={this.importDialogHandleSubmit} handleClose={this.importDialogHandleClose}/>
 			</>

@@ -8,9 +8,9 @@ export default class AddDepositDialog extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			val: '',
+			value: '',
 			description: '',
-			uid: '',
+			user_id: '',
 			userList: []
 		};
 
@@ -20,12 +20,12 @@ export default class AddDepositDialog extends Component {
 	}
 
 	componentDidMount(){
-		this.fetchUsers(this.props.bid);
+		this.fetchUsers(this.props.comapny_id);
 	}
 
 	componentDidUpdate(prevProps){
-		if (this.props.bid !== prevProps.bid){
-			this.fetchUsers(this.props.bid);
+		if (this.props.comapny_id !== prevProps.comapny_id){
+			this.fetchUsers(this.props.comapny_id);
 		}
 	}
 
@@ -46,10 +46,10 @@ export default class AddDepositDialog extends Component {
 			console.log('Success:', data);
 			this.setState({userList:data});
 			if (data.length === 0){
-				this.setState({uid: ''});
+				this.setState({user_id: ''});
 			}
 			else {
-				this.setState({uid: data[0].uid});
+				this.setState({user_id: data[0].user_id});
 			}
 		}).catch((error) => {
 			console.error('Error:', error);
@@ -58,20 +58,20 @@ export default class AddDepositDialog extends Component {
 
 	close_dialog() {
 		this.setState({
-			val: '',
+			value: '',
 			description: '',
-			uid: ''
+			user_id: ''
 		});
 		this.props.handleClose();
 	}
 	handle_submit(e) {
 		e.preventDefault();
 
-		this.props.handleSubmit({bid:this.props.bid, val:this.state.val, description:this.state.description, uid:this.state.uid});
+		this.props.handleSubmit({comapny_id:this.props.comapny_id, value:this.state.value, description:this.state.description, user_id:this.state.user_id});
 		this.setState({
-			val: '',
+			value: '',
 			description: '',
-			uid: ''
+			user_id: ''
 		});
 	}
 
@@ -88,14 +88,14 @@ export default class AddDepositDialog extends Component {
 						<Form>
 							<Form.Group>
 								<Form.Label>Amount</Form.Label>
-								<Form.Control type="number" value={this.state.val}  onChange={(e) => this.setState({val: e.target.value})} />
+								<Form.Control type="number" value={this.state.value}  onChange={(e) => this.setState({value: e.target.value})} />
 
 								<Form.Label>Student ONID</Form.Label>
-								<Form.Control as="select" value={this.state.uid} onChange={(e) => this.setState({uid: e.target.value})}>
+								<Form.Control as="select" value={this.state.user_id} onChange={(e) => this.setState({user_id: e.target.value})}>
 									{this.state.userList.map((user, index) => {
 										return(
-											<React.Fragment key={user.uid}>
-												<option value={user.uid}>{user.uid}</option>
+											<React.Fragment key={user.user_id}>
+												<option value={user.user_id}>{user.user_id}</option>
 											</React.Fragment>
 										);
 									})}

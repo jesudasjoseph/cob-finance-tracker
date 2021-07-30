@@ -41,7 +41,7 @@ export class Dashboard extends Component {
 	render(){
 		return (
 			<React.Fragment>
-				<div style={{textAlign:'center', padding: '4px'}}><h1><b>{this.state.business.name}</b> - dashboard</h1></div>
+				<div style={{textAlign:'center', padding: '4px'}}><h1><b>{this.state.business.company_id}</b> - dashboard</h1></div>
 				<h3 style={{padding: '20px 0px 0px 0px'}}>Profit Goals</h3>
 				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
 				<h3 style={{padding: '20px 0px 0px 0px'}}>Expenses / Revenue</h3>

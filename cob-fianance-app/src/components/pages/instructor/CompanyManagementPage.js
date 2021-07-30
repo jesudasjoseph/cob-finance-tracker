@@ -150,7 +150,7 @@ export default class CompanyManagementPage extends Component {
 		this.setState({showAddCompanyDialog: true});
 	}
 	deleteOnClick(){
-		fetch(API_PATH + '/business/bybid?bid=' + this.state.businessTable[this.state.selectedRow].bid, {
+		fetch(API_PATH + '/business/bybid?bid=' + this.state.businessTable[this.state.selectedRow].company_id, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
@@ -224,7 +224,7 @@ export default class CompanyManagementPage extends Component {
 
 	//Navigate to Business Overview Page
 	overviewBusinessOnClick(){
-		this.props.history.push("/instructor/dashboard/" + this.state.businessTable[this.state.selectedRow].bid);
+		this.props.history.push("/instructor/dashboard/" + this.state.businessTable[this.state.selectedRow].company_id);
 	}
 
 	//Paging
@@ -289,22 +289,21 @@ export default class CompanyManagementPage extends Component {
 								<tbody>
 									{
 										this.state.businessTable.map((business, index) => {
-										const {name,
-													instructor,
+										const {instructor,
 													section,
 													transaction_total,
 													deposit_total,
 													product_count,
 													expense_total,
-													bid,
+													company_id,
 													profit,
 													profit_goal,
 													stretch_profit_goal,
 													square_total} = business;
 										if (index === this.state.selectedRow){
 											return (
-												<tr key={bid} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
-													<td>{name + ' ('+ bid + ')'}</td>
+												<tr key={company_id} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
+													<td>{company_id}</td>
 													<td>{section}</td>
 													<td>{instructor}</td>
 													<td>{product_count}</td>
@@ -319,8 +318,8 @@ export default class CompanyManagementPage extends Component {
 										}
 										else {
 											return (
-												<tr key={bid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{name + ' ('+ bid + ')'}</td>
+												<tr key={company_id} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{company_id}</td>
 													<td>{section}</td>
 													<td>{instructor}</td>
 													<td>{product_count}</td>
