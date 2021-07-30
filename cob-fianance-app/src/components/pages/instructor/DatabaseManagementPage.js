@@ -21,28 +21,17 @@ export default class DatabaseManagementPage extends Component{
 		}
 
 		this.exportOnClick = this.exportOnClick.bind(this);
-		this.resetOnClick = this.resetOnClick.bind(this);
 
-		this.updateExportProgress = this.updateExportProgress.bind(this);
-		this.updateImportProgress = this.updateImportProgress.bind(this);
+		this.updateProgress = this.updateProgress.bind(this);
 	}
 
-	//Import Database
-	updateImportProgress(progress, label){
+	updateProgress(progress, label){
 		this.setState({progressPercent: progress, progressLabel: label});
 	}
 
 	//Export Database
 	exportOnClick(){
-		exportUtil.startExport(this.updateExportProgress);
-	}
-	updateExportProgress(progress, label){
-		this.setState({progressPercent: progress, progressLabel: label});
-	}
-
-	//Reset Database
-	resetOnClick(){
-		this.setState({showResetDialog: true});
+		exportUtil.startExport(this.updateProgress);
 	}
 
 	render(){
@@ -55,14 +44,14 @@ export default class DatabaseManagementPage extends Component{
 					<div className='flex-container button-container'>
 						<Button className='left' onClick={this.exportOnClick}>Export Database</Button>
 						<Button className='middle' onClick={() => {this.setState({showImportDialog: true})}}>Import Database</Button>
-						<Button className='right' variant='danger' onClick={this.resetOnClick}>Reset Database</Button>
+						<Button className='right' variant='danger' onClick={() => {this.setState({showResetDialog: true})}}>Reset Database</Button>
 					</div>
 					<div className='flex-container'>
-						<ProgressBar now={this.state.progressPercent} label={`${this.state.progressPercent}%`}/>
 						<h4 className='progress-label'>{this.state.progressLabel}</h4>
+						<ProgressBar className='database-progress-bar' now={this.state.progressPercent} label={`${this.state.progressPercent}%`}/>
 					</div>
 				</div>
-				<ImportDatabaseDialog show={this.state.showImportDialog} handleClose={() => {this.setState({showImportDialog: false})}} updateProgress={(progress, label) => {this.setState({progressPercent: progress, progressLabel: label})}}/>
+				<ImportDatabaseDialog show={this.state.showImportDialog} handleClose={() => {this.setState({showImportDialog: false})}} updateProgress={this.updateProgress}/>
 				<ResetDatabaseDialog show={this.state.showResetDialog} handleClose={() => {this.setState({showResetDialog: false})}}/>
 			</>
 		);

@@ -1018,7 +1018,7 @@ async function getMultipleExpensesByBid(asker, start, end, bid) {
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(200, []);
 				}
 				else {
 					return new data(200, res.rows);

@@ -3,6 +3,7 @@ import {API_PATH} from '../../../Config';
 export function startImport(data, updateProgress){
 
 	importUsers(data.users, updateProgress);
+	importCompanies(data, updateProgress);
 }
 
 function importUsers(users, updateProgress){
@@ -15,7 +16,6 @@ function importUsers(users, updateProgress){
 				method: 'POST',
 				credentials: 'same-origin',
 				headers: {
-					'Accept': 'application/json',
 					'Content-type': 'application/json',
 					'Authorization': window.localStorage.getItem('jwt')
 				},
@@ -26,5 +26,36 @@ function importUsers(users, updateProgress){
 				console.log(error);
 			});
 		}
+	}
+}
+function importCompanies(data, updateProgress){
+	if (data.companies){
+		let companyBody;
+		for (let i = 0; i < data.companies.length; i++){
+			companyBody = {business: {name: data.companies[i].name, section: data.companies[i].section, instructor: data.companies[i].instructor}}
+			fetch(API_PATH + '/business', {
+				mode: 'cors',
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-type': 'application/json',
+					'Authorization': window.localStorage.getItem('jwt')
+				},
+				body: JSON.stringify(companyBody)
+			}).then(response => {
+				updateProgress(100/data.companies.length*(i+1), 'Importing Companies');
+				if (i+1 === data.companies.length){
+					updateProgress(100, 'Companies Imported');
+					importDeposits(data, updateProgress);
+				}
+			}).catch((error) => {
+				console.log(error);
+			});
+		}
+	}
+}
+function importDeposits(data, updateProgress){
+	if (data.deposits){
+		
 	}
 }

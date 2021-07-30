@@ -50,7 +50,7 @@ export default class ResetDatabaseDialog extends Component{
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			if (Math.floor(response.status / 200) === 1){
+			if (response.status === 200){
 				this.context.pushNotification('success', 'Successfully Reset Database', '', 4000);
 			}
 			else if (response.status === 406){

@@ -2,6 +2,10 @@
 
 }
 
+.database-management-page-container .database-progress-bar{
+	height: 2em;
+}
+
 .database-management-page-container .progress-label{
 	text-align: center;
 }

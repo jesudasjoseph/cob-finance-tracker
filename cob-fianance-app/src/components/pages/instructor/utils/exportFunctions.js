@@ -15,13 +15,16 @@ function companyObject(bid, name, section, instructor){
 		bid: bid,
 		name: name,
 		section: section,
-		instructor: instructor
+		instructor: instructor,
+		users: [],
+		deposits: [],
+		transactions: [],
+		expenses: []
 	});
 }
 
-function depositObject(bid, uid, val, tag, date, description){
+function depositObject(uid, val, tag, date, description){
 	return({
-		bid: bid,
 		uid: uid,
 		val: val,
 		tag: tag,
@@ -30,9 +33,8 @@ function depositObject(bid, uid, val, tag, date, description){
 	});
 }
 
-function transactionObject(bid, uid, customer, product, payment_method, quantity, price_per_unit, date){
+function transactionObject(uid, customer, product, payment_method, quantity, price_per_unit, date){
 	return({
-		bid: bid,
 		uid: uid,
 		customer: customer,
 		product: product,
@@ -43,9 +45,8 @@ function transactionObject(bid, uid, customer, product, payment_method, quantity
 	});
 }
 
-function expenseObject(bid, uid, customer, product, payment_method, quantity, company, date, price_per_unit, justification){
+function expenseObject(uid, customer, product, payment_method, quantity, company, date, price_per_unit, justification){
 	return({
-		bid: bid,
 		uid: uid,
 		customer: customer,
 		product: product,
@@ -61,16 +62,17 @@ function expenseObject(bid, uid, customer, product, payment_method, quantity, co
 let databaseBackupObject;
 /*
 databaseBackupObject = {
+	users = [
+		userObject,
+		userObject,
+		...
+	],
 	companies = [
 		companyObject,
 		companyObject,
 		...
 		],
-	users = [
-		userObject,
-		userObject,
-		...
-		],
+
 	deposits = [
 		depositObject,
 		depositObject,
@@ -90,69 +92,25 @@ databaseBackupObject = {
 */
 let companyList = [];
 let userList = [];
-let depositList = [];
-let transactionList = [];
-let expenseList = [];
 
 let companyIndex = 0;
 let userIndex = 0;
-let depositIndex = 0;
-let transactionIndex = 0;
-let expenseIndex = 0;
 
-const dataLength = 100;
+const DATA_LENGTH = 100;
 
 let updateFunction;
 
 export function startExport(callBack){
 	companyList = [];
 	userList = [];
-	depositList = [];
-	transactionList = [];
-	expenseList = [];
 	companyIndex = 0;
 	userIndex = 0;
-	depositIndex = 0;
-	transactionIndex = 0;
-	expenseIndex = 0;
 	databaseBackupObject = null;
 	updateFunction = callBack;
-	getCompanies();
-}
-
-function getCompanies(){
-	fetch(API_PATH + '/business?start=' + companyIndex + '&end=' + dataLength, {
-		mode: 'cors',
-		method: 'GET',
-		credentials: 'same-origin',
-		headers: {
-			'Accept': 'application/json',
-			'Content-type': 'application/json',
-			'Authorization': window.localStorage.getItem('jwt')
-		}
-	}).then(response => {
-		return response.json();
-	}).then(data => {
-		if (data.length !== 0){
-			let tempCompanyList = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
-			companyList = companyList.concat(tempCompanyList);
-			companyIndex += dataLength;
-			getCompanies();
-		}
-		else {
-			getCompaniesSuccess();
-		}
-	}).catch((error) => {
-		console.error('Error:', error);
-	});
-}
-function getCompaniesSuccess(){
 	getUsers();
-	updateFunction(10, 'Downloading Company Info');
 }
-
 function getUsers(){
-	fetch(API_PATH + '/user?start=' + userIndex + '&end=' + dataLength, {
+	fetch(API_PATH + '/user?start=' + userIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -167,7 +125,8 @@ function getUsers(){
 		if (data.length !== 0) {
 			let tempUserList = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
 			userList = userList.concat(tempUserList);
-			userIndex += dataLength;
+			userIndex += DATA_LENGTH;
+			console.log(data);
 			getUsers();
 		}
 		else {
@@ -178,12 +137,12 @@ function getUsers(){
 	});
 }
 function getUsersSuccess(){
-	getDeposits();
 	updateFunction(20, 'Downloading User Info');
+	getCompanies();
 }
 
-function getDeposits(){
-	fetch(API_PATH + '/deposit?start=' + depositIndex + '&end=' + dataLength, {
+function getCompanies(){
+	fetch(API_PATH + '/business?start=' + companyIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -195,90 +154,132 @@ function getDeposits(){
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		if (data.length !== 0) {
-			let tempDepositList = data.map(deposit => depositObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
-			depositList = depositList.concat(tempDepositList);
-			depositIndex += dataLength;
-			console.log(data);
-			getDeposits();
+		if (data.length !== 0){
+			let tempCompanyList = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
+			companyList = companyList.concat(tempCompanyList);
+			companyIndex += DATA_LENGTH;
+			getCompanies();
 		}
 		else {
-			getDepositsSuccess();
+			getCompaniesSuccess();
 		}
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
 }
-function getDepositsSuccess(){
-	getTransactions();
-	updateFunction(50, 'Downloading Deposits');
+function getCompaniesSuccess(){
+	updateFunction(10, 'Downloaded Company Info');
+	if (companyList.length)
+		companyList.forEach((item, i) => {
+			getDeposits(i);
+			getTransactions(i);
+			getExpenses(i);
+		});
+	else
+		triggerDownload();
 }
 
-function getTransactions(){
-	fetch(API_PATH + '/transaction?start=' + transactionIndex + '&end=' + dataLength, {
+function getDeposits(companyIndex, depositIndex = 0){
+	console.log(`depositIndex: ${depositIndex}, companyIndex: ${companyIndex}`);
+	fetch(API_PATH + '/deposit/bybid?bid=' + companyList[companyIndex].bid + '&start=' + depositIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
 		headers: {
 			'Accept': 'application/json',
-			'Content-type': 'application/json',
 			'Authorization': window.localStorage.getItem('jwt')
 		}
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		if (data.length !== 0) {
-			let tempTransactionList = data.map(transaction => transactionObject(transaction.bid, transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
-			transactionList = transactionList.concat(tempTransactionList);
-			transactionIndex += dataLength;
-			getTransactions();
+		if (data.length) {
+			let tempDepositList = data.map(deposit => depositObject(deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
+			companyList[companyIndex].deposits = companyList[companyIndex].deposits.concat(tempDepositList);
+			getDeposits(companyIndex, depositIndex += DATA_LENGTH);
 		}
 		else {
-			getTransactionsSuccess();
+			updateFunction(50, 'Downloading Deposits');
 		}
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
 }
-function getTransactionsSuccess(){
-	getExpenses();
-	updateFunction(70, 'Downloading Transactions');
-}
-
-function getExpenses(){
-	fetch(API_PATH + '/expense?start=' + expenseIndex + '&end=' + dataLength, {
+function getTransactions(companyIndex, transactionIndex = 0){
+	console.log(`transactionIndex: ${transactionIndex}, companyIndex: ${companyIndex}`);
+	fetch(API_PATH + '/transaction/bybid?bid=' + companyList[companyIndex].bid + '&start=' + transactionIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
 		headers: {
 			'Accept': 'application/json',
-			'Content-type': 'application/json',
 			'Authorization': window.localStorage.getItem('jwt')
 		}
 	}).then(response => {
 		return response.json();
 	}).then(data => {
-		if (data.length !== 0) {
-			let tempExpenseList = data.map(expense => expenseObject(expense.bid, expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
-			expenseList = expenseList.concat(tempExpenseList);
-			expenseIndex += dataLength;
-			getExpenses();
+		if (data.length) {
+			let tempTransactionList = data.map(transaction => transactionObject(transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
+			companyList[companyIndex].transactions = companyList[companyIndex].transactions.concat(tempTransactionList);
+			getTransactions(companyIndex, transactionIndex += DATA_LENGTH);
 		}
 		else {
-			getExpensesSuccess();
+			updateFunction(70, 'Downloading Transactions');
 		}
 	}).catch((error) => {
 		console.error('Error:', error);
 	});
 }
-function getExpensesSuccess(){
-	updateFunction( 100, 'Export Download Complete!');
-	triggerDownload();
+function getExpenses(companyIndex, expenseIndex = 0){
+	fetch(API_PATH + '/expense/bybid?bid=' + companyList[companyIndex].bid + '&start=' + expenseIndex + '&end=' + DATA_LENGTH, {
+		mode: 'cors',
+		method: 'GET',
+		credentials: 'same-origin',
+		headers: {
+			'Accept': 'application/json',
+			'Authorization': window.localStorage.getItem('jwt')
+		}
+	}).then(response => {
+		return response.json();
+	}).then(data => {
+		if (data.length) {
+			let tempExpenseList = data.map(expense => expenseObject(expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
+			companyList[companyIndex].expenses = companyList[companyIndex].expenses.concat(tempExpenseList);
+			getExpenses(companyIndex, expenseIndex += DATA_LENGTH);
+		}
+		else {
+			updateFunction( 100, 'Export Download Complete!');
+			getUsersInCompany(companyIndex);
+		}
+	}).catch((error) => {
+		console.error('Error:', error);
+	});
+}
+function getUsersInCompany(companyIndex){
+	fetch(API_PATH + '/user/bybid?bid=' + companyList[companyIndex].bid, {
+		mode: 'cors',
+		method: 'GET',
+		credentials: 'same-origin',
+		headers: {
+			'Accept': 'application/json',
+			'Authorization': window.localStorage.getItem('jwt')
+		}
+	}).then(response => {
+		return response.json();
+	}).then(data => {
+		if (data.length !== 0){
+			companyList[companyIndex].users = data;
+		}
+		if ((companyList.length - 1) === companyIndex){
+			triggerDownload();
+		}
+	}).catch((error) => {
+		console.error('Error:', error);
+	});
 }
 
 function triggerDownload(){
 
-	databaseBackupObject = { companies: companyList , users: userList, deposits: depositList, transactions: transactionList, expenses: expenseList };
+	databaseBackupObject = { companies: companyList , users: userList };
 
 	//Create a CSV Download link
 	let downloadLink = document.createElement("a");
