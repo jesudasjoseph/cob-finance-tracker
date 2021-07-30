@@ -1,39 +1,37 @@
 import { API_PATH } from '../../../Config';
 
-function userObject(uid, role, first, last, section){
+function userObject(user_id, role, first_name, last_name, section){
 	return({
-		uid: uid,
+		user_id: user_id,
 		role: role,
-		first: first,
-		last: last,
+		first_name: first_name,
+		last_name: last_name,
 		section: section
 	});
 }
 
-function companyObject(bid, name, section, instructor){
+function companyObject(company_id, section, instructor){
 	return({
-		bid: bid,
-		name: name,
+		company_id: company_id,
 		section: section,
 		instructor: instructor
 	});
 }
 
-function depositObject(bid, uid, val, tag, date, description){
+function depositObject(company_id, user_id, value, date, description){
 	return({
-		bid: bid,
-		uid: uid,
-		val: val,
-		tag: tag,
+		company_id: company_id,
+		user_id: user_id,
+		value: value,
 		date: date,
 		description: description
 	});
 }
 
-function transactionObject(bid, uid, customer, product, payment_method, quantity, price_per_unit, date){
+function transactionObject(company_id, user_id, customer, product, payment_method, quantity, price_per_unit, date){
 	return({
-		bid: bid,
-		uid: uid,
+		company_id: company_id,
+		user_id: user_id,
 		customer: customer,
 		product: product,
 		payment_method: payment_method,
@@ -43,10 +41,10 @@ function transactionObject(bid, uid, customer, product, payment_method, quantity
 	});
 }
 
-function expenseObject(bid, uid, customer, product, payment_method, quantity, company, date, price_per_unit, justification){
+function expenseObject(company_id, user_id, customer, product, payment_method, quantity, company, date, price_per_unit, description){
 	return({
-		bid: bid,
-		uid: uid,
+		company_id: company_id,
+		user_id: user_id,
 		customer: customer,
 		product: product,
 		payment_method: payment_method,
@@ -54,7 +52,7 @@ function expenseObject(bid, uid, customer, product, payment_method, quantity, co
 		company: company,
 		date: date,
 		price_per_unit: price_per_unit,
-		justification: justification
+		description: description
 	});
 }
 
@@ -134,7 +132,7 @@ function getCompanies(){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0){
-			let tempCompanyList = data.map(company => companyObject(company.bid, company.name, company.section, company.instructor));
+			let tempCompanyList = data.map(company => companyObject(company.company_id, company.section, company.instructor));
 			companyList = companyList.concat(tempCompanyList);
 			companyIndex += dataLength;
 			getCompanies();
@@ -165,7 +163,7 @@ function getUsers(){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0) {
-			let tempUserList = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
+			let tempUserList = data.map(user => userObject(user.user_id, user.role, user.first_name, user.last_name, user.section));
 			userList = userList.concat(tempUserList);
 			userIndex += dataLength;
 			getUsers();
@@ -196,7 +194,7 @@ function getDeposits(){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0) {
-			let tempDepositList = data.map(deposit => depositObject(deposit.bid, deposit.uid, deposit.val, deposit.tag, deposit.date, deposit.description));
+			let tempDepositList = data.map(deposit => depositObject(deposit.company_id, deposit.user_id, deposit.value, deposit.date, deposit.description));
 			depositList = depositList.concat(tempDepositList);
 			depositIndex += dataLength;
 			console.log(data);
@@ -228,7 +226,7 @@ function getTransactions(){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0) {
-			let tempTransactionList = data.map(transaction => transactionObject(transaction.bid, transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
+			let tempTransactionList = data.map(transaction => transactionObject(transaction.company_id, transaction.user_id, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
 			transactionList = transactionList.concat(tempTransactionList);
 			transactionIndex += dataLength;
 			getTransactions();
@@ -259,7 +257,7 @@ function getExpenses(){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0) {
-			let tempExpenseList = data.map(expense => expenseObject(expense.bid, expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
+			let tempExpenseList = data.map(expense => expenseObject(expense.company_id, expense.user_id, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.description));
 			expenseList = expenseList.concat(tempExpenseList);
 			expenseIndex += dataLength;
 			getExpenses();

@@ -6,7 +6,6 @@ export default class StudentTable extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			bid: this.props.dataFromParent,
 			students: []
 		}
 		//this.fetchBusinessStudents = this.fetchBusinessStudents.bind(this);
@@ -18,7 +17,7 @@ export default class StudentTable extends Component {
 		this.fetchBusinessStudents();
 	}
 	fetchBusinessStudents(){
-		fetch(API_PATH + '/user/bybid?bid=' + this.state.bid.bid, {
+		fetch(API_PATH + '/user/bybid?bid=' + this.props.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -56,12 +55,12 @@ export default class StudentTable extends Component {
 					</thead>
 					<tbody>
 					{this.state.students.map((student, index) => {
-							const {first,last,uid,section} = student;
+							const {first_name,last_name,user_id,section} = student;
 							return (
 								<tr key={index}>
-									<td> {first}</td>
-									<td> {last} </td>
-									<td> {uid} </td>
+									<td> {first_name}</td>
+									<td> {last_name} </td>
+									<td> {user_id} </td>
 									<td> {section} </td>
 								</tr>
 							);
