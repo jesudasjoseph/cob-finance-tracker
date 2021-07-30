@@ -182,7 +182,7 @@ function getCompaniesSuccess(){
 
 function getDeposits(companyIndex, depositIndex = 0){
 	console.log(`depositIndex: ${depositIndex}, companyIndex: ${companyIndex}`);
-	fetch(API_PATH + '/deposit/bybid?bid=' + companyList[companyIndex].bid + '&start=' + depositIndex + '&end=' + DATA_LENGTH, {
+	fetch(API_PATH + '/deposit/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + depositIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -194,10 +194,9 @@ function getDeposits(companyIndex, depositIndex = 0){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0) {
-			let tempUserList = data.map(user => userObject(user.user_id, user.role, user.first_name, user.last_name, user.section));
-			userList = userList.concat(tempUserList);
-			userIndex += dataLength;
-			getUsers();
+			let tempDepositList = data.map(deposit => depositObject(deposit.company_id, deposit.user_id, deposit.value, deposit.date, deposit.description));
+			companyList[companyIndex].deposits = companyList[companyIndex].deposits.concat(tempDepositList);
+			getDeposits(companyIndex, depositIndex += DATA_LENGTH);
 		}
 		else {
 			updateFunction(50, 'Downloading Deposits');
@@ -208,7 +207,7 @@ function getDeposits(companyIndex, depositIndex = 0){
 }
 function getTransactions(companyIndex, transactionIndex = 0){
 	console.log(`transactionIndex: ${transactionIndex}, companyIndex: ${companyIndex}`);
-	fetch(API_PATH + '/transaction/bybid?bid=' + companyList[companyIndex].bid + '&start=' + transactionIndex + '&end=' + DATA_LENGTH, {
+	fetch(API_PATH + '/transaction/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + transactionIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -232,7 +231,7 @@ function getTransactions(companyIndex, transactionIndex = 0){
 	});
 }
 function getExpenses(companyIndex, expenseIndex = 0){
-	fetch(API_PATH + '/expense/bybid?bid=' + companyList[companyIndex].bid + '&start=' + expenseIndex + '&end=' + DATA_LENGTH, {
+	fetch(API_PATH + '/expense/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + expenseIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -257,7 +256,7 @@ function getExpenses(companyIndex, expenseIndex = 0){
 	});
 }
 function getUsersInCompany(companyIndex){
-	fetch(API_PATH + '/user/bybid?bid=' + companyList[companyIndex].bid, {
+	fetch(API_PATH + '/user/bybid?bid=' + companyList[companyIndex].company_id, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
