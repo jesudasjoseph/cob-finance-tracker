@@ -9,7 +9,6 @@ function userObject(user_id, role, first_name, last_name, section){
 		section: section
 	});
 }
-
 function companyObject(company_id, section, instructor){
 	return({
 		company_id: company_id,
@@ -21,20 +20,16 @@ function companyObject(company_id, section, instructor){
 		expenses: []
 	});
 }
-
-function depositObject(company_id, user_id, value, date, description){
+function depositObject(user_id, value, date, description){
 	return({
-		company_id: company_id,
 		user_id: user_id,
 		value: value,
 		date: date,
 		description: description
 	});
 }
-
-function transactionObject(company_id, user_id, customer, product, payment_method, quantity, price_per_unit, date){
+function transactionObject(user_id, customer, product, payment_method, quantity, price_per_unit, date){
 	return({
-		company_id: company_id,
 		user_id: user_id,
 		customer: customer,
 		product: product,
@@ -44,10 +39,8 @@ function transactionObject(company_id, user_id, customer, product, payment_metho
 		date: date
 	});
 }
-
-function expenseObject(company_id, user_id, customer, product, payment_method, quantity, company, date, price_per_unit, description){
+function expenseObject(user_id, customer, product, payment_method, quantity, company, date, price_per_unit, description){
 	return({
-		company_id: company_id,
 		user_id: user_id,
 		customer: customer,
 		product: product,
@@ -124,7 +117,7 @@ function getUsers(){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0) {
-			let tempUserList = data.map(user => userObject(user.uid, user.role, user.first, user.last, user.section));
+			let tempUserList = data.map(user => userObject(user.user_id, user.role, user.first_name, user.last_name, user.section));
 			userList = userList.concat(tempUserList);
 			userIndex += DATA_LENGTH;
 			console.log(data);
@@ -194,7 +187,7 @@ function getDeposits(companyIndex, depositIndex = 0){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0) {
-			let tempDepositList = data.map(deposit => depositObject(deposit.company_id, deposit.user_id, deposit.value, deposit.date, deposit.description));
+			let tempDepositList = data.map(deposit => depositObject(deposit.user_id, deposit.value, deposit.date, deposit.description));
 			companyList[companyIndex].deposits = companyList[companyIndex].deposits.concat(tempDepositList);
 			getDeposits(companyIndex, depositIndex += DATA_LENGTH);
 		}
@@ -219,7 +212,7 @@ function getTransactions(companyIndex, transactionIndex = 0){
 		return response.json();
 	}).then(data => {
 		if (data.length) {
-			let tempTransactionList = data.map(transaction => transactionObject(transaction.uid, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
+			let tempTransactionList = data.map(transaction => transactionObject(transaction.user_id, transaction.customer, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit, transaction.date));
 			companyList[companyIndex].transactions = companyList[companyIndex].transactions.concat(tempTransactionList);
 			getTransactions(companyIndex, transactionIndex += DATA_LENGTH);
 		}
@@ -243,7 +236,7 @@ function getExpenses(companyIndex, expenseIndex = 0){
 		return response.json();
 	}).then(data => {
 		if (data.length) {
-			let tempExpenseList = data.map(expense => expenseObject(expense.uid, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.justification));
+			let tempExpenseList = data.map(expense => expenseObject(expense.user_id, expense.customer, expense.product, expense.payment_method, expense.quantity, expense.company, expense.date, expense.price_per_unit, expense.description));
 			companyList[companyIndex].expenses = companyList[companyIndex].expenses.concat(tempExpenseList);
 			getExpenses(companyIndex, expenseIndex += DATA_LENGTH);
 		}
@@ -268,7 +261,7 @@ function getUsersInCompany(companyIndex){
 		return response.json();
 	}).then(data => {
 		if (data.length !== 0){
-			companyList[companyIndex].users = data;
+			companyList[companyIndex].users = data.map(item => item.user_id);
 		}
 		if ((companyList.length - 1) === companyIndex){
 			triggerDownload();
