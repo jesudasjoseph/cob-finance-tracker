@@ -14,7 +14,7 @@ export default class Bank extends Component{
 			businessTableSelectedRow: -1,
 			depositTableMaxRows: 18,
 			depositTableInitialIndex: 0,
-			selectedCompanyInfo: {company_id: ''}
+			company_id: null
 		};
 
 		this.fetchBusinessData = this.fetchBusinessData.bind(this);
@@ -46,7 +46,7 @@ export default class Bank extends Component{
 	}
 
 	businessTableRowClickHandler(index){
-		this.setState({businessTableSelectedRow: index, selectedCompanyInfo: {company_id: this.state.businessData[index].company_id}});
+		this.setState({businessTableSelectedRow: index, company_id: this.state.businessData[index].company_id});
 	}
 
 	render () {
@@ -84,7 +84,7 @@ export default class Bank extends Component{
 					</div>
 				</div>
 				<div className='right'>
-					<DepositTable companyInfo={this.state.selectedCompanyInfo}/>
+					<DepositTable company_id={this.state.company_id}/>
 				</div>
 			</div>
 			</>

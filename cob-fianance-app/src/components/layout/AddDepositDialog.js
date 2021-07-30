@@ -20,12 +20,12 @@ export default class AddDepositDialog extends Component {
 	}
 
 	componentDidMount(){
-		this.fetchUsers(this.props.comapny_id);
+		this.fetchUsers(this.props.company_id);
 	}
 
 	componentDidUpdate(prevProps){
-		if (this.props.comapny_id !== prevProps.comapny_id){
-			this.fetchUsers(this.props.comapny_id);
+		if (this.props.company_id !== prevProps.company_id){
+			this.fetchUsers(this.props.company_id);
 		}
 	}
 
@@ -67,7 +67,7 @@ export default class AddDepositDialog extends Component {
 	handle_submit(e) {
 		e.preventDefault();
 
-		this.props.handleSubmit({comapny_id:this.props.comapny_id, value:this.state.value, description:this.state.description, user_id:this.state.user_id});
+		this.props.handleSubmit({company_id:this.props.company_id, value:this.state.value, description:this.state.description, user_id:this.state.user_id});
 		this.setState({
 			value: '',
 			description: '',

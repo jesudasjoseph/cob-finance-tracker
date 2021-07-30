@@ -41,7 +41,7 @@ export default class EditUserDialog extends Component {
 								<Form.Label>ONID: {this.props.user_id}</Form.Label><br/>
 
 								<Form.Label>Company ID:</Form.Label>
-								<Form.Control type="number" value={this.state.company_id} onChange={(e) => this.setState({company_id: e.target.value})} />
+								<Form.Control type="text" value={this.state.company_id} onChange={(e) => this.setState({company_id: e.target.value})} />
 							</Form.Group>
 
 							<Button variant="primary" type="submit">Add/Move</Button>

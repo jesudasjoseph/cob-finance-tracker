@@ -52,10 +52,10 @@ export default class DepositTable extends PureComponent{
 		});
 	}
 
-	updateComponent = memoize((companyInfo) => {
-			if (companyInfo.company_id != ''){
-				this.fetchDepositData(companyInfo.company_id, this.state.tablePageIndex, this.state.searchText);
-				return {addDisabled: false, companyName: companyInfo.company_id};
+	updateComponent = memoize((company_id) => {
+			if (company_id != null){
+				this.fetchDepositData(company_id, this.state.tablePageIndex, this.state.searchText);
+				return {addDisabled: false, companyName: company_id};
 			}
 			else {
 				return {addDisabled: true, companyName: 'Select a Company'};
@@ -88,7 +88,7 @@ export default class DepositTable extends PureComponent{
 			else{
 				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 			}
-			this.fetchDepositData(this.props.companyInfo.company_id, this.state.tablePageIndex, this.state.searchText);
+			this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, this.state.searchText);
 		}).catch((error) => {
 			console.error('Error:', error);
 			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
@@ -100,11 +100,11 @@ export default class DepositTable extends PureComponent{
 
 	searchOnChange(text){
 		this.setState({searchText: text});
-		this.fetchDepositData(this.props.companyInfo.company_id, this.state.tablePageIndex, text);
+		this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, text);
 	}
 
 	render(){
-		const {companyName, addDisabled} = this.updateComponent(this.props.companyInfo);
+		const {companyName, addDisabled} = this.updateComponent(this.props.company_id);
 
 		if (addDisabled){
 			return (<h2>{companyName}</h2>);
@@ -146,7 +146,7 @@ export default class DepositTable extends PureComponent{
 							<TableControl add addDisabled={addDisabled} addOnClick={this.addOnClick}/>
 						</div>
 					</div>
-					<AddDepositDialog bid={this.props.companyInfo.company_id} show={this.state.showAddDepositDialog} handleSubmit={this.handleSubmitDeposit} handleClose={this.handleCloseDeposit}/>
+					<AddDepositDialog company_id={this.props.company_id} show={this.state.showAddDepositDialog} handleSubmit={this.handleSubmitDeposit} handleClose={this.handleCloseDeposit}/>
 				</>
 			);
 		}
