@@ -30,7 +30,7 @@ export default class TransactionPage extends Component {
 	}
 
 	fetchTransactionTableData(searchText = ''){
-		fetch(API_PATH + '/transaction/byuid?start=0&end=50' + '&search=' + searchText, {
+		fetch(API_PATH + '/transaction/byuid?start=0&end=50&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

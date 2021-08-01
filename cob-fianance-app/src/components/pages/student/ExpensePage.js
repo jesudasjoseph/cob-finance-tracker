@@ -58,7 +58,7 @@ export default class ExpensePage extends Component {
 	}
 
 	fetchExpenseTableData(searchParam = ''){
-		fetch(API_PATH + '/expense/byuid?start=0&end=50' + '&search=' + searchParam, {
+		fetch(API_PATH + '/expense/byuid?start=0&end=50&search=' + searchParam, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

@@ -3,8 +3,6 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import {API_PATH} from '../../../Config';
-
 const importUtil = require('../utils/importFunctions');
 
 export default class ImportDatabaseDialog extends Component{
