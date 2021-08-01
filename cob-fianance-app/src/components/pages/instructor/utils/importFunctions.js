@@ -118,7 +118,7 @@ function importDeposits(deposits){
 function addExpense(expenses, index){
 	if (expenses[index]){
 		const expenseBody = {expense: expenses[index]}
-		fetch(API_PATH + '/expense', {
+		fetch(API_PATH + '/expense/bybid', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

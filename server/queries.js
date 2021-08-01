@@ -953,11 +953,11 @@ async function addTransaction(asker, transaction) {
 
 	return new data(500);
 }
-async function addTransaction(asker, transaction, company_id) {
+async function addTransactionByCid(asker, transaction) {
 	const client = await pool.connect();
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
-		values: [transaction.user_id, company_id, transaction.customer, transaction.product, transaction.date, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
+		values: [transaction.user_id, transaction.company_id, transaction.customer, transaction.product, transaction.date, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
 	};
 
 	try {
@@ -1182,11 +1182,11 @@ async function addExpense(asker, expense) {
 
 	return new data(500);
 }
-async function addExpenseByCid(asker, expense, company_id) {
+async function addExpenseByCid(asker, expense) {
 	const client = await pool.connect();
 	const query = {
 		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-		values: [expense.user_id, company_id, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.description]
+		values: [expense.user_id, expense.company_id, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.description]
 	}
 
 	try {
@@ -1534,12 +1534,14 @@ exports.getMultipleTransactions = getMultipleTransactions;
 exports.getMultipleTransactionsByBid = getMultipleTransactionsByBid;
 exports.getMultipleTransactionsByUid = getMultipleTransactionsByUid;
 exports.addTransaction = addTransaction;
+exports.addTransactionByCid = addTransactionByCid;
 exports.deleteTransactionByTid = deleteTransactionByTid;
 
 exports.getMultipleExpenses = getMultipleExpenses;
 exports.getMultipleExpensesByBid = getMultipleExpensesByBid;
 exports.getMultipleExpensesByUid = getMultipleExpensesByUid;
 exports.addExpense = addExpense;
+exports.addExpenseByCid = addExpenseByCid;
 exports.deleteExpenseByEid = deleteExpenseByEid;
 
 exports.getMultipleDeposits = getMultipleDeposits;

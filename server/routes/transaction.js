@@ -36,6 +36,13 @@ router.post('/', authorizor.authToken, async (req, res) => {
 	res.end();
 });
 
+router.post('/bybid', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code} = await q.addTransactionByCid(req.body.asker, req.body.transaction);
+	res.statusCode = code;
+	res.end();
+});
+
 router.delete('/bytid', authorizor.authToken, async (req, res) => {
 	let {code} = await q.deleteTransactionByTid(req.body.asker, req.query.tid);
 	res.statusCode = code;

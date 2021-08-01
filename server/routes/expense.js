@@ -35,6 +35,13 @@ router.post('/', authorizor.authToken, async (req, res) => {
 	res.end();
 });
 
+router.post('/bybid', authorizor.authToken, async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	let {code} = await q.addExpenseByCid(req.body.asker, req.body.expense);
+	res.statusCode = code;
+	res.end();
+});
+
 router.delete('/byeid', authorizor.authToken, async (req, res) => {
 	let {code} = await q.deleteExpenseByEid(req.body.asker, req.query.eid);
 	res.statusCode = code;
