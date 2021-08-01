@@ -75,7 +75,7 @@ function addUsersToCompany(users, company, index){
 				'Content-type': 'application/json',
 				'Authorization': window.localStorage.getItem('jwt')
 			},
-			body: JSON.stringify({user_iud: users[index], company_id: company})
+			body: JSON.stringify({user_id: users[index], company_id: company})
 		}).then(response => {
 			addUsersToCompany(users, company, ++index);
 		}).catch((error) => {
@@ -144,7 +144,7 @@ function importExpenses(expenses){
 function addTransaction(transactions, index){
 	if (transactions[index]){
 		const transactionBody = {transaction: transactions[index]}
-		fetch(API_PATH + '/transaction', {
+		fetch(API_PATH + '/transaction/bybid', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
