@@ -58,7 +58,7 @@ export default class ExpensePage extends Component {
 	}
 
 	fetchExpenseTableData(searchParam = ''){
-		fetch(API_PATH + '/expense/byuid?start=0&end=50' + '&search=' + searchParam, {
+		fetch(API_PATH + '/expense/byuid?start=0&end=50&search=' + searchParam, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -104,14 +104,14 @@ export default class ExpensePage extends Component {
 										<th>Quantity</th>
 										<th>Price Per Unit</th>
 										<th>Total</th>
-										<th>Justification</th>
+										<th>Description</th>
 									</tr>
 								</thead>
 								<tbody>
 									{this.state.expenseTableData.map((expense, index) => {
-										const {quantity,product,company, date, payment_method, price_per_unit, justification, total,eid} = expense;
+										const {quantity,product,company, date, payment_method, price_per_unit, description, total, expense_id} = expense;
 										return (
-											<tr key={eid}>
+											<tr key={expense_id}>
 												<td> {date.split('T')[0]} </td>
 												<td> {product}</td>
 												<td>{company}</td>
@@ -119,7 +119,7 @@ export default class ExpensePage extends Component {
 												<td>{quantity}</td>
 												<td>{price_per_unit}</td>
 												<td>{total}</td>
-												<td>{justification}</td>
+												<td>{description}</td>
 											</tr>
 										);
 									})}

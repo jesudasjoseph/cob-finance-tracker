@@ -25,9 +25,9 @@ export default class ImportUserDialog extends Component {
 		this.props.handleClose();
 	}
 
-	adduser(uid, first, last, section, bid) {
-		const user_body = {user:{uid: uid, first: first, last: last, role: 0, section: section}}
-		const addUserToBusinessBody = {uid: uid, bid:bid};
+	adduser(user_id, first_name, last_name, section, company_id) {
+		const user_body = {user:{user_id: user_id, first_name: first_name, last_name: last_name, role: 0, section: section}}
+		const addUserToBusinessBody = {user_id: user_id, company_id:company_id};
 		fetch(API_PATH + '/user', {
 			mode: 'cors',
 			method: 'POST',

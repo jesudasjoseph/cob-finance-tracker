@@ -150,7 +150,7 @@ export default class CompanyManagementPage extends Component {
 		this.setState({showAddCompanyDialog: true});
 	}
 	deleteOnClick(){
-		fetch(API_PATH + '/business/bybid?bid=' + this.state.businessTable[this.state.selectedRow].bid, {
+		fetch(API_PATH + '/business/bybid?bid=' + this.state.businessTable[this.state.selectedRow].company_id, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
@@ -188,7 +188,6 @@ export default class CompanyManagementPage extends Component {
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
 				this.context.pushNotification('success', 'Successfully Added New Business', '', 4000);
-
 			}
 			else{
 				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
@@ -225,7 +224,7 @@ export default class CompanyManagementPage extends Component {
 
 	//Navigate to Business Overview Page
 	overviewBusinessOnClick(){
-		this.props.history.push("/instructor/dashboard/" + this.state.businessTable[this.state.selectedRow].bid);
+		this.props.history.push("/instructor/dashboard/" + this.state.businessTable[this.state.selectedRow].company_id);
 	}
 
 	//Paging
@@ -236,7 +235,7 @@ export default class CompanyManagementPage extends Component {
 	}
 	lastPage(){
 		this.fetchTableData(null, this.state.tableInitialIndex - this.state.tableMaxRows);
-		if (this.state.tableInitialIndex - this.state.tableMaxRows == 0){
+		if (this.state.tableInitialIndex - this.state.tableMaxRows === 0){
 			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: true, nextDisabled: false});
 		}
 		else {
@@ -290,22 +289,21 @@ export default class CompanyManagementPage extends Component {
 								<tbody>
 									{
 										this.state.businessTable.map((business, index) => {
-										const {name,
-													instructor,
+										const {instructor,
 													section,
 													transaction_total,
 													deposit_total,
 													product_count,
 													expense_total,
-													bid,
+													company_id,
 													profit,
 													profit_goal,
 													stretch_profit_goal,
 													square_total} = business;
 										if (index === this.state.selectedRow){
 											return (
-												<tr key={bid} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
-													<td>{name + ' ('+ bid + ')'}</td>
+												<tr key={company_id} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
+													<td>{company_id}</td>
 													<td>{section}</td>
 													<td>{instructor}</td>
 													<td>{product_count}</td>
@@ -320,8 +318,8 @@ export default class CompanyManagementPage extends Component {
 										}
 										else {
 											return (
-												<tr key={bid} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{name + ' ('+ bid + ')'}</td>
+												<tr key={company_id} onClick={() => this.tableHandleRowClick(index)}>
+													<td>{company_id}</td>
 													<td>{section}</td>
 													<td>{instructor}</td>
 													<td>{product_count}</td>

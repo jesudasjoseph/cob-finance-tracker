@@ -1,7 +1,5 @@
 const { Pool } = require('pg');
-
 const pool = new Pool();
-
 const roleType = {
 	'admin':2,
 	'instructor':1,
@@ -25,6 +23,8 @@ function user(uid, role, first, last){
 	this.last = last;
 }
 
+let resetCode;
+
 async function init(){
 	pool.on('error', (err, client) => {
 		console.error('Unexpected error on idle client', err)
@@ -32,11 +32,83 @@ async function init(){
 	})
 }
 
+
+async function generateResetCode() {
+	let firstHalf = [
+		'banana',
+		'orange',
+		'mango',
+		'peach',
+		'watermelon'
+	]
+	let secondHalf = [
+		'spinach',
+		'carrot',
+		'peas',
+		'onion',
+		'tomato'
+	]
+	let code = firstHalf[Math.floor(Math.random() * 5)] + '-' + secondHalf[Math.floor(Math.random() * 5)];
+	resetCode = code;
+	return code;
+}
+//Database management
+async function getResetCode(asker) {
+	switch(asker.role){
+		case roleType.student:
+			return new data(403);
+			break;
+		case roleType.instructor:
+		case roleType.admin:
+			let res = await generateResetCode();
+			return new data(200, {code: res});
+		default:
+			return new data(403);
+	}
+}
+async function resetDatabase(asker, code){
+	const deleteCompanyQuery = {
+		text: 'DELETE FROM company_table'
+	}
+	const deleteUserQuery = {
+		text: 'DELETE FROM user_table WHERE user_id!=$1',
+		values: [asker.uid]
+	}
+	const client = await pool.connect();
+
+	try {
+		switch(asker.role){
+			case roleType.admin:
+			case roleType.instructor:
+				if (code === resetCode){
+					await client.query(deleteCompanyQuery);
+					await client.query(deleteUserQuery);
+					return new data(200);
+				}
+				else{
+					return new data(406);
+				}
+				break;
+			case roleType.student:
+				return new data(403);
+				break;
+			default:
+				return new data(403);
+		}
+	} catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	} finally {
+		client.release();
+	}
+	return new data(500);
+}
+
 //Helper
-async function get_bid_from_uid(uid, client) {
+async function get_bid_from_uid(user_id, client) {
 	const query = {
-		text: 'SELECT bid FROM user_has_business WHERE uid = $1',
-		values: [uid]
+		text: 'SELECT company_id FROM user_has_company WHERE user_id = $1',
+		values: [user_id]
 	};
 
 	let res = await client.query(query);
@@ -44,19 +116,19 @@ async function get_bid_from_uid(uid, client) {
 		return -1;
 	}
 	else {
-		return res.rows[0].bid;
+		return res.rows[0].company_id;
 	}
 }
-async function is_user_in_business(uid, client, bid = null) {
-	if (bid == null){
-		bid = await get_bid_from_uid(uid, client);
-		if (bid < 0){
+async function is_user_in_business(user_id, client, company_id = null) {
+	if (company_id == null){
+		company_id = await get_bid_from_uid(user_id, client);
+		if (company_id < 0){
 			return false;
 		}
 
 		const query = {
-			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
-			values: [bid, uid]
+			text: 'SELECT user_id FROM user_has_company WHERE company_id = $1 AND user_id = $2',
+			values: [company_id, user_id]
 		};
 
 		let res = await client.query(query);
@@ -68,12 +140,12 @@ async function is_user_in_business(uid, client, bid = null) {
 		}
 	}
 	else {
-		if (bid < 0){
+		if (company_id < 0){
 			return false;
 		}
 		const query = {
-			text: 'SELECT uid FROM user_has_business WHERE bid = $1 AND uid = $2',
-			values: [bid, uid]
+			text: 'SELECT user_id FROM user_has_company WHERE company_id = $1 AND user_id = $2',
+			values: [company_id, user_id]
 		};
 
 		let res = await client.query(query);
@@ -89,8 +161,8 @@ async function is_user_in_business(uid, client, bid = null) {
 //This is a model function
 async function createUser(asker, user) {
 	const createUserQuery = {
-		text: 'INSERT INTO users (uid, role, first, last, section) VALUES ($1, $2, $3, $4, $5)',
-		values: [user.uid, user.role, user.first, user.last, user.section]
+		text: 'INSERT INTO user_table (user_id, role, first_name, last_name, section) VALUES ($1, $2, $3, $4, $5)',
+		values: [user.user_id, user.role, user.first_name, user.last_name, user.section]
 	}
 	const client = await pool.connect();
 
@@ -124,16 +196,16 @@ async function createUser(asker, user) {
 
 	return new data(500);
 }
-async function getUserByUid(asker, uid) {
+async function getUserByUid(asker, user_id) {
 	const query = {
-		text: 'SELECT * FROM "users" WHERE uid = $1',
-		values: [uid]
+		text: 'SELECT * FROM user_table WHERE user_id = $1',
+		values: [user_id]
 	}
 	const client = await pool.connect();
 	let res;
 
 	try {
-		if (asker.uid === uid || asker.role >= 1){
+		if (asker.uid === user_id || asker.role >= 1){
 			res = await client.query(query);
 			if (!res.rows.length) {
 				return new data(404);
@@ -155,13 +227,13 @@ async function getUserByUid(asker, uid) {
 	}
 }
 async function getUserByAsker(asker) {
-	return new data(200, {uid:asker.uid});
+	return new data(200, {user_id:asker.user_id});
 }
 //Permissions Instructor, Admin
-async function getMultipleUsersByBid(asker, bid) {
+async function getMultipleUsersByBid(asker, company_id) {
 	const query = {
-		text: 'SELECT users.first, users.last, users.uid, users.role, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE business.bid=$1 ORDER BY users.uid',
-		values: [bid]
+		text: 'SELECT user_table.first_name, user_table.last_name, user_table.user_id, user_table.role, user_table.section FROM user_table LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE company_table.company_id=$1 ORDER BY user_table.user_id',
+		values: [company_id]
 	}
 
 	const client = await pool.connect();
@@ -199,23 +271,23 @@ async function getMultipleUsersByBid(asker, bid) {
 async function getMultipleUsers(asker, start, end, sort, searchText) {
 	searchText = '%' + searchText + '%';
 	const querySortByOnid = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.uid OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first_name, last_name, user_table.user_id, role, company_table.company_id, user_table.section FROM "user_table" LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE user_table.user_id ILIKE $3 OR user_table.first_name ILIKE $3 OR user_table.last_name ILIKE $3 ORDER BY user_table.user_id OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByBusinessName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY business.name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first_name, last_name, user_table.user_id, role, company_table.company_id, user_table.section FROM "user_table" LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE user_table.user_id ILIKE $3 OR user_table.first_name ILIKE $3 OR user_table.last_name ILIKE $3 ORDER BY company_table.company_id OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByLastName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first_name, last_name, user_table.user_id, role, company_table.company_id, user_table.section FROM "user_table" LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE user_table.user_id ILIKE $3 OR user_table.first_name ILIKE $3 OR user_table.last_name ILIKE $3 ORDER BY user_table.last_name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByFirstName = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.first OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first_name, last_name, user_table.user_id, role, company_table.company_id, user_table.section FROM "user_table" LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE user_table.user_id ILIKE $3 OR user_table.first_name ILIKE $3 OR user_table.last_name ILIKE $3 ORDER BY user_table.first_name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 	const querySortByRole = {
-		text: 'SELECT first, last, users.uid, role, business.bid, name, users.section FROM "users" LEFT JOIN "user_has_business" ON users.uid = user_has_business.uid LEFT JOIN "business" ON user_has_business.bid = business.bid WHERE users.uid ILIKE $3 OR users.first ILIKE $3 OR users.last ILIKE $3 ORDER BY users.role, users.last OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
+		text: 'SELECT first_name, last_name, user_table.user_id, role, company_table.company_id, user_table.section FROM "user_table" LEFT JOIN "user_has_company" ON user_table.user_id = user_has_company.user_id LEFT JOIN company_table ON user_has_company.company_id = company_table.company_id WHERE user_table.user_id ILIKE $3 OR user_table.first_name ILIKE $3 OR user_table.last_name ILIKE $3 ORDER BY user_table.role, user_table.last_name OFFSET $1 ROWS FETCH FIRST $2 ROWS ONLY',
 		values: [start, end, searchText]
 	}
 
@@ -265,7 +337,7 @@ async function getMultipleUsers(asker, start, end, sort, searchText) {
 }
 async function modifyUser(asker, user) {
 	const query = {
-		text: 'UPDATE users SET first = $1, last = $2 WHERE uid=$3',
+		text: 'UPDATE user_table SET first_name = $1, last_name = $2 WHERE user_id=$3',
 		values: [user.first, user.last, user.uid]
 	}
 	const client = await pool.connect();
@@ -293,10 +365,10 @@ async function modifyUser(asker, user) {
 		client.release();
 	}
 }
-async function deleteUserByUid(asker, uid) {
+async function deleteUserByUid(asker, user_id) {
 	const query = {
-		text: 'DELETE FROM users WHERE uid = $1',
-		values: [uid]
+		text: 'DELETE FROM user_table WHERE user_id = $1',
+		values: [user_id]
 	}
 	const client = await pool.connect();
 
@@ -334,7 +406,7 @@ async function getRole(asker){
 	const client = await pool.connect();
 	let res;
 	try {
-		res = await client.query('SELECT role FROM "users" WHERE uid = $1', [asker.uid]);
+		res = await client.query('SELECT role FROM user_table WHERE user_id = $1', [asker.uid]);
 	}
 	catch (e) {
 		console.log("pg" + e);
@@ -345,20 +417,20 @@ async function getRole(asker){
 	}
 
 	if (!res.rows.length) {
-		return new data(404);
+		return new data(200, []);
 	}
 	else {
 		return new data(200, res.rows[0].role);
 	}
 }
-async function addUserToBusiness(asker, uid, bid) {
+async function addUserToBusiness(asker, user_id, company_id) {
 	const deleteQuery = {
-		text: 'DELETE FROM user_has_business WHERE uid=$1',
-		values: [uid]
+		text: 'DELETE FROM user_has_company WHERE user_id=$1',
+		values: [user_id]
 	}
 	const query = {
-		text: 'INSERT INTO user_has_business (uid, bid) VALUES ($1, $2)',
-		values: [uid, bid]
+		text: 'INSERT INTO user_has_company (user_id, company_id) VALUES ($1, $2)',
+		values: [user_id, company_id]
 	}
 
 	const client = await pool.connect();
@@ -397,19 +469,19 @@ async function addUserToBusiness(asker, uid, bid) {
 async function getMultipleBusiness(asker, start, end, sort, searchText) {
 	searchText = '%' + searchText + '%';
 	const query = {
-		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM company_view WHERE company_view.company_id ILIKE $3 OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end, searchText]
 	}
 	const querySortByInstructor = {
-		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM company_view WHERE company_view.company_id ILIKE $3 ORDER BY instructor OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end, searchText]
 	}
 	const querySortByName = {
-		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY name OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM company_view WHERE company_view.company_id ILIKE $3 ORDER BY company_id OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end, searchText]
 	}
 	const querySortBySection = {
-		text: 'SELECT * FROM business_view WHERE business_view.name ILIKE $3 ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		text: 'SELECT * FROM company_view WHERE company_view.company_id ILIKE $3 ORDER BY section OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end, searchText]
 	}
 	const client = await pool.connect();
@@ -455,7 +527,7 @@ async function getMultipleBusiness(asker, start, end, sort, searchText) {
 }
 async function getMultipleBusinessNames(asker) {
 	const query = {
-		text: "SELECT name, bid FROM business_view ORDER BY name;"
+		text: "SELECT company_id FROM company_view ORDER BY company_id;"
 	}
 	const client = await pool.connect();
 	let res;
@@ -488,7 +560,7 @@ async function getMultipleBusinessNames(asker) {
 }
 async function getBusinessByUid(asker) {
 	const query = {
-		text: 'SELECT * FROM business_view LEFT JOIN user_has_business ON (business_view.bid=user_has_business.bid) WHERE uid=$1;',
+		text: 'SELECT * FROM company_view LEFT JOIN user_has_company ON (company_view.company_id=user_has_company.company_id) WHERE user_id=$1;',
 		values: [asker.uid]
 	}
 	const client = await pool.connect();
@@ -534,10 +606,10 @@ async function getBusinessByUid(asker) {
 
 	return new data(500);
 }
-async function getBusinessByBid(asker, bid) {
+async function getBusinessByBid(asker, company_id) {
 	const query = {
-		text: 'SELECT * FROM business_view WHERE bid=$1;',
-		values: [bid]
+		text: 'SELECT * FROM company_view WHERE company_id=$1;',
+		values: [company_id]
 	}
 	const client = await pool.connect();
 	let res;
@@ -545,7 +617,7 @@ async function getBusinessByBid(asker, bid) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				const studentIsInBusiness = await is_user_in_business(asker.uid, client, bid);
+				const studentIsInBusiness = await is_user_in_business(asker.uid, client, company_id);
 				if (studentIsInBusiness){
 					res = await client.query(query);
 					if (!res.rows.length) {
@@ -588,10 +660,10 @@ async function getBusinessByBid(asker, bid) {
 
 	return new data(500);
 }
-async function createBusiness(asker, business) {
+async function createBusiness(asker, company) {
 	const query = {
-		text: 'INSERT INTO business (name, section, instructor) VALUES ($1, $2, $3)',
-		values: [business.name, business.section, business.instructor]
+		text: 'INSERT INTO company_table (company_id, section, instructor) VALUES ($1, $2, $3)',
+		values: [company.company_id, company.section, company.instructor]
 	}
 	const client = await pool.connect();
 
@@ -622,7 +694,7 @@ async function createBusiness(asker, business) {
 }
 async function modifyProfitGoalByUid(asker, profit_goal) {
 	const query = {
-		text: 'UPDATE business SET profit_goal=$1 FROM user_has_business WHERE business.bid=user_has_business.bid AND uid=$2;',
+		text: 'UPDATE company_table SET profit_goal=$1 FROM user_has_company WHERE company_table.company_id=user_has_company.company_id AND user_id=$2;',
 		values: [profit_goal, asker.uid]
 	}
 	const client = await pool.connect();
@@ -653,7 +725,7 @@ async function modifyProfitGoalByUid(asker, profit_goal) {
 }
 async function modifyStretchProfitGoalByUid(asker, stretch_profit_goal) {
 	const query = {
-		text: 'UPDATE business SET stretch_profit_goal=$1 FROM user_has_business WHERE business.bid=user_has_business.bid AND uid=$2;',
+		text: 'UPDATE company_table SET stretch_profit_goal=$1 FROM user_has_company WHERE company_table.company_id=user_has_company.company_id AND user_id=$2;',
 		values: [stretch_profit_goal, asker.uid]
 	}
 	const client = await pool.connect();
@@ -682,10 +754,10 @@ async function modifyStretchProfitGoalByUid(asker, stretch_profit_goal) {
 
 	return new data(500);
 }
-async function deleteBusinessByBid(asker, bid) {
+async function deleteBusinessByBid(asker, company_id) {
 	const query = {
-		text: 'DELETE FROM business WHERE bid = $1',
-		values: [bid]
+		text: 'DELETE FROM company_table WHERE company_id = $1',
+		values: [company_id]
 	}
 	const client = await pool.connect();
 
@@ -714,11 +786,10 @@ async function deleteBusinessByBid(asker, bid) {
 
 //Transaction Queries
 //Fix permissions for students
-async function getMultipleTransactions(asker, start, end, bid) {
+async function getMultipleTransactionsByBid(asker, start, end, company_id) {
 	const query = {
-		//text: 'SELECT name, section, transaction_total, bank_total, expense_total, profit, first, last FROM business LEFT JOIN user_has_business ON (business.bid=user_has_business.bid) LEFT JOIN users ON (users.uid=user_has_business.uid) OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
-		text: 'SELECT * FROM transactions WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end]
+		text: 'SELECT * FROM transaction_table WHERE company_id=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [company_id, start, end]
 	}
 	const client = await pool.connect();
 	let res;
@@ -729,7 +800,7 @@ async function getMultipleTransactions(asker, start, end, bid) {
 				if (await is_user_in_business(asker.uid, client)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
-						return new data(404);
+						return new data(200, res.rows);
 					}
 					else {
 						return new data(200, res.rows);
@@ -739,7 +810,8 @@ async function getMultipleTransactions(asker, start, end, bid) {
 					return new data(403);
 				}
 				break;
-			default:
+			case roleType.instructor:
+			case roleType.admin:
 				res = await client.query(query);
 				if (!res.rows.length) {
 					return new data(200, []);
@@ -747,6 +819,46 @@ async function getMultipleTransactions(asker, start, end, bid) {
 				else {
 					return new data(200, res.rows);
 				}
+				break;
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function getMultipleTransactions(asker, start, end) {
+	const query = {
+		text: 'SELECT * FROM transaction_table ORDER BY date DESC OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403)
+				break;
+			case roleType.instructor:
+			case roleType.admin:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(200, []);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+				break;
+			default:
+				return new data(403);
 		}
 	}
 	catch (e) {
@@ -762,13 +874,13 @@ async function getMultipleTransactions(asker, start, end, bid) {
 async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 	searchText = '%' + searchText + '%';
 	const client = await pool.connect();
-	const bid = await get_bid_from_uid(asker.uid, client);
-	if (bid == -1){
+	const company_id = await get_bid_from_uid(asker.uid, client);
+	if (company_id == -1){
 		return new data(403);
 	}
 	const query = {
-		text: 'SELECT * FROM transactions WHERE bid=$1 AND transactions.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end, searchText]
+		text: 'SELECT * FROM transaction_table WHERE company_id=$1 AND transaction_table.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [company_id, start, end, searchText]
 	}
 	let res;
 	try {
@@ -803,13 +915,13 @@ async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 }
 async function addTransaction(asker, transaction) {
 	const client = await pool.connect();
-	const bid = await get_bid_from_uid(asker.uid, client);
-	if (bid == -1){
+	const company_id = await get_bid_from_uid(asker.uid, client);
+	if (company_id == -1){
 		return new data(403);
 	}
 	const query = {
 		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
-		values: [asker.uid, bid, transaction.customer, transaction.date, transaction.product, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
+		values: [asker.uid, company_id, transaction.customer, transaction.product, transaction.date, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
 	};
 
 	try {
@@ -841,10 +953,39 @@ async function addTransaction(asker, transaction) {
 
 	return new data(500);
 }
-async function deleteTransactionByTid(asker, tid, bid) {
+async function addTransactionByCid(asker, transaction) {
+	const client = await pool.connect();
+	const query = {
+		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
+		values: [transaction.user_id, transaction.company_id, transaction.customer, transaction.product, transaction.date, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
+	};
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			case roleType.instructor:
+			case roleType.admin:
+				await client.query(query);
+				return new data(201);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function deleteTransactionByTid(asker, transaction_id, company_id) {
 	const query = {
 		text: 'CALL delete_transaction($1)',
-		values: [tid]
+		values: [transaction_id]
 	}
 	const client = await pool.connect();
 
@@ -879,10 +1020,10 @@ async function deleteTransactionByTid(asker, tid, bid) {
 
 //Expense Queries
 //Fix Permissions for students
-async function getMultipleExpenses(asker, start, end, bid) {
+async function getMultipleExpensesByBid(asker, start, end, company_id) {
 	const query = {
-		text: 'SELECT * FROM expenses WHERE bid=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end]
+		text: 'SELECT * FROM expense_table WHERE company_id=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [company_id, start, end]
 	}
 	const client = await pool.connect();
 	let res;
@@ -906,7 +1047,7 @@ async function getMultipleExpenses(asker, start, end, bid) {
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(200, []);
 				}
 				else {
 					return new data(200, res.rows);
@@ -923,16 +1064,52 @@ async function getMultipleExpenses(asker, start, end, bid) {
 
 	return new data(500);
 }
+async function getMultipleExpenses(asker, start, end) {
+	const query = {
+		text: 'SELECT * FROM expense_table ORDER BY date DESC OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			case roleType.instructor:
+			case roleType.admin:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404, res.rows);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function getMultipleExpensesByUid(asker, start, end, searchText) {
 	searchText = '%' + searchText + '%';
 	const client = await pool.connect();
-	const bid = await get_bid_from_uid(asker.uid, client);
-	if (bid == -1){
+	const company_id = await get_bid_from_uid(asker.uid, client);
+	if (company_id == -1){
 		return new data(403);
 	}
 	const query = {
-		text: 'SELECT * FROM expenses WHERE bid=$1 AND expenses.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end, searchText]
+		text: 'SELECT * FROM expense_table WHERE company_id=$1 AND expense_table.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [company_id, start, end, searchText]
 	}
 	let res;
 	try {
@@ -967,13 +1144,13 @@ async function getMultipleExpensesByUid(asker, start, end, searchText) {
 }
 async function addExpense(asker, expense) {
 	const client = await pool.connect();
-	const bid = await get_bid_from_uid(asker.uid, client);
-	if (bid == -1){
+	const company_id = await get_bid_from_uid(asker.uid, client);
+	if (company_id == -1){
 		return new data(403);
 	}
 	const query = {
 		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-		values: [asker.uid, bid, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.justification]
+		values: [asker.uid, company_id, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.description]
 	}
 
 	try {
@@ -1005,10 +1182,39 @@ async function addExpense(asker, expense) {
 
 	return new data(500);
 }
-async function deleteExpenseByEid(asker, eid, bid) {
+async function addExpenseByCid(asker, expense) {
+	const client = await pool.connect();
+	const query = {
+		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+		values: [expense.user_id, expense.company_id, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.description]
+	}
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			case roleType.instructor:
+			case roleType.admin:
+				await client.query(query);
+				return new data(201);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function deleteExpenseByEid(asker, expense_id, company_id) {
 	const query = {
 		text: 'CALL delete_expense($1)',
-		values: [eid]
+		values: [expense_id]
 	}
 	const client = await pool.connect();
 
@@ -1023,7 +1229,7 @@ async function deleteExpenseByEid(asker, eid, bid) {
 				return new data(200);
 				break;
 			case roleType.student:
-			if (await is_user_in_business(asker.uid, client)) {
+			if (await is_user_in_business(asker.uid, client, company_id)) {
 				await client.query(query);
 				return new data(200);
 			}
@@ -1043,11 +1249,11 @@ async function deleteExpenseByEid(asker, eid, bid) {
 
 //Deposit Queries
 //Permitted - Admin, Instructor
-async function getMultipleDeposits(asker, start, end, bid, searchText) {
+async function getMultipleDepositsByBid(asker, start, end, company_id, searchText) {
 	searchText = '%' + searchText + '%';
 	const query = {
-		text: 'SELECT * FROM deposits WHERE bid=$1 AND deposits.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
-		values: [bid, start, end, searchText]
+		text: 'SELECT * FROM deposit_table WHERE company_id=$1 AND deposit_table.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
+		values: [company_id, start, end, searchText]
 	}
 	const client = await pool.connect();
 	let res;
@@ -1077,10 +1283,46 @@ async function getMultipleDeposits(asker, start, end, bid, searchText) {
 
 	return new data(500);
 }
+async function getMultipleDeposits(asker, start, end) {
+	const query = {
+		text: 'SELECT * FROM deposit_table ORDER BY date DESC OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
+		values: [start, end]
+	}
+	const client = await pool.connect();
+	let res;
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			case roleType.instructor:
+			case roleType.admin:
+				res = await client.query(query);
+				if (!res.rows.length) {
+					return new data(404, res.rows);
+				}
+				else {
+					return new data(200, res.rows);
+				}
+			default:
+				return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function addDeposit(asker, deposit) {
 	const query = {
 		text: 'CALL insert_deposit($1, $2, $3, $4)',
-		values: [deposit.bid, deposit.uid, deposit.val, deposit.description]
+		values: [deposit.company_id, deposit.user_id, deposit.value, deposit.description]
 	}
 	const client = await pool.connect();
 
@@ -1109,10 +1351,10 @@ async function addDeposit(asker, deposit) {
 
 	return new data(500);
 }
-async function deleteDepositByDid(asker, did) {
+async function deleteDepositByDid(asker, deposit_id) {
 	const query = {
 		text: 'CALL delete_deposit($1)',
-		values: [did]
+		values: [deposit_id]
 	}
 	const client = await pool.connect();
 
@@ -1140,10 +1382,10 @@ async function deleteDepositByDid(asker, did) {
 }
 
 //Export functions
-async function getExpenseDataCSV(asker, bid) {
+async function getExpenseDataCSV(asker, company_id) {
 	const query = {
-		text: 'SELECT * FROM expenses WHERE bid=$1;',
-		values: [bid]
+		text: 'SELECT * FROM expense_table WHERE company_id=$1;',
+		values: [company_id]
 	}
 	const client = await pool.connect();
 	let res;
@@ -1181,10 +1423,10 @@ async function getExpenseDataCSV(asker, bid) {
 
 	return new data(500);
 }
-async function getTransactionDataCSV(asker, bid) {
+async function getTransactionDataCSV(asker, company_id) {
 	const query = {
-		text: 'SELECT * FROM transactions WHERE bid=$1;',
-		values: [bid]
+		text: 'SELECT * FROM transaction_table WHERE company_id=$1;',
+		values: [company_id]
 	}
 	const client = await pool.connect();
 	let res;
@@ -1222,10 +1464,10 @@ async function getTransactionDataCSV(asker, bid) {
 
 	return new data(500);
 }
-async function getDepositDataCSV(asker, bid) {
+async function getDepositDataCSV(asker, company_id) {
 	const query = {
-		text: 'SELECT * FROM deposits WHERE bid=$1;',
-		values: [bid]
+		text: 'SELECT * FROM deposit_table WHERE company_id=$1;',
+		values: [company_id]
 	}
 	const client = await pool.connect();
 	let res;
@@ -1266,6 +1508,10 @@ async function getDepositDataCSV(asker, bid) {
 
 exports.init = init;
 exports.getRole = getRole;
+
+exports.getResetCode = getResetCode;
+exports.resetDatabase = resetDatabase;
+
 exports.createUser = createUser;
 exports.getUserByUid = getUserByUid;
 exports.getUserByAsker = getUserByAsker;
@@ -1285,16 +1531,21 @@ exports.modifyStretchProfitGoalByUid = modifyStretchProfitGoalByUid;
 exports.deleteBusinessByBid = deleteBusinessByBid;
 
 exports.getMultipleTransactions = getMultipleTransactions;
+exports.getMultipleTransactionsByBid = getMultipleTransactionsByBid;
 exports.getMultipleTransactionsByUid = getMultipleTransactionsByUid;
 exports.addTransaction = addTransaction;
+exports.addTransactionByCid = addTransactionByCid;
 exports.deleteTransactionByTid = deleteTransactionByTid;
 
 exports.getMultipleExpenses = getMultipleExpenses;
+exports.getMultipleExpensesByBid = getMultipleExpensesByBid;
 exports.getMultipleExpensesByUid = getMultipleExpensesByUid;
 exports.addExpense = addExpense;
+exports.addExpenseByCid = addExpenseByCid;
 exports.deleteExpenseByEid = deleteExpenseByEid;
 
 exports.getMultipleDeposits = getMultipleDeposits;
+exports.getMultipleDepositsByBid = getMultipleDepositsByBid;
 exports.addDeposit = addDeposit;
 exports.deleteDepositByDid = deleteDepositByDid;
 

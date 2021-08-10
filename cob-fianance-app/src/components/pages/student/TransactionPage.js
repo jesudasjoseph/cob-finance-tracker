@@ -30,7 +30,7 @@ export default class TransactionPage extends Component {
 	}
 
 	fetchTransactionTableData(searchText = ''){
-		fetch(API_PATH + '/transaction/byuid?start=0&end=50' + '&search=' + searchText, {
+		fetch(API_PATH + '/transaction/byuid?start=0&end=50&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -106,9 +106,9 @@ export default class TransactionPage extends Component {
 								</thead>
 								<tbody>
 									{this.state.transactionTableData.map((transaction, index) => {
-										const {customer,date,product,payment_method, quantity, price_per_unit, tid, total} = transaction;
+										const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
 										return (
-											<tr key={tid}>
+											<tr key={transaction_id}>
 												<td>{date.split('T')[0]} </td>
 												<td>{customer}</td>
 												<td>{product}</td>

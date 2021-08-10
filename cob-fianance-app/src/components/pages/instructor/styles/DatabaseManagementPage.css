@@ -1,0 +1,30 @@
+.database-management-page-container{
+
+}
+
+.database-management-page-container .database-progress-bar{
+	height: 2em;
+}
+
+.database-management-page-container .progress-label{
+	text-align: center;
+}
+
+.database-management-page-container .button-container{
+	display: flex;
+	flex-direction: row;
+}
+
+.database-management-page-container .left{
+	flex-grow: 1;
+}
+
+.database-management-page-container .middle{
+	flex-grow: 1;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.database-management-page-container .right{
+	flex-grow: 1;
+}

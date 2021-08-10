@@ -11,12 +11,12 @@ export default class SnapshotGroup extends React.Component{
 	constructor(props){
 		super(props);
 
-		let bid = parseInt(this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length-1]);
+		let company_id = this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length-1];
 
 		this.state = {
 			expenseTableData: [],
 			transactionTableData: [],
-			bid: bid,
+			company_id: company_id,
 			business: [],
 			students: []
 		};
@@ -31,17 +31,13 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	componentDidMount(){
-		if (isNaN(this.state.bid))
-			this.props.history.push('/404');
-		else {
-			this.fetchBusinessData();
-			this.fetchExpenseTableData();
-			this.fetchTransactionTableData();
-		}
+		this.fetchBusinessData();
+		this.fetchExpenseTableData();
+		this.fetchTransactionTableData();
 	}
 
 	fetchExpenseTableData(){
-		fetch(API_PATH + '/expense?start=0&end=50&bid=' + this.state.bid, {
+		fetch(API_PATH + '/expense/bybid?start=0&end=50&bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -62,7 +58,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	fetchTransactionTableData(){
-		fetch(API_PATH + '/transaction?start=0&end=50&bid=' + this.state.bid, {
+		fetch(API_PATH + '/transaction/bybid?start=0&end=50&bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -84,7 +80,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	fetchBusinessData(){
-		fetch(API_PATH + '/business/bybid?bid=' + this.state.bid, {
+		fetch(API_PATH + '/business/bybid?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -105,7 +101,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	exportExpenseData(){
-		fetch(API_PATH + '/export/expense?bid=' + this.state.bid, {
+		fetch(API_PATH + '/export/expense?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -122,7 +118,7 @@ export default class SnapshotGroup extends React.Component{
 			var blob = new Blob(["\ufeff", data]);
 			var url = URL.createObjectURL(blob);
 			downloadLink.href = url;
-			downloadLink.download = "Bid_" + this.state.bid + "_expenseData.csv";
+			downloadLink.download = "Bid_" + this.state.company_id + "_expenseData.csv";
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
@@ -133,7 +129,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	exportTransactionData(){
-		fetch(API_PATH + '/export/transaction?bid=' + this.state.bid, {
+		fetch(API_PATH + '/export/transaction?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -150,7 +146,7 @@ export default class SnapshotGroup extends React.Component{
 			var blob = new Blob(["\ufeff", data]);
 			var url = URL.createObjectURL(blob);
 			downloadLink.href = url;
-			downloadLink.download = "Bid_" + this.state.bid + "_transactionData.csv";
+			downloadLink.download = "Bid_" + this.state.company_id + "_transactionData.csv";
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
@@ -161,7 +157,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	exportDepositData(){
-		fetch(API_PATH + '/export/deposit?bid=' + this.state.bid, {
+		fetch(API_PATH + '/export/deposit?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -178,7 +174,7 @@ export default class SnapshotGroup extends React.Component{
 			var blob = new Blob(["\ufeff", data]);
 			var url = URL.createObjectURL(blob);
 			downloadLink.href = url;
-			downloadLink.download = "Bid_" + this.state.bid + "_depositData.csv";
+			downloadLink.download = "Bid_" + this.state.company_id + "_depositData.csv";
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
@@ -192,8 +188,8 @@ export default class SnapshotGroup extends React.Component{
 	render () {
 		return (
 			<React.Fragment>
-				<h1 style={{textAlign:'center'}}>{this.state.business.name}</h1>
-				<StudentTable dataFromParent = {{bid: this.state.bid}} Mystudents = {{students: this.state.students}}/>
+				<h1 style={{textAlign:'center'}}>{this.state.business.company_id}</h1>
+				<StudentTable company_id={this.state.company_id} Mystudents={{students: this.state.students}}/>
 				<h3> Profit Goals</h3>
 				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
 				<h3 style={{padding: '20px 0px'}}>Expenses / Revenue</h3>
@@ -220,14 +216,14 @@ export default class SnapshotGroup extends React.Component{
 								<th>Quantity</th>
 								<th>Price Per Unit</th>
 								<th>Total</th>
-								<th>Justification</th>
+								<th>Description</th>
 							</tr>
 						</thead>
 						<tbody>
 							{this.state.expenseTableData.map((expense, index) => {
-								const {quantity,product,company, date, payment_method, price_per_unit, justification, total,eid} = expense;
+								const {quantity,product,company, date, payment_method, price_per_unit, description, total, expense_id} = expense;
 								return (
-									<tr key={eid}>
+									<tr key={expense_id}>
 										<td> {date.split('T')[0]} </td>
 										<td> {product}</td>
 										<td>{company}</td>
@@ -235,7 +231,7 @@ export default class SnapshotGroup extends React.Component{
 										<td>{quantity}</td>
 										<td>{price_per_unit}</td>
 										<td>{total}</td>
-										<td>{justification}</td>
+										<td>{description}</td>
 									</tr>
 								);
 							})}
@@ -264,9 +260,9 @@ export default class SnapshotGroup extends React.Component{
 						</thead>
 						<tbody>
 							{this.state.transactionTableData.map((transaction, index) => {
-								const {customer,date,product,payment_method, quantity, price_per_unit, tid, total} = transaction;
+								const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
 								return (
-									<tr key={tid}>
+									<tr key={transaction_id}>
 										<td>{date.split('T')[0]} </td>
 										<td>{customer}</td>
 										<td>{product}</td>

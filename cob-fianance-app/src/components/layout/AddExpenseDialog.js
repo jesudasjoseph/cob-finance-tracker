@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { API_PATH } from '../Config';
 
 /*
 Props:
@@ -21,7 +20,7 @@ export default class AddExpenseDialog extends Component {
 			payment_method: '',
 			quantity: '',
 			price_per_unit:'',
-			justification:''
+			description:''
 		};
 
 		this.close_dialog = this.close_dialog.bind(this);
@@ -36,7 +35,8 @@ export default class AddExpenseDialog extends Component {
 				product: '',
 				payment_method: '',
 				quantity: '',
-				price_per_unit:''
+				price_per_unit:'',
+				description:''
 			}
 		});
 		this.props.handleClose();
@@ -49,7 +49,7 @@ export default class AddExpenseDialog extends Component {
 			payment_method:this.state.payment_method,
 			quantity:this.state.quantity,
 			price_per_unit:this.state.price_per_unit,
-			justification:this.state.justification
+			description:this.state.description
 		});
 		this.setState({
 			transaction: {
@@ -58,7 +58,8 @@ export default class AddExpenseDialog extends Component {
 				product: '',
 				payment_method: '',
 				quantity: '',
-				price_per_unit:''
+				price_per_unit:'',
+				description:''
 			}
 		});
 	}
@@ -87,8 +88,8 @@ export default class AddExpenseDialog extends Component {
 								<Form.Control type="text" value={this.state.quantity}  onChange={(e) => this.setState({quantity: e.target.value})}/>
 								<Form.Label>Price Per Unit</Form.Label>
 								<Form.Control type="text" value={this.state.price_per_unit}  onChange={(e) => this.setState({price_per_unit: e.target.value})}/>
-								<Form.Label>Justification</Form.Label>
-								<Form.Control type="text" value={this.state.justification}  onChange={(e) => this.setState({justification: e.target.value})}/>
+								<Form.Label>Description</Form.Label>
+								<Form.Control type="text" value={this.state.description}  onChange={(e) => this.setState({description: e.target.value})}/>
 							</Form.Group>
 						</Form>
 					</Modal.Body>
