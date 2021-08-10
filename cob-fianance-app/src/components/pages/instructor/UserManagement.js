@@ -271,7 +271,7 @@ export default class UserManagement extends Component {
 	}
 	lastPage(){
 		this.fetchTableData(null, this.state.tableInitialIndex - this.state.tableMaxRows);
-		if (this.state.tableInitialIndex - this.state.tableMaxRows == 0){
+		if (this.state.tableInitialIndex - this.state.tableMaxRows === 0){
 			this.setState({tableInitialIndex: this.state.tableInitialIndex - this.state.tableMaxRows, lastDisabled: true, nextDisabled: false});
 		}
 		else {

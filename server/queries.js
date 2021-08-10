@@ -86,7 +86,7 @@ async function resetDatabase(asker, code){
 					return new data(200);
 				}
 				else{
-					return new data(403);
+					return new data(406);
 				}
 				break;
 			case roleType.student:
@@ -953,6 +953,35 @@ async function addTransaction(asker, transaction) {
 
 	return new data(500);
 }
+async function addTransactionByCid(asker, transaction) {
+	const client = await pool.connect();
+	const query = {
+		text: 'CALL insert_transaction($1, $2, $3, $4, $5, $6, $7, $8)',
+		values: [transaction.user_id, transaction.company_id, transaction.customer, transaction.product, transaction.date, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
+	};
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			case roleType.instructor:
+			case roleType.admin:
+				await client.query(query);
+				return new data(201);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
 async function deleteTransactionByTid(asker, transaction_id, company_id) {
 	const query = {
 		text: 'CALL delete_transaction($1)',
@@ -1018,7 +1047,7 @@ async function getMultipleExpensesByBid(asker, start, end, company_id) {
 			default:
 				res = await client.query(query);
 				if (!res.rows.length) {
-					return new data(404);
+					return new data(200, []);
 				}
 				else {
 					return new data(200, res.rows);
@@ -1140,6 +1169,35 @@ async function addExpense(asker, expense) {
 				break;
 			case roleType.admin:
 				return new data(403);
+				break;
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+		client.release();
+	}
+
+	return new data(500);
+}
+async function addExpenseByCid(asker, expense) {
+	const client = await pool.connect();
+	const query = {
+		text: 'CALL insert_expense($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+		values: [expense.user_id, expense.company_id, expense.product, expense.company, expense.quantity, expense.date, expense.payment_method, expense.price_per_unit, expense.description]
+	}
+
+	try {
+		switch(asker.role){
+			case roleType.student:
+				return new data(403);
+				break;
+			case roleType.instructor:
+			case roleType.admin:
+				await client.query(query);
+				return new data(201);
 				break;
 		}
 	}
@@ -1476,12 +1534,14 @@ exports.getMultipleTransactions = getMultipleTransactions;
 exports.getMultipleTransactionsByBid = getMultipleTransactionsByBid;
 exports.getMultipleTransactionsByUid = getMultipleTransactionsByUid;
 exports.addTransaction = addTransaction;
+exports.addTransactionByCid = addTransactionByCid;
 exports.deleteTransactionByTid = deleteTransactionByTid;
 
 exports.getMultipleExpenses = getMultipleExpenses;
 exports.getMultipleExpensesByBid = getMultipleExpensesByBid;
 exports.getMultipleExpensesByUid = getMultipleExpensesByUid;
 exports.addExpense = addExpense;
+exports.addExpenseByCid = addExpenseByCid;
 exports.deleteExpenseByEid = deleteExpenseByEid;
 
 exports.getMultipleDeposits = getMultipleDeposits;

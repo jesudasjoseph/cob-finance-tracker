@@ -1,4 +1,4 @@
-import React, {Component, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import memoize from 'memoize-one';
 import Table from 'react-bootstrap/Table';
 import TableControl from './TableControl';

@@ -50,18 +50,20 @@ export default class ResetDatabaseDialog extends Component{
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			if (Math.floor(response.status / 200) === 1){
+			if (response.status === 200){
 				this.context.pushNotification('success', 'Successfully Reset Database', '', 4000);
-
 			}
-			else{
+			else if (response.status === 406){
+				this.context.pushNotification('fail', 'Server Error', 'Reset code does not match! Try again!', 6000);
+			}
+			else {
 				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
 			}
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
 		this.setState({userResetCode: ''});
-		this.props.handleSubmit();
+		this.props.handleClose();
 	}
 
 	render(){
@@ -70,16 +72,17 @@ export default class ResetDatabaseDialog extends Component{
 				<Modal show={this.props.show} onHide={this.close_dialog}>
 					<Modal.Header closeButton>
 						<Modal.Title>
-							Add Deposit
+							Reset Database
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
 						<Form>
+							<p>This will delete all information in the database except for the current user information.</p>
 							<Form.Label>Confirm database reset by typing out: "{this.state.resetCode}"</Form.Label>
 							<Form.Control type="text" value={this.state.userResetCode}  onChange={(e) => this.setState({userResetCode: e.target.value})} />
 						</Form>
 						<Modal.Footer>
-						<Button variant="primary" onClick={this.handle_submit}>Add</Button>
+						<Button variant="primary" onClick={this.handle_submit}>Reset</Button>
 						</Modal.Footer>
 					</Modal.Body>
 				</Modal>
