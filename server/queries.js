@@ -916,7 +916,7 @@ async function addTransaction(asker, transaction) {
 		return new data(403);
 	}
 	const query = {
-		text: 'CALL insert_transaction($1, ($2), $3, $4, $5, $6, $7, $8)',
+		text: 'CALL insert_transaction($1, "$2", $3, $4, $5, $6, $7, $8)',
 		values: [asker.uid, company_id, transaction.customer, transaction.product, transaction.date, transaction.payment_method, transaction.quantity, transaction.price_per_unit]
 	};
 
