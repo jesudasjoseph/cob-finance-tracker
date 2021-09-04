@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.7 (Ubuntu 12.7-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.7 (Ubuntu 12.7-0ubuntu0.20.04.1)
+-- Dumped from database version 12.8 (Ubuntu 12.8-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.8 (Ubuntu 12.8-0ubuntu0.20.04.1)
 
--- Started on 2021-08-08 17:45:20 PDT
+-- Started on 2021-08-30 18:14:10 PDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,7 +20,7 @@ SET row_security = off;
 
 --
 -- TOC entry 212 (class 1255 OID 33045)
--- Name: delete_deposit(bigint); Type: PROCEDURE; Schema: public; Owner: devserver
+-- Name: delete_deposit(bigint); Type: PROCEDURE; Schema: public; Owner: -
 --
 
 CREATE PROCEDURE public.delete_deposit(in_deposit_id bigint)
@@ -44,11 +44,9 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.delete_deposit(in_deposit_id bigint) OWNER TO devserver;
-
 --
 -- TOC entry 225 (class 1255 OID 33046)
--- Name: delete_expense(bigint); Type: PROCEDURE; Schema: public; Owner: devserver
+-- Name: delete_expense(bigint); Type: PROCEDURE; Schema: public; Owner: -
 --
 
 CREATE PROCEDURE public.delete_expense(in_expense_id bigint)
@@ -72,11 +70,9 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.delete_expense(in_expense_id bigint) OWNER TO devserver;
-
 --
 -- TOC entry 226 (class 1255 OID 33047)
--- Name: delete_transaction(bigint); Type: PROCEDURE; Schema: public; Owner: devserver
+-- Name: delete_transaction(bigint); Type: PROCEDURE; Schema: public; Owner: -
 --
 
 CREATE PROCEDURE public.delete_transaction(in_transaction_id bigint)
@@ -110,11 +106,9 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.delete_transaction(in_transaction_id bigint) OWNER TO devserver;
-
 --
 -- TOC entry 228 (class 1255 OID 33048)
--- Name: insert_deposit(text, text, money, text); Type: PROCEDURE; Schema: public; Owner: devserver
+-- Name: insert_deposit(text, text, money, text); Type: PROCEDURE; Schema: public; Owner: -
 --
 
 CREATE PROCEDURE public.insert_deposit(in_company_id text, in_user_id text, in_value money, in_description text)
@@ -135,11 +129,9 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.insert_deposit(in_company_id text, in_user_id text, in_value money, in_description text) OWNER TO devserver;
-
 --
 -- TOC entry 227 (class 1255 OID 33049)
--- Name: insert_expense(text, text, text, text, numeric, date, text, money, text); Type: PROCEDURE; Schema: public; Owner: devserver
+-- Name: insert_expense(text, text, text, text, numeric, date, text, money, text); Type: PROCEDURE; Schema: public; Owner: -
 --
 
 CREATE PROCEDURE public.insert_expense(in_user_id text, in_company_id text, in_product text, in_company text, in_quantity numeric, in_date date, in_payment text, in_price money, in_description text)
@@ -160,11 +152,9 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.insert_expense(in_user_id text, in_company_id text, in_product text, in_company text, in_quantity numeric, in_date date, in_payment text, in_price money, in_description text) OWNER TO devserver;
-
 --
 -- TOC entry 229 (class 1255 OID 33053)
--- Name: insert_transaction(text, text, text, text, date, text, numeric, money); Type: PROCEDURE; Schema: public; Owner: devserver
+-- Name: insert_transaction(text, text, text, text, date, text, numeric, money); Type: PROCEDURE; Schema: public; Owner: -
 --
 
 CREATE PROCEDURE public.insert_transaction(in_user_id text, in_company_id text, in_customer text, in_product text, in_date date, in_payment text, in_quantity numeric, in_price money)
@@ -195,15 +185,13 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.insert_transaction(in_user_id text, in_company_id text, in_customer text, in_product text, in_date date, in_payment text, in_quantity numeric, in_price money) OWNER TO devserver;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
 -- TOC entry 203 (class 1259 OID 32954)
--- Name: company_table; Type: TABLE; Schema: public; Owner: devserver
+-- Name: company_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.company_table (
@@ -224,11 +212,9 @@ CREATE TABLE public.company_table (
 );
 
 
-ALTER TABLE public.company_table OWNER TO devserver;
-
 --
 -- TOC entry 211 (class 1259 OID 33041)
--- Name: company_view; Type: VIEW; Schema: public; Owner: devserver
+-- Name: company_view; Type: VIEW; Schema: public; Owner: -
 --
 
 CREATE VIEW public.company_view AS
@@ -249,11 +235,9 @@ CREATE VIEW public.company_view AS
    FROM public.company_table;
 
 
-ALTER TABLE public.company_view OWNER TO devserver;
-
 --
 -- TOC entry 205 (class 1259 OID 32975)
--- Name: deposit_table; Type: TABLE; Schema: public; Owner: devserver
+-- Name: deposit_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.deposit_table (
@@ -266,11 +250,9 @@ CREATE TABLE public.deposit_table (
 );
 
 
-ALTER TABLE public.deposit_table OWNER TO devserver;
-
 --
 -- TOC entry 204 (class 1259 OID 32973)
--- Name: deposit_table_deposit_id_seq; Type: SEQUENCE; Schema: public; Owner: devserver
+-- Name: deposit_table_deposit_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.deposit_table ALTER COLUMN deposit_id ADD GENERATED ALWAYS AS IDENTITY (
@@ -286,7 +268,7 @@ ALTER TABLE public.deposit_table ALTER COLUMN deposit_id ADD GENERATED ALWAYS AS
 
 --
 -- TOC entry 207 (class 1259 OID 32993)
--- Name: expense_table; Type: TABLE; Schema: public; Owner: devserver
+-- Name: expense_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.expense_table (
@@ -304,11 +286,9 @@ CREATE TABLE public.expense_table (
 );
 
 
-ALTER TABLE public.expense_table OWNER TO devserver;
-
 --
 -- TOC entry 206 (class 1259 OID 32991)
--- Name: expense_table_expense_id_seq; Type: SEQUENCE; Schema: public; Owner: devserver
+-- Name: expense_table_expense_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.expense_table ALTER COLUMN expense_id ADD GENERATED ALWAYS AS IDENTITY (
@@ -324,7 +304,7 @@ ALTER TABLE public.expense_table ALTER COLUMN expense_id ADD GENERATED ALWAYS AS
 
 --
 -- TOC entry 209 (class 1259 OID 33010)
--- Name: transaction_table; Type: TABLE; Schema: public; Owner: devserver
+-- Name: transaction_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.transaction_table (
@@ -341,11 +321,9 @@ CREATE TABLE public.transaction_table (
 );
 
 
-ALTER TABLE public.transaction_table OWNER TO devserver;
-
 --
 -- TOC entry 208 (class 1259 OID 33008)
--- Name: transaction_table_transaction_id_seq; Type: SEQUENCE; Schema: public; Owner: devserver
+-- Name: transaction_table_transaction_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.transaction_table ALTER COLUMN transaction_id ADD GENERATED ALWAYS AS IDENTITY (
@@ -361,7 +339,7 @@ ALTER TABLE public.transaction_table ALTER COLUMN transaction_id ADD GENERATED A
 
 --
 -- TOC entry 210 (class 1259 OID 33025)
--- Name: user_has_company; Type: TABLE; Schema: public; Owner: devserver
+-- Name: user_has_company; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.user_has_company (
@@ -370,11 +348,9 @@ CREATE TABLE public.user_has_company (
 );
 
 
-ALTER TABLE public.user_has_company OWNER TO devserver;
-
 --
 -- TOC entry 202 (class 1259 OID 32946)
--- Name: user_table; Type: TABLE; Schema: public; Owner: devserver
+-- Name: user_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.user_table (
@@ -386,11 +362,9 @@ CREATE TABLE public.user_table (
 );
 
 
-ALTER TABLE public.user_table OWNER TO devserver;
-
 --
 -- TOC entry 2856 (class 2606 OID 32972)
--- Name: company_table company_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+-- Name: company_table company_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.company_table
@@ -399,7 +373,7 @@ ALTER TABLE ONLY public.company_table
 
 --
 -- TOC entry 2858 (class 2606 OID 32984)
--- Name: deposit_table deposit_table_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+-- Name: deposit_table deposit_table_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.deposit_table
@@ -408,7 +382,7 @@ ALTER TABLE ONLY public.deposit_table
 
 --
 -- TOC entry 2860 (class 2606 OID 33002)
--- Name: expense_table expense_table_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+-- Name: expense_table expense_table_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.expense_table
@@ -417,7 +391,7 @@ ALTER TABLE ONLY public.expense_table
 
 --
 -- TOC entry 2862 (class 2606 OID 33019)
--- Name: transaction_table transaction_table_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+-- Name: transaction_table transaction_table_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.transaction_table
@@ -426,7 +400,7 @@ ALTER TABLE ONLY public.transaction_table
 
 --
 -- TOC entry 2854 (class 2606 OID 32953)
--- Name: user_table user_table_pkey; Type: CONSTRAINT; Schema: public; Owner: devserver
+-- Name: user_table user_table_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_table
@@ -435,7 +409,7 @@ ALTER TABLE ONLY public.user_table
 
 --
 -- TOC entry 2866 (class 2606 OID 33031)
--- Name: user_has_company company_id; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+-- Name: user_has_company company_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_has_company
@@ -444,7 +418,7 @@ ALTER TABLE ONLY public.user_has_company
 
 --
 -- TOC entry 2863 (class 2606 OID 32985)
--- Name: deposit_table deposit_table_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+-- Name: deposit_table deposit_table_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.deposit_table
@@ -453,7 +427,7 @@ ALTER TABLE ONLY public.deposit_table
 
 --
 -- TOC entry 2864 (class 2606 OID 33003)
--- Name: expense_table expense_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+-- Name: expense_table expense_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.expense_table
@@ -462,7 +436,7 @@ ALTER TABLE ONLY public.expense_table
 
 --
 -- TOC entry 2865 (class 2606 OID 33054)
--- Name: transaction_table transaction_table_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+-- Name: transaction_table transaction_table_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.transaction_table
@@ -471,14 +445,14 @@ ALTER TABLE ONLY public.transaction_table
 
 --
 -- TOC entry 2867 (class 2606 OID 33036)
--- Name: user_has_company user_id; Type: FK CONSTRAINT; Schema: public; Owner: devserver
+-- Name: user_has_company user_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_has_company
     ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.user_table(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2021-08-08 17:45:23 PDT
+-- Completed on 2021-08-30 18:14:18 PDT
 
 --
 -- PostgreSQL database dump complete
