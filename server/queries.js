@@ -105,13 +105,13 @@ async function resetDatabase(asker, code){
 }
 
 //Helper
-async function get_bid_from_uid(user_id, client) {
+async function get_bid_from_uid(user_id) {
 	const query = {
 		text: 'SELECT company_id FROM user_has_company WHERE user_id = $1',
 		values: [user_id]
 	};
 
-	let res = await client.query(query);
+	let res = await pool.query(query);
 	if (!res.rows.length) {
 		return -1;
 	}
@@ -119,9 +119,9 @@ async function get_bid_from_uid(user_id, client) {
 		return res.rows[0].company_id;
 	}
 }
-async function is_user_in_business(user_id, client, company_id = null) {
+async function is_user_in_business(user_id, company_id = null) {
 	if (company_id == null){
-		company_id = await get_bid_from_uid(user_id, client);
+		company_id = await get_bid_from_uid(user_id);
 		if (company_id < 0){
 			return false;
 		}
@@ -131,7 +131,7 @@ async function is_user_in_business(user_id, client, company_id = null) {
 			values: [company_id, user_id]
 		};
 
-		let res = await client.query(query);
+		let res = await pool.query(query);
 		if (!res.rows.length) {
 			return false;
 		}
@@ -148,7 +148,7 @@ async function is_user_in_business(user_id, client, company_id = null) {
 			values: [company_id, user_id]
 		};
 
-		let res = await client.query(query);
+		let res = await pool.query(query);
 		if (!res.rows.length) {
 			return false;
 		}
@@ -611,15 +611,14 @@ async function getBusinessByBid(asker, company_id) {
 		text: 'SELECT * FROM company_view WHERE company_id=$1;',
 		values: [company_id]
 	}
-	const client = await pool.connect();
 	let res;
 
 	try {
 		switch(asker.role){
 			case roleType.student:
-				const studentIsInBusiness = await is_user_in_business(asker.uid, client, company_id);
+				const studentIsInBusiness = await is_user_in_business(asker.uid, company_id);
 				if (studentIsInBusiness){
-					res = await client.query(query);
+					res = await pool.query(query);
 					if (!res.rows.length) {
 						return new data(404);
 					}
@@ -631,7 +630,7 @@ async function getBusinessByBid(asker, company_id) {
 					return new data(403);
 				}
 			case roleType.instructor:
-				res = await client.query(query);
+				res = await pool.query(query);
 				if (!res.rows.length) {
 					return new data(404);
 				}
@@ -639,7 +638,7 @@ async function getBusinessByBid(asker, company_id) {
 					return new data(200, res.rows);
 				}
 			case roleType.admin:
-				res = await client.query(query);
+				res = await pool.query(query);
 				if (!res.rows.length) {
 					return new data(404);
 				}
@@ -655,7 +654,6 @@ async function getBusinessByBid(asker, company_id) {
 		return new data(500);
 	}
 	finally {
-		client.release();
 	}
 
 	return new data(500);
@@ -791,14 +789,13 @@ async function getMultipleTransactionsByBid(asker, start, end, company_id) {
 		text: 'SELECT * FROM transaction_table WHERE company_id=$1 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [company_id, start, end]
 	}
-	const client = await pool.connect();
 	let res;
 
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, client)) {
-					res = await client.query(query);
+				if (await is_user_in_business(asker.uid)) {
+					res = await pool.query(query);
 					if (!res.rows.length) {
 						return new data(200, res.rows);
 					}
@@ -812,7 +809,7 @@ async function getMultipleTransactionsByBid(asker, start, end, company_id) {
 				break;
 			case roleType.instructor:
 			case roleType.admin:
-				res = await client.query(query);
+				res = await pool.query(query);
 				if (!res.rows.length) {
 					return new data(200, []);
 				}
@@ -829,7 +826,6 @@ async function getMultipleTransactionsByBid(asker, start, end, company_id) {
 		return new data(500);
 	}
 	finally {
-		client.release();
 	}
 
 	return new data(500);
@@ -874,7 +870,7 @@ async function getMultipleTransactions(asker, start, end) {
 async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 	searchText = '%' + searchText + '%';
 	const client = await pool.connect();
-	const company_id = await get_bid_from_uid(asker.uid, client);
+	const company_id = await get_bid_from_uid(asker.uid);
 	if (company_id == -1){
 		return new data(403);
 	}
@@ -886,7 +882,7 @@ async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, client)) {
+				if (await is_user_in_business(asker.uid)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
 						return new data(200, []);
@@ -915,7 +911,7 @@ async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 }
 async function addTransaction(asker, transaction) {
 	const client = await pool.connect();
-	const company_id = await get_bid_from_uid(asker.uid, client);
+	const company_id = await get_bid_from_uid(asker.uid);
 	if (company_id == -1){
 		return new data(403);
 	}
@@ -927,7 +923,7 @@ async function addTransaction(asker, transaction) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, client)) {
+				if (await is_user_in_business(asker.uid)) {
 					await client.query(query);
 					return new data(201);
 				}
@@ -1000,7 +996,7 @@ async function deleteTransactionByTid(asker, transaction_id, company_id) {
 				return new data(200);
 				break;
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, client)) {
+				if (await is_user_in_business(asker.uid)) {
 					await client.query(query);
 					return new data(200);
 				}
@@ -1031,7 +1027,7 @@ async function getMultipleExpensesByBid(asker, start, end, company_id) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, client)) {
+				if (await is_user_in_business(asker.uid)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
 						return new data(200, []);
@@ -1103,7 +1099,7 @@ async function getMultipleExpenses(asker, start, end) {
 async function getMultipleExpensesByUid(asker, start, end, searchText) {
 	searchText = '%' + searchText + '%';
 	const client = await pool.connect();
-	const company_id = await get_bid_from_uid(asker.uid, client);
+	const company_id = await get_bid_from_uid(asker.uid);
 	if (company_id == -1){
 		return new data(403);
 	}
@@ -1115,7 +1111,7 @@ async function getMultipleExpensesByUid(asker, start, end, searchText) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, client)) {
+				if (await is_user_in_business(asker.uid)) {
 					res = await client.query(query);
 					if (!res.rows.length) {
 						return new data(200, []);
@@ -1144,7 +1140,7 @@ async function getMultipleExpensesByUid(asker, start, end, searchText) {
 }
 async function addExpense(asker, expense) {
 	const client = await pool.connect();
-	const company_id = await get_bid_from_uid(asker.uid, client);
+	const company_id = await get_bid_from_uid(asker.uid);
 	if (company_id == -1){
 		return new data(403);
 	}
@@ -1156,7 +1152,7 @@ async function addExpense(asker, expense) {
 	try {
 		switch(asker.role){
 			case roleType.student:
-				if (await is_user_in_business(asker.uid, client)) {
+				if (await is_user_in_business(asker.uid)) {
 					await client.query(query);
 					return new data(201);
 				}
@@ -1229,7 +1225,7 @@ async function deleteExpenseByEid(asker, expense_id, company_id) {
 				return new data(200);
 				break;
 			case roleType.student:
-			if (await is_user_in_business(asker.uid, client, company_id)) {
+			if (await is_user_in_business(asker.uid, company_id)) {
 				await client.query(query);
 				return new data(200);
 			}
