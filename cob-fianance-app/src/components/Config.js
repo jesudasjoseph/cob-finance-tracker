@@ -1,1 +1,1 @@
-export const API_PATH = 'https://trackmycompany.app/api/1';
+export const API_PATH = 'https://API_ADDRESS';
