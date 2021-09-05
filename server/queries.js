@@ -1251,7 +1251,6 @@ async function getMultipleDepositsByBid(asker, start, end, company_id, searchTex
 		text: 'SELECT * FROM deposit_table WHERE company_id=$1 AND deposit_table.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
 		values: [company_id, start, end, searchText]
 	}
-	const client = await pool.connect();
 	let res;
 
 	try {
@@ -1260,7 +1259,7 @@ async function getMultipleDepositsByBid(asker, start, end, company_id, searchTex
 				return new data(403);
 				break;
 			default:
-				res = await client.query(query);
+				res = await pool.query(query);
 				if (!res.rows.length) {
 					return new data(200, []);
 				}
@@ -1274,7 +1273,6 @@ async function getMultipleDepositsByBid(asker, start, end, company_id, searchTex
 		return new data(500);
 	}
 	finally {
-		client.release();
 	}
 
 	return new data(500);
@@ -1284,7 +1282,6 @@ async function getMultipleDeposits(asker, start, end) {
 		text: 'SELECT * FROM deposit_table ORDER BY date DESC OFFSET ($1) ROWS FETCH FIRST ($2) ROWS ONLY;',
 		values: [start, end]
 	}
-	const client = await pool.connect();
 	let res;
 
 	try {
@@ -1294,7 +1291,7 @@ async function getMultipleDeposits(asker, start, end) {
 				break;
 			case roleType.instructor:
 			case roleType.admin:
-				res = await client.query(query);
+				res = await pool.query(query);
 				if (!res.rows.length) {
 					return new data(404, res.rows);
 				}
@@ -1310,7 +1307,6 @@ async function getMultipleDeposits(asker, start, end) {
 		return new data(500);
 	}
 	finally {
-		client.release();
 	}
 
 	return new data(500);
@@ -1320,7 +1316,6 @@ async function addDeposit(asker, deposit) {
 		text: 'CALL insert_deposit($1, $2, $3, $4)',
 		values: [deposit.company_id, deposit.user_id, deposit.value, deposit.description]
 	}
-	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
@@ -1328,11 +1323,11 @@ async function addDeposit(asker, deposit) {
 				return new data(403);
 				break;
 			case roleType.instructor:
-				await client.query(query);
+				await pool.query(query);
 				return new data(201);
 				break;
 			case roleType.admin:
-				await client.query(query);
+				await pool.query(query);
 				return new data(201);
 				break;
 		}
@@ -1342,7 +1337,6 @@ async function addDeposit(asker, deposit) {
 		return new data(500);
 	}
 	finally {
-		client.release();
 	}
 
 	return new data(500);
@@ -1352,16 +1346,15 @@ async function deleteDepositByDid(asker, deposit_id) {
 		text: 'CALL delete_deposit($1)',
 		values: [deposit_id]
 	}
-	const client = await pool.connect();
 
 	try {
 		switch(asker.role){
 			case roleType.admin:
-				await client.query(query);
+				await pool.query(query);
 				return new data(200);
 				break;
 			case roleType.instructor:
-				await client.query(query);
+				await pool.query(query);
 				return new data(200);
 				break;
 			case roleType.student:
@@ -1372,7 +1365,7 @@ async function deleteDepositByDid(asker, deposit_id) {
 		console.log("pg" + e);
 		return new data(500);
 	} finally {
-		client.release();
+
 	}
 	return new data(500);
 }
