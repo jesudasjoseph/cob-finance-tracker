@@ -90,6 +90,7 @@ export default class AddUserDialog extends Component {
 	}
 
 	handle_submit() {
+		console.log(this.state.company_id);
 		this.props.handleSubmit({company_id: this.state.company_id, first_name: this.state.first_name, last_name: this.state.last_name, user_id: this.removeSpaces(this.state.user_id), section: this.state.section, role: this.state.role});
 		this.setState({
 			company_id: '',
@@ -125,7 +126,7 @@ export default class AddUserDialog extends Component {
 								<Form.Label>Section:</Form.Label>
 								<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
 
-								<Form.Label>Business:</Form.Label>
+								<Form.Label>Company:</Form.Label>
 								<Form.Control as="select" type="text" value={this.state.company_id} onChange={(e) => this.setState({company_id: e.target.value})}>
 									{
 										this.state.comapanyNameList.map((company, index) => {
