@@ -223,7 +223,7 @@ async function getUserByUid(asker, user_id) {
 	}
 }
 async function getUserByAsker(asker) {
-	return new data(200, {user_id:asker.user_id});
+	return new data(200, {uid:asker.uid});
 }
 //Permissions Instructor, Admin
 async function getMultipleUsersByBid(asker, company_id) {
