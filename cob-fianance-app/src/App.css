@@ -42,14 +42,6 @@ h2 {
 	}
 }
 
-.toast-error{
-	background-color: #e87b85;
-}
-
-.toast-success{
-	background-color: #44c963;
-}
-
 /*Look for floating flex containers*/
 .flex-container {
 	background-color: white;

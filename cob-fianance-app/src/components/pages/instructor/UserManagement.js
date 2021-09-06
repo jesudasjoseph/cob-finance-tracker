@@ -144,11 +144,16 @@ export default class UserManagement extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
-			if (this.state.tableSelectedRow === this.state.tableRows.length - 1){
-				this.setState({tableSelectedRow: this.state.tableRows.length - 2});
+			if (Math.floor(response.status / 200) === 1) {
+				if (this.state.tableSelectedRow === this.state.tableRows.length - 1){
+					this.setState({tableSelectedRow: this.state.tableRows.length - 2});
+				}
+				this.fetchTableData();
+				this.context.pushNotification('success', 'Deleted', 'Successfully deleted user', 4);
 			}
-			this.fetchTableData();
+			else {
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+			}
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -170,6 +175,7 @@ export default class UserManagement extends Component {
 			body: JSON.stringify(userBody)
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
+				this.context.pushNotification('success', 'Added', 'Successfully added new user', 4);
 				fetch(API_PATH + '/user/addtobusiness', {
 					mode: 'cors',
 					method: 'POST',
@@ -182,10 +188,10 @@ export default class UserManagement extends Component {
 					body: JSON.stringify(addUserToBusinessBody)
 				}).then(response => {
 					if (Math.floor(response.status / 200) === 1){
-						this.context.pushNotification('success', 'Successfully Added New User', '', 4000);
+						this.context.pushNotification('success', 'Added', 'Successfully added user to company', 4);
 					}
 					else{
-						this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+						this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
 					}
 					this.fetchTableData(this.state.sortOption);
 				}).catch((error) => {
@@ -193,10 +199,10 @@ export default class UserManagement extends Component {
 				});
 			}
 			else {
-				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
 			}
 		}).catch((error) => {
-			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
+			this.context.pushNotification('error', 'App Error', error.toString(), 8);
 		});
 		this.setState({showAddUserDialog: false})
 	}
@@ -217,9 +223,15 @@ export default class UserManagement extends Component {
 			},
 			body: JSON.stringify(dataObject)
 		}).then(response => {
-			this.fetchTableData();
+			if (Math.floor(response.status / 200) === 1){
+				this.fetchTableData();
+				this.context.pushNotification('success', 'User Modified', 'Successfully modified user.', 4);
+			}
+			else {
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+			}
 		}).catch((error) => {
-			console.error('Error:', error);
+			console.error('error:', error);
 		});
 		this.setState({showEditUserDialog: false});
 	}

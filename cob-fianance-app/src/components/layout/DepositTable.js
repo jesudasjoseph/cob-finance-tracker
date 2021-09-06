@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import TableControl from './TableControl';
 import SearchBar from './SearchBar';
 import AddDepositDialog from './AddDepositDialog';
+
 import {AppContext} from '../../AppContext';
 
 import { API_PATH } from '../Config';
@@ -82,16 +83,15 @@ export default class DepositTable extends PureComponent{
 			body: JSON.stringify(depositBody)
 		}).then((response) => {
 			if (Math.floor(response.status / 200) === 1){
-				this.context.pushNotification('success', 'Successfully Added Deposit', '', 4000);
-
+				this.context.pushNotification('success', 'Deposite Added', 'Successfully added deposit!', 4);
+				this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, this.state.searchText);
 			}
 			else{
-				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
 			}
-			this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, this.state.searchText);
 		}).catch((error) => {
 			console.error('Error:', error);
-			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
+			this.context.pushNotification('error', 'App Error', error.toString(), 8);
 		});
 	}
 	handleCloseDeposit() {

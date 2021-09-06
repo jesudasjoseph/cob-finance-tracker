@@ -22,7 +22,6 @@ import Login from './components/pages/Login';
 import Page404 from './components/pages/404';
 
 //Notification
-import Notification from './components/layout/Notification';
 import Toast from 'react-bootstrap/Toast';
 
 //Context
@@ -56,15 +55,16 @@ export default class App extends Component{
 		this.notificationOnClose = this.notificationOnClose.bind(this);
 	}
 
-	pushNotification(type, title, content, timeout){
+	//Push notifiaction onto notifiaction state array. Replace notifiactions that are already invisible.
+	pushNotification(type, title, content, delay_in_seconds){
 		if (this.state.notificationPool.length === 0){
-			this.setState({notificationPool: [new NotificationObj(title, content, type, timeout)]});
+			this.setState({notificationPool: [new NotificationObj(title, content, type, delay_in_seconds * 1000)]});
 		}
 		else if (this.state.notificationHiddenPoolCount > 0){
 			for (let i = 0; i < this.state.notificationPool.length; i++){
 				if (!this.state.notificationPool[i].show){
 					let tempNotificationPool = this.state.notificationPool;
-					tempNotificationPool[i] = new NotificationObj(title, content, type, timeout);
+					tempNotificationPool[i] = new NotificationObj(title, content, type, delay_in_seconds * 1000);
 					this.setState({notificationPool: tempNotificationPool, notificationHiddenPoolCount: this.state.notificationHiddenPoolCount - 1});
 					break;
 				}
@@ -72,18 +72,15 @@ export default class App extends Component{
 		}
 		else {
 			let tempNotificationPool = this.state.notificationPool;
-			tempNotificationPool.push(NotificationObj(title, content, type, timeout));
+			tempNotificationPool.push(new NotificationObj(title, content, type, delay_in_seconds * 1000));
 			this.setState({notificationPool: tempNotificationPool});
 		}
-		//this.setState({notificationType: type, notificationTitle: title, notificationContent: content, notificationTimeout: timeout, showNotification:true});
 	}
 
 	notificationOnClose(index){
 		let notificationPool = this.state.notificationPool;
 		notificationPool[index].show = false;
 		this.setState({notificationPool: notificationPool, notificationHiddenPoolCount: this.state.notificationHiddenPoolCount + 1});
-
-		//this.setState({showNotification: false});
 	}
 
 	render(){
@@ -134,17 +131,15 @@ export default class App extends Component{
 					{
 						this.state.notificationPool.map((notification, index) => {
 							const { title, content, type, delay, show} = notification;
-							let pool = this.state.notificationPool;
 							return(
-								<Toast className='toast' onClose={() => this.notificationOnClose(index)} show={show} delay={delay} autohide>
+								<Toast className='toast' onClose={() => this.notificationOnClose(index)} show={show} delay={delay} autohide={delay}>
 									<Toast.Header>
 										<img
 											src="holder.js/20x20?text=%20"
 											className="rounded me-2"
 											alt=""
 										/>
-										<strong className="me-auto">{title}</strong>
-										<small>{type}</small>
+										<strong className="mr-auto">{title}</strong>
 									</Toast.Header>
 									<Toast.Body>{content}</Toast.Body>
 								</Toast>
@@ -152,37 +147,8 @@ export default class App extends Component{
 						})
 					}
 				</div>
-				<div className='toast-container'>
-					<Toast className='toast' show>
-						<Toast.Header>
-							<img
-								src="holder.js/20x20?text=%20"
-								className="rounded me-2"
-								alt=""
-							/>
-							<strong className="mr-auto">Network</strong>
-							<small>Error</small>
-						</Toast.Header>
-						<Toast.Body className='toast-error'>Stuff and things...</Toast.Body>
-					</Toast>
-					<Toast className='toast' show>
-						<Toast.Header>
-							<img
-								src="holder.js/20x20?text=%20"
-								className="rounded me-2"
-								alt=""
-							/>
-							<strong className="mr-auto">Network</strong>
-							<small>Error</small>
-						</Toast.Header>
-						<Toast.Body className='toast-success'>Stuff and things...</Toast.Body>
-					</Toast>
-				</div>
+
 			</>
 		);
 	}
 }
-
-/*
-<Notification show={this.state.showNotification} type={this.state.notificationType} content={this.state.notificationContent} title={this.state.notificationTitle} onClose={this.notificationOnClose} timeout={this.state.notificationTimeout}/>
-*/
