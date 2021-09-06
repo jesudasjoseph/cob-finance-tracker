@@ -325,6 +325,28 @@ async function getMultipleUsers(asker, start, end, sort, searchText) {
 	finally {
 	}
 }
+async function getInstructors() {
+	const query = {
+		text: 'SELECT * FROM user_table WHERE role>0'
+	}
+	let res;
+
+	try {
+		res = await pool.query(query);
+		if (!res.rows.length) {
+			return new data(200, []);
+		}
+		else {
+			return new data(200, res.rows);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+	}
+}
 async function modifyUser(asker, user) {
 	const query = {
 		text: 'UPDATE user_table SET first_name = $1, last_name = $2 WHERE user_id=$3',
@@ -1454,6 +1476,7 @@ exports.getUserByUid = getUserByUid;
 exports.getUserByAsker = getUserByAsker;
 exports.getMultipleUsersByBid = getMultipleUsersByBid;
 exports.getMultipleUsers = getMultipleUsers;
+exports.getInstructors = getInstructors;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
 exports.addUserToBusiness = addUserToBusiness;
