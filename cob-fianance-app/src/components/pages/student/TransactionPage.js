@@ -3,7 +3,9 @@ import Table from 'react-bootstrap/Table';
 import AddTransactionDialog from '../../layout/AddTransactionDialog';
 import TableControl from '../../layout/TableControl';
 import SearchBar from '../../layout/SearchBar';
+
 import { API_PATH } from '../../Config';
+import { AppContext } from '../../../AppContext';
 
 import './styles/TransactionPage.css';
 
@@ -70,8 +72,13 @@ export default class TransactionPage extends Component {
 			},
 			body: JSON.stringify(transactionBody)
 		}).then(response => {
-			console.log(response);
-			this.fetchTransactionTableData(this.state.searchText);
+			if (Math.floor(response.status / 200) === 1) {
+				this.fetchTransactionTableData(this.state.searchText);
+				this.context.pushNotification('success', 'Transaction Added', 'Successfully added transaction', 4);
+			}
+			else {
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+			}
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -132,3 +139,4 @@ export default class TransactionPage extends Component {
 		);
 	}
 }
+TransactionPage.contextType = AppContext;

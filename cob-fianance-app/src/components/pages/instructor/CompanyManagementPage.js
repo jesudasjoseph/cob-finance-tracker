@@ -160,14 +160,20 @@ export default class CompanyManagementPage extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
-			if (this.state.businessTable.length === 1){
-				this.setState({selectedRow: -1, deleteDisabled: true});
+			if (Math.floor(response.status / 200) === 1) {
+				if (this.state.businessTable.length === 1){
+					this.setState({selectedRow: -1, deleteDisabled: true});
+				}
+				else if (this.state.selectedRow === this.state.businessTable.length - 1){
+					this.setState({selectedRow: this.state.businessTable.length - 2});
+				}
+				this.fetchBusinessData();
+				this.context.pushNotification('success', 'Company Deleted', 'Successfuly deleted company!', 4);
 			}
-			else if (this.state.selectedRow === this.state.businessTable.length - 1){
-				this.setState({selectedRow: this.state.businessTable.length - 2});
+			else {
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
 			}
-			this.fetchBusinessData();
+
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -187,14 +193,14 @@ export default class CompanyManagementPage extends Component {
 			body: JSON.stringify(businessBody)
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
-				this.context.pushNotification('success', 'Successfully Added New Business', '', 4000);
+				this.context.pushNotification('success', 'Company Added', 'Successfuly added company!', 4);
 			}
 			else{
-				this.context.pushNotification('fail', 'Network Error', response.status + ': ' + response.statusText, 0);
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
 			}
 			this.fetchBusinessData(this.state.sortOption);
 		}).catch((error) => {
-			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
+			this.context.pushNotification('error', 'App Error', error.toString(), 8);
 		});
 		this.setState({showAddCompanyDialog: false});
 	}
