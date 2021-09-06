@@ -3,6 +3,8 @@ import Table from 'react-bootstrap/Table';
 import DepositTable from '../../layout/DepositTable';
 import { API_PATH } from '../../Config';
 
+import { AppContext } from '../../../AppContext';
+
 import './styles/Bank.css';
 
 export default class Bank extends Component{
@@ -91,3 +93,4 @@ export default class Bank extends Component{
 		);
 	}
 }
+Bank.contextType = AppContext;

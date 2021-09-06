@@ -3,7 +3,10 @@ import Table from 'react-bootstrap/Table';
 import TableControl from '../../layout/TableControl';
 import AddExpenseDialog from '../../layout/AddExpenseDialog';
 import SearchBar from '../../layout/SearchBar';
+
 import { API_PATH } from '../../Config';
+import { AppContext } from '../../../AppContext';
+
 import './styles/ExpensePage.css';
 
 export default class ExpensePage extends Component {
@@ -50,8 +53,13 @@ export default class ExpensePage extends Component {
 			},
 			body: JSON.stringify(expense_body)
 		}).then(response => {
-			console.log(response);
-			this.fetchExpenseTableData(this.state.searchText);
+			if (Math.floor(response.status / 200) === 1) {
+				this.fetchExpenseTableData(this.state.searchText);
+				this.context.pushNotification('success', 'Expense Added', 'Successfully added expense', 4);
+			}
+			else {
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+			}
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -136,3 +144,4 @@ export default class ExpensePage extends Component {
 		);
 	}
 }
+ExpensePage.contextType = AppContext;
