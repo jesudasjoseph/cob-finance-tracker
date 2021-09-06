@@ -248,7 +248,7 @@ async function getMultipleUsersByBid(asker, company_id) {
 				return new data(403);
 		}
 		if (!res.rows.length) {
-			return new data(404, []);
+			return new data(200, []);
 		}
 		else {
 			return new data(200, res.rows);
