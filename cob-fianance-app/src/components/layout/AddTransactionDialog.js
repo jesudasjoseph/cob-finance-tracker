@@ -124,8 +124,6 @@ export default class AddTransactionDialog extends Component {
 									<InputGroup.Text>Product</InputGroup.Text>
 								</InputGroup.Prepend>
 								<FormControl required type='text' value={this.state.product} onChange={(e) => this.setState({product: e.target.value})}/>
-								<FormControl.Feedback type='invalid'>Looks Good!</FormControl.Feedback>
-								<FormControl.Feedback>Looks Good!</FormControl.Feedback>
 							</InputGroup>
 
 							<InputGroup className="mb-3">

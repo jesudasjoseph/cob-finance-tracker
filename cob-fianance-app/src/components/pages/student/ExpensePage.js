@@ -18,12 +18,8 @@ export default class ExpensePage extends Component {
 			searchText: ''
 		}
 		this.fetchExpenseTableData = this.fetchExpenseTableData.bind(this);
-
 		this.addOnClick = this.addOnClick.bind(this);
-
 		this.addExpenseDialogOnClose = this.addExpenseDialogOnClose.bind(this);
-		this.addExpenseDialogOnSubmit = this.addExpenseDialogOnSubmit.bind(this);
-
 		this.searchOnChange = this.searchOnChange.bind(this);
 	}
 
@@ -38,35 +34,11 @@ export default class ExpensePage extends Component {
 	addExpenseDialogOnClose(){
 		this.setState({showAddDialog: false});
 	}
-	addExpenseDialogOnSubmit(transactionObject){
-		this.setState({showAddDialog: false});
-		const expense_body = { expense:transactionObject };
 
-		fetch(API_PATH + '/expense', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(expense_body)
-		}).then(response => {
-			if (Math.floor(response.status / 200) === 1) {
-				this.fetchExpenseTableData(this.state.searchText);
-				this.context.pushNotification('success', 'Expense Added', 'Successfully added expense', 4);
-			}
-			else {
-				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-			}
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-	}
-
-	fetchExpenseTableData(searchParam = ''){
-		fetch(API_PATH + '/expense/byuid?start=0&end=50&search=' + searchParam, {
+	fetchExpenseTableData(searchText = ''){
+		if (searchText === '')
+			searchText = this.state.searchText;
+		fetch(API_PATH + '/expense/byuid?start=0&end=50&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -76,7 +48,6 @@ export default class ExpensePage extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
@@ -139,7 +110,7 @@ export default class ExpensePage extends Component {
 						<TableControl add addOnClick={this.addOnClick}/>
 					</div>
 				</div>
-				<AddExpenseDialog show={this.state.showAddDialog} handleClose={this.addExpenseDialogOnClose} handleSubmit={this.addExpenseDialogOnSubmit}/>
+				<AddExpenseDialog show={this.state.showAddDialog} onClose={this.addExpenseDialogOnClose} onSuccess={this.fetchExpenseTableData}/>
 			</>
 		);
 	}
