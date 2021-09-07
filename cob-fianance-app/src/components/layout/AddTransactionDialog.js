@@ -5,10 +5,13 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
+import { API_PATH } from '../Config';
+import { AppContext } from '../../AppContext';
+
 /*
 Props:
-handleClose()
-handleSubmit(userObject)
+onClose()
+onSuccess()
 show
 */
 
@@ -51,17 +54,39 @@ export default class AddTransactionDialog extends Component {
 			quantity: '',
 			price_per_unit:''
 		});
-		this.props.handleClose();
+		this.props.onClose();
 	}
 	handle_submit(e) {
 		e.preventDefault();
 
-		this.props.handleSubmit({customer:this.state.customer,
+		let transactionBody = {transaction:{customer:this.state.customer,
 		date:this.state.date,
 		product:this.state.product ,
 		payment_method:this.state.payment_method,
 		quantity:this.state.quantity,
-		price_per_unit:this.state.price_per_unit});
+		price_per_unit:this.state.price_per_unit}};
+
+		fetch(API_PATH + '/transaction', {
+			mode: 'cors',
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			},
+			body: JSON.stringify(transactionBody)
+		}).then(response => {
+			if (Math.floor(response.status / 200) === 1) {
+				this.props.onSuccess();
+				this.context.pushNotification('success', 'Transaction Added', 'Successfully added transaction', 4);
+			}
+			else {
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+			}
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 
 		this.setState({
 			customer: '',
@@ -71,6 +96,8 @@ export default class AddTransactionDialog extends Component {
 			quantity: '',
 			price_per_unit:''
 		});
+
+		this.props.onClose();
 	}
 
 	render() {
@@ -144,3 +171,4 @@ export default class AddTransactionDialog extends Component {
 		)
 	}
 }
+AddTransactionDialog.contextType = AppContext;
