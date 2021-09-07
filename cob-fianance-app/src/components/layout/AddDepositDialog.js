@@ -94,9 +94,7 @@ export default class AddDepositDialog extends Component {
 								<Form.Control as="select" value={this.state.user_id} onChange={(e) => this.setState({user_id: e.target.value})}>
 									{this.state.userList.map((user, index) => {
 										return(
-											<React.Fragment key={user.user_id}>
-												<option value={user.user_id}>{user.user_id}</option>
-											</React.Fragment>
+											<option key={user.user_id} value={user.user_id}>{user.user_id}</option>
 										);
 									})}
 								</Form.Control>

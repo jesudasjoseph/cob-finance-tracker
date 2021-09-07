@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -17,7 +17,8 @@ export default class AddCompanyDialogButton extends Component {
 		this.state = {
 			company_id: '',
 			section: '',
-			instructor: 'default'
+			instructor: '',
+			instructorList: []
 		};
 
 		this.close_dialog = this.close_dialog.bind(this);
@@ -25,7 +26,8 @@ export default class AddCompanyDialogButton extends Component {
 	}
 
 	componentDidMount(){
-		fetch(API_PATH + '/user/asker', {
+		this.setState({selectedInstructor: window.localStorage.getItem('user_id')});
+		fetch(API_PATH + '/user/instructors', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -35,11 +37,9 @@ export default class AddCompanyDialogButton extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			},
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
-			console.log('Success:', data)
-			this.setState({instructor:data.user_id});
+			this.setState({instructorList:data});
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
@@ -84,7 +84,15 @@ export default class AddCompanyDialogButton extends Component {
 								<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
 
 								<Form.Label>Instructor</Form.Label>
-								<Form.Control type="text" value={this.state.instructor} onChange={(e) => this.setState({instructor: e.target.value})} />
+								<Form.Control as="select" type="text" value={this.state.instructor} onChange={(e) => this.setState({instructor: e.target.value})}>
+									{
+										this.state.instructorList.map((instructor, index) => {
+											return(
+												<option key={instructor.user_id} value={instructor.user_id}>{instructor.first_name} {instructor.last_name}</option>
+											);
+										})
+									}
+								</Form.Control>
 							</Form.Group>
 						</Form>
 					</Modal.Body>

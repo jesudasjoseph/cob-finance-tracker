@@ -114,7 +114,7 @@ export default class AddUserDialog extends Component {
 					<Modal.Body>
 						<Form>
 							<Form.Group>
-								<Form.Label>ONID:</Form.Label>
+								<Form.Label>User ID (ONID):</Form.Label>
 								<Form.Control type="text" value={this.state.user_id}  onChange={(e) => this.setState({user_id: e.target.value})} />
 
 								<Form.Label>First name:</Form.Label>
@@ -131,9 +131,7 @@ export default class AddUserDialog extends Component {
 									{
 										this.state.comapanyNameList.map((company, index) => {
 											return(
-												<>
-													<option key={company.company_id} value={company.company_id}>{company.company_id}</option>
-												</>
+												<option key={company.company_id} value={company.company_id}>{company.company_id}</option>
 											);
 										})
 									}
