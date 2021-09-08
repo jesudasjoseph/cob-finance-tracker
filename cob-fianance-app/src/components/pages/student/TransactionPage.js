@@ -17,13 +17,10 @@ export default class TransactionPage extends Component {
 			showAddTransactionDialog: false,
 			searchText: ''
 		}
+
 		this.fetchTransactionTableData = this.fetchTransactionTableData.bind(this);
-
 		this.addOnClick = this.addOnClick.bind(this);
-
 		this.addTransactionDialogOnClose = this.addTransactionDialogOnClose.bind(this);
-		this.AddTransactionDialogOnSubmit = this.AddTransactionDialogOnSubmit.bind(this);
-
 		this.searchOnChange = this.searchOnChange.bind(this);
 	}
 
@@ -32,6 +29,8 @@ export default class TransactionPage extends Component {
 	}
 
 	fetchTransactionTableData(searchText = ''){
+		if (searchText === '')
+			searchText = this.state.searchText;
 		fetch(API_PATH + '/transaction/byuid?start=0&end=50&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
@@ -42,7 +41,6 @@ export default class TransactionPage extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
 			this.setState({transactionTableData:data});
@@ -54,35 +52,7 @@ export default class TransactionPage extends Component {
 	addOnClick(){
 		this.setState({showAddTransactionDialog: true});
 	}
-
 	addTransactionDialogOnClose(){
-		this.setState({showAddTransactionDialog: false});
-	}
-	AddTransactionDialogOnSubmit(transactionObject){
-		const transactionBody = {transaction:transactionObject};
-
-		fetch(API_PATH + '/transaction', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(transactionBody)
-		}).then(response => {
-			if (Math.floor(response.status / 200) === 1) {
-				this.fetchTransactionTableData(this.state.searchText);
-				this.context.pushNotification('success', 'Transaction Added', 'Successfully added transaction', 4);
-			}
-			else {
-				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-			}
-		}).catch((error) => {
-			console.error('Error:', error);
-		});
-
 		this.setState({showAddTransactionDialog: false});
 	}
 
@@ -134,7 +104,7 @@ export default class TransactionPage extends Component {
 						<TableControl add addOnClick={this.addOnClick}/>
 					</div>
 				</div>
-				<AddTransactionDialog show={this.state.showAddTransactionDialog} handleClose={this.addTransactionDialogOnClose} handleSubmit={this.AddTransactionDialogOnSubmit}/>
+				<AddTransactionDialog show={this.state.showAddTransactionDialog} onClose={this.addTransactionDialogOnClose} onSuccess={this.fetchTransactionTableData}/>
 			</>
 		);
 	}

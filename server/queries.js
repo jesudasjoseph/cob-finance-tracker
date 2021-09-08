@@ -223,7 +223,7 @@ async function getUserByUid(asker, user_id) {
 	}
 }
 async function getUserByAsker(asker) {
-	return new data(200, {user_id:asker.user_id});
+	return new data(200, {uid:asker.uid});
 }
 //Permissions Instructor, Admin
 async function getMultipleUsersByBid(asker, company_id) {
@@ -248,7 +248,7 @@ async function getMultipleUsersByBid(asker, company_id) {
 				return new data(403);
 		}
 		if (!res.rows.length) {
-			return new data(404, []);
+			return new data(200, []);
 		}
 		else {
 			return new data(200, res.rows);
@@ -316,6 +316,28 @@ async function getMultipleUsers(asker, start, end, sort, searchText) {
 		}
 		else {
 			return new data(403);
+		}
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+	}
+}
+async function getInstructors() {
+	const query = {
+		text: 'SELECT * FROM user_table WHERE role>0'
+	}
+	let res;
+
+	try {
+		res = await pool.query(query);
+		if (!res.rows.length) {
+			return new data(200, []);
+		}
+		else {
+			return new data(200, res.rows);
 		}
 	}
 	catch (e) {
@@ -1454,6 +1476,7 @@ exports.getUserByUid = getUserByUid;
 exports.getUserByAsker = getUserByAsker;
 exports.getMultipleUsersByBid = getMultipleUsersByBid;
 exports.getMultipleUsers = getMultipleUsers;
+exports.getInstructors = getInstructors;
 exports.modifyUser = modifyUser;
 exports.deleteUserByUid = deleteUserByUid;
 exports.addUserToBusiness = addUserToBusiness;

@@ -12,6 +12,7 @@ export default class Login extends React.Component {
 			} else {
 				window.localStorage.removeItem('jwt');
 				window.localStorage.removeItem('role');
+				window.localStorage.removeItem('user_id');
 				window.location.href = '/saml/auth';
 			}
 		}

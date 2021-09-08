@@ -16,7 +16,7 @@ export default class CompanyManagementPage extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			businessTable: [],
+			companyTable: [],
 			tableMaxRows: 18,
 			tableInitialIndex: 0,
 			selectedRow: -1,
@@ -35,16 +35,15 @@ export default class CompanyManagementPage extends Component {
 			searchText: ''
 		}
 
-		this.fetchBusinessData = this.fetchBusinessData.bind(this);
-		this.getBusinessTotals = this.getBusinessTotals.bind(this);
+		this.fetchCompanyData = this.fetchCompanyData.bind(this);
+		this.getCompanyTotals = this.getCompanyTotals.bind(this);
 
 		this.tableHandleRowClick = this.tableHandleRowClick.bind(this);
 
 		this.addOnClick = this.addOnClick.bind(this);
 		this.deleteOnClick = this.deleteOnClick.bind(this);
 
-		this.addDialogHandleSubmit = this.addDialogHandleSubmit.bind(this);
-		this.addDialogHandleClose = this.addDialogHandleClose.bind(this);
+		this.addDialogOnClose = this.addDialogOnClose.bind(this);
 
 		this.onSortOptionChange = this.onSortOptionChange.bind(this);
 
@@ -57,13 +56,13 @@ export default class CompanyManagementPage extends Component {
 }
 
 	componentDidMount(){
-		this.fetchBusinessData('name');
+		this.fetchCompanyData('name');
 	}
 
-	fetchBusinessData(sortParam, start, searchParam){
+	fetchCompanyData(sortParam = null, start = null, searchParam = undefined){
 
 		let URL = API_PATH + '/business?';
-		if (start != null){
+		if (start){
 			URL = URL + 'start=' + start + '&end=' + this.state.tableMaxRows;
 		}
 		else {
@@ -76,12 +75,14 @@ export default class CompanyManagementPage extends Component {
 			URL = URL + '&sort=' + this.state.sortOption;
 		}
 
-		if (searchParam === undefined){
-			URL = URL + '&search=' + this.state.searchText;
-		}
-		else {
+		if (searchParam !== undefined){
 			URL = URL + '&search=' + searchParam;
 		}
+		else {
+			URL = URL + '&search=' + this.state.searchText;
+		}
+
+		console.log(URL);
 
 		fetch(URL, {
 			mode: 'cors',
@@ -101,14 +102,14 @@ export default class CompanyManagementPage extends Component {
 			else {
 				this.setState({nextDisabled: false});
 			}
-			this.setState({ businessTable:data });
-			this.getBusinessTotals();
+			this.setState({ companyTable:data });
+			this.getCompanyTotals();
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
 	}
 
-	getBusinessTotals(){
+	getCompanyTotals(){
 		this.setState({
 			revenueTotal:0.0,
 			quantityTotal:0,
@@ -117,14 +118,14 @@ export default class CompanyManagementPage extends Component {
 			bankTotal:0.0,
 			squareTotal:0.0
 		});
-		for (let i = 0; i < this.state.businessTable.length; i++){
+		for (let i = 0; i < this.state.companyTable.length; i++){
 			this.setState({
-				revenueTotal:this.state.revenueTotal+parseFloat(this.state.businessTable[i].deposit_total),
-				quantityTotal:this.state.quantityTotal+parseFloat(this.state.businessTable[i].product_count),
-				expenseTotal:this.state.expenseTotal+parseFloat(this.state.businessTable[i].expense_total),
-				profitTotal:this.state.profitTotal+parseFloat(this.state.businessTable[i].profit),
-				bankTotal:this.state.bankTotal+parseFloat(this.state.businessTable[i].deposit_total),
-				squareTotal:this.state.squareTotal+parseFloat(this.state.businessTable[i].square_total)
+				revenueTotal:this.state.revenueTotal+parseFloat(this.state.companyTable[i].deposit_total),
+				quantityTotal:this.state.quantityTotal+parseFloat(this.state.companyTable[i].product_count),
+				expenseTotal:this.state.expenseTotal+parseFloat(this.state.companyTable[i].expense_total),
+				profitTotal:this.state.profitTotal+parseFloat(this.state.companyTable[i].profit),
+				bankTotal:this.state.bankTotal+parseFloat(this.state.companyTable[i].deposit_total),
+				squareTotal:this.state.squareTotal+parseFloat(this.state.companyTable[i].square_total)
 			});
 		}
 		this.setState({
@@ -149,8 +150,12 @@ export default class CompanyManagementPage extends Component {
 	addOnClick(){
 		this.setState({showAddCompanyDialog: true});
 	}
+	addDialogOnClose(){
+		this.setState({showAddCompanyDialog: false});
+	}
+
 	deleteOnClick(){
-		fetch(API_PATH + '/business/bybid?bid=' + this.state.businessTable[this.state.selectedRow].company_id, {
+		fetch(API_PATH + '/business/bybid?bid=' + this.state.companyTable[this.state.selectedRow].company_id, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
@@ -161,13 +166,13 @@ export default class CompanyManagementPage extends Component {
 			}
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1) {
-				if (this.state.businessTable.length === 1){
+				if (this.state.companyTable.length === 1){
 					this.setState({selectedRow: -1, deleteDisabled: true});
 				}
-				else if (this.state.selectedRow === this.state.businessTable.length - 1){
-					this.setState({selectedRow: this.state.businessTable.length - 2});
+				else if (this.state.selectedRow === this.state.companyTable.length - 1){
+					this.setState({selectedRow: this.state.companyTable.length - 2});
 				}
-				this.fetchBusinessData();
+				this.fetchCompanyData();
 				this.context.pushNotification('success', 'Company Deleted', 'Successfuly deleted company!', 4);
 			}
 			else {
@@ -179,58 +184,29 @@ export default class CompanyManagementPage extends Component {
 		});
 	}
 
-	addDialogHandleSubmit(businessObject){
-		const businessBody = {business:businessObject}
-		fetch(API_PATH + '/business', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(businessBody)
-		}).then(response => {
-			if (Math.floor(response.status / 200) === 1){
-				this.context.pushNotification('success', 'Company Added', 'Successfuly added company!', 4);
-			}
-			else{
-				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-			}
-			this.fetchBusinessData(this.state.sortOption);
-		}).catch((error) => {
-			this.context.pushNotification('error', 'App Error', error.toString(), 8);
-		});
-		this.setState({showAddCompanyDialog: false});
-	}
-	addDialogHandleClose(){
-		this.setState({showAddCompanyDialog: false});
-	}
-
 	//Sort Selection Functions
 	onSortOptionChange(option){
 		switch(option){
 			case 'Instructor':
 				this.setState({sortOption: 'instructor'});
-				this.fetchBusinessData('instructor');
+				this.fetchCompanyData('instructor');
 				break;
 			case 'Section':
 				this.setState({sortOption: 'section'});
-				this.fetchBusinessData('section');
+				this.fetchCompanyData('section');
 				break;
 			case 'Name':
 				this.setState({sortOption: 'name'});
-				this.fetchBusinessData('name');
+				this.fetchCompanyData('name');
 				break;
 			default:
-				this.fetchBusinessData();
+				this.fetchCompanyData();
 		}
 	}
 
 	//Navigate to Business Overview Page
 	overviewBusinessOnClick(){
-		this.props.history.push("/instructor/dashboard/" + this.state.businessTable[this.state.selectedRow].company_id);
+		this.props.history.push("/instructor/dashboard/" + this.state.companyTable[this.state.selectedRow].company_id);
 	}
 
 	//Paging
@@ -251,8 +227,8 @@ export default class CompanyManagementPage extends Component {
 	}
 
 	searchOnChange(text){
-		this.setState({searchText: text, selectedRow: -1});
-		this.fetchBusinessData(null, null, text);
+		this.setState({searchText: text, selectedRow: -1, deleteDisabled: true});
+		this.fetchCompanyData(null, null, text);
 	}
 
 	render() {
@@ -280,7 +256,7 @@ export default class CompanyManagementPage extends Component {
 										<th>Sales Goals</th>
 									</tr>
 									<tr className='table-secondary-header'>
-										<th>Total: {this.state.businessTable.length}</th>
+										<th>Total: {this.state.companyTable.length}</th>
 										<th></th>
 										<th></th>
 										<th>{this.state.quantityTotal}</th>
@@ -294,7 +270,7 @@ export default class CompanyManagementPage extends Component {
 								</thead>
 								<tbody>
 									{
-										this.state.businessTable.map((business, index) => {
+										this.state.companyTable.map((business, index) => {
 										const {instructor,
 													section,
 													transaction_total,
@@ -351,7 +327,7 @@ export default class CompanyManagementPage extends Component {
 						</div>
 					</div>
 				</div>
-				<AddCompanyDialog show={this.state.showAddCompanyDialog} handleSubmit={this.addDialogHandleSubmit} handleClose={this.addDialogHandleClose}/>
+				<AddCompanyDialog show={this.state.showAddCompanyDialog} onClose={this.addDialogOnClose} onSuccess={this.fetchCompanyData}/>
 			</>
 		);
 	}
