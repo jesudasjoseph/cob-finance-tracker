@@ -30,7 +30,6 @@ export default class ExpensePage extends Component {
 	addOnClick(){
 		this.setState({showAddDialog: true});
 	}
-
 	addExpenseDialogOnClose(){
 		this.setState({showAddDialog: false});
 	}
