@@ -2,12 +2,16 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
+
 import { API_PATH } from '../Config';
+import { AppContext } from '../../AppContext';
 
 /*
 Props:
-handleClose()
-handleSubmit(userObject)
+onClose()
+onSuccess()
 show
 */
 
@@ -55,7 +59,6 @@ export default class AddUserDialog extends Component {
 				return [];
 			}
 		}).then((data) => {
-			console.log(data);
 			this.setState({comapanyNameList:data, company_id:data[0].company_id});
 		}).catch((error) => {
 			console.log(error);
@@ -71,7 +74,7 @@ export default class AddUserDialog extends Component {
 			section: '',
 			role: 0
 		});
-		this.props.handleClose();
+		this.props.onClose();
 	}
 
 	//Removes Spaces from input text and returns string without spaces
@@ -89,9 +92,53 @@ export default class AddUserDialog extends Component {
 		return text;
 	}
 
-	handle_submit() {
-		console.log(this.state.company_id);
-		this.props.handleSubmit({company_id: this.state.company_id, first_name: this.state.first_name, last_name: this.state.last_name, user_id: this.removeSpaces(this.state.user_id), section: this.state.section, role: this.state.role});
+	handle_submit(e) {
+		e.preventDefault();
+
+		const userBody = {user: {company_id: this.state.company_id, first_name: this.state.first_name, last_name: this.state.last_name, user_id: this.removeSpaces(this.state.user_id), section: this.state.section, role: this.state.role}};
+		const addUserToBusinessBody = {user_id: this.state.user_id, company_id: this.state.company_id};
+		fetch(API_PATH + '/user', {
+			mode: 'cors',
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			},
+			body: JSON.stringify(userBody)
+		}).then(response => {
+			if (Math.floor(response.status / 200) === 1){
+				this.context.pushNotification('success', 'Added', 'Successfully added new user', 4);
+				fetch(API_PATH + '/user/addtobusiness', {
+					mode: 'cors',
+					method: 'POST',
+					credentials: 'same-origin',
+					headers: {
+						'Accept': 'application/json',
+						'Content-type': 'application/json',
+						'Authorization': window.localStorage.getItem('jwt')
+					},
+					body: JSON.stringify(addUserToBusinessBody)
+				}).then(response => {
+					if (Math.floor(response.status / 200) === 1){
+						this.context.pushNotification('success', 'Added', 'Successfully added user to company', 4);
+					}
+					else{
+						this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+					}
+					this.props.onSuccess();
+				}).catch((error) => {
+					this.context.pushNotification('fail', 'App Error', error.toString(), 0);
+				});
+			}
+			else {
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+			}
+		}).catch((error) => {
+			this.context.pushNotification('error', 'App Error', error.toString(), 8);
+		});
+
 		this.setState({
 			company_id: '',
 			first_name: '',
@@ -100,6 +147,7 @@ export default class AddUserDialog extends Component {
 			section: '',
 			role: 0
 		});
+		this.props.onClose();
 	}
 
 	render() {
@@ -111,23 +159,44 @@ export default class AddUserDialog extends Component {
 							Add User
 						</Modal.Title>
 					</Modal.Header>
-					<Modal.Body>
-						<Form>
-							<Form.Group>
-								<Form.Label>User ID (ONID):</Form.Label>
-								<Form.Control type="text" value={this.state.user_id}  onChange={(e) => this.setState({user_id: e.target.value})} />
+					<Form onSubmit={this.handle_submit}>
+						<Modal.Body>
 
-								<Form.Label>First name:</Form.Label>
-								<Form.Control type="text" value={this.state.first_name} onChange={(e) => this.setState({first_name: e.target.value})} />
+							<label>User ID</label>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>ONID</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl required value={this.state.user_id}  onChange={(e) => this.setState({user_id: e.target.value})} />
+							</InputGroup>
 
-								<Form.Label>Last name:</Form.Label>
-								<Form.Control type="text" value={this.state.last_name} onChange={(e) => this.setState({last_name: e.target.value})} />
+							<label>Name</label>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>First</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl required value={this.state.first_name} onChange={(e) => this.setState({first_name: e.target.value})} />
+							</InputGroup>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>Last</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl required value={this.state.last_name} onChange={(e) => this.setState({last_name: e.target.value})} />
+							</InputGroup>
 
-								<Form.Label>Section:</Form.Label>
-								<Form.Control type="text" value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
+							<label>Other Info</label>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>Section</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl value={this.state.section} onChange={(e) => this.setState({section: e.target.value})} />
+							</InputGroup>
 
-								<Form.Label>Company:</Form.Label>
-								<Form.Control as="select" type="text" value={this.state.company_id} onChange={(e) => this.setState({company_id: e.target.value})}>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>Company</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl as="select" type="text" value={this.state.company_id} onChange={(e) => this.setState({company_id: e.target.value})}>
 									{
 										this.state.comapanyNameList.map((company, index) => {
 											return(
@@ -135,22 +204,28 @@ export default class AddUserDialog extends Component {
 											);
 										})
 									}
-								</Form.Control>
+								</FormControl>
+							</InputGroup>
 
-								<Form.Label>Role:</Form.Label>
-								<Form.Control as="select" type="text" value={this.state.role} onChange={(e) => this.setState({role: e.target.value})}>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>Role</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl as="select" type="text" value={this.state.role} onChange={(e) => this.setState({role: e.target.value})}>
 									<option value="0">Student</option>
 									<option value="1">Instructor</option>
 									<option value="2">Admin</option>
-								</Form.Control>
-							</Form.Group>
-						</Form>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button variant="primary" onClick={this.handle_submit}>Add User</Button>
-					</Modal.Footer>
+								</FormControl>
+							</InputGroup>
+
+						</Modal.Body>
+						<Modal.Footer>
+							<Button variant="primary" type="submit">Add User</Button>
+						</Modal.Footer>
+					</Form>
 				</Modal>
 			</>
 		)
 	}
 }
+AddUserDialog.contextType = AppContext;
