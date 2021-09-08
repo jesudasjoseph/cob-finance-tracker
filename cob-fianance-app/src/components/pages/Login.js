@@ -24,6 +24,7 @@ export default class Login extends React.Component {
 			} else {
 				window.localStorage.removeItem('jwt');
 				window.localStorage.removeItem('role');
+				window.localStorage.removeItem('user_id');
 			}
 		}
 	}
@@ -53,11 +54,13 @@ export default class Login extends React.Component {
 						this.setState({role: data.role});
 						window.localStorage.setItem('jwt',"Bearer " + data.token);
 						window.localStorage.setItem('role', data.role);
+						window.localStorage.setItem('user_id', data.user_id);
 						this.props.history.push('/instructor/dashboard');
 					} else if (data.role === 0){
 						this.setState({role: data.role});
 						window.localStorage.setItem('jwt',"Bearer " + data.token);
 						window.localStorage.setItem('role', data.role);
+						window.localStorage.setItem('user_id', data.user_id);
 						this.props.history.push('/student/dashboard');
 					} else {
 						alert("No role specified!");

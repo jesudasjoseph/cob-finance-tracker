@@ -62,7 +62,7 @@ async function getToken(uid, ip){
 	if (code == 200) {
 		let ses = new session(uid, data, ip)
 		addSession(ses);
-		return new packet(code, {token:generateToken(ses), role:data});
+		return new packet(code, {token:generateToken(ses), role:data, user_id:uid});
 	}
 	else {
 		return new packet(code);

@@ -41,11 +41,8 @@ export default class UserManagement extends Component {
 		this.editOnClick = this.editOnClick.bind(this);
 		this.deleteOnClick = this.deleteOnClick.bind(this);
 
-		this.addDialogHandleSubmit = this.addDialogHandleSubmit.bind(this);
-		this.addDialogHandleClose = this.addDialogHandleClose.bind(this);
-
-		this.editDialogHandleSubmit = this.editDialogHandleSubmit.bind(this);
-		this.editDialogHandleClose = this.editDialogHandleClose.bind(this);
+		this.addDialogOnClose = this.addDialogOnClose.bind(this);
+		this.editDialogOnClose = this.editDialogOnClose.bind(this);
 
 		this.importDialogHandleSubmit = this.importDialogHandleSubmit.bind(this);
 		this.importDialogHandleClose = this.importDialogHandleClose.bind(this);
@@ -62,9 +59,9 @@ export default class UserManagement extends Component {
 		this.fetchTableData();
 	}
 
-	fetchTableData(sortParam, start, searchParam){
+	fetchTableData(sortParam = null, start = null, searchParam = undefined){
 		let URL = API_PATH + '/user?';
-		if (start != null){
+		if (start){
 			URL = URL + 'start=' + start + '&end=' + this.state.tableMaxRows;
 		}
 		else {
@@ -77,11 +74,11 @@ export default class UserManagement extends Component {
 			URL = URL + '&sort=' + this.state.sortOption;
 		}
 
-		if (searchParam === undefined){
-			URL = URL + '&search=' + this.state.searchText;
+		if (searchParam !== undefined){
+			URL = URL + '&search=' + searchParam;
 		}
 		else {
-			URL = URL + '&search=' + searchParam;
+			URL = URL + '&search=' + this.state.searchText;
 		}
 
 		fetch(URL, {
@@ -160,82 +157,12 @@ export default class UserManagement extends Component {
 	}
 
 	//Add Dialog Functions
-	addDialogHandleSubmit(userObject){
-		const userBody = {user: {user_id: userObject.user_id, company_id: userObject.company_id, first_name: userObject.first_name, last_name: userObject.last_name, section: userObject.section, role: userObject.role}}
-		const addUserToBusinessBody = {user_id: userObject.user_id, company_id: userObject.company_id};
-		fetch(API_PATH + '/user', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(userBody)
-		}).then(response => {
-			if (Math.floor(response.status / 200) === 1){
-				this.context.pushNotification('success', 'Added', 'Successfully added new user', 4);
-				fetch(API_PATH + '/user/addtobusiness', {
-					mode: 'cors',
-					method: 'POST',
-					credentials: 'same-origin',
-					headers: {
-						'Accept': 'application/json',
-						'Content-type': 'application/json',
-						'Authorization': window.localStorage.getItem('jwt')
-					},
-					body: JSON.stringify(addUserToBusinessBody)
-				}).then(response => {
-					if (Math.floor(response.status / 200) === 1){
-						this.context.pushNotification('success', 'Added', 'Successfully added user to company', 4);
-					}
-					else{
-						this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-					}
-					this.fetchTableData(this.state.sortOption);
-				}).catch((error) => {
-					this.context.pushNotification('fail', 'App Error', error.toString(), 0);
-				});
-			}
-			else {
-				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-			}
-		}).catch((error) => {
-			this.context.pushNotification('error', 'App Error', error.toString(), 8);
-		});
-		this.setState({showAddUserDialog: false})
-	}
-	addDialogHandleClose(){
+	addDialogOnClose(){
 		this.setState({showAddUserDialog: false})
 	}
 
 	//Edit Dialog Functions
-	editDialogHandleSubmit(dataObject){
-		fetch(API_PATH + '/user/addtobusiness', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(dataObject)
-		}).then(response => {
-			if (Math.floor(response.status / 200) === 1){
-				this.fetchTableData();
-				this.context.pushNotification('success', 'User Modified', 'Successfully modified user.', 4);
-			}
-			else {
-				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-			}
-		}).catch((error) => {
-			console.error('error:', error);
-		});
-		this.setState({showEditUserDialog: false});
-	}
-	editDialogHandleClose(){
+	editDialogOnClose(){
 		this.setState({showEditUserDialog: false});
 	}
 
@@ -372,9 +299,9 @@ export default class UserManagement extends Component {
 						</div>
 					</div>
 				</div>
-				<AddUserDialog show={this.state.showAddUserDialog} handleSubmit={this.addDialogHandleSubmit} handleClose={this.addDialogHandleClose}/>
+				<AddUserDialog show={this.state.showAddUserDialog} onClose={this.addDialogOnClose} onSuccess={this.fetchTableData}/>
 
-				<EditUserDialog show={this.state.showEditUserDialog} key={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].company_id+this.state.tableRows[this.state.tableSelectedRow].user_id} company_id={ (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].company_id} user_id={ (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].user_id} handleSubmit={this.editDialogHandleSubmit} handleClose={this.editDialogHandleClose}/>
+				<EditUserDialog show={this.state.showEditUserDialog} key={(this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].company_id+this.state.tableRows[this.state.tableSelectedRow].user_id} company_id={ (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].company_id} user_id={ (this.state.tableSelectedRow === -1) ? -1 : this.state.tableRows[this.state.tableSelectedRow].user_id} onClose={this.editDialogOnClose} onSuccess={this.fetchTableData}/>
 
 				<ImportUserDialog show={this.state.showImportUserDialog} handleSubmit={this.importDialogHandleSubmit} handleClose={this.importDialogHandleClose}/>
 			</>
