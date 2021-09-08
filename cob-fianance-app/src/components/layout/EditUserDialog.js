@@ -8,6 +8,13 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { API_PATH } from '../Config';
 import { AppContext } from '../../AppContext';
 
+/*
+Props:
+onClose()
+onSuccess()
+show
+*/
+
 export default class EditUserDialog extends Component {
 	constructor(props){
 		super(props);

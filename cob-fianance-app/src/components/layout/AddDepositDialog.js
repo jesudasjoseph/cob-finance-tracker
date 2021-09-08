@@ -2,7 +2,18 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
+
 import { API_PATH } from '../Config';
+import { AppContext } from '../../AppContext';
+
+/*
+Props:
+onClose()
+onSuccess()
+show
+*/
 
 export default class AddDepositDialog extends Component {
 	constructor(props){
@@ -59,20 +70,42 @@ export default class AddDepositDialog extends Component {
 	close_dialog() {
 		this.setState({
 			value: '',
-			description: '',
-			user_id: ''
+			description: ''
 		});
-		this.props.handleClose();
+		this.props.onClose();
 	}
 	handle_submit(e) {
 		e.preventDefault();
 
-		this.props.handleSubmit({company_id:this.props.company_id, value:this.state.value, description:this.state.description, user_id:this.state.user_id});
+		const depositBody = {deposit: {company_id:this.props.company_id, value:this.state.value, description:this.state.description, user_id:this.state.user_id}};
+		fetch(API_PATH + '/deposit', {
+			mode: 'cors',
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-type': 'application/json',
+				'Authorization': window.localStorage.getItem('jwt')
+			},
+			body: JSON.stringify(depositBody)
+		}).then((response) => {
+			if (Math.floor(response.status / 200) === 1){
+				this.context.pushNotification('success', 'Deposite Added', 'Successfully added deposit!', 4);
+				this.props.onSuccess();
+			}
+			else{
+				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+			}
+		}).catch((error) => {
+			console.error('Error:', error);
+			this.context.pushNotification('error', 'App Error', error.toString(), 8);
+		});
+
 		this.setState({
 			value: '',
-			description: '',
-			user_id: ''
+			description: ''
 		});
+		this.props.onClose();
 	}
 
 	render() {
@@ -84,31 +117,44 @@ export default class AddDepositDialog extends Component {
 							Add Deposit
 						</Modal.Title>
 					</Modal.Header>
-					<Modal.Body>
-						<Form>
-							<Form.Group>
-								<Form.Label>Amount</Form.Label>
-								<Form.Control type="number" value={this.state.value}  onChange={(e) => this.setState({value: e.target.value})} />
+					<Form onSubmit={this.handle_submit}>
+						<Modal.Body>
 
-								<Form.Label>Student ONID</Form.Label>
-								<Form.Control as="select" value={this.state.user_id} onChange={(e) => this.setState({user_id: e.target.value})}>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>$</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl required type="number" value={this.state.value}  onChange={(e) => this.setState({value: e.target.value})} />
+							</InputGroup>
+
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>ONID</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl as="select" value={this.state.user_id} onChange={(e) => this.setState({user_id: e.target.value})}>
 									{this.state.userList.map((user, index) => {
 										return(
 											<option key={user.user_id} value={user.user_id}>{user.user_id}</option>
 										);
 									})}
-								</Form.Control>
+								</FormControl>
+							</InputGroup>
 
-								<Form.Label>Description</Form.Label>
-								<Form.Control type="text" value={this.state.description} onChange={(e) => this.setState({description: e.target.value})} />
-							</Form.Group>
-						</Form>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text>Note</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl value={this.state.description} onChange={(e) => this.setState({description: e.target.value})} />
+							</InputGroup>
+
+						</Modal.Body>
 						<Modal.Footer>
-							<Button variant="primary" type="submit" onClick={this.handle_submit}>Add</Button>
+							<Button variant="primary" type="submit">Add</Button>
 						</Modal.Footer>
-					</Modal.Body>
+					</Form>
 				</Modal>
 			</>
 		)
 	}
 }
+AddDepositDialog.contextType = AppContext;

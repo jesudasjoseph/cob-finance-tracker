@@ -24,8 +24,7 @@ export default class DepositTable extends PureComponent{
 		this.fetchDepositData = this.fetchDepositData.bind(this);
 		this.addOnClick = this.addOnClick.bind(this);
 
-		this.handleSubmitDeposit = this.handleSubmitDeposit.bind(this);
-		this.handleCloseDeposit = this.handleCloseDeposit.bind(this);
+		this.AddDepositDialogOnClose = this.AddDepositDialogOnClose.bind(this);
 
 		this.searchOnChange = this.searchOnChange.bind(this);
 	}
@@ -67,34 +66,7 @@ export default class DepositTable extends PureComponent{
 	addOnClick() {
 		this.setState({showAddDepositDialog: true});
 	}
-
-	handleSubmitDeposit(depositObject) {
-		this.setState({showAddDepositDialog: false});
-		const depositBody = {deposit: depositObject}
-		fetch(API_PATH + '/deposit', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(depositBody)
-		}).then((response) => {
-			if (Math.floor(response.status / 200) === 1){
-				this.context.pushNotification('success', 'Deposite Added', 'Successfully added deposit!', 4);
-				this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, this.state.searchText);
-			}
-			else{
-				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-			}
-		}).catch((error) => {
-			console.error('Error:', error);
-			this.context.pushNotification('error', 'App Error', error.toString(), 8);
-		});
-	}
-	handleCloseDeposit() {
+	AddDepositDialogOnClose() {
 		this.setState({showAddDepositDialog: false});
 	}
 
@@ -146,7 +118,7 @@ export default class DepositTable extends PureComponent{
 							<TableControl add addDisabled={addDisabled} addOnClick={this.addOnClick}/>
 						</div>
 					</div>
-					<AddDepositDialog company_id={this.props.company_id} show={this.state.showAddDepositDialog} handleSubmit={this.handleSubmitDeposit} handleClose={this.handleCloseDeposit}/>
+					<AddDepositDialog company_id={this.props.company_id} show={this.state.showAddDepositDialog} onSuccess={() => this.fetchDepositData(this.props.company_id, this.state.tablePageIndex, this.state.searchText)} onClose={this.AddDepositDialogOnClose}/>
 				</>
 			);
 		}
