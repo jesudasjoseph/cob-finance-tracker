@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { API_PATH } from '../Config';
 import * as XLSX from 'xlsx';
 
 export default class ImportUserDialog extends Component {
@@ -28,7 +27,7 @@ export default class ImportUserDialog extends Component {
 	adduser(user_id, first_name, last_name, section, company_id) {
 		const user_body = {user:{user_id: user_id, first_name: first_name, last_name: last_name, role: 0, section: section}}
 		const addUserToBusinessBody = {user_id: user_id, company_id:company_id};
-		fetch(API_PATH + '/user', {
+		fetch(process.env.REACT_APP_API_PATH + '/user', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -40,7 +39,7 @@ export default class ImportUserDialog extends Component {
 			body: JSON.stringify(user_body)
 		}).then(response => {
 			console.log(response);
-			fetch(API_PATH + '/user/addtobusiness', {
+			fetch(process.env.REACT_APP_API_PATH + '/user/addtobusiness', {
 				mode: 'cors',
 				method: 'POST',
 				credentials: 'same-origin',

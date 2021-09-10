@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import ProfitProgress from '../../layout/ProfitProgress';
 import ExpenseProgress from '../../layout/ExpenseProgress';
 import BankProgress from '../../layout/BankProgress';
-import { API_PATH } from '../../Config';
 
 export class Dashboard extends Component {
 	constructor(props){
@@ -18,7 +17,7 @@ export class Dashboard extends Component {
 	}
 
 	fetchBusinessData(){
-		fetch(API_PATH + '/business/byuid', {
+		fetch(process.env.REACT_APP_API_PATH + '/business/byuid', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

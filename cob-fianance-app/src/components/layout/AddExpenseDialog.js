@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { API_PATH } from '../Config';
 import { AppContext } from '../../AppContext';
 
 /*
@@ -73,7 +72,7 @@ export default class AddExpenseDialog extends Component {
 			description:this.state.description
 		}};
 
-		fetch(API_PATH + '/expense', {
+		fetch(process.env.REACT_APP_API_PATH + '/expense', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

@@ -4,7 +4,6 @@ import AddTransactionDialog from '../../layout/AddTransactionDialog';
 import TableControl from '../../layout/TableControl';
 import SearchBar from '../../layout/SearchBar';
 
-import { API_PATH } from '../../Config';
 import { AppContext } from '../../../AppContext';
 
 import './styles/TransactionPage.css';
@@ -31,7 +30,7 @@ export default class TransactionPage extends Component {
 	fetchTransactionTableData(searchText = ''){
 		if (searchText === '')
 			searchText = this.state.searchText;
-		fetch(API_PATH + '/transaction/byuid?start=0&end=50&search=' + searchText, {
+		fetch(process.env.REACT_APP_API_PATH + '/transaction/byuid?start=0&end=50&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

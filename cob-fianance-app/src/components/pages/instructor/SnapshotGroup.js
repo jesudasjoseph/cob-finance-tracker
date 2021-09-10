@@ -4,7 +4,6 @@ import ExpenseProgress from '../../layout/ExpenseProgress';
 import BankProgress from '../../layout/BankProgress';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import { API_PATH } from '../../Config';
 import StudentTable from '../../layout/BusinessStudents';
 
 export default class SnapshotGroup extends React.Component{
@@ -37,7 +36,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	fetchExpenseTableData(){
-		fetch(API_PATH + '/expense/bybid?start=0&end=50&bid=' + this.state.company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/expense/bybid?start=0&end=50&bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -58,7 +57,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	fetchTransactionTableData(){
-		fetch(API_PATH + '/transaction/bybid?start=0&end=50&bid=' + this.state.company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/transaction/bybid?start=0&end=50&bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -80,7 +79,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	fetchBusinessData(){
-		fetch(API_PATH + '/business/bybid?bid=' + this.state.company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/business/bybid?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -101,7 +100,7 @@ export default class SnapshotGroup extends React.Component{
 	}
 
 	exportExpenseData(){
-		fetch(API_PATH + '/export/expense?bid=' + this.state.company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/export/expense?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -129,7 +128,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	exportTransactionData(){
-		fetch(API_PATH + '/export/transaction?bid=' + this.state.company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/export/transaction?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -157,7 +156,7 @@ export default class SnapshotGroup extends React.Component{
 		});
 	}
 	exportDepositData(){
-		fetch(API_PATH + '/export/deposit?bid=' + this.state.company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/export/deposit?bid=' + this.state.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

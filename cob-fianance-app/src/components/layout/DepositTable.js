@@ -7,7 +7,6 @@ import AddDepositDialog from './AddDepositDialog';
 
 import {AppContext} from '../../AppContext';
 
-import { API_PATH } from '../Config';
 import './styles/DepositTable.css';
 
 export default class DepositTable extends PureComponent{
@@ -34,7 +33,7 @@ export default class DepositTable extends PureComponent{
 	};
 
 	fetchDepositData(company_id, pageIndex, searchText = ''){
-		fetch(API_PATH + '/deposit/bybid?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + company_id + '&search=' + searchText, {
+		fetch(process.env.REACT_APP_API_PATH + '/deposit/bybid?start=' + pageIndex + '&end=' + this.state.tableMaxRows + '&bid=' + company_id + '&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

@@ -4,7 +4,6 @@ import TableControl from '../../layout/TableControl';
 import AddExpenseDialog from '../../layout/AddExpenseDialog';
 import SearchBar from '../../layout/SearchBar';
 
-import { API_PATH } from '../../Config';
 import { AppContext } from '../../../AppContext';
 
 import './styles/ExpensePage.css';
@@ -37,7 +36,7 @@ export default class ExpensePage extends Component {
 	fetchExpenseTableData(searchText = ''){
 		if (searchText === '')
 			searchText = this.state.searchText;
-		fetch(API_PATH + '/expense/byuid?start=0&end=50&search=' + searchText, {
+		fetch(process.env.REACT_APP_API_PATH + '/expense/byuid?start=0&end=50&search=' + searchText, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

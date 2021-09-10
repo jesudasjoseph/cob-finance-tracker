@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { API_PATH } from '../Config';
 
 export class ProfitGoalsForm extends Component {
 	constructor(props){
@@ -18,7 +17,7 @@ export class ProfitGoalsForm extends Component {
 	}
 
 	componentDidMount(){
-		fetch(API_PATH + '/business/byuid', {
+		fetch(process.env.REACT_APP_API_PATH + '/business/byuid', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -46,7 +45,7 @@ export class ProfitGoalsForm extends Component {
 		e.preventDefault();
 
 		const body = {profit_goal: this.state.profit_goal, stretch_profit_goal: this.state.stretch_profit_goal};
-		fetch(API_PATH + '/business/byuid/profit_goal', {
+		fetch(process.env.REACT_APP_API_PATH + '/business/byuid/profit_goal', {
 			mode: 'cors',
 			method: 'PUT',
 			credentials: 'same-origin',
@@ -61,7 +60,7 @@ export class ProfitGoalsForm extends Component {
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
-		fetch(API_PATH + '/business/byuid/stretch_profit_goal', {
+		fetch(process.env.REACT_APP_API_PATH + '/business/byuid/stretch_profit_goal', {
 			mode: 'cors',
 			method: 'PUT',
 			credentials: 'same-origin',

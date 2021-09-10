@@ -3,8 +3,6 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import { API_PATH } from '../../../Config';
-
 import { AppContext } from '../../../../AppContext';
 
 export default class ResetDatabaseDialog extends Component{
@@ -20,7 +18,7 @@ export default class ResetDatabaseDialog extends Component{
 	}
 
 	componentDidMount(){
-		fetch(API_PATH + '/admin/reset-code', {
+		fetch(process.env.REACT_APP_API_PATH + '/admin/reset-code', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -42,7 +40,7 @@ export default class ResetDatabaseDialog extends Component{
 		this.props.handleClose();
 	}
 	handle_submit(){
-		fetch(API_PATH + '/admin/reset-database?code=' + this.state.userResetCode, {
+		fetch(process.env.REACT_APP_API_PATH + '/admin/reset-database?code=' + this.state.userResetCode, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',
