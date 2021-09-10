@@ -1,6 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { API_PATH } from '../Config';
+
 export default class UnknownONID extends React.Component {
 	render () {
 		return (
