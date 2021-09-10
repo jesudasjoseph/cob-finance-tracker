@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { API_PATH } from '../Config';
 import { AppContext } from '../../AppContext';
 
 /*
@@ -35,7 +34,7 @@ export default class EditUserDialog extends Component {
 	}
 
 	fetchCompanyNames(){
-		let URL = API_PATH + '/business/names'
+		let URL = process.env.REACT_APP_API_PATH + '/business/names'
 
 		fetch(URL, {
 			mode: 'cors',
@@ -68,7 +67,7 @@ export default class EditUserDialog extends Component {
 		e.preventDefault();
 
 		const dataObject = {user_id:this.props.user_id, company_id:this.state.company_id};
-		fetch(API_PATH + '/user/addtobusiness', {
+		fetch(process.env.REACT_APP_API_PATH + '/user/addtobusiness', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

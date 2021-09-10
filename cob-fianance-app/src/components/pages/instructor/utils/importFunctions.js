@@ -1,7 +1,3 @@
-import {API_PATH} from '../../../Config';
-
-//let updateProgress;
-
 export function startImport(data, callBack){
 	importUsers(data);
 }
@@ -10,7 +6,7 @@ function addUser(data, index){
 	if (data.users[index]){
 		let userBody = {user: data.users[index]}
 		console.log(userBody);
-		fetch(API_PATH + '/user', {
+		fetch(process.env.REACT_APP_API_PATH + '/user', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -38,7 +34,7 @@ function addCompany(data, index){
 	if (data.companies[index]){
 		console.log(data.companies[index]);
 		let companyBody = {business: data.companies[index]}
-		fetch(API_PATH + '/business', {
+		fetch(process.env.REACT_APP_API_PATH + '/business', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -66,7 +62,7 @@ function importCompanies(data){
 
 function addUsersToCompany(users, company, index){
 	if (users[index]){
-		fetch(API_PATH + '/user/addtobusiness', {
+		fetch(process.env.REACT_APP_API_PATH + '/user/addtobusiness', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -92,7 +88,7 @@ function importUserCompany(users, company){
 function addDeposit(deposits, index){
 	if (deposits[index]){
 		const depositBody = {deposit: deposits[index]}
-		fetch(API_PATH + '/deposit', {
+		fetch(process.env.REACT_APP_API_PATH + '/deposit', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -118,7 +114,7 @@ function importDeposits(deposits){
 function addExpense(expenses, index){
 	if (expenses[index]){
 		const expenseBody = {expense: expenses[index]}
-		fetch(API_PATH + '/expense/bybid', {
+		fetch(process.env.REACT_APP_API_PATH + '/expense/bybid', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',
@@ -144,7 +140,7 @@ function importExpenses(expenses){
 function addTransaction(transactions, index){
 	if (transactions[index]){
 		const transactionBody = {transaction: transactions[index]}
-		fetch(API_PATH + '/transaction/bybid', {
+		fetch(process.env.REACT_APP_API_PATH + '/transaction/bybid', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

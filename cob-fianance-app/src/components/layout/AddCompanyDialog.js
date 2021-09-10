@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { API_PATH } from '../Config';
 import { AppContext } from '../../AppContext';
 
 /*
@@ -31,7 +30,7 @@ export default class AddCompanyDialog extends Component {
 
 	componentDidMount(){
 		this.setState({instructor: window.localStorage.getItem('user_id')});
-		fetch(API_PATH + '/user/instructors', {
+		fetch(process.env.REACT_APP_API_PATH + '/user/instructors', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -64,7 +63,7 @@ export default class AddCompanyDialog extends Component {
 		}
 
 		const businessBody = {business:{company_id:this.state.company_id, section:this.state.section, instructor:this.state.instructor}}
-		fetch(API_PATH + '/business', {
+		fetch(process.env.REACT_APP_API_PATH + '/business', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

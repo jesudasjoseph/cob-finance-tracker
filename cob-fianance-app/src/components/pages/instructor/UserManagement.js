@@ -12,8 +12,6 @@ import { AppContext } from '../../../AppContext';
 
 import './styles/UserManagement.css';
 
-import {API_PATH} from '../../Config.js';
-
 export default class UserManagement extends Component {
 	constructor(props){
 		super(props);
@@ -60,7 +58,7 @@ export default class UserManagement extends Component {
 	}
 
 	fetchTableData(sortParam = null, start = null, searchParam = undefined){
-		let URL = API_PATH + '/user?';
+		let URL = process.env.REACT_APP_API_PATH + '/user?';
 		if (start){
 			URL = URL + 'start=' + start + '&end=' + this.state.tableMaxRows;
 		}
@@ -131,7 +129,7 @@ export default class UserManagement extends Component {
 		this.setState({showEditUserDialog: true});
 	}
 	deleteOnClick(){
-		fetch(API_PATH + '/user/byuid?uid=' + this.state.tableRows[this.state.tableSelectedRow].user_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/user/byuid?uid=' + this.state.tableRows[this.state.tableSelectedRow].user_id, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',

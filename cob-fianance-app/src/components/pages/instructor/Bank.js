@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
 import DepositTable from '../../layout/DepositTable';
-import { API_PATH } from '../../Config';
 
 import { AppContext } from '../../../AppContext';
 
@@ -29,7 +28,7 @@ export default class Bank extends Component{
 	}
 
 	fetchBusinessData(){
-		fetch(API_PATH + '/business/names', {
+		fetch(process.env.REACT_APP_API_PATH + '/business/names', {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',

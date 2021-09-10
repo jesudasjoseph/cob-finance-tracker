@@ -6,7 +6,6 @@ import SearchBar from '../../layout/SearchBar.js';
 import TableControl from '../../layout/TableControl.js';
 import AddCompanyDialog from '../../layout/AddCompanyDialog';
 import SortSelector from '../../layout/SortSelector.js';
-import { API_PATH } from '../../Config';
 
 import { AppContext } from '../../../AppContext';
 
@@ -61,7 +60,7 @@ export default class CompanyManagementPage extends Component {
 
 	fetchCompanyData(sortParam = null, start = null, searchParam = undefined){
 
-		let URL = API_PATH + '/business?';
+		let URL = process.env.REACT_APP_API_PATH + '/business?';
 		if (start){
 			URL = URL + 'start=' + start + '&end=' + this.state.tableMaxRows;
 		}
@@ -155,7 +154,7 @@ export default class CompanyManagementPage extends Component {
 	}
 
 	deleteOnClick(){
-		fetch(API_PATH + '/business/bybid?bid=' + this.state.companyTable[this.state.selectedRow].company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/business/bybid?bid=' + this.state.companyTable[this.state.selectedRow].company_id, {
 			mode: 'cors',
 			method: 'DELETE',
 			credentials: 'same-origin',

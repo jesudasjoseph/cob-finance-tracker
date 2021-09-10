@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { API_PATH } from '../Config';
 import { AppContext } from '../../AppContext';
 
 /*
@@ -66,7 +65,7 @@ export default class AddTransactionDialog extends Component {
 		quantity:this.state.quantity,
 		price_per_unit:this.state.price_per_unit}};
 
-		fetch(API_PATH + '/transaction', {
+		fetch(process.env.REACT_APP_API_PATH + '/transaction', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

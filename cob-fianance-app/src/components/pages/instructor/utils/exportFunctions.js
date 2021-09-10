@@ -1,5 +1,3 @@
-import { API_PATH } from '../../../Config';
-
 function userObject(user_id, role, first_name, last_name, section){
 	return({
 		user_id: user_id,
@@ -107,7 +105,7 @@ export function startExport(callBack){
 	getUsers();
 }
 function getUsers(){
-	fetch(API_PATH + '/user?start=' + userIndex + '&end=' + DATA_LENGTH, {
+	fetch(process.env.REACT_APP_API_PATH + '/user?start=' + userIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -139,7 +137,7 @@ function getUsersSuccess(){
 }
 
 function getCompanies(){
-	fetch(API_PATH + '/business?start=' + companyIndex + '&end=' + DATA_LENGTH, {
+	fetch(process.env.REACT_APP_API_PATH + '/business?start=' + companyIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -178,7 +176,7 @@ function getCompaniesSuccess(){
 
 function getDeposits(companyIndex, depositIndex = 0){
 	console.log(`depositIndex: ${depositIndex}, companyIndex: ${companyIndex}`);
-	fetch(API_PATH + '/deposit/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + depositIndex + '&end=' + DATA_LENGTH, {
+	fetch(process.env.REACT_APP_API_PATH + '/deposit/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + depositIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -203,7 +201,7 @@ function getDeposits(companyIndex, depositIndex = 0){
 }
 function getTransactions(companyIndex, transactionIndex = 0){
 	console.log(`transactionIndex: ${transactionIndex}, companyIndex: ${companyIndex}`);
-	fetch(API_PATH + '/transaction/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + transactionIndex + '&end=' + DATA_LENGTH, {
+	fetch(process.env.REACT_APP_API_PATH + '/transaction/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + transactionIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -227,7 +225,7 @@ function getTransactions(companyIndex, transactionIndex = 0){
 	});
 }
 function getExpenses(companyIndex, expenseIndex = 0){
-	fetch(API_PATH + '/expense/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + expenseIndex + '&end=' + DATA_LENGTH, {
+	fetch(process.env.REACT_APP_API_PATH + '/expense/bybid?bid=' + companyList[companyIndex].company_id + '&start=' + expenseIndex + '&end=' + DATA_LENGTH, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',
@@ -252,7 +250,7 @@ function getExpenses(companyIndex, expenseIndex = 0){
 	});
 }
 function getUsersInCompany(companyIndex){
-	fetch(API_PATH + '/user/bybid?bid=' + companyList[companyIndex].company_id, {
+	fetch(process.env.REACT_APP_API_PATH + '/user/bybid?bid=' + companyList[companyIndex].company_id, {
 		mode: 'cors',
 		method: 'GET',
 		credentials: 'same-origin',

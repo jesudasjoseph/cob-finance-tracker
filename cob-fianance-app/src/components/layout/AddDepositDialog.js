@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { API_PATH } from '../Config';
 import { AppContext } from '../../AppContext';
 
 /*
@@ -41,7 +40,7 @@ export default class AddDepositDialog extends Component {
 	}
 
 	fetchUsers(bid){
-		fetch(API_PATH + '/user/bybid?bid=' + bid, {
+		fetch(process.env.REACT_APP_API_PATH + '/user/bybid?bid=' + bid, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
@@ -78,7 +77,7 @@ export default class AddDepositDialog extends Component {
 		e.preventDefault();
 
 		const depositBody = {deposit: {company_id:this.props.company_id, value:this.state.value, description:this.state.description, user_id:this.state.user_id}};
-		fetch(API_PATH + '/deposit', {
+		fetch(process.env.REACT_APP_API_PATH + '/deposit', {
 			mode: 'cors',
 			method: 'POST',
 			credentials: 'same-origin',

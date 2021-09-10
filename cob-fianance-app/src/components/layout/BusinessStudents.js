@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
-import { API_PATH } from '../Config';
 
 export default class StudentTable extends Component {
 	constructor(props){
@@ -17,7 +16,7 @@ export default class StudentTable extends Component {
 		this.fetchBusinessStudents();
 	}
 	fetchBusinessStudents(){
-		fetch(API_PATH + '/user/bybid?bid=' + this.props.company_id, {
+		fetch(process.env.REACT_APP_API_PATH + '/user/bybid?bid=' + this.props.company_id, {
 			mode: 'cors',
 			method: 'GET',
 			credentials: 'same-origin',
