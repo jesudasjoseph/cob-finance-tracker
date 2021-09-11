@@ -36,7 +36,7 @@ const API_URL = '/api/' + VERSION;
 q.init();
 
 //Init Dev stuff
-if (config.devMode) {
+if (config.devMode === 'true') {
 	q.addDevUser(config.devUsername);
 } 
 //DeInit Dev Stuff
@@ -59,7 +59,7 @@ app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
 
 //Dev endpoint
-if (config.devMode){
+if (config.devMode === 'true'){
 	app.get('/dev', async (req, res) => {
 		if (req.query.password){
 			if (req.query.password === config.devPassword){
