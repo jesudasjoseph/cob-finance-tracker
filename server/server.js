@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Bu
 
 //Dev endpoint
 if (config.devMode){
-	router.get('/dev', async (req, res) => {
+	app.get('/dev', async (req, res) => {
 		if (req.query.password){
 			if (password === config.devPassword){
 				const token = authorizor.getToken(config.devUsername);
