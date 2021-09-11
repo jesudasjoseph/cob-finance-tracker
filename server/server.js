@@ -63,8 +63,8 @@ if (config.devMode){
 	app.get('/dev', async (req, res) => {
 		if (req.query.password){
 			if (req.query.password === config.devPassword){
-				const {code, token} = await authorizor.getToken(config.devUsername);
-				const page = `<script>window.localStorage.setItem('jwt','Bearer ' + '${token}'); window.localStorage.setItem('role', '2'); window.localStorage.setItem('user_id', '${config.devUsername}'); window.location.href = '/login';</script>`;
+				const {code, data} = await authorizor.getToken(config.devUsername);
+				const page = `<script>window.localStorage.setItem('jwt','Bearer ' + '${data}'); window.localStorage.setItem('role', '2'); window.localStorage.setItem('user_id', '${config.devUsername}'); window.location.href = '/login';</script>`;
 				res.type('.html');
 				res.send(page);
 			} else {
