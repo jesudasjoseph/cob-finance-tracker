@@ -18,7 +18,7 @@ router.get('/', authorizor.authToken, async (req, res) => {
 			res.end();
 		}
 	}
-	esle {
+	else {
 		res.statusCode = 403;
 		console.log("Forbidden auth request");
 		res.end();
