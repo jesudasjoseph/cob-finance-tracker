@@ -54,26 +54,12 @@ let expenseRouter = require('./routes/expense');
 let depositRouter = require('./routes/deposit');
 let exportRouter = require('./routes/export');
 
+//DEV REQUESTS (NOT FOR PRODUCTION)
+let devRouter = require('./routes/dev');
+
 app.use(cors()); //Use cors middleware
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
-
-//Dev endpoint
-if (config.devMode === 'true'){
-	app.get('/dev', async (req, res) => {
-		if (req.query.password){
-			if (req.query.password === config.devPassword){
-				const {code, data} = await authorizor.getToken(config.devUsername);
-				const page = `<script>window.localStorage.setItem('jwt','Bearer ' + '${data.token}'); window.localStorage.setItem('role', '2'); window.localStorage.setItem('user_id', '${config.devUsername}'); window.location.href = '/login';</script>`;
-				res.type('.html');
-				res.send(page);
-			} else {
-				res.redirect('/login');
-			}
-		}
-	});
-}
-
 
 //SAML Strategy config
 //This also checks if user exists.
@@ -93,7 +79,6 @@ passport.use(new SamlStrategy({
 			return done(null, code);
 		}
 	}));
-
 app.get('/saml/auth',
 	passport.authenticate('saml', { failureRedirect: '/saml/fail', failureFlash: true, session: false }),
 	function(req, res) {
@@ -123,7 +108,7 @@ app.use(express.json()); //Parse body
 
 //API Endpoints
 //Router for Authentication requests
-//app.use(API_URL + '/auth', authRouter);
+app.use(API_URL + '/auth', authRouter);
 //Router for Database Admin requests
 app.use(API_URL + '/admin', adminRouter);
 //Router for Business data requests
@@ -138,6 +123,11 @@ app.use(API_URL + '/expense', expenseRouter);
 app.use(API_URL + '/deposit', depositRouter);
 //Router for Export data requests
 app.use(API_URL + '/export', exportRouter);
+
+//Dev endpoint
+if (config.devMode === 'true'){
+	app.use(API_URL + '/dev', devRouter);
+}
 
 //Static Server (Front-End)
 app.get(['/', '/*'], (req, res) => {

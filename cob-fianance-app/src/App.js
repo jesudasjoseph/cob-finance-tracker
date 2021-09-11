@@ -24,6 +24,9 @@ import Login from './components/pages/Login';
 import Page404 from './components/pages/404';
 import UnknownONID from './components/pages/UnknownONID';
 
+//Dev Pages
+import DevLogin from './components/pages/DevLogin';
+
 //Notification
 import Toast from 'react-bootstrap/Toast';
 
@@ -100,6 +103,7 @@ export default class App extends Component{
 							<Route path="/login" component={Login}/>
 							<Route path="/404" component={Page404}/>
 							<Route path="/unknown-onid" component={UnknownONID}/>
+							<Route path="/dev" component={DevLogin}/>
 
 							<Route path="/instructor">
 								<InstructorNavbar/>
