@@ -39,7 +39,7 @@ async function init(){
 async function addDevUser(user_id) {
 	const createUserQuery = {
 		text: 'INSERT INTO user_table (user_id, role, first_name, last_name, section) VALUES ($1, $2, $3, $4, $5)',
-		values: [user.user_id, '2', 'Dev', 'Team', '000']
+		values: [user_id, '2', 'Dev', 'Team', '000']
 	}
 
 	try {
