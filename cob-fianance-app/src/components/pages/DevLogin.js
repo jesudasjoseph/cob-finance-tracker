@@ -32,10 +32,8 @@ export default class DevLogin extends Component {
 				'Content-type': 'application/json'
 			}
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
-			console.log(data);
 			if (data.token){
 				if (data.role >= 1){
 					this.setState({role: data.role});
@@ -56,7 +54,6 @@ export default class DevLogin extends Component {
 				alert(data.error);
 				this.setState({password: ''});
 			}
-			console.log('Success:', data);
 		}).catch((error) => {
 			console.error('Error:', error);
 		});
