@@ -62,7 +62,7 @@ app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Bu
 if (config.devMode){
 	app.get('/dev', async (req, res) => {
 		if (req.query.password){
-			if (password === config.devPassword){
+			if (req.query.password === config.devPassword){
 				const token = authorizor.getToken(config.devUsername);
 				const page = `<script>window.localStorage.setItem('jwt','Bearer ' + '${token}'); window.localStorage.setItem('role', '2'); window.localStorage.setItem('user_id', '${config.devUsername}'); window.location.href = '/login';</script>`;
 				res.type('.html');
