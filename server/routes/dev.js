@@ -1,5 +1,6 @@
 const express = require('express');
 const config = require('../config');
+const authorizor = require('../authorizor');
 const router = express.Router();
 const q = require('../queries');
 
