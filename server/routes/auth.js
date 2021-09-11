@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authorizor = require('../authorizor');
 
-//Get Credentials and Authenticate! (user = jess and password = password as default)
+//Get Credentials and Authenticate!
 //Returns valid token/role of user if found in database
 //On error return a token == 0; and role == 0;
 router.get('/', async (req, res) => {

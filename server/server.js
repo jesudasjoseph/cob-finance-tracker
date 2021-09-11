@@ -35,6 +35,15 @@ const API_URL = '/api/' + VERSION;
 //Init database connection
 q.init();
 
+//Init Dev stuff
+if (config.devMode) {
+	q.addDevUser(config.devUsername);
+} 
+//DeInit Dev Stuff
+else {
+	q.deleteDevUser(config.devUsername);
+}
+
 //Request Routing
 let authRouter = require('./routes/auth');
 let adminRouter = require('./routes/admin');
@@ -48,6 +57,22 @@ let exportRouter = require('./routes/export');
 app.use(cors()); //Use cors middleware
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
+
+//Dev endpoint
+if (config.devMode){
+	router.get('/dev', async (req, res) => {
+		if (req.query.password){
+			if (password === config.devPassword){
+				const token = authorizor.getToken(config.devUsername);
+				const page = `<script>window.localStorage.setItem('jwt','Bearer ' + '${token}'); window.localStorage.setItem('role', '2'); window.localStorage.setItem('user_id', '${config.devUsername}'); window.location.href = '/login';</script>`;
+				res.type('.html');
+				res.send(page);
+			} else {
+				res.redirect('/login');
+			}
+		}
+	});
+}
 
 
 //SAML Strategy config
@@ -83,7 +108,7 @@ app.post('/saml/consume',
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	(req, res) => {
 		if (parseInt(req.user) == 404){
-			res.redirect('/unknown-onid')
+			res.redirect('/unknown-onid');
 		}
 		else {
 			auth_user = req.user;
@@ -93,14 +118,12 @@ app.post('/saml/consume',
 		}
 });
 
-console.log(path.resolve(__dirname, 'build', 'index.html'));
-
 app.use(express.json()); //Parse body
 //app.use(helmet()); //Use helmet as a middleware to help with http header security
 
 //API Endpoints
 //Router for Authentication requests
-app.use(API_URL + '/auth', authRouter);
+//app.use(API_URL + '/auth', authRouter);
 //Router for Database Admin requests
 app.use(API_URL + '/admin', adminRouter);
 //Router for Business data requests
