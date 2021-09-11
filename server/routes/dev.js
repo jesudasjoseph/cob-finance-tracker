@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const q = require('../queries');
 
-app.get('/auth', async (req, res) => {
+router.get('/auth', async (req, res) => {
 	if (req.query.password){
 		if (req.query.password === config.devPassword){
 			const {code, data} = await authorizor.getToken(config.devUsername);
