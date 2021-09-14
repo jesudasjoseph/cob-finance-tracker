@@ -202,30 +202,18 @@ export default class UserManagement extends Component {
 				console.log(response);
 				return response.json();
 			}).then(data => {
-				/*if (data.token){
-					this.setState({token: data.token});
-					if (data.role >= 1){
-						this.setState({role: data.role});
-						window.localStorage.setItem('jwt',"Bearer " + data.token);
-						window.localStorage.setItem('role', data.role);
-						window.localStorage.setItem('user_id', data.user_id);
-						this.props.history.push('/instructor/dashboard');
-					} else if (data.role === 0){
-						this.setState({role: data.role});
-						window.localStorage.setItem('jwt',"Bearer " + data.token);
-						window.localStorage.setItem('role', data.role);
-						window.localStorage.setItem('user_id', data.user_id);
-						this.props.history.push('/student/dashboard');
-					} else {
-						alert("No role specified!");
-						this.setState({token: 0});
-					}
-				//redirect to instructor or student account
-				} else {
-					this.setState({token: 0});
-					alert(data.error);
-				}
-				*/
+				window.localStorage.setItem('jwt_admin', window.localStorage.getItem('jwt'));
+				window.localStorage.setItem('role_admin', window.localStorage.getItem('role'));
+				window.localStorage.setItem('user_id_admin', window.localStorage.getItem('user_id'));
+
+				window.localStorage.setItem('jwt',"Bearer " + data.token);
+				window.localStorage.setItem('role', data.role);
+				window.localStorage.setItem('user_id', data.user_id);
+
+				this.context.setLoginState(true);
+
+				this.props.history.push('/student/dashboard');
+
 				console.log('Success:', data);
 			}).catch((error) => {
 				console.error('Error:', error);
