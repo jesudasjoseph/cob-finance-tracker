@@ -12,8 +12,8 @@ let SamlStrategy = require('passport-saml').Strategy;
 const authorizor = require('./authorizor');
 const q = require('./queries');
 
-let key = fs.readFileSync(__dirname + config.sslKeyPath);
-let cert = fs.readFileSync(__dirname + config.sslCertPath);
+let key = fs.readFileSync(config.sslKeyPath);
+let cert = fs.readFileSync(config.sslCertPath);
 let options = {
   key: key,
   cert: cert
