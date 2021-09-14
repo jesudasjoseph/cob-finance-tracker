@@ -59,7 +59,7 @@ function generateToken(payload){
 async function getToken(user_id){
 	let {code, data} = await q.getRole(new q.asker(user_id, undefined));
 
-	if (code == 200) {
+	if (data != []) {
 		let ses = new session(user_id, data);
 		addSession(ses);
 		return new packet(200, {token:generateToken(ses), role:data, user_id:user_id});
