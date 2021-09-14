@@ -58,6 +58,7 @@ function generateToken(payload){
 //on fail - {http_status}
 async function getToken(user_id){
 	let {code, data} = await q.getRole(new q.asker(user_id, undefined));
+	console.log("Get getRole request in getToken:", data);
 
 	if (data != []) {
 		let ses = new session(user_id, data);
