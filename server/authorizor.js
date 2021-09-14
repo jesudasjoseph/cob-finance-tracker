@@ -65,7 +65,7 @@ async function getToken(user_id){
 		return new packet(200, {token:generateToken(ses), role:data, user_id:user_id});
 	}
 	else {
-		return new packet(code);
+		return new packet(code, null);
 	}
 }
 

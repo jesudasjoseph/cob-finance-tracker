@@ -72,11 +72,11 @@ passport.use(new SamlStrategy({
 	async (profile, done) => {
 		let {code, data} = await authorizor.getToken(profile.nameID.split('@')[0]);
 
-		if (code === 200){
+		if (data){
 			return done(null, data);
 		}
 		else{
-			return done(null, code);
+			return done(null, null);
 		}
 	}));
 app.get('/saml/auth',
@@ -92,14 +92,14 @@ app.post('/saml/consume',
 	bodyparser.urlencoded({ extended: false }),
 	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
 	(req, res) => {
-		if (parseInt(req.user) == 404){
-			res.redirect('/unknown-onid');
-		}
-		else {
+		if (req.user){
 			auth_user = req.user;
 			const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + '${auth_user.token}'); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/login';</script>`;
 			res.type('.html');
 			res.send(authPage);
+		}
+		else {
+			res.redirect('/unknown-onid');
 		}
 });
 
