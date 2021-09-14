@@ -29,7 +29,8 @@ export default class UserManagement extends Component {
 			company_id: '',
 			lastDisabled: true,
 			nextDisabled: false,
-			searchText: ''
+			searchText: '',
+			loginAsUserDisabled: true
 		}
 
 		this.fetchTableData = this.fetchTableData.bind(this);
@@ -51,6 +52,8 @@ export default class UserManagement extends Component {
 		this.nextPage = this.nextPage.bind(this);
 
 		this.searchOnChange = this.searchOnChange.bind(this);
+
+		this.onLoginAsUserClick = this.onLoginAsUserClick.bind(this);
 	}
 
 	componentDidMount(){
@@ -114,9 +117,15 @@ export default class UserManagement extends Component {
 	tableHandleRowClick(index){
 		if (index >= 0) {
 			this.setState({editDisabled: false, deleteDisabled: false});
+			if (this.state.tableRows[index].role === 0){
+				this.setState({loginAsUserDisabled: false});
+			}
+			else {
+				this.setState({loginAsUserDisabled: true});
+			}
 		}
 		else {
-			this.setState({editDisabled: true, deleteDisabled: true});
+			this.setState({editDisabled: true, deleteDisabled: true, loginAsUserDisabled: true});
 		}
 		this.setState({tableSelectedRow: index});
 	}
@@ -142,6 +151,12 @@ export default class UserManagement extends Component {
 			if (Math.floor(response.status / 200) === 1) {
 				if (this.state.tableSelectedRow === this.state.tableRows.length - 1){
 					this.setState({tableSelectedRow: this.state.tableRows.length - 2});
+					if (this.state.tableRows[this.state.tableRows.length - 2].role === 0){
+						this.setState({loginAsUserDisabled: true});
+					}
+					else{
+						this.setState({loginAsUserDisabled: false});
+					}
 				}
 				this.fetchTableData();
 				this.context.pushNotification('success', 'Deleted', 'Successfully deleted user', 4);
@@ -170,6 +185,51 @@ export default class UserManagement extends Component {
 	}
 	importDialogHandleClose(){
 		this.setState({showImportUserDialog: false});
+	}
+
+	onLoginAsUserClick(){
+		console.log(this.state.tableRows);
+		fetch(process.env.REACT_APP_API_PATH + '/auth?user_id=' + this.state.tableRows[this.state.tableSelectedRow].user_id, {
+				mode: 'cors',
+				method: 'GET',
+				credentials: 'same-origin',
+				headers: {
+					'Accept': 'application/json',
+					'Content-type': 'application/json',
+					'Authorization': window.localStorage.getItem('jwt')
+				}
+			}).then(response => {
+				console.log(response);
+				return response.json();
+			}).then(data => {
+				/*if (data.token){
+					this.setState({token: data.token});
+					if (data.role >= 1){
+						this.setState({role: data.role});
+						window.localStorage.setItem('jwt',"Bearer " + data.token);
+						window.localStorage.setItem('role', data.role);
+						window.localStorage.setItem('user_id', data.user_id);
+						this.props.history.push('/instructor/dashboard');
+					} else if (data.role === 0){
+						this.setState({role: data.role});
+						window.localStorage.setItem('jwt',"Bearer " + data.token);
+						window.localStorage.setItem('role', data.role);
+						window.localStorage.setItem('user_id', data.user_id);
+						this.props.history.push('/student/dashboard');
+					} else {
+						alert("No role specified!");
+						this.setState({token: 0});
+					}
+				//redirect to instructor or student account
+				} else {
+					this.setState({token: 0});
+					alert(data.error);
+				}
+				*/
+				console.log('Success:', data);
+			}).catch((error) => {
+				console.error('Error:', error);
+			});
 	}
 
 	//Sort Selection Functions
@@ -294,6 +354,7 @@ export default class UserManagement extends Component {
 						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={'Role'} onOptionChange={this.onSortOptionChange}/>
 						<div className='flex-container'>
 							<Button onClick={()=>{this.setState({showImportUserDialog: true})}} style={{width: '100%'}}>Import Users</Button>
+							<Button disabled={this.state.loginAsUserDisabled} onClick={this.onLoginAsUserClick} style={{width: '100%'}}>Login as User</Button>
 						</div>
 					</div>
 				</div>
