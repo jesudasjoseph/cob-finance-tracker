@@ -65,7 +65,6 @@ async function getToken(user_id){
 		return new packet(200, {token:generateToken(ses), role:data, user_id:user_id});
 	}
 	else {
-		console.log("date == []");
 		return new packet(code, null);
 	}
 }
