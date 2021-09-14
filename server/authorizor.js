@@ -60,12 +60,14 @@ async function getToken(user_id){
 	let {code, data} = await q.getRole(new q.asker(user_id, undefined));
 	console.log("Get getRole request in getToken:", data);
 
-	if (data != []) {
+	if (data) {
+		console.log(data);
 		let ses = new session(user_id, data);
 		addSession(ses);
 		return new packet(200, {token:generateToken(ses), role:data, user_id:user_id});
 	}
 	else {
+		console.log("date == []");
 		return new packet(code, null);
 	}
 }
