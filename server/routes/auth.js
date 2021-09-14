@@ -7,10 +7,10 @@ const authorizor = require('../authorizor');
 //Query parameter: user_id
 router.get('/', authorizor.authToken, async (req, res) => {
 	if (req.body.asker.role === 2) {
-		if (req.query.uid != undefined) {
+		if (req.query.user_id != undefined) {
 			res.setHeader('Content-Type', 'application/json');
 			let {code, data} = await authorizor.getToken(req.query.user_id);
-			console.log("Sending token to: '" + req.query.uid + "'");
+			console.log("Sending token to: '" + req.query.user_id + "'");
 			res.send(JSON.stringify(data));
 		}
 		else {
