@@ -3,17 +3,18 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-	porthttps: process.env.PORTHTTPS,
-	porthttp: process.env.PORTHTTP,
+	HTTPS_PORT: process.env.HTTPS_PORT,
+	HTTP_PORT: process.env.HTTP_PORT,
 
-	secret: process.env.API_KEY,
+	API_SECRET: process.env.API_SECRET,
 
-	samlCert: process.env.SAML_CERT,
-	samlIssuer: process.env.SAML_ISSUER,
-	samlCallbackUrl: process.env.SAML_CBURL,
+	HOSTNAME: process.env.HOSTNAME,
 
-	sslKeyPath: process.env.SSL_KEY_PATH,
-	sslCertPath: process.env.SSL_CERT_PATH,
+	SAML_ENTRY_POINT: process.env.SAML_ENTRY_POINT,
+	SAML_CERT: process.env.SAML_CERT,
+
+	SSL_KEY_PATH: process.env.SSL_KEY_PATH,
+	SSL_CERT_PATH: process.env.SSL_CERT_PATH,
 
 	certbotCertificateRenewalURL: process.env.certBotURL,
 	certbotCertificateRenewalMSG: process.env.certBotMSG,

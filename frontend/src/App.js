@@ -1,5 +1,3 @@
-//version 1.0
-
 import React, {Component} from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
@@ -57,7 +55,7 @@ export default class App extends Component{
 			notificationTitle: '',
 			notificationContent: '',
 			notificationTimeout: 0,
-			loginState: true
+			loginState: false
 		}
 
 		this.pushNotification = this.pushNotification.bind(this);

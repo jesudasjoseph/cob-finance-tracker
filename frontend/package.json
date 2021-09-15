@@ -1,6 +1,6 @@
 {
-  "name": "Business-Finance-App",
-  "version": "0.1.0",
+  "name": "Business-Finance-Tracker",
+  "version": "0.2.0",
   "private": true,
   "homepage": "/",
   "dependencies": {
@@ -10,12 +10,12 @@
     "bootstrap": "^4.5.3",
     "memoize-one": "^5.2.1",
     "react": "^17.0.1",
-    "react-bootstrap": "^1.4.0",
+    "react-bootstrap": "^1.6.3",
     "react-data-table-component": "^6.11.7",
     "react-dom": "^17.0.1",
     "react-file-reader": "^1.1.4",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.1",
+    "react-scripts": "4.0.3",
     "styled-components": "^5.2.3",
     "web-vitals": "^0.2.4",
     "xlsx": "^0.16.9"
