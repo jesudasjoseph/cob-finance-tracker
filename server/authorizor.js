@@ -47,7 +47,7 @@ function generateSID(){
 
 //Generate a jwt out of a payload provided (expects an object constructed with the function 'session')
 function generateToken(payload){
-	return jwt.sign({payload}, config.secret);
+	return jwt.sign({payload}, config.API_SECRET);
 }
 
 //Returns a token for the specified 'user_id'.
@@ -85,7 +85,7 @@ function authToken(req, res, next){
 	if (token == null)
 		return res.sendStatus(401);
 
-	jwt.verify(token, config.secret, function (error, decoded) {
+	jwt.verify(token, config.API_SECRET, function (error, decoded) {
 		if (error){
 			console.log("jwt-err: " + error);
 			return res.sendStatus(400);

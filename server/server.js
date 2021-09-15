@@ -12,25 +12,28 @@ let SamlStrategy = require('passport-saml').Strategy;
 const authorizor = require('./authorizor');
 const q = require('./queries');
 
-let key = fs.readFileSync(config.sslKeyPath);
-let cert = fs.readFileSync(config.sslCertPath);
+const VERSION = 1;
+const API_URL = '/api/' + VERSION;
+
+let sslKey = fs.readFileSync(config.SSL_KEY_PATH);
+let sslCert = fs.readFileSync(config.SSL_CERT_PATH);
 let options = {
-  key: key,
-  cert: cert
+  key: sslKey,
+  cert: sslCert
 };
 
 const httpServer = express();
+
+//CERTBOT ssl certificate renewal
 httpServer.get(config.certbotCertificateRenewalURL, (req, res) => {
 	res.send(config.certBotMSG);
 });
+
 httpServer.get('*', (req, res) => {
 	res.redirect('https://' + req.hostname + req.url);
 });
 
 const app = express();
-
-const VERSION = 1;
-const API_URL = '/api/' + VERSION;
 
 //Init database connection
 q.init();
@@ -64,10 +67,10 @@ app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Bu
 //SAML Strategy config
 //This also checks if user exists.
 passport.use(new SamlStrategy({
-		entryPoint: 'https://login-int.iam.oregonstate.edu/idp/profile/SAML2/Redirect/SSO',
-		issuer: config.samlIssuer,
-		callbackUrl: config.samlCallbackUrl,
-		cert: config.samlCert
+		entryPoint: config.SAML_ENTRY_POINT,
+		issuer: config.HOSTNAME,
+		callbackUrl: config.HOSTNAME + '/saml/consume',
+		cert: config.SAML_CERT
 	},
 	async (profile, done) => {
 		let {code, data} = await authorizor.getToken(profile.nameID.split('@')[0]);
@@ -126,6 +129,7 @@ app.use(API_URL + '/export', exportRouter);
 
 //Dev endpoint
 if (config.devMode === 'true'){
+	console.log('DEV_MODE is Enabled! ### THIS IS INSECURE ###');
 	app.use(API_URL + '/dev', devRouter);
 }
 
@@ -134,14 +138,19 @@ app.get(['/', '/*'], (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
-let serverhttps = https.createServer(options, app);
+let httpsServer = https.createServer(options, app);
 
-httpServer.listen(config.porthttp, () => {
-	console.log(`Listening at http://localhost:${config.porthttp}`);
+//Start HTTP/HTTPS Servers
+
+console.log('Starting server...');
+console.log(`Server Config: ${config}`);
+
+httpServer.listen(config.HTTP_PORT, () => {
+	console.log(`Listening at http://localhost:${config.HTTP_PORT}`);
 });
 
-serverhttps.listen(config.porthttps, () => {
-	console.log(`Listening at https://localhost:${config.porthttps}`);
+httpsServer.listen(config.HTTPS_PORT, () => {
+	console.log(`Listening at https://localhost:${config.HTTPS_PORT}`);
 });
 
 module.exports = app;
