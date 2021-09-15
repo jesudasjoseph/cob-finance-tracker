@@ -93,7 +93,7 @@ let auth_user = undefined;
 
 app.post('/saml/consume',
 	bodyparser.urlencoded({ extended: false }),
-	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
+	passport.authenticate('saml', { failureRedirect: '/unknown-onid', failureFlash: true, session: false }),
 	(req, res) => {
 		if (req.user){
 			auth_user = req.user;
