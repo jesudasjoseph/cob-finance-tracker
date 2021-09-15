@@ -1,5 +1,7 @@
 const { Pool } = require('pg');
 const pool = new Pool();
+const config = require('./config');
+
 const roleType = {
 	'admin':2,
 	'instructor':1,
@@ -32,7 +34,49 @@ async function init(){
 	})
 }
 
+//Development Queries
+//Create Dev User (Only used if .env DEV_MODE == true)
+async function addDevUser(user_id) {
+	const createUserQuery = {
+		text: 'INSERT INTO user_table (user_id, role, first_name, last_name, section) VALUES ($1, $2, $3, $4, $5)',
+		values: [user_id, '2', 'Dev', 'Team', '000']
+	}
 
+	try {
+		await pool.query(createUserQuery);
+		return new data(201);
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+	}
+
+	return new data(500);
+}
+//Delete Dev User (Only used if .env DEV_MODE == false) 
+async function deleteDevUser(user_id) {
+	const query = {
+		text: 'DELETE FROM user_table WHERE user_id = $1',
+		values: [user_id]
+	}
+
+	try {
+		await pool.query(query);
+		return new data(200);
+	}
+	catch (e) {
+		console.log("pg" + e);
+		return new data(500);
+	}
+	finally {
+	}
+
+	return new data(500);
+}
+
+//Database management
 async function generateResetCode() {
 	let firstHalf = [
 		'banana',
@@ -52,7 +96,6 @@ async function generateResetCode() {
 	resetCode = code;
 	return code;
 }
-//Database management
 async function getResetCode(asker) {
 	switch(asker.role){
 		case roleType.student:
@@ -1466,6 +1509,10 @@ async function getDepositDataCSV(asker, company_id) {
 }
 
 exports.init = init;
+
+exports.addDevUser = addDevUser;
+exports.deleteDevUser = deleteDevUser;
+
 exports.getRole = getRole;
 
 exports.getResetCode = getResetCode;

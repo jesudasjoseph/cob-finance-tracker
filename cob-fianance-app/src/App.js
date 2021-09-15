@@ -1,3 +1,5 @@
+//version 1.0
+
 import React, {Component} from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
@@ -20,6 +22,10 @@ import Page_Settings from './components/pages/student/Settings';
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Page404 from './components/pages/404';
+import UnknownONID from './components/pages/UnknownONID';
+
+//Dev Pages
+import DevLogin from './components/pages/DevLogin';
 
 //Notification
 import Toast from 'react-bootstrap/Toast';
@@ -50,11 +56,13 @@ export default class App extends Component{
 			notificationType: '',
 			notificationTitle: '',
 			notificationContent: '',
-			notificationTimeout: 0
+			notificationTimeout: 0,
+			loginState: true
 		}
 
 		this.pushNotification = this.pushNotification.bind(this);
 		this.notificationOnClose = this.notificationOnClose.bind(this);
+		this.setLoginState = this.setLoginState.bind(this);
 	}
 
 	//Push notifiaction onto notifiaction state array. Replace notifiactions that are already invisible.
@@ -86,44 +94,59 @@ export default class App extends Component{
 		this.setState({notificationPool: notificationPool, notificationHiddenPoolCount: this.state.notificationHiddenPoolCount + 1});
 	}
 
+	setLoginState(state){
+		this.setState({loginState: state});
+	}
+
 	render(){
+		let containerClass = '';
+		if (this.state.loginState === true){
+			containerClass = 'container-login'
+		}
+		console.log(this.state.loginState);
+
 		return (
 			<>
-				<AppContext.Provider value={{pushNotification: this.pushNotification}}>
+				<AppContext.Provider value={{pushNotification: this.pushNotification, setLoginState: this.setLoginState}}>
 					<BrowserRouter>
 						<Switch>
 							<Route exact path="/" component={Home}/>
 							<Route path="/home" component={Home}/>
 							<Route path="/login" component={Login}/>
 							<Route path="/404" component={Page404}/>
+							<Route path="/unknown-onid" component={UnknownONID}/>
+							<Route path="/dev" component={DevLogin}/>
 
-							<Route path="/instructor">
-								<InstructorNavbar/>
-								<div className="container">
-									<Switch>
-										<Route exact path="/instructor/dashboard" component={CompanyManagementPage}/>
-										<Route exact path="/instructor/companymanagementpage" component={CompanyManagementPage}/>
-										<Route exact path="/instructor/bank" component={Bank}/>
-										<Route exact path="/instructor/usermanagement" component={UserManagement}/>
-										<Route exact path="/instructor/database" component={DatabaseManagementPage}/>
-										<Route exact path="/instructor/dashboard/:id" component={SnapshotGroup}/>
-										<Route path="*" component={Page404}/>
-									</Switch>
-								</div>
-							</Route>
+							
+								<Route path="/instructor">
+									<InstructorNavbar/>
+									<div className="container">
+										<Switch>
+											<Route exact path="/instructor/dashboard" component={CompanyManagementPage}/>
+											<Route exact path="/instructor/companymanagementpage" component={CompanyManagementPage}/>
+											<Route exact path="/instructor/bank" component={Bank}/>
+											<Route exact path="/instructor/usermanagement" component={UserManagement}/>
+											<Route exact path="/instructor/database" component={DatabaseManagementPage}/>
+											<Route exact path="/instructor/dashboard/:id" component={SnapshotGroup}/>
+											<Route path="*" component={Page404}/>
+										</Switch>
+									</div>
+								</Route>
 
-							<Route path="/student">
-								<StudentNavbar/>
-								<div className="container">
-									<Switch>
-										<Route exact path="/student/dashboard" component={Dashboard}/>
-										<Route exact path="/student/settings" component={Page_Settings} />
-										<Route exact path="/student/transactions" component={TransactionPage} />
-										<Route exact path="/student/expenses" component={ExpensePage}/>
-										<Route path="*" component={Page404}/>
-									</Switch>
+								<div className={containerClass}>
+								<Route path="/student">
+									<StudentNavbar/>
+									<div className="container">
+										<Switch>
+											<Route exact path="/student/dashboard" component={Dashboard}/>
+											<Route exact path="/student/settings" component={Page_Settings} />
+											<Route exact path="/student/transactions" component={TransactionPage} />
+											<Route exact path="/student/expenses" component={ExpensePage}/>
+											<Route path="*" component={Page404}/>
+										</Switch>
+									</div>
+								</Route>
 								</div>
-							</Route>
 
 							<Route path="*" component={Page404}/>
 						</Switch>

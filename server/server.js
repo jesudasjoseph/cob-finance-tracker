@@ -7,10 +7,13 @@ const https = require('https');
 const http = require('http');
 const config = require('./config');
 const path = require('path');
+const passport = require('passport');
+let SamlStrategy = require('passport-saml').Strategy;
+const authorizor = require('./authorizor');
 const q = require('./queries');
 
-let key = fs.readFileSync(__dirname + config.sslKeyPath);
-let cert = fs.readFileSync(__dirname + config.sslCertPath);
+let key = fs.readFileSync(config.sslKeyPath);
+let cert = fs.readFileSync(config.sslCertPath);
 let options = {
   key: key,
   cert: cert
@@ -32,6 +35,15 @@ const API_URL = '/api/' + VERSION;
 //Init database connection
 q.init();
 
+//Init Dev stuff
+if (config.devMode === 'true') {
+	q.addDevUser(config.devUsername);
+} 
+//DeInit Dev Stuff
+else {
+	q.deleteDevUser(config.devUsername);
+}
+
 //Request Routing
 let authRouter = require('./routes/auth');
 let adminRouter = require('./routes/admin');
@@ -42,10 +54,57 @@ let expenseRouter = require('./routes/expense');
 let depositRouter = require('./routes/deposit');
 let exportRouter = require('./routes/export');
 
-//app.use(helmet()); //Use helmet as a middleware to help with http header security
+//DEV REQUESTS (NOT FOR PRODUCTION)
+let devRouter = require('./routes/dev');
+
 app.use(cors()); //Use cors middleware
-app.use(express.json()); //Parse body
+app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Build Path
+
+//SAML Strategy config
+//This also checks if user exists.
+passport.use(new SamlStrategy({
+		entryPoint: 'https://login-int.iam.oregonstate.edu/idp/profile/SAML2/Redirect/SSO',
+		issuer: config.samlIssuer,
+		callbackUrl: config.samlCallbackUrl,
+		cert: config.samlCert
+	},
+	async (profile, done) => {
+		let {code, data} = await authorizor.getToken(profile.nameID.split('@')[0]);
+
+		if (data){
+			return done(null, data);
+		}
+		else{
+			return done(null, null);
+		}
+	}));
+app.get('/saml/auth',
+	passport.authenticate('saml', { failureRedirect: '/saml/fail', failureFlash: true, session: false }),
+	function(req, res) {
+		res.redirect('/');
+	}
+);
+
+let auth_user = undefined;
+
+app.post('/saml/consume',
+	bodyparser.urlencoded({ extended: false }),
+	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true, session: false }),
+	(req, res) => {
+		if (req.user){
+			auth_user = req.user;
+			const authPage = `<script>let myStorage = window.localStorage; myStorage.setItem('jwt','Bearer ' + '${auth_user.token}'); myStorage.setItem('role', ${auth_user.role}); window.location.href = '/login';</script>`;
+			res.type('.html');
+			res.send(authPage);
+		}
+		else {
+			res.redirect('/unknown-onid');
+		}
+});
+
+app.use(express.json()); //Parse body
+//app.use(helmet()); //Use helmet as a middleware to help with http header security
 
 //API Endpoints
 //Router for Authentication requests
@@ -64,6 +123,11 @@ app.use(API_URL + '/expense', expenseRouter);
 app.use(API_URL + '/deposit', depositRouter);
 //Router for Export data requests
 app.use(API_URL + '/export', exportRouter);
+
+//Dev endpoint
+if (config.devMode === 'true'){
+	app.use(API_URL + '/dev', devRouter);
+}
 
 //Static Server (Front-End)
 app.get(['/', '/*'], (req, res) => {

@@ -50,22 +50,22 @@ function generateToken(payload){
 	return jwt.sign({payload}, config.secret);
 }
 
-//Returns a token for the specified 'user', 'ip' combo.
+//Returns a token for the specified 'user_id'.
 //Adds user to sessionList
 //
 //returns
-//on success - {200, {token, role}}
+//on success - {200, {token, role, user_id}}
 //on fail - {http_status}
-async function getToken(uid, ip){
-	let {code, data} = await q.getRole(new q.asker(uid, undefined));
+async function getToken(user_id){
+	let {code, data} = await q.getRole(new q.asker(user_id, undefined));
 
-	if (code == 200) {
-		let ses = new session(uid, data, ip)
+	if (data.length != 0) {
+		let ses = new session(user_id, data);
 		addSession(ses);
-		return new packet(code, {token:generateToken(ses), role:data, user_id:uid});
+		return new packet(200, {token:generateToken(ses), role:data, user_id:user_id});
 	}
 	else {
-		return new packet(code);
+		return new packet(code, null);
 	}
 }
 
