@@ -69,7 +69,7 @@ app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Bu
 passport.use(new SamlStrategy({
 		entryPoint: config.SAML_ENTRY_POINT,
 		issuer: config.HOSTNAME,
-		callbackUrl: `${config.HOSTNAME} + /saml/consume`,
+		callbackUrl: `${config.HOSTNAME}/saml/consume`,
 		cert: config.SAML_CERT
 	},
 	async (profile, done) => {
@@ -143,7 +143,7 @@ let httpsServer = https.createServer(options, app);
 //Start HTTP/HTTPS Servers
 
 console.log('Starting server...');
-console.log(`Server Config: ${config}`);
+console.log(`Server Config: ${JSON.stringify(config)}`);
 
 httpServer.listen(config.HTTP_PORT, () => {
 	console.log(`Listening at http://localhost:${config.HTTP_PORT}`);
