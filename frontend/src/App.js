@@ -57,7 +57,7 @@ export default class App extends Component{
 			notificationTitle: '',
 			notificationContent: '',
 			notificationTimeout: 0,
-			loginState: true
+			loginState: false
 		}
 
 		this.pushNotification = this.pushNotification.bind(this);
