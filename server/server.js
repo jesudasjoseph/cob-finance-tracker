@@ -69,7 +69,7 @@ app.use(express.static(path.join(__dirname, 'build'),)); //Use Static Website Bu
 passport.use(new SamlStrategy({
 		entryPoint: config.SAML_ENTRY_POINT,
 		issuer: config.HOSTNAME,
-		callbackUrl: config.HOSTNAME + '/saml/consume',
+		callbackUrl: `${config.HOSTNAME} + /saml/consume`,
 		cert: config.SAML_CERT
 	},
 	async (profile, done) => {
