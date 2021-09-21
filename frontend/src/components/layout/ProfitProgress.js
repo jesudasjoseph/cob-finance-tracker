@@ -47,8 +47,35 @@ export class ProfitProgress extends Component {
 					stretchLabel = '$'+profit+'/'+profitStretchGoal+' ('+stretch_percent+'%)'
 				}
 
+				//SVG Progress Variables
+				const progress = 80;
+				const width = 300;
+				const cycx = width/2;
+				const radius = cycx - width/8;
+				const circ = radius * 2 * Math.PI;
+				const circPerc = circ/100;
+				const mask = (circPerc*80);
+				const maskOffset = (mask/100) * (100 - progress);
+				const degreeOffset = (360 - 360*0.8) / 2 + 90;
+
 				return (
 					<>
+						<svg
+							width={width}
+							height={width}>
+							<circle
+								stroke="white"
+								fill="transparent"
+								r={radius}
+								cx={cycx}
+								cy={cycx}
+								style={{strokeWidth: width/8,
+										strokeDasharray: mask + " " + mask*2,
+										strokeDashoffset: maskOffset,
+										transform: `rotate(${degreeOffset}deg)`,
+										transformOrigin: "50% 50%"}}
+								/>
+						</svg>
 						<div className='progressBarContainer'>
 							<div className='lossBarDefault' style={{backgroundColor: (profit < 0) ? '#dc3545' : '#28a745' }}>
 							</div>
