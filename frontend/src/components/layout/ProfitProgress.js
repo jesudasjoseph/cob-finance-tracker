@@ -48,8 +48,9 @@ export class ProfitProgress extends Component {
 				}
 
 				//SVG Progress Variables
+				const myText = '$440'; 
 				const progress = 80;
-				const width = 300;
+				const width = 200;
 				const cycx = width/2;
 				const radius = cycx - width/8;
 				const circ = radius * 2 * Math.PI;
@@ -62,9 +63,23 @@ export class ProfitProgress extends Component {
 					<>
 						<svg
 							width={width}
-							height={width}>
+							height={width}
+							viewBox={"0 0 " + width + " " + width}>
+							<text x={cycx - (myText.length*10)/2} y={'50%'}>{myText}</text>
 							<circle
 								stroke="white"
+								fill="transparent"
+								r={radius}
+								cx={cycx}
+								cy={cycx}
+								style={{strokeWidth: width/8,
+										strokeDasharray: mask + " " + mask*2,
+										strokeDashoffset: maskOffset,
+										transform: `rotate(${degreeOffset}deg)`,
+										transformOrigin: "50% 50%"}}
+								/>
+														<circle
+								stroke="green"
 								fill="transparent"
 								r={radius}
 								cx={cycx}
