@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import ProfitProgress from '../../layout/ProfitProgress';
 import ExpenseProgress from '../../layout/ExpenseProgress';
 import BankProgress from '../../layout/BankProgress';
+import CircleProfitProgress from '../../layout/CircleProfitProgress';
 
 export class Dashboard extends Component {
 	constructor(props){
@@ -42,6 +43,7 @@ export class Dashboard extends Component {
 			<React.Fragment>
 				<div style={{textAlign:'center', padding: '4px'}}><h1><b>{this.state.business.company_id}</b> - dashboard</h1></div>
 				<h3 style={{padding: '20px 0px 0px 0px'}}>Profit Goals</h3>
+				<CircleProfitProgress profit={this.state.business.profit} goal={this.state.business.profit_goal} stretchGoal={this.state.business.stretch_profit_goal}/>
 				<ProfitProgress profit={this.state.business.profit} profitGoal={this.state.business.profit_goal} profitStretchGoal={this.state.business.stretch_profit_goal}/>
 				<h3 style={{padding: '20px 0px 0px 0px'}}>Expenses / Revenue</h3>
 				<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
