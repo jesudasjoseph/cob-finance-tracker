@@ -7,7 +7,7 @@ import './styles/CircleProfitProgress.css';
 
 export default class CircleProfitProgress extends Component {
 	render() {
-		if (this.props.profit === null){
+		if (this.props.profit === NaN){
 			return (
 				<>
 					<div className='progressBarContainer'>
@@ -18,81 +18,135 @@ export default class CircleProfitProgress extends Component {
 		}
 		else {
 			let profit = parseFloat(this.props.profit);
-			let profitGoal = parseFloat(this.props.goal);
-			let profitStretchGoal = parseFloat(this.props.stretchGoal);
+			let goal = parseFloat(this.props.goal);
+			let stretchGoal = parseFloat(this.props.stretchGoal);
 
-			if (profitGoal === 0){
+			if (goal === 0 || stretchGoal === 0){
 				return (
 					<div>
-						<p className='centerText'>Profit goal not Set!</p>
+						<p className='centerText'>Profit goals not Set!</p>
 					</div>
 				)
 			}
 			else {
-				const percent_of_profit_goal = profitGoal/100;
-				const percent_of_stretch_goal = profitStretchGoal/100;
-				const profit_percent = parseFloat(profit/percent_of_profit_goal).toFixed(2);
-				const stretch_percent = parseFloat(profit/percent_of_stretch_goal).toFixed(2);
+				let hasProfit = true;
+				let progress = 0;
 
-				let lossLabel = '';
-				let profitLabel = '';
-				let stretchLabel = '';
+				//When progress is equal to this it reaches the marker in the graphic
+				const goalMarker = 64;
+				const stretchGoalMarker = 100;
 
-				if (profit < 0) {
-					lossLabel = '$'+profit;
+				const percent_of_profit_goal = goal/100;
+				const percent_of_stretch_goal = stretchGoal/100;
+				const profit_percent = parseFloat((profit/percent_of_profit_goal)*(goalMarker/100)).toFixed(2);
+				const stretch_percent = parseFloat(profit/percent_of_stretch_goal*(stretchGoalMarker/100)).toFixed(2);
+
+				if (profit < 0){
+					hasProfit = false;
 				}
-				else if (profit < profitGoal){
-					profitLabel = '$'+profit+'/'+profitGoal+' ('+profit_percent+'%)'
+				else if (profit <= goal){
+					progress = profit_percent;
 				}
 				else {
-					profitLabel = '$'+profitGoal+'/'+profitGoal+' (100%)'
-					stretchLabel = '$'+profit+'/'+profitStretchGoal+' ('+stretch_percent+'%)'
+					progress = stretch_percent + goalMarker;
 				}
 				
-				//In Picxels
-				const width = 200;
-
-				const strokeWidth = width/6;
-				const diameter = width - strokeWidth;
-				const radius = diameter/2;
-				const circumference = diameter*Math.PI;
-				
-
-				//Progress in percent
-				let progress = 100;
+				const height = this.props.style ? this.props.style.height : 300;
 
 				const svgContainerStyle = {
-					width: `${diameter}px`,
-					height: `${diameter}px`
+					width: `${height+120}px`,
+					height: `${height}px`
 				}
-
-				const circleStyle = {
-					width: `${width}px`,
-					height: `${width}px`,
-					r: `${radius}px`,
-					strokeDasharray: `${circumference*0.80} ${circumference+2}`,
-					strokeDashoffset: `${circumference*0.0080*(100-progress)}px`,
-					transform: `rotate(${90+360*0.1}deg)`,
-					transformOrigin: `50% 50%`,
-					cx: `${width/2}px`,
-					cy: `${width/2}px`,
-					strokeWidth: `${strokeWidth}px`
-				};
-
-				//SVG Progress Variables
-				const myText = '440';
 
 				return (
 					<>
 						<div className='circle-progress-container' style={svgContainerStyle}>
-							<p className='circle-progress-label'>${myText}</p>
-							<svg id='svg' className='circle-progress-svg' viewBox={"0 0 " + width + " " + width}>
+							<svg id='svg' className='circle-progress-svg' 
+								viewBox='0 0 100 100'>
 								<circle
-									stroke="white"
 									fill="transparent"
-									style={circleStyle}
+									width="80"
+									height="800"
+									r="40"
+									cx="50"
+									cy="50"
+									stroke={hasProfit ? 'white' : 'red'}
+									strokeWidth="13"
+									strokeDasharray="201 500"
+									style={{
+										transform: 'rotate(126deg)',
+										transformOrigin: '50% 50%'
+									}}
 									/>
-								
+								<circle
+									fill="transparent"
+									width="80"
+									height="80"
+									r="40"
+									cx="50"
+									cy="50"
+									stroke="black"
+									strokeWidth="13"
+									strokeDasharray="200 400"
+									strokeDashoffset={(200 - progress*2).toString()}
+									style={{
+										transform: 'rotate(126deg)',
+										transformOrigin: '50% 50%',
+										opacity: hasProfit ? '1' : '0'
+									}}
+									/>
+								<circle
+									fill="transparent"
+									width="80"
+									height="80"
+									r="42"
+									cx="50"
+									cy="50"
+									stroke="#4a4a4a"
+									strokeWidth="18"
+									strokeDasharray="1.5 75 1.5 300"
+									style={{
+										transform: 'rotate(-52deg)',
+										transformOrigin: '50% 50%',
+										opacity: hasProfit ? '1' : '0'
+									}}
+									/>
+								<text
+									className="circle-progress-profit-label"
+									x="50"
+									y="50"
+									fontSize="14"
+									textAnchor="middle"
+									fill="black">
+									{hasProfit ? '$' + profit : `($${0-profit})`}
+								</text>
+								<text
+									className="circle-progress-label"
+									x="50"
+									y="88"
+									fontSize="12"
+									textAnchor="middle"
+									fill={hasProfit ? 'green' : 'red'}>
+									{hasProfit ? 'Profit' : 'Loss'}
+								</text>
+								<text
+									className="circle-progress-goal-label"
+									x="85"
+									y="10"
+									fontSize="8"
+									textAnchor="left"
+									fill="black">
+									{hasProfit ? '$' + this.props.goal : ''}
+								</text>
+								<text
+									className="circle-progress-stretch-label"
+									x="85"
+									y="95"
+									fontSize="8"
+									textAnchor="left"
+									fill="black">
+									{hasProfit ? '$' + this.props.stretchGoal : ''}
+								</text>
 							</svg>
 						</div>
 					</>
@@ -101,15 +155,3 @@ export default class CircleProfitProgress extends Component {
 		}
 	}
 }
-/*
-<circle 
-									className='circle-progress-base-ring'
-									stroke="green"
-									fill="transparent"
-									style={{
-											strokeDasharray: '100% 200%',
-											strokeDashoffset: '20%',
-											transform: `rotate(${degreeOffset}deg)`,
-											transformOrigin: "50% 50%"}}
-									/>
-*/
