@@ -49,28 +49,48 @@ export default class CircleProfitProgress extends Component {
 					stretchLabel = '$'+profit+'/'+profitStretchGoal+' ('+stretch_percent+'%)'
 				}
 				
-				//SVG Progress Variables
-				const myText = '440'; 
-				const progress = 80;
+				//In Picxels
 				const width = 200;
-				const cycx = width/2;
-				const radius = 100;
+
+				const strokeWidth = width/6;
+				const diameter = width - strokeWidth;
+				const radius = diameter/2;
+				const circumference = diameter*Math.PI;
+				
+
+				//Progress in percent
+				let progress = 100;
+
+				const svgContainerStyle = {
+					width: `${diameter}px`,
+					height: `${diameter}px`
+				}
+
+				const circleStyle = {
+					width: `${width}px`,
+					height: `${width}px`,
+					r: `${radius}px`,
+					strokeDasharray: `${circumference*0.80} ${circumference+2}`,
+					strokeDashoffset: `${circumference*0.0080*(100-progress)}px`,
+					transform: `rotate(${90+360*0.1}deg)`,
+					transformOrigin: `50% 50%`,
+					cx: `${width/2}px`,
+					cy: `${width/2}px`,
+					strokeWidth: `${strokeWidth}px`
+				};
+
+				//SVG Progress Variables
+				const myText = '440';
 
 				return (
 					<>
-						<div className='circle-progress-container' style={{width: '200px', height: '200px'}}>
+						<div className='circle-progress-container' style={svgContainerStyle}>
 							<p className='circle-progress-label'>${myText}</p>
-							<svg id='svg' className='circle-progress-svg'>
-								<circle id='circle' 
-									className='circle-progress-base-ring'
+							<svg id='svg' className='circle-progress-svg' viewBox={"0 0 " + width + " " + width}>
+								<circle
 									stroke="white"
 									fill="transparent"
-									style={{
-											r: radius,
-											strokeDasharray: `${80*Math.PI}% ${200*Math.PI}%`,
-											strokeDashoffset: `${20*Math.PI}%`,
-											transform: `rotate(${90}deg)`,
-											transformOrigin: "50% 50%"}}
+									style={circleStyle}
 									/>
 								
 							</svg>
