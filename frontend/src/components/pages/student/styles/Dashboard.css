@@ -1,0 +1,23 @@
+.dashboard-container{
+	display: flex;
+	flex-direction: row;
+}
+@media only screen and (max-width: 1400px) {
+	.dashboard-container {
+		flex-direction: column;
+	}
+}
+
+.dashboard-container .left {
+	flex-grow: 1;
+	margin: auto;
+	background: none;
+	box-shadow: none;
+}
+
+.dashboard-container .right {
+	display: flex;
+	flex-direction: column;
+	min-width: 250px;
+	flex-grow: 15;
+}
