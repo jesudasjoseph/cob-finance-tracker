@@ -237,9 +237,6 @@ export default class CompanyManagementPage extends Component {
 					<div className='left'>
 						<SearchBar onChange={this.searchOnChange}/>
 						<div className='flex-container'>
-							<h2>Companies</h2>
-							<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
-							<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
 							<Table responsive size="sm" bordered hover variant="dark">
 								<thead>
 									<tr>
@@ -316,6 +313,8 @@ export default class CompanyManagementPage extends Component {
 									})}
 								</tbody>
 							</Table>
+							<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'< Last Page'}</Button>
+							<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'Next Page >'}</Button>
 						</div>
 					</div>
 					<div className='right'>

@@ -278,13 +278,10 @@ export default class UserManagement extends Component {
 					<div className='left'>
 						<SearchBar onChange={this.searchOnChange}/>
 						<div className='flex-container'>
-						<h2>Users</h2>
-						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>Last Page</Button>
-						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>Next Page</Button>
-						<Table size='sm' variant='dark' bordered hover responsive>
-							<thead>
+							<Table size='sm' variant='dark' bordered hover responsive>
+								<thead>
 								<tr>
-									<th>ONID</th>
+									<th>UID</th>
 									<th>Company</th>
 									<th>Name</th>
 									<th>Section</th>
@@ -297,8 +294,8 @@ export default class UserManagement extends Component {
 									<th></th>
 									<th></th>
 								</tr>
-							</thead>
-							<tbody>
+								</thead>
+								<tbody>
 								{
 									this.state.tableRows.map((row, index) => {
 										const {
@@ -333,8 +330,10 @@ export default class UserManagement extends Component {
 										}
 									})
 								}
-							</tbody>
-						</Table>
+								</tbody>
+							</Table>
+							<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'< Last Page'}</Button>
+							<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'Next Page >'}</Button>
 						</div>
 					</div>
 					<div className='right'>

@@ -63,11 +63,16 @@ h2 {
 
 /*Look for floating flex containers*/
 .flex-container {
-	background-color: white;
+	/*background-color: white;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 5px;*/
 	margin: 10px;
-	box-shadow: 3px 3px 10px black;
+
+	/*box-shadow: 3px 3px 10px black;*/
+}
+
+.page-shadow {
+	box-shadow: 1px 1px 2px black;
 }
 
 /*.table-container{
@@ -109,11 +114,11 @@ h2 {
 }
 
 .global-last-page-button {
-	width: 50%;
+	width: 8em;
 	float: left;
 }
 .global-next-page-button {
-	width: 50%;
+	width: 8em;
 	float: right;
 }
 

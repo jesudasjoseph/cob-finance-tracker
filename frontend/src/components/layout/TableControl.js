@@ -41,9 +41,9 @@ export default class TableControl extends Component {
 		return(
 			<>
 				<div className='flex-container control-container'>
-					{this.props.add && <Button className='addButton' disabled={this.props.addDisabled} variant='success' onClick={this.props.addOnClick}>Add</Button>}
-					{this.props.edit && <Button className='editButton' disabled={this.props.editDisabled} variant='warning' onClick={this.props.editOnClick}>Edit</Button>}
-					{this.props.delete && <Button className='deleteButton' disabled={this.props.deleteDisabled} variant='danger' onClick={this.deleteOnClick}>Delete</Button>}
+					{this.props.add && <Button className='addButton page-shadow' disabled={this.props.addDisabled} variant='success' onClick={this.props.addOnClick}>Add</Button>}
+					{this.props.edit && <Button className='editButton page-shadow' disabled={this.props.editDisabled} variant='warning' onClick={this.props.editOnClick}>Edit</Button>}
+					{this.props.delete && <Button className='deleteButton page-shadow' disabled={this.props.deleteDisabled} variant='danger' onClick={this.deleteOnClick}>Delete</Button>}
 				</div>
 				<Modal show={this.state.showWarning}>
 					<Modal.Body>
