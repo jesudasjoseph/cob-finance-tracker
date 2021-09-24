@@ -59,10 +59,10 @@ class StudentNavbar extends Component {
 	render(){
 		if (this.state.smallWindow) {
 			return(
-				<Navbar sticky="top" collapseOnSelect expand="md" bg="dark" variant="dark">
+				<Navbar fixed="bottom" collapseOnSelect expand="md" bg="dark" variant="dark">
 					<Navbar.Brand as={Link} to="/student/dashboard">College of Buisness App</Navbar.Brand>
 					<div className='ml-auto'>
-						<DropdownButton variant="dark" menuAlign="right" title={<img src={hamburger} alt='Nav'></img>} id="collasible-nav-dropdown">
+						<DropdownButton variant="dark" drop='up' menuAlign="right" title={<img src={hamburger} alt='Nav'></img>} id="collasible-nav-dropdown">
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/dashboard">Dashboard</Dropdown.Item>
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/transactions">Transactions</Dropdown.Item>
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/expenses">Expenses</Dropdown.Item>

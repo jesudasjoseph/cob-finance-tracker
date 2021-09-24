@@ -37,10 +37,10 @@ export default class InstructorNavbar extends Component {
 		if (this.state.smallWindow){
 			return (
 				<>
-					<Navbar sticky="top" bg="dark" variant="dark">
+					<Navbar fixed="bottom" bg="dark" variant="dark">
 						<Navbar.Brand as={Link} to="/instructor/dashboard">College of Business App</Navbar.Brand>
 						<div className="ml-auto dropdown-nav">
-							<DropdownButton style={{textAlign: 'center'}} title={<img src={hamburger} alt='Nav'></img>} variant="dark" menuAlign="right">
+							<DropdownButton drop='up' title={<img src={hamburger} alt='Nav'></img>} variant="dark" menuAlign="right">
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/instructor/dashboard">Dashboard</Dropdown.Item>
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/instructor/bank">Bank</Dropdown.Item>
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/instructor/usermanagement">Users</Dropdown.Item>
