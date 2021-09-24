@@ -7,12 +7,33 @@ import {Link, withRouter} from 'react-router-dom';
 
 import { AppContext } from '../../AppContext';
 
+import hamburger from '../../assets/hamburger.png';
+import './styles/StudentNavbar.css';
+
 class StudentNavbar extends Component {
 
 	constructor(props){
 		super(props);
 
+		this.state = {
+			smallWindow: false
+		}
+
+		this.checkWidth = this.checkWidth.bind(this);
 		this.onLogout = this.onLogout.bind(this);
+	}
+
+	checkWidth(){
+		const match = window.matchMedia(`(max-width: 768px)`);
+		this.setState({smallWindow: match.matches});
+	}
+
+	componentDidMount() {
+		this.checkWidth();
+		window.addEventListener("resize", this.checkWidth);
+	}
+	componentWillUnmount() {
+ 		window.removeEventListener("resize", this.checkWidth);
 	}
 
 	onLogout(){
@@ -36,26 +57,44 @@ class StudentNavbar extends Component {
 	}
 
 	render(){
-		return(
-			<Navbar sticky="top" collapseOnSelect expand="md" bg="dark" variant="dark">
-				<Navbar.Brand as={Link} to="/student/dashboard">College of Buisness App</Navbar.Brand>
-				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-				<Navbar.Collapse id="responsive-navbar-nav">
-					<Nav className="ml-auto">
-						<Nav.Link as={Link} to="/student/dashboard">Dashboard</Nav.Link>
-						<Nav.Link as={Link} to="/student/transactions">Transactions</Nav.Link>
-						<Nav.Link as={Link} to="/student/expenses">Expenses</Nav.Link>
-					</Nav>
-					<Nav>
-						<DropdownButton variant="dark" menuAlign="right" title={window.localStorage.getItem('user_id')} id="collasible-nav-dropdown">
-							<Dropdown.Item as={Link} to="/student/settings">Settings</Dropdown.Item>
-							<Dropdown.Divider />
-							<Dropdown.Item onClick={this.onLogout}>Logout</Dropdown.Item>
+		if (this.state.smallWindow) {
+			return(
+				<Navbar sticky="top" collapseOnSelect expand="md" bg="dark" variant="dark">
+					<Navbar.Brand as={Link} to="/student/dashboard">College of Buisness App</Navbar.Brand>
+					<div className='ml-auto'>
+						<DropdownButton variant="dark" menuAlign="right" title={<img src={hamburger} alt='Nav'></img>} id="collasible-nav-dropdown">
+							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/dashboard">Dashboard</Dropdown.Item>
+							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/transactions">Transactions</Dropdown.Item>
+							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/expenses">Expenses</Dropdown.Item>
+							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/settings">Settings</Dropdown.Item>
+							<Dropdown.Divider/>
+							<Dropdown.Item style={{textAlign: 'center'}} onClick={this.onLogout}>Logout</Dropdown.Item>
 						</DropdownButton>
-					</Nav>
-				</Navbar.Collapse>
-			</Navbar>
-		)
+					</div>
+				</Navbar>
+			);
+		}
+		else {
+			return(
+				<Navbar sticky="top" collapseOnSelect expand="md" bg="dark" variant="dark">
+					<Navbar.Brand as={Link} to="/student/dashboard">College of Buisness App</Navbar.Brand>
+					<div className='ml-auto list-nav'>
+						<Nav>
+							<Nav.Link style={{textAlign: 'center'}} as={Link} to="/student/dashboard">Dashboard</Nav.Link>
+							<Nav.Link style={{textAlign: 'center'}} as={Link} to="/student/transactions">Transactions</Nav.Link>
+							<Nav.Link style={{textAlign: 'center'}} as={Link} to="/student/expenses">Expenses</Nav.Link>
+						</Nav>
+						<Nav>
+							<DropdownButton variant="dark" menuAlign="right" title={window.localStorage.getItem('user_id')} id="collasible-nav-dropdown">
+								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/settings">Settings</Dropdown.Item>
+								<Dropdown.Divider />
+								<Dropdown.Item style={{textAlign: 'center'}} onClick={this.onLogout}>Logout</Dropdown.Item>
+							</DropdownButton>
+						</Nav>
+					</div>
+				</Navbar>
+			);
+		}
 	}
 }
 StudentNavbar.contextType = AppContext;
