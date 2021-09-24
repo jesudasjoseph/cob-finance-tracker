@@ -67,7 +67,6 @@ export default class TransactionPage extends Component {
 					<div className='left'>
 						<SearchBar onChange={this.searchOnChange}/>
 						<div className='flex-container'>
-							<h2>Transactions</h2>
 							<Table responsive size="m" striped bordered hover variant="dark">
 								<thead>
 									<tr>

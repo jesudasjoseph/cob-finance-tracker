@@ -67,7 +67,6 @@ export default class ExpensePage extends Component {
 					<div className='left'>
 						<SearchBar onChange={this.searchOnChange}/>
 						<div className='flex-container'>
-							<h2>Business Expenses</h2>
 							<Table
 								responsive
 								size="m"

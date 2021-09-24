@@ -85,9 +85,9 @@ export default class DepositTable extends PureComponent{
 				<>
 					<div className='deposit-table-container'>
 						<div className='left'>
+							<h2>{companyName} - Bank Deposit</h2>
 							<SearchBar onChange={this.searchOnChange}/>
 							<div className='flex-container'>
-							<h2>{companyName} - Bank Deposit</h2>
 							<Table responsive size="sm" striped bordered hover variant="dark">
 								<thead>
 									<tr>

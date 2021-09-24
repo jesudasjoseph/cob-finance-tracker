@@ -17,10 +17,10 @@
 		width: auto;
 	}
 	.deposit-table-container .left {
-		order: 2;
+		order: 1;
 	}
 	.deposit-table-container .right {
-		order: 1;
+		order: 2;
 	}
 
 }

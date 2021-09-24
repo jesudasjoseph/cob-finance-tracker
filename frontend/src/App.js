@@ -101,7 +101,6 @@ export default class App extends Component{
 		if (this.state.loginState === true){
 			containerClass = 'container-login'
 		}
-		console.log(this.state.loginState);
 
 		return (
 			<>

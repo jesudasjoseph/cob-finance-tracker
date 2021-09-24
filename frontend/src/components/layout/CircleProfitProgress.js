@@ -7,7 +7,7 @@ import './styles/CircleProfitProgress.css';
 
 export default class CircleProfitProgress extends Component {
 	render() {
-		if (this.props.profit === NaN){
+		if (isNaN(this.props.profit)){
 			return (
 				<>
 					<div className='progressBarContainer'>
