@@ -48,12 +48,7 @@ export default class App extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			notificationPool: [
-				new NotificationObj(0, 'Error', 'This is an Error!', 'error', 0),
-				new NotificationObj(0, 'Successful', 'This is a successful message!', 'success', 0),
-				new NotificationObj(0, 'Warning', 'This is a warning message!!', 'warning', 0),
-				new NotificationObj(0, 'Warning', '', 'warning', 0)
-			],
+			notificationPool: [],
 			notificationHiddenPoolCount: 0,
 			loginState: false
 		}
