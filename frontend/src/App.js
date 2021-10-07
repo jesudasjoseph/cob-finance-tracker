@@ -42,7 +42,7 @@ function NotificationObj(id, title, content, type, delay){
 	this.id = id;
 	this.show = true;
 }
-let notifiactionCount = 0;
+let notificationCount = 0;
 
 export default class App extends Component{
 	constructor(props){
@@ -50,11 +50,6 @@ export default class App extends Component{
 		this.state = {
 			notificationPool: [],
 			notificationHiddenPoolCount: 0,
-			showNotification: false,
-			notificationType: '',
-			notificationTitle: '',
-			notificationContent: '',
-			notificationTimeout: 0,
 			loginState: false
 		}
 
@@ -65,15 +60,15 @@ export default class App extends Component{
 
 	//Push notifiaction onto notifiaction state array. Replace notifiactions that are already invisible.
 	pushNotification(type, title, content, delay_in_seconds){
-		notifiactionCount++;
+		notificationCount++;
 		if (this.state.notificationPool.length === 0){
-			this.setState({notificationPool: [new NotificationObj(notifiactionCount, title, content, type, delay_in_seconds * 1000)]});
+			this.setState({notificationPool: [new NotificationObj(notificationCount, title, content, type, delay_in_seconds * 1000)]});
 		}
 		else if (this.state.notificationHiddenPoolCount > 0){
 			for (let i = 0; i < this.state.notificationPool.length; i++){
 				if (!this.state.notificationPool[i].show){
 					let tempNotificationPool = this.state.notificationPool;
-					tempNotificationPool[i] = new NotificationObj(notifiactionCount, title, content, type, delay_in_seconds * 1000);
+					tempNotificationPool[i] = new NotificationObj(notificationCount, title, content, type, delay_in_seconds * 1000);
 					this.setState({notificationPool: tempNotificationPool, notificationHiddenPoolCount: this.state.notificationHiddenPoolCount - 1});
 					break;
 				}
@@ -81,7 +76,7 @@ export default class App extends Component{
 		}
 		else {
 			let tempNotificationPool = this.state.notificationPool;
-			tempNotificationPool.push(new NotificationObj(notifiactionCount, title, content, type, delay_in_seconds * 1000));
+			tempNotificationPool.push(new NotificationObj(notificationCount, title, content, type, delay_in_seconds * 1000));
 			this.setState({notificationPool: tempNotificationPool});
 		}
 	}
@@ -101,7 +96,6 @@ export default class App extends Component{
 		if (this.state.loginState === true){
 			containerClass = 'container-login'
 		}
-		console.log(this.state.loginState);
 
 		return (
 			<>
@@ -155,16 +149,11 @@ export default class App extends Component{
 						this.state.notificationPool.map((notification, index) => {
 							const { title, content, type, delay, show, id} = notification;
 							return(
-								<Toast key={id} className='toast' onClose={() => this.notificationOnClose(index)} show={show} delay={delay} autohide={delay}>
+								<Toast key={id} className={'toast toast-' + type} show={show} delay={delay} autohide={delay} onClose={() => this.notificationOnClose(index)} onClick={() => this.notificationOnClose(index)}>
 									<Toast.Header>
-										<img
-											src="holder.js/20x20?text=%20"
-											className="rounded me-2"
-											alt=""
-										/>
 										<strong className="mr-auto">{title}</strong>
 									</Toast.Header>
-									<Toast.Body>{content}</Toast.Body>
+									{content && <Toast.Body>{content}</Toast.Body>}
 								</Toast>
 							);
 						})
