@@ -188,7 +188,6 @@ export default class UserManagement extends Component {
 	}
 
 	onLoginAsUserClick(){
-		console.log(this.state.tableRows);
 		fetch(process.env.REACT_APP_API_PATH + '/auth?user_id=' + this.state.tableRows[this.state.tableSelectedRow].user_id, {
 				mode: 'cors',
 				method: 'GET',
@@ -213,8 +212,6 @@ export default class UserManagement extends Component {
 				this.context.setLoginState(true);
 
 				this.props.history.push('/student/dashboard');
-
-				console.log('Success:', data);
 			}).catch((error) => {
 				console.error('Error:', error);
 			});

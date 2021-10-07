@@ -92,11 +92,6 @@ export default class App extends Component{
 	}
 
 	render(){
-		let containerClass = '';
-		if (this.state.loginState === true){
-			containerClass = 'container-login'
-		}
-
 		return (
 			<>
 				<AppContext.Provider value={{pushNotification: this.pushNotification, setLoginState: this.setLoginState}}>
@@ -123,21 +118,20 @@ export default class App extends Component{
 									</Switch>
 								</div>
 							</Route>
-
-							<div className={containerClass}>
-								<Route path="/student">
+							<Route path="/student">
+								<div className={this.state.loginState ? 'container-login' : 'container-nologin'}>
 									<StudentNavbar/>
-									<div className="container">
-										<Switch>
-											<Route exact path="/student/dashboard" component={Dashboard}/>
-											<Route exact path="/student/settings" component={Page_Settings} />
-											<Route exact path="/student/transactions" component={TransactionPage} />
-											<Route exact path="/student/expenses" component={ExpensePage}/>
-											<Route path="*" component={Page404}/>
-										</Switch>
-									</div>
-								</Route>
-							</div>
+								</div>
+								<div className="container">
+									<Switch>
+										<Route exact path="/student/dashboard" component={Dashboard}/>
+										<Route exact path="/student/settings" component={Page_Settings} />
+										<Route exact path="/student/transactions" component={TransactionPage} />
+										<Route exact path="/student/expenses" component={ExpensePage}/>
+										<Route path="*" component={Page404}/>
+									</Switch>
+								</div>
+							</Route>
 
 							<Route path="*" component={Page404}/>
 						</Switch>

@@ -25,11 +25,12 @@ h2 {
 }
 
 .container-login {
-	height: 100%;
-	width: 100%;
 	border-width: 5px;
 	border-style: solid;
 	border-color: yellow;
+}
+
+.container-nologin {
 }
 
 .toast-container {
@@ -64,6 +65,9 @@ h2 {
 		min-width: 95vw;
 		width: auto;
 		cursor: pointer;
+	}
+	.container {
+		margin-bottom: 60px;
 	}
 }
 
