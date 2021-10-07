@@ -904,7 +904,7 @@ async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 	searchText = '%' + searchText + '%';
 	const company_id = await get_bid_from_uid(asker.uid);
 	if (company_id == -1){
-		return new data(403);
+		return new data(404);
 	}
 	const query = {
 		text: 'SELECT * FROM transaction_table WHERE company_id=$1 AND transaction_table.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
@@ -1121,7 +1121,7 @@ async function getMultipleExpensesByUid(asker, start, end, searchText) {
 	searchText = '%' + searchText + '%';
 	const company_id = await get_bid_from_uid(asker.uid);
 	if (company_id == -1){
-		return new data(403);
+		return new data(404);
 	}
 	const query = {
 		text: 'SELECT * FROM expense_table WHERE company_id=$1 AND expense_table.date::text ILIKE $4 ORDER BY date DESC OFFSET ($2) ROWS FETCH FIRST ($3) ROWS ONLY;',
