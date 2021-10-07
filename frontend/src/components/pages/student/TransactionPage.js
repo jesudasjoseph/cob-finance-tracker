@@ -12,6 +12,7 @@ export default class TransactionPage extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			hasCompany: true,
 			transactionTableData: [],
 			showAddTransactionDialog: false,
 			searchText: ''
@@ -40,7 +41,12 @@ export default class TransactionPage extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			return response.json();
+			if (response.status === 404){
+				this.setState({hasCompany: false});
+			}
+			else {
+				return response.json();
+			}
 		}).then(data => {
 			this.setState({transactionTableData:data});
 		}).catch((error) => {
@@ -61,51 +67,60 @@ export default class TransactionPage extends Component {
 	}
 
 	render() {
-		return (
-			<>
-				<div className='transaction-container'>
-					<div className='left'>
-						<SearchBar onChange={this.searchOnChange}/>
-						<div className='flex-container'>
-							<h2>Transactions</h2>
-							<Table responsive size="m" striped bordered hover variant="dark">
-								<thead>
-									<tr>
-										<th>Date</th>
-										<th>Customer</th>
-										<th>Product</th>
-										<th>Payment Method</th>
-										<th>Quantity</th>
-										<th>Price Per Unit</th>
-										<th>Total</th>
-									</tr>
-								</thead>
-								<tbody>
-									{this.state.transactionTableData.map((transaction, index) => {
-										const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
-										return (
-											<tr key={transaction_id}>
-												<td>{date.split('T')[0]} </td>
-												<td>{customer}</td>
-												<td>{product}</td>
-												<td>{payment_method}</td>
-												<td>{quantity}</td>
-												<td>{price_per_unit}</td>
-												<td>{total}</td>
-											</tr>
-										);
-									})}
-								</tbody>
-							</Table>
+		if (this.state.hasCompany) {
+			return (
+				<>
+					<div className='transaction-container'>
+						<div className='left'>
+							<SearchBar onChange={this.searchOnChange}/>
+							<div className='flex-container'>
+								<h2>Transactions</h2>
+								<Table responsive size="m" striped bordered hover variant="dark">
+									<thead>
+										<tr>
+											<th>Date</th>
+											<th>Customer</th>
+											<th>Product</th>
+											<th>Payment Method</th>
+											<th>Quantity</th>
+											<th>Price Per Unit</th>
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										{this.state.transactionTableData.map((transaction, index) => {
+											const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
+											return (
+												<tr key={transaction_id}>
+													<td>{date.split('T')[0]} </td>
+													<td>{customer}</td>
+													<td>{product}</td>
+													<td>{payment_method}</td>
+													<td>{quantity}</td>
+													<td>{price_per_unit}</td>
+													<td>{total}</td>
+												</tr>
+											);
+										})}
+									</tbody>
+								</Table>
+							</div>
+						</div>
+						<div className='right'>
+							<TableControl add addOnClick={this.addOnClick}/>
 						</div>
 					</div>
-					<div className='right'>
-						<TableControl add addOnClick={this.addOnClick}/>
-					</div>
-				</div>
-				<AddTransactionDialog show={this.state.showAddTransactionDialog} onClose={this.addTransactionDialogOnClose} onSuccess={this.fetchTransactionTableData}/>
-			</>
-		);
+					<AddTransactionDialog show={this.state.showAddTransactionDialog} onClose={this.addTransactionDialogOnClose} onSuccess={this.fetchTransactionTableData}/>
+				</>
+			);
+		}
+		else {
+			return (
+				<>
+					<h3>You are currently not part of a company! Please contact your instructor!</h3>
+				</>
+			);
+		}
 	}
 }
 TransactionPage.contextType = AppContext;

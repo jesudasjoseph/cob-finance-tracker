@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-export class ProfitGoalsForm extends Component {
+export default class ProfitGoalsForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			hasCompany: true,
 			company_id: '',
 			profit_goal: 0,
 			stretch_profit_goal: 0
@@ -27,8 +28,12 @@ export class ProfitGoalsForm extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
-			return response.json();
+			if (response.status === 404){
+				this.setState({hasCompany: false});
+			}
+			else {
+				return response.json();
+			}
 		}).then(data => {
 			console.log('Success:', data);
 			this.setState({
@@ -89,19 +94,27 @@ export class ProfitGoalsForm extends Component {
 	}
 
 	render() {
-		return (
-			<>
-				<Form onSubmit={this.handle_submit}>
-					<Form.Group>
-						<Form.Label>Minimum Profit Goal</Form.Label>
-						<Form.Control type="number" value={this.state.profit_goal}  onChange={this.handleProfitGoalChange} />
-						<Form.Label>Stretch Profit Goal</Form.Label>
-						<Form.Control type="number" value={this.state.stretch_profit_goal} onChange={this.handleStretchProfitGoalChange} />
-					</Form.Group>
-					<Button variant="primary" type="submit">Save</Button>
-				</Form>
-			</>
-		)
+		if (this.state.hasCompany) {
+			return (
+				<>
+					<Form onSubmit={this.handle_submit}>
+						<Form.Group>
+							<Form.Label>Minimum Profit Goal</Form.Label>
+							<Form.Control type="number" value={this.state.profit_goal}  onChange={this.handleProfitGoalChange} />
+							<Form.Label>Stretch Profit Goal</Form.Label>
+							<Form.Control type="number" value={this.state.stretch_profit_goal} onChange={this.handleStretchProfitGoalChange} />
+						</Form.Group>
+						<Button variant="primary" type="submit">Save</Button>
+					</Form>
+				</>
+			);
+		}
+		else {
+			return (
+				<>
+					<h3>You are currently not part of a company! Please contact your instructor!</h3>
+				</>
+			);
+		}
 	}
 }
-export default ProfitGoalsForm

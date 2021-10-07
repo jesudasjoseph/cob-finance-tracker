@@ -114,24 +114,23 @@ export default class App extends Component{
 							<Route path="/404" component={Page404}/>
 							<Route path="/unknown-onid" component={UnknownONID}/>
 							<Route path="/dev" component={DevLogin}/>
-
 							
-								<Route path="/instructor">
-									<InstructorNavbar/>
-									<div className="container">
-										<Switch>
-											<Route exact path="/instructor/dashboard" component={CompanyManagementPage}/>
-											<Route exact path="/instructor/companymanagementpage" component={CompanyManagementPage}/>
-											<Route exact path="/instructor/bank" component={Bank}/>
-											<Route exact path="/instructor/usermanagement" component={UserManagement}/>
-											<Route exact path="/instructor/database" component={DatabaseManagementPage}/>
-											<Route exact path="/instructor/dashboard/:id" component={SnapshotGroup}/>
-											<Route path="*" component={Page404}/>
-										</Switch>
-									</div>
-								</Route>
+							<Route path="/instructor">
+								<InstructorNavbar/>
+								<div className="container">
+									<Switch>
+										<Route exact path="/instructor/dashboard" component={CompanyManagementPage}/>
+										<Route exact path="/instructor/companymanagementpage" component={CompanyManagementPage}/>
+										<Route exact path="/instructor/bank" component={Bank}/>
+										<Route exact path="/instructor/usermanagement" component={UserManagement}/>
+										<Route exact path="/instructor/database" component={DatabaseManagementPage}/>
+										<Route exact path="/instructor/dashboard/:id" component={SnapshotGroup}/>
+										<Route path="*" component={Page404}/>
+									</Switch>
+								</div>
+							</Route>
 
-								<div className={containerClass}>
+							<div className={containerClass}>
 								<Route path="/student">
 									<StudentNavbar/>
 									<div className="container">
@@ -144,7 +143,7 @@ export default class App extends Component{
 										</Switch>
 									</div>
 								</Route>
-								</div>
+							</div>
 
 							<Route path="*" component={Page404}/>
 						</Switch>

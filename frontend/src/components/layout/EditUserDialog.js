@@ -50,11 +50,15 @@ export default class EditUserDialog extends Component {
 				return response.json();
 			}
 			else {
-				console.log(response);
 				return [];
 			}
 		}).then((data) => {
-			this.setState({comapanyNameList:data});
+			if (data.length){
+				this.setState({comapanyNameList: data, company_id: data[0].company_id});
+			}
+			else {
+				this.setState({comapanyNameList: [], company_id: ''});
+			}
 		}).catch((error) => {
 			console.log(error);
 		});
@@ -66,28 +70,33 @@ export default class EditUserDialog extends Component {
 	handle_submit(e) {
 		e.preventDefault();
 
-		const dataObject = {user_id:this.props.user_id, company_id:this.state.company_id};
-		fetch(process.env.REACT_APP_API_PATH + '/user/addtobusiness', {
-			mode: 'cors',
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-type': 'application/json',
-				'Authorization': window.localStorage.getItem('jwt')
-			},
-			body: JSON.stringify(dataObject)
-		}).then(response => {
-			if (Math.floor(response.status / 200) === 1){
-				this.context.pushNotification('success', 'User Modified', 'Successfully modified user.', 4);
-				this.props.onSuccess();
-			}
-			else {
-				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-			}
-		}).catch((error) => {
-			console.error('error:', error);
-		});
+		if (this.state.company_id !== ''){
+			const dataObject = {user_id:this.props.user_id, company_id:this.state.company_id};
+			fetch(process.env.REACT_APP_API_PATH + '/user/addtobusiness', {
+				mode: 'cors',
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Accept': 'application/json',
+					'Content-type': 'application/json',
+					'Authorization': window.localStorage.getItem('jwt')
+				},
+				body: JSON.stringify(dataObject)
+			}).then(response => {
+				if (Math.floor(response.status / 200) === 1){
+					this.context.pushNotification('success', 'User Modified', 'Successfully modified user.', 4);
+					this.props.onSuccess();
+				}
+				else {
+					this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+				}
+			}).catch((error) => {
+				console.error('error:', error);
+			});
+		}
+		else {
+			this.context.pushNotification('error', 'Input Error', "No company selected!", 8);
+		}
 
 		this.props.onClose();
 	}

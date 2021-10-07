@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+import './styles/DevLogin.css';
+
 export default class DevLogin extends Component {
 
 	constructor(props) {
@@ -61,13 +63,15 @@ export default class DevLogin extends Component {
 
 	render () {
 		return (
-			<div className="container">
+			<div className="login-container">
 				<React.Fragment>
-					<Form>
-						<Form.Label>Dev password:</Form.Label>
-						<Form.Control type="input" placeholder="Enter DEV password..." onChange={(e) => this.setState({password: e.target.value})} />
-						<Button onClick={this.getUserToken} variant="primary">Login</Button>
-					</Form>
+					<div>
+						<h3>Developer Login</h3>
+						<Form onSubmit={this.getUserToken}>
+							<Form.Control className="mb-3" type="password" placeholder="Password..." onChange={(e) => this.setState({password: e.target.value})} />
+							<Button className="float-right" type="submit" variant="primary">Login</Button>
+						</Form>
+					</div>
 				</React.Fragment>
 			</div>
 		);
