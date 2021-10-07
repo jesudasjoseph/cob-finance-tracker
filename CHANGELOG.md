@@ -1,4 +1,9 @@
 # Change Log
+## Patch 2.0.1 - October
+
+### Bug Fixes
+
+- Fixed User Add/Edit dialogs not working when no companies exist in the database
 
 ## Release 2.0 - September 15th, 2021
 
