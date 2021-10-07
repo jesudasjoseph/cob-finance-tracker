@@ -924,7 +924,7 @@ async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 					}
 				}
 				else {
-					return new data(403);
+					return new data(404);
 				}
 				break;
 			default:
@@ -1141,7 +1141,7 @@ async function getMultipleExpensesByUid(asker, start, end, searchText) {
 					}
 				}
 				else {
-					return new data(403);
+					return new data(404);
 				}
 				break;
 			default:
