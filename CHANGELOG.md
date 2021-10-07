@@ -1,9 +1,10 @@
 # Change Log
-## Patch 2.0.1 - October
+## Patch 2.0.1 - October 7th, 2021
 
 ### Bug Fixes
 
 - Fixed User Add/Edit dialogs not working when no companies exist in the database
+- Fixed Student pages when a student is not part of a company - (displays message to contact instructor)
 
 ## Release 2.0 - September 15th, 2021
 
