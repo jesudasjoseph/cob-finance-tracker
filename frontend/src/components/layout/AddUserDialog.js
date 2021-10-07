@@ -58,7 +58,12 @@ export default class AddUserDialog extends Component {
 				return [];
 			}
 		}).then((data) => {
-			this.setState({comapanyNameList:data, company_id:data[0].company_id});
+			if (data.length){
+				this.setState({comapanyNameList:data, company_id:data[0].company_id});
+			}
+			else {
+				this.setState({comapanyNameList:[], company_id:''});
+			}
 		}).catch((error) => {
 			console.log(error);
 		});
@@ -109,30 +114,36 @@ export default class AddUserDialog extends Component {
 		}).then(response => {
 			if (Math.floor(response.status / 200) === 1){
 				this.context.pushNotification('success', 'Added', 'Successfully added new user', 4);
-				fetch(process.env.REACT_APP_API_PATH + '/user/addtobusiness', {
-					mode: 'cors',
-					method: 'POST',
-					credentials: 'same-origin',
-					headers: {
-						'Accept': 'application/json',
-						'Content-type': 'application/json',
-						'Authorization': window.localStorage.getItem('jwt')
-					},
-					body: JSON.stringify(addUserToBusinessBody)
-				}).then(response => {
-					if (Math.floor(response.status / 200) === 1){
-						this.context.pushNotification('success', 'Added', 'Successfully added user to company', 4);
-					}
-					else{
-						this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
-					}
-					this.props.onSuccess();
-				}).catch((error) => {
-					this.context.pushNotification('fail', 'App Error', error.toString(), 0);
-				});
+				if (this.state.company_id !== '') {
+					fetch(process.env.REACT_APP_API_PATH + '/user/addtobusiness', {
+						mode: 'cors',
+						method: 'POST',
+						credentials: 'same-origin',
+						headers: {
+							'Accept': 'application/json',
+							'Content-type': 'application/json',
+							'Authorization': window.localStorage.getItem('jwt')
+						},
+						body: JSON.stringify(addUserToBusinessBody)
+					}).then(response => {
+						if (Math.floor(response.status / 200) === 1){
+							this.context.pushNotification('success', 'Added', 'Successfully added user to company', 4);
+						}
+						else{
+							this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+						}
+						this.props.onSuccess();
+					}).catch((error) => {
+						this.context.pushNotification('fail', 'App Error', error.toString(), 0);
+					});
+				}
+				else {
+					this.context.pushNotification('error', 'Input Error', "No company selected!", 8);
+				}
 			}
 			else {
 				this.context.pushNotification('error', 'Network Error', response.status + ': ' + response.statusText, 8);
+				this.props.onSuccess();
 			}
 		}).catch((error) => {
 			this.context.pushNotification('error', 'App Error', error.toString(), 8);

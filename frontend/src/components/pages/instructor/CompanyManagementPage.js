@@ -81,8 +81,6 @@ export default class CompanyManagementPage extends Component {
 			URL = URL + '&search=' + this.state.searchText;
 		}
 
-		console.log(URL);
-
 		fetch(URL, {
 			mode: 'cors',
 			method: 'GET',
