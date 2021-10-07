@@ -1,6 +1,7 @@
 {
   "short_name": "Tracker",
   "name": "COB Finance Tracker",
+  "description": "OSU College Of Business Student Finance Tracker",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,7 +9,7 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "/login",
+  "start_url": "/index.html",
   "display": "fullscreen",
   "theme_color": "#000000",
   "background_color": "#ffffff"
