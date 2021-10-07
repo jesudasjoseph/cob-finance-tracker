@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import ProfitProgress from '../../layout/ProfitProgress';
 import ExpenseProgress from '../../layout/ExpenseProgress';
 import BankProgress from '../../layout/BankProgress';
 import CircleProfitProgress from '../../layout/CircleProfitProgress';
@@ -30,7 +29,6 @@ export class Dashboard extends Component {
 				'Authorization': window.localStorage.getItem('jwt')
 			}
 		}).then(response => {
-			console.log(response);
 			return response.json();
 		}).then(data => {
 			console.log('Success:', data);
