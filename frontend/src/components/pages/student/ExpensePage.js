@@ -6,8 +6,6 @@ import SearchBar from '../../layout/SearchBar';
 
 import { AppContext } from '../../../AppContext';
 
-import './styles/ExpensePage.css';
-
 export default class ExpensePage extends Component {
 	constructor(props){
 		super(props);
@@ -70,48 +68,44 @@ export default class ExpensePage extends Component {
 		if (this.state.hasCompany) {
 			return (
 				<>
-					<div className='expense-container'>
-						<div className='left'>
-							<SearchBar onChange={this.searchOnChange}/>
-							<div className='flex-container'>
-								<h2>Business Expenses</h2>
-								<Table
-									responsive
-									size="m"
-									striped bordered hover variant="dark">
-									<thead>
-										<tr>
-											<th>Date</th>
-											<th>Product</th>
-											<th>Company</th>
-											<th>Payment Method</th>
-											<th>Quantity</th>
-											<th>Price Per Unit</th>
-											<th>Total</th>
-											<th>Description</th>
+					<div className='layout-tb-container'>
+						<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
+						<h2 className='layout-tb-title'>Expenses</h2>
+						<Table className='layout-tb-table'
+							responsive
+							size="m"
+							striped bordered hover variant="dark">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Product</th>
+									<th>Company</th>
+									<th>Payment Method</th>
+									<th>Quantity</th>
+									<th>Price Per Unit</th>
+									<th>Total</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								{this.state.expenseTableData.map((expense, index) => {
+									const {quantity,product,company, date, payment_method, price_per_unit, description, total, expense_id} = expense;
+									return (
+										<tr key={expense_id}>
+											<td> {date.split('T')[0]} </td>
+											<td> {product}</td>
+											<td>{company}</td>
+											<td>{payment_method}</td>
+											<td>{quantity}</td>
+											<td>{price_per_unit}</td>
+											<td>{total}</td>
+											<td>{description}</td>
 										</tr>
-									</thead>
-									<tbody>
-										{this.state.expenseTableData.map((expense, index) => {
-											const {quantity,product,company, date, payment_method, price_per_unit, description, total, expense_id} = expense;
-											return (
-												<tr key={expense_id}>
-													<td> {date.split('T')[0]} </td>
-													<td> {product}</td>
-													<td>{company}</td>
-													<td>{payment_method}</td>
-													<td>{quantity}</td>
-													<td>{price_per_unit}</td>
-													<td>{total}</td>
-													<td>{description}</td>
-												</tr>
-											);
-										})}
-									</tbody>
-								</Table>
-							</div>
-						</div>
-						<div className='right'>
+									);
+								})}
+							</tbody>
+						</Table>
+						<div className='layout-tb-controls'>
 							<TableControl add addOnClick={this.addOnClick}/>
 						</div>
 					</div>
