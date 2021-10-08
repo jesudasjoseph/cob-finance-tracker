@@ -106,6 +106,7 @@ export default class UserManagement extends Component {
 			else {
 				this.setState({nextDisabled: false});
 			}
+			console.log(data);
 			this.setState({tableRows:data});
 		}).catch((error) => {
 			this.context.pushNotification('fail', 'App Error', error.toString(), 0);
@@ -271,75 +272,72 @@ export default class UserManagement extends Component {
 	render(){
 		return(
 			<>
-				<div className='user-management-container'>
-					<div className='left'>
-						<SearchBar onChange={this.searchOnChange}/>
-						<div className='flex-container'>
-							<Table size='sm' variant='dark' bordered hover responsive>
-								<thead>
-								<tr>
-									<th>UID</th>
-									<th>Company</th>
-									<th>Name</th>
-									<th>Section</th>
-									<th>Role</th>
-								</tr>
-								<tr className='table-secondary-header'>
-									<th></th>
-									<th>(ID) Name</th>
-									<th>Last, First</th>
-									<th></th>
-									<th></th>
-								</tr>
-								</thead>
-								<tbody>
-								{
-									this.state.tableRows.map((row, index) => {
-										const {
-											user_id,
-											company_id,
-											first_name,
-											last_name,
-											section,
-											role
-										} = row;
-										if (index === this.state.tableSelectedRow){
-											return(
-												<tr className='selectedRow' key={user_id} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{user_id}</td>
-													<td>{company_id}</td>
-													<td>{last_name + ', ' + first_name}</td>
-													<td>{section}</td>
-													<td>{role}</td>
-												</tr>
-											);
-										}
-										else {
-											return(
-												<tr key={user_id} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{user_id}</td>
-													<td>{company_id}</td>
-													<td>{last_name + ', ' + first_name}</td>
-													<td>{section}</td>
-													<td>{role}</td>
-												</tr>
-											);
-										}
-									})
-								}
-								</tbody>
-							</Table>
-							<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'< Last Page'}</Button>
-							<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'Next Page >'}</Button>
-						</div>
-					</div>
-					<div className='right'>
+				<div className='layout-tb-container'>
+					<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
+					<p></p>
+					<Table className='layout-tb-table' size='sm' variant='dark' bordered hover responsive>
+							<thead>
+							<tr>
+								<th>UID</th>
+								<th>Company</th>
+								<th>Name</th>
+								<th>Section</th>
+								<th>Role</th>
+							</tr>
+							<tr className='table-secondary-header'>
+								<th></th>
+								<th>(ID) Name</th>
+								<th>Last, First</th>
+								<th></th>
+								<th></th>
+							</tr>
+							</thead>
+							<tbody>
+							{
+								this.state.tableRows.map((row, index) => {
+									const {
+										user_id,
+										company_id,
+										first_name,
+										last_name,
+										section,
+										role
+									} = row;
+									if (index === this.state.tableSelectedRow){
+										return(
+											<tr className='selectedRow' key={user_id} onClick={() => this.tableHandleRowClick(index)}>
+												<td>{user_id}</td>
+												<td>{company_id}</td>
+												<td>{last_name + ', ' + first_name}</td>
+												<td>{section}</td>
+												<td>{role}</td>
+											</tr>
+										);
+									}
+									else {
+										return(
+											<tr key={user_id} onClick={() => this.tableHandleRowClick(index)}>
+												<td>{user_id}</td>
+												<td>{company_id}</td>
+												<td>{last_name + ', ' + first_name}</td>
+												<td>{section}</td>
+												<td>{role}</td>
+											</tr>
+										);
+									}
+								})
+							}
+							</tbody>
+					</Table>
+					<div className='layout-tb-controls'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
 						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={'Role'} onOptionChange={this.onSortOptionChange}/>
 						<div className='flex-container'>
 							<Button onClick={()=>{this.setState({showImportUserDialog: true})}} style={{width: '100%'}}>Import Users</Button>
 							<Button disabled={this.state.loginAsUserDisabled} onClick={this.onLoginAsUserClick} style={{width: '100%'}}>Login as User</Button>
 						</div>
+						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'<'}</Button>
+						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'>'}</Button>
 					</div>
 				</div>
 				<AddUserDialog show={this.state.showAddUserDialog} onClose={this.addDialogOnClose} onSuccess={this.fetchTableData}/>
