@@ -52,25 +52,6 @@ h2 {
 	border-radius: 5px;
 }
 
-@media only screen and (max-width: 768px) {
-	.toast-container {
-		z-index: 128;
-		position: fixed;
-		display: block;
-		margin: auto;
-		top: 10px;
-		background-color: none;
-	}
-	.toast {
-		min-width: 95vw;
-		width: auto;
-		cursor: pointer;
-	}
-	.container {
-		margin-bottom: 60px;
-	}
-}
-
 .toast-success .toast-header{
 	background-color: #28a745;
 	color: white;
@@ -155,4 +136,88 @@ h2 {
   padding: 15px;
 	display: block;
 	min-width: 80vw;
+}
+
+.layout-tb-container {
+	display: grid;
+
+	grid-template-columns: auto 200px;
+	grid-template-rows: 10px 1f;
+	grid-template-areas:
+		"search corner"
+		"table controls";
+	column-gap: 8px;
+	row-gap: 10px;
+}
+
+.layout-tb-search {
+	grid-area: search;
+	justify-self: stretch;
+	align-self: end;
+}
+
+.layout-tb-table {
+	grid-area: table;
+	justify-self: center;
+}
+
+.layout-tb-title {
+	grid-area: corner;
+	margin: 0px;
+	align-self: end;
+	justify-self: left;
+}
+
+.layout-tb-controls {
+	grid-area: controls;
+	justify-self: left;
+}
+
+@media only screen and (max-width: 768px) {
+	.toast-container {
+		z-index: 128;
+		position: fixed;
+		display: block;
+		margin: auto;
+		top: 10px;
+		background-color: none;
+	}
+	.toast {
+		min-width: 95vw;
+		width: auto;
+		cursor: pointer;
+	}
+	.container {
+		margin-bottom: 60px;
+	}
+
+	.layout-tb-container {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"search"
+			"table";
+	}
+
+	.layout-tb-search {
+		grid-area: search;
+		justify-self: stretch;
+		align-self: end;
+	}
+
+	.layout-tb-table {
+		grid-area: table;
+		justify-self: center;
+	}
+
+	.layout-tb-title {
+		position: fixed;
+		bottom: 65px;
+		margin: 0px;
+	}
+
+	.layout-tb-controls {
+		position: fixed;
+		right: 5px;
+		bottom: 65px;
+	}
 }
