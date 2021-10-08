@@ -235,7 +235,6 @@ export default class CompanyManagementPage extends Component {
 					<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
 					<p></p>
 					<Table className='layout-tb-table'
-							style={{gridArea: 'table'}}
 							responsive
 							size="sm" 
 							bordered 
