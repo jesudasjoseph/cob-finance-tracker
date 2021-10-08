@@ -1,28 +1,47 @@
 .dashboard-container{
 	display: grid;
 	align-items: center;
-	justify-content: space-evenly;
-	grid-template-columns: [left] 30% [middle] 70% [right];
-	grid-template-rows: 100%;
-}
-@media only screen and (max-width: 1400px) {
-	.dashboard-container {
-		display: block;
-	}
+	grid-template-columns: 1fr 3fr;
+	grid-template-rows: auto;
+	column-gap: 50px;
+
+	grid-template-areas:
+		"left right";
 }
 
 .dashboard-container .left {
-	grid-column-start: left;
-	grid-column-end: span middle;
+	grid-area: left;
 }
 
 .dashboard-container .right {
-	grid-column-start: middle;
-	grid-column-end: span right;
+	grid-area: right;
 }
 
 .student-profit {
 	width: 100%;
 	height: 100%;
 	border: solid 2px black;
+}
+
+@media only screen and (max-width: 1080px) {
+	.dashboard-container{
+		display: grid;
+		align-items: center;
+		grid-template-columns: 3fr 5fr;
+		column-gap: 10px;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.dashboard-container{
+		display: grid;
+		align-items: center;
+		grid-template-columns: auto;
+		grid-template-rows: auto auto;
+		column-gap: 50px;
+
+		grid-template-areas:
+			"left"
+			"right";
+	}
 }
