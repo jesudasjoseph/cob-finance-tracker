@@ -192,7 +192,8 @@ h2 {
 	}
 
 	.layout-tb-container {
-		grid-template-columns: 1fr;
+		display: grid;
+		grid-template-columns: minmax(400px, 1fr);
 		grid-template-areas:
 			"search"
 			"table";
