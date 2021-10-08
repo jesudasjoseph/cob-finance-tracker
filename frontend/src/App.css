@@ -220,5 +220,6 @@ h2 {
 		position: fixed;
 		right: 5px;
 		bottom: 65px;
+		max-width: 150px;
 	}
 }
