@@ -318,9 +318,7 @@ export default class CompanyManagementPage extends Component {
 					<div className='layout-tb-controls'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
 						<SortSelector options={['Instructor','Section','Name']} defaultOption={'Name'} onOptionChange={this.onSortOptionChange}/>
-						<div className='flex-container'>
-							<Button className='overview-button' onClick={this.overviewBusinessOnClick} disabled={this.state.deleteDisabled}>Overview Business</Button>
-						</div>
+						<Button className='overview-button' onClick={this.overviewBusinessOnClick} disabled={this.state.deleteDisabled}>Overview Business</Button>
 						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'<'}</Button>
 						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'>'}</Button>
 					</div>

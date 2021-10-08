@@ -332,10 +332,8 @@ export default class UserManagement extends Component {
 					<div className='layout-tb-controls'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
 						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={'Role'} onOptionChange={this.onSortOptionChange}/>
-						<div className='flex-container'>
-							<Button onClick={()=>{this.setState({showImportUserDialog: true})}} style={{width: '100%'}}>Import Users</Button>
-							<Button disabled={this.state.loginAsUserDisabled} onClick={this.onLoginAsUserClick} style={{width: '100%'}}>Login as User</Button>
-						</div>
+						<Button onClick={()=>{this.setState({showImportUserDialog: true})}} style={{width: '100%'}}>Import Users</Button>
+						<Button disabled={this.state.loginAsUserDisabled} onClick={this.onLoginAsUserClick} style={{width: '100%'}}>Login as User</Button>
 						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'<'}</Button>
 						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'>'}</Button>
 					</div>
