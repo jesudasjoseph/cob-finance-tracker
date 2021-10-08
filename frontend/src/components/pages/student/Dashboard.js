@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import ExpenseProgress from '../../layout/ExpenseProgress';
 import BankProgress from '../../layout/BankProgress';
-import CircleProfitProgress from '../../layout/CircleProfitProgress';
+import ProfitDial from '../../layout/ProfitDial';
 
 import './styles/Dashboard.css';
 
@@ -37,7 +37,6 @@ export class Dashboard extends Component {
 				return response.json();
 			}		
 		}).then(data => {
-			console.log('Success:', data);
 			this.setState({business:data[0]});
 		}).catch((error) => {
 			console.error('Error:', error);
@@ -50,13 +49,13 @@ export class Dashboard extends Component {
 				<>
 					<div style={{textAlign:'center', padding: '4px'}}><h1><b>{this.state.business.company_id}</b> - dashboard</h1></div>
 					<div className='dashboard-container'>
-						<div className='flex-container left'>
-							<CircleProfitProgress profit={this.state.business.profit} goal={this.state.business.profit_goal} stretchGoal={this.state.business.stretch_profit_goal}/>
+						<div className='left'>
+							<ProfitDial className='.student-profit' profit={this.state.business.profit} goal={this.state.business.profit_goal} stretchGoal={this.state.business.stretch_profit_goal}/>
 						</div>
-						<div className='flex-container right'>
-							<h3 style={{padding: '20px 0px 0px 0px'}}>Expenses / Revenue</h3>
+						<div className='right'>
+							<h3>Expenses / Revenue</h3>
 							<ExpenseProgress revenue={this.state.business.transaction_total} expenses={this.state.business.expense_total}/>
-							<h3 style={{padding: '20px 0px 0px 0px'}}>Bank / Square Status</h3>
+							<h3>Bank / Square Status</h3>
 							<BankProgress revenue={this.state.business.transaction_total} square={this.state.business.square_total} bank={this.state.business.deposit_total}/>
 						</div>
 					</div>

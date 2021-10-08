@@ -1,23 +1,28 @@
 .dashboard-container{
-	display: flex;
-	flex-direction: row;
+	display: grid;
+	align-items: center;
+	justify-content: space-evenly;
+	grid-template-columns: [left] 30% [middle] 70% [right];
+	grid-template-rows: 100%;
 }
 @media only screen and (max-width: 1400px) {
 	.dashboard-container {
-		flex-direction: column;
+		display: block;
 	}
 }
 
 .dashboard-container .left {
-	flex-grow: 1;
-	margin: auto;
-	background: none;
-	box-shadow: none;
+	grid-column-start: left;
+	grid-column-end: span middle;
 }
 
 .dashboard-container .right {
-	display: flex;
-	flex-direction: column;
-	min-width: 250px;
-	flex-grow: 15;
+	grid-column-start: middle;
+	grid-column-end: span right;
+}
+
+.student-profit {
+	width: 100%;
+	height: 100%;
+	border: solid 2px black;
 }
