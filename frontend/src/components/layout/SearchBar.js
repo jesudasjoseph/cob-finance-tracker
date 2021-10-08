@@ -27,9 +27,9 @@ export default class SearchBar extends Component {
 	render(){
 		return(
 			<>
-				<div className='flex-container'>
+				<div className={'search-bar ' + (this.props.className || "")}>
 					<Form onSubmit={(e) => {e.preventDefault();}}>
-						<Form.Control className='search-bar page-shadow' type='text' placeholder='Search...' value={this.state.searchValue} onChange={(e) => this.onChange(e)}/>
+						<Form.Control className='page-shadow' type='text' placeholder='Search...' value={this.state.searchValue} onChange={(e) => this.onChange(e)}/>
 					</Form>
 					<button className='clear-search' onClick={this.onClearClick}>x</button>
 				</div>

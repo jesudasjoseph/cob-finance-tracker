@@ -1,14 +1,16 @@
 .search-bar{
-	display: block;
+	position: relative;
 }
 
 .clear-search{
-	float: right;
 	display: block;
-	position: relative;
+	position: absolute;
 	width: 2.25em;
 	height: 2.25em;
-	top: -2.25em;
+	padding: 0px;
+	margin: 0px;
+	top: 0px;
+	right: 0px;
 	border: none;
 	background-color: Transparent;
 	color: red;
