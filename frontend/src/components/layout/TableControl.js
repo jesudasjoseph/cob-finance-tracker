@@ -40,7 +40,7 @@ export default class TableControl extends Component {
 	render(){
 		return(
 			<>
-				<div className='flex-container control-container'>
+				<div className='control-container'>
 					{this.props.add && <Button className='addButton page-shadow' disabled={this.props.addDisabled} variant='success' onClick={this.props.addOnClick}>Add</Button>}
 					{this.props.edit && <Button className='editButton page-shadow' disabled={this.props.editDisabled} variant='warning' onClick={this.props.editOnClick}>Edit</Button>}
 					{this.props.delete && <Button className='deleteButton page-shadow' disabled={this.props.deleteDisabled} variant='danger' onClick={this.deleteOnClick}>Delete</Button>}

@@ -12,26 +12,16 @@
 }
 
 @media only screen and (max-width: 767px) {
-	.control-container {
-		flex-direction: row;
-	}
-
 	.addButton {
 		order: 3;
-		margin-left: 5px;
-		flex-grow: 1;
+		margin-top: 5px;
 	}
 
 	.editButton {
 		order: 2;
-		margin: 0;
-		margin-left: 5px;
-		flex-grow: 1;
 	}
 
 	.deleteButton {
 		order: 1;
-		margin: 0;
-		flex-grow: 1;
 	}
 }
