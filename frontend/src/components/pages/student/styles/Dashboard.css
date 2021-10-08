@@ -36,7 +36,7 @@
 	.dashboard-container{
 		display: grid;
 		align-items: center;
-		grid-template-columns: auto;
+		grid-template-columns: 1fr;
 		grid-template-rows: auto auto;
 		column-gap: 50px;
 

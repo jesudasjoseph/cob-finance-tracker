@@ -231,91 +231,93 @@ export default class CompanyManagementPage extends Component {
 	render() {
 		return (
 			<>
-				<div className='company-management-container'>
-					<div className='left'>
-						<SearchBar onChange={this.searchOnChange}/>
-						<div className='flex-container'>
-							<Table responsive size="sm" bordered hover variant="dark">
-								<thead>
-									<tr>
-										<th>Company</th>
-										<th>Section</th>
-										<th>Instructor</th>
-										<th>Items Sold</th>
-										<th>Bank</th>
-										<th>Square</th>
-										<th>Revenue</th>
-										<th>Expenses</th>
-										<th>Profits</th>
-										<th>Sales Goals</th>
-									</tr>
-									<tr className='table-secondary-header'>
-										<th>Total: {this.state.companyTable.length}</th>
-										<th></th>
-										<th></th>
-										<th>{this.state.quantityTotal}</th>
-										<th>${this.state.bankTotal}</th>
-										<th>${this.state.squareTotal}</th>
-										<th>${this.state.revenueTotal}</th>
-										<th>${this.state.expenseTotal}</th>
-										<th>${this.state.profitTotal}</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									{
-										this.state.companyTable.map((business, index) => {
-										const {instructor,
-													section,
-													transaction_total,
-													deposit_total,
-													product_count,
-													expense_total,
-													company_id,
-													profit,
-													profit_goal,
-													stretch_profit_goal,
-													square_total} = business;
-										if (index === this.state.selectedRow){
-											return (
-												<tr key={company_id} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
-													<td>{company_id}</td>
-													<td>{section}</td>
-													<td>{instructor}</td>
-													<td>{product_count}</td>
-													<td>${deposit_total}</td>
-													<td>${square_total}</td>
-													<td>${transaction_total}</td>
-													<td>${expense_total}</td>
-													<td>${profit}</td>
-													<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
-												</tr>
-											);
-										}
-										else {
-											return (
-												<tr key={company_id} onClick={() => this.tableHandleRowClick(index)}>
-													<td>{company_id}</td>
-													<td>{section}</td>
-													<td>{instructor}</td>
-													<td>{product_count}</td>
-													<td>${deposit_total}</td>
-													<td>${square_total}</td>
-													<td>${transaction_total}</td>
-													<td>${expense_total}</td>
-													<td>${profit}</td>
-													<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
-												</tr>
-											);
-										}
-									})}
-								</tbody>
-							</Table>
-							<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'< Last Page'}</Button>
-							<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'Next Page >'}</Button>
-						</div>
-					</div>
-					<div className='right'>
+				<div className='layout-tb-container'>
+					<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
+					<p></p>
+					<Table className='layout-tb-table'
+							style={{gridArea: 'table'}}
+							responsive
+							size="sm" 
+							bordered 
+							hover 
+							variant="dark">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Section</th>
+									<th>Instructor</th>
+									<th>Items Sold</th>
+									<th>Bank</th>
+									<th>Square</th>
+									<th>Revenue</th>
+									<th>Expenses</th>
+									<th>Profits</th>
+									<th>Sales Goals</th>
+								</tr>
+								<tr className='table-secondary-header'>
+									<th>Total: {this.state.companyTable.length}</th>
+									<th></th>
+									<th></th>
+									<th>{this.state.quantityTotal}</th>
+									<th>${this.state.bankTotal}</th>
+									<th>${this.state.squareTotal}</th>
+									<th>${this.state.revenueTotal}</th>
+									<th>${this.state.expenseTotal}</th>
+									<th>${this.state.profitTotal}</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								{
+									this.state.companyTable.map((business, index) => {
+									const {instructor,
+												section,
+												transaction_total,
+												deposit_total,
+												product_count,
+												expense_total,
+												company_id,
+												profit,
+												profit_goal,
+												stretch_profit_goal,
+												square_total} = business;
+									if (index === this.state.selectedRow){
+										return (
+											<tr key={company_id} className='selectedRow' onClick={() => this.tableHandleRowClick(index)}>
+												<td>{company_id}</td>
+												<td>{section}</td>
+												<td>{instructor}</td>
+												<td>{product_count}</td>
+												<td>${deposit_total}</td>
+												<td>${square_total}</td>
+												<td>${transaction_total}</td>
+												<td>${expense_total}</td>
+												<td>${profit}</td>
+												<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+											</tr>
+										);
+									}
+									else {
+										return (
+											<tr key={company_id} onClick={() => this.tableHandleRowClick(index)}>
+												<td>{company_id}</td>
+												<td>{section}</td>
+												<td>{instructor}</td>
+												<td>{product_count}</td>
+												<td>${deposit_total}</td>
+												<td>${square_total}</td>
+												<td>${transaction_total}</td>
+												<td>${expense_total}</td>
+												<td>${profit}</td>
+												<td className='progress-column'><ProgressBarSmallProfit width={200} profit={profit} profitGoal={profit_goal} profitStretchGoal={stretch_profit_goal}/></td>
+											</tr>
+										);
+									}
+								})}
+							</tbody>
+						</Table>
+
+					<div className='layout-tb-controls'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
 						<SortSelector options={['Instructor','Section','Name']} defaultOption={'Name'} onOptionChange={this.onSortOptionChange}/>
 						<div className='flex-container'>
