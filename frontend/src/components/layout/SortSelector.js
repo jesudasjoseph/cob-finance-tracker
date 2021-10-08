@@ -22,7 +22,7 @@ export default class SortSelector extends Component{
 	render(){
 		return(
 			<>
-				<div className='flex-container sort-selector-container'>
+				<div className='sort-selector-container'>
 					<DropdownButton className='sort-selector-button' id='dropdown-basic-button' title={'sort by: ' + this.state.selectedOption}>
 						{
 							this.props.options.map((option, index) => {
