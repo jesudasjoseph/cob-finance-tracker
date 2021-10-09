@@ -15,6 +15,10 @@
 	margin: 3px;
 }
 
+.add-button:active {
+	box-shadow: inset -1px -1px white, inset 1px 1px white;
+}
+
 .add-button:hover {
 	background-color: #50AE56;
 }
@@ -27,7 +31,6 @@
 .edit-button {
 	border: none;
 	background-image: url(../../../assets/edit.png);
-	background-image-shadow: 2px 2px black;
 	background-size: cover;
 	background-color: #DFD924;
 	border-radius: 50px;
@@ -35,6 +38,10 @@
 	height: 50px;
 
 	margin: 3px;
+}
+
+.edit-button:active {
+	box-shadow: inset -1px -1px white, inset 1px 1px white;
 }
 
 .edit-button:hover {
@@ -56,6 +63,10 @@
 	height: 50px;
 
 	margin: 3px;
+}
+
+.delete-button:active {
+	box-shadow: inset -1px -1px white, inset 1px 1px white;
 }
 
 .delete-button:hover {
