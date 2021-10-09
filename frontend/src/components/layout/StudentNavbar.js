@@ -60,9 +60,15 @@ class StudentNavbar extends Component {
 		if (this.state.smallWindow) {
 			return(
 				<Navbar fixed="bottom" collapseOnSelect expand="md" bg="dark" variant="dark">
-					<Navbar.Brand as={Link} to="/student/dashboard">College of Buisness App</Navbar.Brand>
+					<Navbar.Brand as={Link} to="/student/dashboard">
+						<img src="/favicon.ico"
+							width="30"
+							height="30"
+							alt="App Logo"
+						/>
+					</Navbar.Brand>
 					<div className='ml-auto'>
-						<DropdownButton variant="dark" drop='up' menuAlign="right" title={<img src={hamburger} alt='Nav'></img>} id="collasible-nav-dropdown">
+						<DropdownButton variant="dark" drop='up' menuAlign="right" title={<img src={hamburger} width='30' height='30' alt='Nav'></img>} id="collasible-nav-dropdown">
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/dashboard">Dashboard</Dropdown.Item>
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/transactions">Transactions</Dropdown.Item>
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/expenses">Expenses</Dropdown.Item>
@@ -77,7 +83,13 @@ class StudentNavbar extends Component {
 		else {
 			return(
 				<Navbar sticky="top" collapseOnSelect expand="md" bg="dark" variant="dark">
-					<Navbar.Brand as={Link} to="/student/dashboard">College of Buisness App</Navbar.Brand>
+					<Navbar.Brand as={Link} to="/student/dashboard">
+						<img src="/favicon.ico"
+							width="30"
+							height="30"
+							alt="App Logo"
+						/>
+					</Navbar.Brand>
 					<div className='ml-auto list-nav'>
 						<Nav>
 							<Nav.Link style={{textAlign: 'center'}} as={Link} to="/student/dashboard">Dashboard</Nav.Link>

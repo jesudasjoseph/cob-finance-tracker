@@ -38,9 +38,15 @@ export default class InstructorNavbar extends Component {
 			return (
 				<>
 					<Navbar fixed="bottom" bg="dark" variant="dark">
-						<Navbar.Brand as={Link} to="/instructor/dashboard">College of Business App</Navbar.Brand>
+						<Navbar.Brand as={Link} to="/instructor/dashboard">
+							<img src="/favicon.ico"
+								width="30"
+								height="30"
+								alt="App Logo"
+							/>
+						</Navbar.Brand>
 						<div className="ml-auto dropdown-nav">
-							<DropdownButton drop='up' title={<img src={hamburger} alt='Nav'></img>} variant="dark" menuAlign="right">
+							<DropdownButton drop='up' title={<img src={hamburger} width='30' height='30' alt='Nav'></img>} variant="dark" menuAlign="right">
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/instructor/dashboard">Dashboard</Dropdown.Item>
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/instructor/bank">Bank</Dropdown.Item>
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/instructor/usermanagement">Users</Dropdown.Item>
@@ -58,7 +64,13 @@ export default class InstructorNavbar extends Component {
 			return (
 				<>
 					<Navbar sticky="top" bg="dark" variant="dark">
-						<Navbar.Brand as={Link} to="/instructor/dashboard">College of Business App</Navbar.Brand>
+						<Navbar.Brand as={Link} to="/instructor/dashboard">
+							<img src="/favicon.ico"
+								width="30"
+								height="30"
+								alt="App Logo"
+							/>
+						</Navbar.Brand>
 						<div className="ml-auto list-nav">
 							<Nav>
 								<Nav.Link style={{textAlign: 'center'}} as={Link} to="/instructor/dashboard">Dashboard</Nav.Link>
