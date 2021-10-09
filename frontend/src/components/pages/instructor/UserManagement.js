@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import SearchBar from '../../layout/SearchBar.js';
 import TableControl from '../../layout/TableControl.js';
 import AddUserDialog from '../../layout/AddUserDialog.js';
@@ -274,7 +275,11 @@ export default class UserManagement extends Component {
 			<>
 				<div className='layout-tb-container'>
 					<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
-					<p></p>
+					<ButtonGroup>
+						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'<'}</Button>
+						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={'Role'} onOptionChange={this.onSortOptionChange}/>
+						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'>'}</Button>
+					</ButtonGroup>
 					<Table className='layout-tb-table' size='sm' variant='dark' bordered hover responsive>
 							<thead>
 							<tr>
@@ -331,11 +336,8 @@ export default class UserManagement extends Component {
 					</Table>
 					<div className='layout-tb-controls'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} edit editDisabled={this.state.editDisabled} editOnClick={this.editOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
-						<SortSelector options={['ONID','Company','First Name', 'Last Name', 'Role']} defaultOption={'Role'} onOptionChange={this.onSortOptionChange}/>
 						<Button onClick={()=>{this.setState({showImportUserDialog: true})}} style={{width: '100%'}}>Import Users</Button>
 						<Button disabled={this.state.loginAsUserDisabled} onClick={this.onLoginAsUserClick} style={{width: '100%'}}>Login as User</Button>
-						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'<'}</Button>
-						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'>'}</Button>
 					</div>
 				</div>
 				<AddUserDialog show={this.state.showAddUserDialog} onClose={this.addDialogOnClose} onSuccess={this.fetchTableData}/>

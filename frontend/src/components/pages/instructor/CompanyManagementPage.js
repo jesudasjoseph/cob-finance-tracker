@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table';
 import ProgressBarSmallProfit from '../../layout/ProgressBarSmallProfit';
 import SearchBar from '../../layout/SearchBar.js';
@@ -233,7 +234,11 @@ export default class CompanyManagementPage extends Component {
 			<>
 				<div className='layout-tb-container'>
 					<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
-					<p></p>
+					<ButtonGroup>
+						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'<'}</Button>
+						<SortSelector options={['Instructor','Section','Name']} defaultOption={'Name'} onOptionChange={this.onSortOptionChange}/>
+						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'>'}</Button>
+					</ButtonGroup>
 					<Table className='layout-tb-table'
 							responsive
 							size="sm" 
@@ -317,10 +322,7 @@ export default class CompanyManagementPage extends Component {
 						</Table>
 					<div className='layout-tb-controls'>
 						<TableControl add addDisabled={this.state.addDisabled} addOnClick={this.addOnClick} delete deleteDisabled={this.state.deleteDisabled} deleteOnClick={this.deleteOnClick}/>
-						<SortSelector options={['Instructor','Section','Name']} defaultOption={'Name'} onOptionChange={this.onSortOptionChange}/>
 						<Button className='overview-button' onClick={this.overviewBusinessOnClick} disabled={this.state.deleteDisabled}>Overview Business</Button>
-						<Button className='global-last-page-button' onClick={this.lastPage} disabled={this.state.lastDisabled}>{'<'}</Button>
-						<Button className='global-next-page-button' onClick={this.nextPage} disabled={this.state.nextDisabled}>{'>'}</Button>
 					</div>
 				</div>
 				<AddCompanyDialog show={this.state.showAddCompanyDialog} onClose={this.addDialogOnClose} onSuccess={this.fetchCompanyData}/>
