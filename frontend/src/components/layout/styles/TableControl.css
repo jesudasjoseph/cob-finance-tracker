@@ -1,27 +1,86 @@
 .control-container {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 }
 
-.editButton {
-	margin-top: 5px;
+.add-button {
+	border: none;
+	background-image: url(../../../assets/add.png);
+	background-size: cover;
+	background-color: #2ABB36;
+	border-radius: 50px;
+	width: 50px;
+	height: 50px;
+	
+	margin: 3px;
 }
 
-.deleteButton {
-	margin-top: 5px;
+.add-button:hover {
+	background-color: #50AE56;
+}
+
+.add-button:disabled {
+	box-shadow: none;
+	background-color: #88877B;
+}
+
+.edit-button {
+	border: none;
+	background-image: url(../../../assets/edit.png);
+	background-image-shadow: 2px 2px black;
+	background-size: cover;
+	background-color: #DFD924;
+	border-radius: 50px;
+	width: 50px;
+	height: 50px;
+
+	margin: 3px;
+}
+
+.edit-button:hover {
+	background-color: #CFCA2F;
+}
+
+.edit-button:disabled {
+	box-shadow: none;
+	background-color: #88877B;
+}
+
+.delete-button {
+	border: none;
+	background-image: url(../../../assets/delete.png);
+	background-size: cover;
+	background-color: #DD5454;
+	border-radius: 50px;
+	width: 50px;
+	height: 50px;
+
+	margin: 3px;
+}
+
+.delete-button:hover {
+	background-color: #B34B4B;
+}
+
+.delete-button:disabled {
+	box-shadow: none;
+	background-color: #88877B;
 }
 
 @media only screen and (max-width: 767px) {
-	.addButton {
-		order: 3;
-		margin-top: 5px;
+	.control-container {
+		flex-direction: column;
 	}
 
-	.editButton {
+	.add-button {
+		order: 3;
+	}
+
+	.edit-button {
 		order: 2;
 	}
 
-	.deleteButton {
+	.delete-button {
 		order: 1;
 	}
 }

@@ -41,9 +41,9 @@ export default class TableControl extends Component {
 		return(
 			<>
 				<div className='control-container'>
-					{this.props.add && <Button className='addButton page-shadow' disabled={this.props.addDisabled} variant='success' onClick={this.props.addOnClick}>Add</Button>}
-					{this.props.edit && <Button className='editButton page-shadow' disabled={this.props.editDisabled} variant='warning' onClick={this.props.editOnClick}>Edit</Button>}
-					{this.props.delete && <Button className='deleteButton page-shadow' disabled={this.props.deleteDisabled} variant='danger' onClick={this.deleteOnClick}>Delete</Button>}
+					{this.props.add && <button className='add-button page-shadow' disabled={this.props.addDisabled} onClick={this.props.addOnClick} alt='add'/>}
+					{this.props.edit && <button className='edit-button page-shadow' disabled={this.props.editDisabled} onClick={this.props.editOnClick} alt='edit'/>}
+					{this.props.delete && <button className='delete-button page-shadow' disabled={this.props.deleteDisabled} onClick={this.deleteOnClick} alt='delete'/>}
 				</div>
 				<Modal show={this.state.showWarning}>
 					<Modal.Body>
