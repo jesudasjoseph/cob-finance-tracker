@@ -8,6 +8,7 @@ import {Link, withRouter} from 'react-router-dom';
 import { AppContext } from '../../AppContext';
 
 import hamburger from '../../assets/hamburger.png';
+import userIcon from '../../assets/user-icon.png'
 import './styles/StudentNavbar.css';
 
 class StudentNavbar extends Component {
@@ -68,7 +69,7 @@ class StudentNavbar extends Component {
 						/>
 					</Navbar.Brand>
 					<div className='ml-auto'>
-						<DropdownButton variant="dark" drop='up' menuAlign="right" title={<img src={hamburger} width='30' height='30' alt='Nav'></img>} id="collasible-nav-dropdown">
+						<DropdownButton variant="dark" drop='up' menuAlign="right" title={<img src={hamburger} width='30' height='30' alt='Menu'></img>} id="collasible-nav-dropdown">
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/dashboard">Dashboard</Dropdown.Item>
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/transactions">Transactions</Dropdown.Item>
 							<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/expenses">Expenses</Dropdown.Item>
@@ -97,7 +98,14 @@ class StudentNavbar extends Component {
 							<Nav.Link style={{textAlign: 'center'}} as={Link} to="/student/expenses">Expenses</Nav.Link>
 						</Nav>
 						<Nav>
-							<DropdownButton variant="dark" menuAlign="right" title={window.localStorage.getItem('user_id')} id="collasible-nav-dropdown">
+							<DropdownButton variant="dark" menuAlign="right" 
+								title={
+									<div style={{float: 'left'}}>
+										<img src={userIcon} width='13px' height='13px' alt='' style={{marginRight: '5px'}}/>
+										{window.localStorage.getItem('user_id')}
+									</div>
+								} 
+								id="collasible-nav-dropdown">
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/student/settings">Settings</Dropdown.Item>
 								<Dropdown.Divider />
 								<Dropdown.Item style={{textAlign: 'center'}} onClick={this.onLogout}>Logout</Dropdown.Item>

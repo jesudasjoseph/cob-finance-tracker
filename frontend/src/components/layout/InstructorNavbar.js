@@ -6,6 +6,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import {Link} from 'react-router-dom';
 
 import hamburger from '../../assets/hamburger.png';
+import userIcon from '../../assets/user-icon.png';
 import './styles/InstructorNavbar.css';
 
 export default class InstructorNavbar extends Component {
@@ -77,7 +78,15 @@ export default class InstructorNavbar extends Component {
 								<Nav.Link style={{textAlign: 'center'}} as={Link} to="/instructor/bank">Bank</Nav.Link>
 								<Nav.Link style={{textAlign: 'center'}} as={Link} to="/instructor/usermanagement">Users</Nav.Link>
 							</Nav>
-							<DropdownButton style={{textAlign: 'center'}} title={'(' + window.localStorage.getItem('user_id') + ')'} variant="dark" menuAlign="right">
+							<DropdownButton style={{textAlign: 'center'}} 
+								title={
+									<div style={{float: 'left'}}>
+										<img src={userIcon} width='13px' height='13px' alt='' style={{marginRight: '5px'}}/>
+										{window.localStorage.getItem('user_id')}
+									</div>
+								} 
+								variant="dark" 
+								menuAlign="right">
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/instructor/database">Database</Dropdown.Item>
 								<Dropdown.Divider />
 								<Dropdown.Item style={{textAlign: 'center'}} as={Link} to="/home" onClick={() => {window.localStorage.clear();}}>Logout</Dropdown.Item>
