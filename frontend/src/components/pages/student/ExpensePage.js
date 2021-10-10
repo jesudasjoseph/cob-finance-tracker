@@ -70,7 +70,7 @@ export default class ExpensePage extends Component {
 				<>
 					<div className='layout-tb-container'>
 						<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
-						<h2 className='layout-tb-title'>Expenses</h2>
+						<p></p>
 						<Table className='layout-tb-table'
 							responsive
 							size="m"

@@ -22,6 +22,22 @@ class StudentNavbar extends Component {
 
 		this.checkWidth = this.checkWidth.bind(this);
 		this.onLogout = this.onLogout.bind(this);
+		this.getTitle = this.getTitle.bind(this);
+	}
+
+	getTitle(){
+		switch (this.props.history.location.pathname) {
+			case '/student/settings':
+				return 'Settings';
+			case '/student/transactions':
+				return 'Transactions';
+			case '/student/expenses':
+				return 'Expenses';
+			case '/student/dashboard':
+				return 'Dashboard';
+			default:
+				return '';
+		}
 	}
 
 	checkWidth(){
@@ -66,7 +82,9 @@ class StudentNavbar extends Component {
 							width="30"
 							height="30"
 							alt="App Logo"
+							style={{marginRight: '10px'}}
 						/>
+						{this.getTitle()}
 					</Navbar.Brand>
 					<div className='ml-auto'>
 						<DropdownButton variant="dark" drop='up' menuAlign="right" title={<img src={hamburger} width='30' height='30' alt='Menu'></img>} id="collasible-nav-dropdown">
@@ -89,7 +107,9 @@ class StudentNavbar extends Component {
 							width="30"
 							height="30"
 							alt="App Logo"
+							style={{marginRight: '10px'}}
 						/>
+						{this.getTitle()}
 					</Navbar.Brand>
 					<div className='ml-auto list-nav'>
 						<Nav>

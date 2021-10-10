@@ -70,8 +70,7 @@ export default class TransactionPage extends Component {
 				<>
 					<div className='layout-tb-container'>
 						<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
-
-						<h2 className='layout-tb-title'>Transactions</h2>
+						<p></p>
 						<Table className='layout-tb-table' responsive size="m" striped bordered hover variant="dark">
 							<thead>
 								<tr>

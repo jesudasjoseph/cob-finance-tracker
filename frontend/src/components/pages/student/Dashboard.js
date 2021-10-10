@@ -47,7 +47,7 @@ export class Dashboard extends Component {
 		if (this.state.hasCompany){
 			return (
 				<>
-					<div style={{textAlign:'center', padding: '4px'}}><h1><b>{this.state.business.company_id}</b> - dashboard</h1></div>
+					<div style={{textAlign:'center', padding: '4px'}}><h1><b>{this.state.business.company_id}</b></h1></div>
 					<div className='dashboard-container'>
 						<div className='left'>
 							<ProfitDial className='.student-profit' profit={this.state.business.profit} goal={this.state.business.profit_goal} stretchGoal={this.state.business.stretch_profit_goal}/>

@@ -3,13 +3,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 import hamburger from '../../assets/hamburger.png';
 import userIcon from '../../assets/user-icon.png';
 import './styles/InstructorNavbar.css';
 
-export default class InstructorNavbar extends Component {
+class InstructorNavbar extends Component {
 
 	constructor(props) {
 		super(props);
@@ -19,6 +19,22 @@ export default class InstructorNavbar extends Component {
 		}
 
 		this.checkWidth = this.checkWidth.bind(this);
+		this.getTitle = this.getTitle.bind(this);
+	}
+
+	getTitle(){
+		switch (this.props.history.location.pathname) {
+			case '/instructor/dashboard':
+				return 'Dashboard';
+			case '/instructor/usermanagement':
+				return 'Users';
+			case '/instructor/bank':
+				return 'Bank';
+			case '/instructor/database':
+				return 'Databse Settings';
+			default:
+				return '';
+		}
 	}
 
 	checkWidth(){
@@ -43,8 +59,10 @@ export default class InstructorNavbar extends Component {
 							<img src="/favicon.ico"
 								width="30"
 								height="30"
-								alt="App Logo"
+								alt="App Icon"
+								style={{marginRight: '10px'}}
 							/>
+							{this.getTitle()}
 						</Navbar.Brand>
 						<div className="ml-auto dropdown-nav">
 							<DropdownButton drop='up' title={<img src={hamburger} width='30' height='30' alt='Nav'></img>} variant="dark" menuAlign="right">
@@ -70,7 +88,9 @@ export default class InstructorNavbar extends Component {
 								width="30"
 								height="30"
 								alt="App Logo"
+								style={{marginRight: '10px'}}
 							/>
+							{this.getTitle()}
 						</Navbar.Brand>
 						<div className="ml-auto list-nav">
 							<Nav>
@@ -98,3 +118,4 @@ export default class InstructorNavbar extends Component {
 		}
 	}
 }
+export default withRouter(InstructorNavbar);
