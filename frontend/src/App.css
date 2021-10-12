@@ -142,7 +142,7 @@ h2 {
 	display: grid;
 
 	grid-template-columns: auto 200px;
-	grid-template-rows: 10px 1f;
+	grid-template-rows: 10px 1fr;
 	grid-template-areas:
 		"search corner"
 		"table controls";
@@ -193,7 +193,7 @@ h2 {
 
 	.layout-tb-container {
 		display: grid;
-		grid-template-columns: minmax(400px, 1fr);
+		grid-template-columns: minmax(250px, 1fr);
 		grid-template-areas:
 			"search"
 			"table";
