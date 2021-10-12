@@ -11,7 +11,7 @@ async function main() {
     secure: true,
     auth: {
       user: 'jemajo.sys.alert', // generated ethereal user
-      pass: '9u*mc8&8wL55N#!h7o97@G8qf6qZiA3s', // generated ethereal password
+      pass: '', // generated ethereal password
     },
   });
 
