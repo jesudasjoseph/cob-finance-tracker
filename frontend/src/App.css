@@ -142,7 +142,7 @@ h2 {
 	display: grid;
 
 	grid-template-columns: auto 200px;
-	grid-template-rows: 10px 1fr;
+	grid-template-rows: auto auto;
 	grid-template-areas:
 		"search corner"
 		"table controls";
