@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const pool = new Pool();
 const config = require('./config');
+const logger = require('./logger.js');
 
 const roleType = {
 	'admin':2,
@@ -29,8 +30,8 @@ let resetCode;
 
 async function init(){
 	pool.on('error', (err, client) => {
-		console.error('Unexpected error on idle client', err)
-		process.exit(-1)
+		logger.log(`Unexpected error on idle client: ${err}`, 'pg-error')
+		process.exit(-1);
 	})
 }
 
@@ -47,7 +48,7 @@ async function addDevUser(user_id) {
 		return new data(201);
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -67,7 +68,7 @@ async function deleteDevUser(user_id) {
 		return new data(200);
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -139,7 +140,7 @@ async function resetDatabase(asker, code){
 				return new data(403);
 		}
 	} catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	} finally {
 		client.release();
@@ -229,7 +230,7 @@ async function createUser(asker, user) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -259,7 +260,7 @@ async function getUserByUid(asker, user_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -298,7 +299,7 @@ async function getMultipleUsersByBid(asker, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -362,7 +363,7 @@ async function getMultipleUsers(asker, start, end, sort, searchText) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -384,7 +385,7 @@ async function getInstructors() {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -412,7 +413,7 @@ async function modifyUser(asker, user) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -445,7 +446,7 @@ async function deleteUserByUid(asker, user_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -459,7 +460,7 @@ async function getRole(asker){
 		res = await pool.query('SELECT role FROM user_table WHERE user_id = $1', [asker.uid]);
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -503,7 +504,7 @@ async function addUserToBusiness(asker, user_id, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -564,7 +565,7 @@ async function getMultipleBusiness(asker, start, end, sort, searchText) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -595,7 +596,7 @@ async function getMultipleBusinessNames(asker) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -641,7 +642,7 @@ async function getBusinessByUid(asker) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -693,7 +694,7 @@ async function getBusinessByBid(asker, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -723,7 +724,7 @@ async function createBusiness(asker, company) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -752,7 +753,7 @@ async function modifyProfitGoalByUid(asker, profit_goal) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -781,7 +782,7 @@ async function modifyStretchProfitGoalByUid(asker, stretch_profit_goal) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -810,7 +811,7 @@ async function deleteBusinessByBid(asker, company_id) {
 				break;
 		}
 	} catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	} finally {
 	}
@@ -857,7 +858,7 @@ async function getMultipleTransactionsByBid(asker, start, end, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -892,7 +893,7 @@ async function getMultipleTransactions(asker, start, end) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -932,7 +933,7 @@ async function getMultipleTransactionsByUid(asker, start, end, searchText) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -970,7 +971,7 @@ async function addTransaction(asker, transaction) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -997,7 +998,7 @@ async function addTransactionByCid(asker, transaction) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1032,7 +1033,7 @@ async function deleteTransactionByTid(asker, transaction_id, company_id) {
 				break;
 		}
 	} catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	} finally {
 	}
@@ -1075,7 +1076,7 @@ async function getMultipleExpensesByBid(asker, start, end, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1109,7 +1110,7 @@ async function getMultipleExpenses(asker, start, end) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1149,7 +1150,7 @@ async function getMultipleExpensesByUid(asker, start, end, searchText) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1187,7 +1188,7 @@ async function addExpense(asker, expense) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1214,7 +1215,7 @@ async function addExpenseByCid(asker, expense) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1249,7 +1250,7 @@ async function deleteExpenseByEid(asker, expense_id, company_id) {
 				break;
 		}
 	} catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	} finally {
 	}
@@ -1282,7 +1283,7 @@ async function getMultipleDepositsByBid(asker, start, end, company_id, searchTex
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1316,7 +1317,7 @@ async function getMultipleDeposits(asker, start, end) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1346,7 +1347,7 @@ async function addDeposit(asker, deposit) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1375,7 +1376,7 @@ async function deleteDepositByDid(asker, deposit_id) {
 				break;
 		}
 	} catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	} finally {
 
@@ -1416,7 +1417,7 @@ async function getExpenseDataCSV(asker, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1457,7 +1458,7 @@ async function getTransactionDataCSV(asker, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
@@ -1498,7 +1499,7 @@ async function getDepositDataCSV(asker, company_id) {
 		}
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {

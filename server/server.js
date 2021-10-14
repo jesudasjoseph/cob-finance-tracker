@@ -11,9 +11,12 @@ const passport = require('passport');
 let SamlStrategy = require('passport-saml').Strategy;
 const authorizor = require('./authorizor');
 const q = require('./queries');
+const logger = require('./logger.js');
 
 const VERSION = 1;
 const API_URL = '/api/' + VERSION;
+
+logger.init(config.SMTP_HOST, config.SMTP_PORT, config.SMTP_USER, config.SMTP_PASSWORD, config.LOG_RECIPIENT);
 
 let sslKey = fs.readFileSync(config.SSL_KEY_PATH);
 let sslCert = fs.readFileSync(config.SSL_CERT_PATH);
@@ -129,7 +132,7 @@ app.use(API_URL + '/export', exportRouter);
 
 //Dev endpoint
 if (config.devMode === 'true'){
-	console.log('DEV_MODE is Enabled! ### THIS IS INSECURE ###');
+	logger.log('DEV_MODE is Enabled! ### THIS IS INSECURE ###');
 	app.use(API_URL + '/dev', devRouter);
 }
 
@@ -142,15 +145,14 @@ let httpsServer = https.createServer(options, app);
 
 //Start HTTP/HTTPS Servers
 
-console.log('Starting server...');
-console.log(`Server Config: ${JSON.stringify(config)}`);
+logger.log('Starting server...');
 
 httpServer.listen(config.HTTP_PORT, () => {
-	console.log(`Listening at http://localhost:${config.HTTP_PORT}`);
+	logger.log(`Listening at http://localhost:${config.HTTP_PORT}`);
 });
 
 httpsServer.listen(config.HTTPS_PORT, () => {
-	console.log(`Listening at https://localhost:${config.HTTPS_PORT}`);
+	logger.log(`Listening at https://localhost:${config.HTTPS_PORT}`);
 });
 
 module.exports = app;
