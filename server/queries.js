@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const pool = new Pool();
 const config = require('./config');
+const logger = require('./logger.js');
 
 const roleType = {
 	'admin':2,
@@ -29,8 +30,8 @@ let resetCode;
 
 async function init(){
 	pool.on('error', (err, client) => {
-		console.error('Unexpected error on idle client', err)
-		process.exit(-1)
+		logger.log(`Unexpected error on idle client: ${err}`, 'pg-error')
+		process.exit(-1);
 	})
 }
 
@@ -47,7 +48,7 @@ async function addDevUser(user_id) {
 		return new data(201);
 	}
 	catch (e) {
-		console.log("pg" + e);
+		logger.log(e, 'pg-error');
 		return new data(500);
 	}
 	finally {
