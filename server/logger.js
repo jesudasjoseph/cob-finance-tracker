@@ -44,13 +44,13 @@ function init(smtpHost = null, smtpPort, smtpUser, smtpPassword, email_recipient
 	}
 }
 
-function log(logType, logMessage){
-	if (logType.includes('error')) {
+function log(logMessage, logType = null){
+	if (logType ? logType.includes('error') : false) {
 		console.error(logType + ':', logMessage);
 		sendNotificationMail(logType, logMessage);
 	}
 	else {
-		console.log(logType + ':', logMessage);
+		console.log((logType ? (logType + ':') : '') + logMessage);
 	}
 }
 
