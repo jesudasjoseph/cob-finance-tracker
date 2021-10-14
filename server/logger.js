@@ -50,7 +50,7 @@ function log(logMessage, logType = null){
 		sendNotificationMail(logType, logMessage);
 	}
 	else {
-		console.log((logType ? (logType + ':') : '') + logMessage);
+		console.log((logType ? (logType + ': ') : '') + logMessage);
 	}
 }
 
