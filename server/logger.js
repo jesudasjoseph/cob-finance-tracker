@@ -1,28 +1,52 @@
 "use strict";
+
 const nodemailer = require("nodemailer");
 
-// async..await is not allowed in global scope, must use a wrapper
-async function main() {
+//Private
+let transporter = null;
+let emailRecipients;
+let senderEmail;
 
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'jemajo.sys.alert', // generated ethereal user
-      pass: '', // generated ethereal password
+function sendNotificationMail(title, body) {
+  if (transporter) {
+    transporter.sendMail({
+      from: '"Finance Tracker Alert Service" <'+ senderEmail +'>',
+      to: emailRecipients,
+      subject: "Tracker Alert",
+      text: title + '\n' + body,
+      html: `<h1>${title}</h1><p>${body}</p>`
     },
-  });
-
-  // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: '"Finance Tracker Alert Service" <jemajo.sys.alert@gmail.com>', // sender address
-    to: "jessjmj@gmail.com", // list of receivers
-    subject: "Tracker Alert", // Subject line
-    text: "some message! A user wants to be added to a business...", // plain text body
-    html: "<p>some message! A user wants to be added to a business...</p>", // html body
-  });
+    (err, info) => {
+      if (err) {
+        console.log("Failed to send notfication via email");
+      }
+    });
+  }
 }
 
-main().catch(console.error);
+//Public
+function init(smtpHost = null, smtpPort, smtpUser, smtpPassword, email_recipients) {
+  if (smtpHost) {
+    transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: true,
+      auth: {
+        user: smtpUser,
+        pass: smtpPassword
+      }
+    });
+    emailRecipients = email_recipients;
+    senderEmail = smtpUser;
+  }
+  else {
+    transporter = null
+  }
+}
+
+function test() {
+  sendNotificationMail('Title', 'hello this is the body!');
+}
+
+exports.init = init;
+exports.test = test;
