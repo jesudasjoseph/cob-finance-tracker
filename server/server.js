@@ -146,7 +146,6 @@ let httpsServer = https.createServer(options, app);
 //Start HTTP/HTTPS Servers
 
 logger.log('Starting server...');
-logger.log(`Server Config: ${JSON.stringify(config)}`);
 
 httpServer.listen(config.HTTP_PORT, () => {
 	logger.log(`Listening at http://localhost:${config.HTTP_PORT}`);
