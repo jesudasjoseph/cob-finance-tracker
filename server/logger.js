@@ -18,7 +18,7 @@ function sendNotificationMail(title, body) {
 		},
 		(err, info) => {
 			if (err) {
-				console.log("Failed to send notfication via email");
+				console.error("Failed to send notfication via email", err);
 			}
 		});
 	}
