@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const config = require('./config');
 const q = require('./queries');
+const logger = require('./logger.js');
 
 const SESSION_TIMEOUT = 50; //seconds
 const MAX_SESSIONS = 100;
@@ -40,7 +41,7 @@ function generateSID(){
 	if (checkDuplicateSid(sid))
 		return sid;
 	else{
-		console.log('generateSID found duplicate!');
+		logger.log('generateSID found duplicate!', 'auth-error');
 		return generateSID();
 	}
 }
@@ -78,7 +79,7 @@ function authToken(req, res, next){
 		token = authHeader.split(' ')[1];
 	}
 	catch(e) {
-		console.log(e);
+		logger.log(e.toString(), 'auth-error');
 		return res.sendStatus(401);
 	}
 
@@ -87,7 +88,7 @@ function authToken(req, res, next){
 
 	jwt.verify(token, config.API_SECRET, function (error, decoded) {
 		if (error){
-			console.log("jwt-err: " + error);
+			logger.log(error.toString(), 'jwt-err');
 			return res.sendStatus(400);
 		}
 		else{
