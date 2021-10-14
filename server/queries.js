@@ -48,7 +48,7 @@ async function addDevUser(user_id) {
 		return new data(201);
 	}
 	catch (e) {
-		logger.log(e, 'pg-error');
+		logger.log(e.toString(), 'pg-error');
 		return new data(500);
 	}
 	finally {
