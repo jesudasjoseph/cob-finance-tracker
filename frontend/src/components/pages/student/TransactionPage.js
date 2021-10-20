@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import Table from 'react-bootstrap/Table';
+import Table from '../../layout/Table';
+import TableItem from '../../layout/TableItem';
 import AddTransactionDialog from '../../layout/AddTransactionDialog';
 import TableControl from '../../layout/TableControl';
 import SearchBar from '../../layout/SearchBar';
@@ -71,34 +72,20 @@ export default class TransactionPage extends Component {
 					<div className='layout-tb-container'>
 						<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
 						<p></p>
-						<Table className='layout-tb-table' responsive size="m" striped bordered hover variant="dark">
-							<thead>
-								<tr>
-									<th>Date</th>
-									<th>Customer</th>
-									<th>Product</th>
-									<th>Payment Method</th>
-									<th>Quantity</th>
-									<th>Price Per Unit</th>
-									<th>Total</th>
-								</tr>
-							</thead>
-							<tbody>
-								{this.state.transactionTableData.map((transaction, index) => {
-									const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
-									return (
-										<tr key={transaction_id}>
-											<td>{date.split('T')[0]} </td>
-											<td>{customer}</td>
-											<td>{product}</td>
-											<td>{payment_method}</td>
-											<td>{quantity}</td>
-											<td>{price_per_unit}</td>
-											<td>{total}</td>
-										</tr>
-									);
-								})}
-							</tbody>
+						<Table titles={['Date', 'Customer', 'Product', 'Payment', 'Quantity', 'Price', 'Total']}>
+							{this.state.transactionTableData.map((transaction, index) => {
+								const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
+								return (
+									<TableItem key={transaction_id} 
+										date={date.split('T')[0]} 
+										customer={customer}
+										product={product}
+										payment_method={payment_method}
+										quantity={quantity}
+										price_per_unit={price_per_unit}
+										total={total}/>
+								);
+							})}
 						</Table>
 						<div className='layout-tb-controls'>
 							<TableControl add addOnClick={this.addOnClick}/>
@@ -118,3 +105,22 @@ export default class TransactionPage extends Component {
 	}
 }
 TransactionPage.contextType = AppContext;
+
+
+/*
+this.state.transactionTableData.map((transaction, index) => {
+								const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
+								return (
+									<tr key={transaction_id}>
+										<td>{date.split('T')[0]} </td>
+										<td>{customer}</td>
+										<td>{product}</td>
+										<td>{payment_method}</td>
+										<td>{quantity}</td>
+										<td>{price_per_unit}</td>
+										<td>{total}</td>
+									</tr>
+								);
+							})
+
+*/
