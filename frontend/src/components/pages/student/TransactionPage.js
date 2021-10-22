@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import Table from '../../layout/Table';
-import TableItem from '../../layout/TableItem';
+import MobileTable from '../../layout/MobileTable';
 import AddTransactionDialog from '../../layout/AddTransactionDialog';
 import TableControl from '../../layout/TableControl';
 import SearchBar from '../../layout/SearchBar';
@@ -72,21 +71,21 @@ export default class TransactionPage extends Component {
 					<div className='layout-tb-container'>
 						<SearchBar className='layout-tb-search' onChange={this.searchOnChange}/>
 						<p></p>
-						<Table titles={['Date', 'Customer', 'Product', 'Payment', 'Quantity', 'Price', 'Total']}>
+						<MobileTable>
 							{this.state.transactionTableData.map((transaction, index) => {
 								const {customer, date, product, payment_method, quantity, price_per_unit, transaction_id, total} = transaction;
 								return (
-									<TableItem key={transaction_id} 
+									<MobileTable.TransactionItem key={transaction_id} 
 										date={date.split('T')[0]} 
-										customer={customer}
-										product={product}
-										payment_method={payment_method}
+										subtitle={customer}
+										title={product}
+										payment={payment_method}
 										quantity={quantity}
-										price_per_unit={price_per_unit}
+										unit_price={price_per_unit}
 										total={total}/>
 								);
 							})}
-						</Table>
+						</MobileTable>
 						<div className='layout-tb-controls'>
 							<TableControl add addOnClick={this.addOnClick}/>
 						</div>
