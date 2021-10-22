@@ -3,79 +3,51 @@
 	flex-direction: row;
 }
 
-.add-button {
-	border: none;
-	background-image: url(../../../assets/add.png);
-	background-size: cover;
-	background-color: #2ABB36;
+.control-button {
+	border: 1px solid rgba(255, 255, 255, 0.5);
+
 	border-radius: 50px;
 	width: 50px;
 	height: 50px;
+
+	box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
+}
+
+.control-button:hover {
+	box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.6);
+}
+
+.control-button:active {
+	box-shadow: none;
+}
+
+.control-button:disabled {
+	box-shadow: none;
+	background-color: #88877B;
+}
+
+.add-button {
+	background-image: url(../../../assets/add.png);
+	background-size: cover;
+	background-color: #2ABB36;
 	
 	margin: 3px;
 }
 
-.add-button:active {
-	box-shadow: inset -1px -1px white, inset 1px 1px white;
-}
-
-.add-button:hover {
-	background-color: #50AE56;
-}
-
-.add-button:disabled {
-	box-shadow: none;
-	background-color: #88877B;
-}
-
 .edit-button {
-	border: none;
 	background-image: url(../../../assets/edit.png);
 	background-size: cover;
 	background-color: #DFD924;
-	border-radius: 50px;
-	width: 50px;
-	height: 50px;
 
 	margin: 3px;
-}
-
-.edit-button:active {
-	box-shadow: inset -1px -1px white, inset 1px 1px white;
-}
-
-.edit-button:hover {
-	background-color: #CFCA2F;
-}
-
-.edit-button:disabled {
-	box-shadow: none;
-	background-color: #88877B;
 }
 
 .delete-button {
-	border: none;
 	background-image: url(../../../assets/delete.png);
 	background-size: cover;
 	background-color: #DD5454;
-	border-radius: 50px;
-	width: 50px;
-	height: 50px;
 
 	margin: 3px;
-}
-
-.delete-button:active {
-	box-shadow: inset -1px -1px white, inset 1px 1px white;
-}
-
-.delete-button:hover {
-	background-color: #B34B4B;
-}
-
-.delete-button:disabled {
-	box-shadow: none;
-	background-color: #88877B;
 }
 
 @media only screen and (max-width: 767px) {

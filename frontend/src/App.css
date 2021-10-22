@@ -217,6 +217,10 @@ h2 {
 	}
 
 	.layout-tb-controls {
+		display: flex;
+		flex-direction: row-reverse;
+		align-items: flex-end;
+
 		position: fixed;
 		right: 5px;
 		bottom: 65px;
